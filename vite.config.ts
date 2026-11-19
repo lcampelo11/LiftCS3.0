@@ -25,6 +25,15 @@ export default defineConfig(() => {
           if (fs.existsSync(distDir) && fs.existsSync(srcAssets)) {
             fs.cpSync(srcAssets, distAssets, {recursive: true, force: true});
           }
+          if (fs.existsSync(distDir)) {
+            for (const pwaFile of ['manifest.json', 'sw.js', 'icon-192.png', 'icon-512.png']) {
+              const srcPwa = path.resolve(__dirname, pwaFile);
+              const dstPwa = path.resolve(distDir, pwaFile);
+              if (fs.existsSync(srcPwa)) {
+                fs.copyFileSync(srcPwa, dstPwa);
+              }
+            }
+          }
         },
       },
     ],
