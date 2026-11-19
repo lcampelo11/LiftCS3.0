@@ -1,0 +1,6 @@
+{
+  "name": "Lift-Ctrl Shelf",
+  "description": "Gestão Inteligente de Estoque, Rupturas e Validade - Lift-Ctrl Shelf",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
