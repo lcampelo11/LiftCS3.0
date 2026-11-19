@@ -500,6 +500,65 @@ body.dark-mode button.sec, body.dark-mode .sec { background: linear-gradient(135
 .pwa-ios-box{background:#0f172a;color:#e2e8f0;border:1px solid #3b82f6;border-radius:16px;padding:20px;max-width:340px;width:100%;text-align:center}
 .pwa-ios-box h3{color:#fff;font-size:16px;margin-bottom:8px}
 .pwa-ios-box p{font-size:13px;color:#cbd5e1;line-height:1.5;margin-bottom:14px}
+/* ── PASSO 2: CADASTRO INTELIGENTE & PLU ───────────────────────────────── */
+.smart-search-card{background:linear-gradient(135deg,#eff6ff,#f8fafc);border:1.5px solid #93c5fd;border-radius:12px;padding:12px;margin-bottom:14px}
+.smart-search-title{font-size:13px;font-weight:700;color:#1e3a8a;margin-bottom:4px;display:flex;align-items:center;gap:6px}
+.smart-search-sub{font-size:11px;color:#475569;margin-bottom:8px;line-height:1.4}
+.smart-search-row{display:flex;gap:6px;align-items:stretch}
+.smart-search-row input{flex:1;margin:0}
+.smart-search-row button{margin:0;white-space:nowrap;padding:9px 14px}
+.smart-status{font-size:11px;margin-top:8px;color:#1e40af;display:none}
+.smart-results{margin-top:8px;display:none;flex-direction:column;gap:6px;max-height:260px;overflow-y:auto}
+.smart-results.ativo{display:flex}
+.smart-res-item{background:#fff;border:1px solid #cbd5e1;border-radius:9px;padding:9px 10px;cursor:pointer;transition:border-color .15s,background .15s}
+.smart-res-item:hover{border-color:#2563eb;background:#eff6ff}
+.smart-res-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:3px}
+.smart-res-nome{font-size:13px;font-weight:700;color:#0f172a}
+.smart-res-badge{font-size:10px;font-weight:700;padding:2px 6px;border-radius:6px;background:#dbeafe;color:#1e40af;white-space:nowrap}
+.smart-res-badge.gemini{background:#f3e8ff;color:#6b21a8}
+.smart-res-badge.brasilapi{background:#dcfce7;color:#166534}
+.smart-res-end{font-size:11px;color:#475569;line-height:1.35}
+.smart-res-meta{font-size:10px;color:#64748b;margin-top:3px;font-family:monospace}
+.canal-hint{font-size:11px;color:#1e40af;background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:6px 10px;margin:-4px 0 12px;display:none}
+.canal-hint.ativo{display:block}
+.logo-studio{display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:10px}
+.logo-thumb-wrap{position:relative;width:82px;height:82px;border-radius:12px;border:1.5px dashed #94a3b8;background:#fff;display:flex;align-items:center;justify-content:center;overflow:visible;flex-shrink:0}
+.logo-thumb-wrap img{width:100%;height:100%;object-fit:contain;border-radius:10px;background:#fff}
+.logo-thumb-empty{font-size:26px;color:#94a3b8}
+.logo-cam-btn{position:absolute;right:-6px;bottom:-6px;width:30px;height:30px;border-radius:50%;background:#1e40af;color:#fff;border:2px solid #fff;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;padding:0;margin:0;box-shadow:0 2px 6px rgba(0,0,0,0.25)}
+.logo-studio-actions{flex:1;min-width:190px;display:flex;flex-direction:column;gap:6px}
+.logo-btn-row{display:flex;flex-wrap:wrap;gap:6px}
+.logo-btn-row button,.logo-btn-row label.logo-file-lbl{margin:0;padding:6px 10px;font-size:11px;font-weight:600;border-radius:7px;cursor:pointer;display:inline-flex;align-items:center;gap:4px}
+.logo-file-lbl{background:#334155;color:#fff}
+.logo-src-badge{font-size:11px;color:#475569}
+.plu-card{border:1px solid #c7d2fe;background:#f8fafc;border-radius:10px;padding:12px;margin-top:14px}
+.plu-card-head{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:8px}
+.plu-card-title{font-size:13px;font-weight:700;color:#1e3a8a}
+.plu-count-pill{font-size:11px;font-weight:700;color:#1e40af;background:#dbeafe;padding:2px 8px;border-radius:6px}
+.plu-espelho-bar{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:8px}
+.plu-espelho-btn{background:linear-gradient(135deg,#6d28d9,#7c3aed);color:#fff;border:none;border-radius:8px;padding:8px 12px;font-size:12px;font-weight:700;cursor:pointer;margin:0}
+.plu-input{width:100%;min-width:96px;padding:6px 8px;border:1px solid #93c5fd;border-radius:6px;font-size:12px;font-weight:600}
+.plu-badge{display:inline-block;margin-top:3px;padding:2px 7px;border-radius:5px;background:#dbeafe;border:1px solid #93c5fd;color:#1e3a8a;font-size:11px;font-weight:700}
+.plu-badge-inline{display:inline-block;margin-left:5px;padding:1px 6px;border-radius:5px;background:#dbeafe;border:1px solid #93c5fd;color:#1e3a8a;font-size:10px;font-weight:700}
+.cfg-key-row{display:flex;gap:6px;align-items:stretch;margin-bottom:8px}
+.cfg-key-row input{flex:1;margin:0}
+.cfg-key-toggle{background:#e2e8f0;color:#1e293b;border:1px solid #cbd5e1;border-radius:8px;padding:0 12px;margin:0;cursor:pointer;font-size:13px}
+body.dark-mode .smart-search-card{background:linear-gradient(135deg,#172554,#0f172a)!important;border-color:#1d4ed8!important}
+body.dark-mode .smart-search-title{color:#93c5fd!important}
+body.dark-mode .smart-search-sub,body.dark-mode .smart-status{color:#cbd5e1!important}
+body.dark-mode .smart-res-item{background:#1e293b!important;border-color:#334155!important}
+body.dark-mode .smart-res-item:hover{background:#283548!important;border-color:#60a5fa!important}
+body.dark-mode .smart-res-nome{color:#f1f5f9!important}
+body.dark-mode .smart-res-end,body.dark-mode .smart-res-meta{color:#94a3b8!important}
+body.dark-mode .canal-hint{background:#172554!important;border-color:#1d4ed8!important;color:#bfdbfe!important}
+body.dark-mode .logo-studio{background:#1e293b!important;border-color:#334155!important}
+body.dark-mode .logo-thumb-wrap{background:#0f172a!important;border-color:#475569!important}
+body.dark-mode .logo-src-badge{color:#cbd5e1!important}
+body.dark-mode .plu-card{background:#1e293b!important;border-color:#334155!important}
+body.dark-mode .plu-card-title{color:#93c5fd!important}
+body.dark-mode .plu-count-pill{background:#172554!important;color:#93c5fd!important}
+body.dark-mode .plu-badge,body.dark-mode .plu-badge-inline{background:#172554!important;border-color:#3b82f6!important;color:#93c5fd!important}
+body.dark-mode .cfg-key-toggle{background:#334155!important;color:#e2e8f0!important;border-color:#475569!important}
 </style>
 </head>
 <body>
@@ -959,31 +1018,85 @@ body.dark-mode button.sec, body.dark-mode .sec { background: linear-gradient(135
   </div>
   <div class="sm" id="msgHome"></div>
   <div class="sm" id="msgClient"></div>
+
+  <!-- BUSCADOR HIBRIDO INTELIGENTE -->
+  <div class="smart-search-card" id="smartStoreBox">
+    <div class="smart-search-title">&#128269; Busca Inteligente de Loja ou CNPJ</div>
+    <div class="smart-search-sub">Digite o CNPJ (14 d&iacute;gitos) para preencher via BrasilAPI, ou digite Nome + Regi&atilde;o (ex: <b>Presunic Caxias</b>) para buscar no OpenStreetMap e Gemini. Offline? Preencha manualmente abaixo.</div>
+    <div class="smart-search-row">
+      <input type="text" id="smartStoreQuery" placeholder="Ex: Presunic Caxias ou 33.041.260/0652-90" onkeydown="if(event.key==='Enter'){event.preventDefault();buscarLojaInteligente();}">
+      <button type="button" id="btnSmartStoreSearch" onclick="buscarLojaInteligente()">Buscar</button>
+    </div>
+    <div class="smart-status" id="smartStoreStatus"></div>
+    <div class="smart-results" id="smartStoreResults"></div>
+  </div>
+
   <div class="fg"><label>Empresa *</label><select id="clientCompany" onchange="onClientCompanyChange()"><option value="">-- Selecione --</option></select></div>
-  <div class="fg"><label>Nome do Cliente *</label><input type="text" id="clientName" placeholder="Ex: Megabox"></div>
-  <div class="fg"><label>CNPJ *</label><input type="text" id="clientCNPJ" placeholder="Ex: 12.345.678/0001-90"></div>
+  <div class="fg"><label>Nome do Cliente / Loja *</label><input type="text" id="clientName" placeholder="Ex: Megabox" oninput="autoClassificarTipologia(false)"></div>
+  <div class="fg">
+    <label>CNPJ *</label>
+    <div style="display:flex;gap:6px;align-items:center">
+      <input type="text" id="clientCNPJ" placeholder="Ex: 12.345.678/0001-90" style="flex:1">
+      <button type="button" class="sec" style="margin:0;padding:8px 10px;font-size:11px;white-space:nowrap" onclick="consultarCnpjDireto()" title="Consultar este CNPJ na BrasilAPI">Consultar CNPJ</button>
+    </div>
+  </div>
   <div class="grid2">
+    <div class="fg"><label>Raz&atilde;o Social <span style="color:#94a3b8;font-weight:400;font-size:11px">(opcional)</span></label><input type="text" id="clientRazaoSocial" placeholder="Preenchido automaticamente ou manual"></div>
+    <div class="fg"><label>CNAE Principal <span style="color:#94a3b8;font-weight:400;font-size:11px">(opcional)</span></label><input type="text" id="clientCNAE" placeholder="Ex: 4711-3/02 - Supermercados" oninput="autoClassificarTipologia(false)"></div>
+  </div>
+  <div class="fg"><label>Endere&ccedil;o Completo <span style="color:#94a3b8;font-weight:400;font-size:11px">(opcional)</span></label><input type="text" id="clientEndereco" placeholder="Rua, n&uacute;mero, bairro, cidade/UF"></div>
+
+  <div class="grid2">
+    <div class="fg"><label>N&ordm; de Checkouts *</label><input type="number" id="clientCheckouts" placeholder="Ex: 8" min="1" style="width:100%" oninput="autoClassificarTipologia(false)"></div>
     <div class="fg">
-      <label>Perfil da Loja *</label>
-      <select id="clientPerfil" onchange="onClientPerfilChange()">
-        <option value="">Selecione...</option>
-        <option value="Vizinhanca">Vizinhanca</option>
-        <option value="Mercado">Mercado</option>
-        <option value="Supermercado">Supermercado</option>
-        <option value="Hipermercado">Hipermercado</option>
-        <option value="Atacarejo">Atacarejo</option>
-        <option value="Conveniencia">Conveniencia</option>
-        <option value="Personalizado">Personalizado</option>
+      <label>Canal (Tipologia)</label>
+      <select id="clientCanal" onchange="onClientCanalChange(false)">
+        <option value="">Auto / Selecione...</option>
+        <option value="Vizinhanca">Vizinhan&ccedil;a (1-4 checkouts)</option>
+        <option value="Super">Super (5-14 checkouts)</option>
+        <option value="Hiper">Hiper (15+ checkouts)</option>
+        <option value="Atacado">Atacado / Cash &amp; Carry</option>
       </select>
     </div>
-    <div class="fg"><label>Nº de Checkouts *</label><input type="number" id="clientCheckouts" placeholder="Ex: 8" min="1" style="width:100%"></div>
+  </div>
+  <div class="canal-hint" id="canalAutoHint"></div>
+
+  <div class="fg">
+    <label>Perfil da Loja *</label>
+    <select id="clientPerfil" onchange="onClientPerfilChange()">
+      <option value="">Selecione...</option>
+      <option value="Vizinhanca">Vizinhanca</option>
+      <option value="Mercado">Mercado</option>
+      <option value="Supermercado">Supermercado</option>
+      <option value="Hipermercado">Hipermercado</option>
+      <option value="Atacarejo">Atacarejo</option>
+      <option value="Conveniencia">Conveniencia</option>
+      <option value="Personalizado">Personalizado</option>
+    </select>
   </div>
   <div class="fg" id="clientPerfilCustomWrap" style="display:none"><label>Descreva o perfil personalizado</label><input type="text" id="clientPerfilCustom" placeholder="Ex: Loja de bairro com foco em bebidas"></div>
+
   <div class="fg">
-    <label>Logo do Cliente (Opcional)</label>
-    <div id="clientLogoPreview"></div>
-    <input type="file" id="clientLogo" accept="image/*" style="width:100%;margin-top:4px;font-size:12px;">
+    <label>Logo do Cliente (4 N&iacute;veis Inteligentes - m&aacute;x. 200x200px JPEG)</label>
+    <div class="logo-studio">
+      <div class="logo-thumb-wrap">
+        <div id="clientLogoPreview"><span class="logo-thumb-empty">&#127978;</span></div>
+        <button type="button" class="logo-cam-btn" onclick="document.getElementById('clientLogoCamera').click()" title="Tirar foto da fachada ou encarte">&#128247;</button>
+      </div>
+      <div class="logo-studio-actions">
+        <div class="logo-btn-row">
+          <button type="button" onclick="buscarLogoInteligenteManual()" style="padding:6px 10px;font-size:11px">&#128269; Buscar Logo Auto</button>
+          <button type="button" class="sec" onclick="gerarAvatarLojaManual()" style="padding:6px 10px;font-size:11px">&#127912; Avatar</button>
+          <label class="logo-file-lbl" for="clientLogo">&#128444;&#65039; Galeria</label>
+          <button type="button" class="red" onclick="limparLogoCliente()" style="padding:6px 8px;font-size:11px" title="Remover logo">Limpar</button>
+        </div>
+        <div class="logo-src-badge" id="clientLogoSourceInfo">Ordem autom&aacute;tica: 1) Dom&iacute;nio &rarr; 2) Wikimedia &rarr; 3) Avatar &rarr; 4) C&acirc;mera/Foto</div>
+      </div>
+    </div>
+    <input type="file" id="clientLogo" accept="image/*" style="display:none">
+    <input type="file" id="clientLogoCamera" accept="image/*" capture="environment" style="display:none">
   </div>
+
   <div class="grid2">
     <div class="fg"><label>Contato da Loja *</label><input type="text" id="clientBuyer" placeholder="Ex: Joao Silva"></div>
     <div class="fg"><label>Tel. Contato *</label><input type="text" id="clientBuyerPhone" placeholder="(21) 99999-9999"></div>
@@ -1011,6 +1124,27 @@ body.dark-mode button.sec, body.dark-mode .sec { background: linear-gradient(135
   </div>
   <table><thead><tr><th>Codigo</th><th>Produto</th><th>Gramatura</th><th>Qtd/Cx</th><th>Ações</th></tr></thead><tbody id="clientProductsBody"><tr><td colspan="5" style="text-align:center;color:#999">Nenhum produto</td></tr></tbody></table>
   <div id="notaRemocaoProd" style="display:none;margin-top:8px;font-size:12px;background:#fef2f2;border:1px solid #fecaca;color:#b91c1c;border-radius:8px;padding:8px 10px"></div>
+
+  <!-- DE/PARA CODIGOS INTERNOS DA LOJA (PLU) -->
+  <div class="plu-card" id="pluSection">
+    <div class="plu-card-head">
+      <div class="plu-card-title">&#127991;&#65039; C&oacute;digos Internos da Loja (De/Para - PLU) <span style="font-weight:400;font-size:11px;color:#64748b">(opcional)</span></div>
+      <span class="plu-count-pill" id="pluCountBadge">0 mapeado(s)</span>
+    </div>
+    <div style="font-size:11px;color:#475569;margin-bottom:8px;line-height:1.4">Vincule o c&oacute;digo interno (PLU) que esta loja/rede usa para cada SKU. Ele aparecer&aacute; em destaque na Sugest&atilde;o de Pedido e no PDF.</div>
+    <div class="plu-espelho-bar">
+      <button type="button" class="plu-espelho-btn" onclick="document.getElementById('pluEspelhoInput').click()">&#128196; Ler Espelho de Pedido (Foto/PDF com Gemini)</button>
+      <input type="file" id="pluEspelhoInput" accept="image/*,application/pdf" style="display:none" onchange="processarEspelhoPedidoGemini(this)">
+    </div>
+    <div id="pluEspelhoStatus" style="font-size:11px;margin-bottom:8px;display:none"></div>
+    <div style="overflow-x:auto">
+      <table style="margin-top:4px">
+        <thead><tr><th>SKU / Produto</th><th style="width:135px">C&oacute;d. Interno Loja (PLU)</th></tr></thead>
+        <tbody id="pluMappingBody"><tr><td colspan="2" style="text-align:center;color:#999">Adicione produtos acima para mapear os PLUs da loja</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
   <div style="margin-top:12px;"><button onclick="voltarClientForm()" class="sec">&#8592; Voltar</button><button onclick="saveClient()">Salvar Cliente</button></div>
 </div>
 
@@ -1403,13 +1537,26 @@ body.dark-mode button.sec, body.dark-mode .sec { background: linear-gradient(135
     <div id="cfgExcluirEmpresa"></div>
   </div>
 
-  <!-- Chave API Gemini -->
-  <div style="border:1px solid #c4b5fd;border-radius:10px;padding:14px;margin-bottom:10px;background:#faf5ff">
-    <div style="font-weight:700;color:#7c3aed;margin-bottom:6px">&#129302; Chave API de Inteligencia Artificial</div>
-    <div style="font-size:11px;color:#7c3aed;margin-bottom:8px">Chave API de emergência (opcional). Deixe em branco para usar a chave padrão do sistema.</div>
-    <input type="password" id="geminiKeyInput" placeholder="Cole sua chave API aqui..." style="width:100%;padding:10px;border:1px solid #c4b5fd;border-radius:8px;font-size:13px;margin-bottom:8px">
-    <button onclick="salvarConfigIA()" style="background:#7c3aed;color:#fff;border:none;border-radius:8px;padding:10px 16px;cursor:pointer;font-size:13px;font-weight:700">Salvar Chave API</button>
-    <div id="msgConfigIA" style="font-size:11px;margin-top:6px"></div>
+  <!-- Chave API Google Gemini (gemini-2.5-flash) -->
+  <div style="border:1px solid #93c5fd;border-radius:10px;padding:14px;margin-bottom:10px;background:#eff6ff">
+    <div style="font-weight:700;color:#1e3a8a;margin-bottom:4px">&#10024; Chave API Google Gemini (gemini-2.5-flash)</div>
+    <div style="font-size:11px;color:#475569;margin-bottom:8px;line-height:1.4">Salva exclusivamente no <b>localStorage</b> deste aparelho. Usada na busca inteligente de lojas e na leitura de fotos/PDFs de espelhos de pedido (De/Para PLU).</div>
+    <div class="cfg-key-row">
+      <input type="password" id="googleGeminiKeyInput" placeholder="Cole sua chave AIza... do Google AI Studio" autocomplete="off" style="padding:10px;border:1px solid #93c5fd;border-radius:8px;font-size:13px">
+      <button type="button" class="cfg-key-toggle" onclick="toggleMostrarGeminiKey()" title="Mostrar ou ocultar chave">&#128065;&#65039;</button>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button type="button" onclick="salvarConfigGemini()" style="background:#1e40af;color:#fff;border:none;border-radius:8px;padding:10px 16px;cursor:pointer;font-size:13px;font-weight:700;margin:0">Salvar Chave Gemini</button>
+      <button type="button" onclick="limparConfigGemini()" class="sec" style="border:none;border-radius:8px;padding:10px 14px;cursor:pointer;font-size:12px;font-weight:600;margin:0">Remover</button>
+    </div>
+    <div id="msgConfigGemini" style="font-size:11px;margin-top:8px;font-weight:600"></div>
+    <details style="margin-top:10px;border-top:1px dashed #bfdbfe;padding-top:8px">
+      <summary style="font-size:11px;color:#6d28d9;font-weight:600;cursor:pointer">&#129302; Chave API Secund&aacute;ria / Emerg&ecirc;ncia (Assistente &amp; Importa&ccedil;&atilde;o legada)</summary>
+      <div style="font-size:11px;color:#7c3aed;margin:6px 0 8px">Opcional. Deixe em branco para usar a chave padr&atilde;o do sistema.</div>
+      <input type="password" id="geminiKeyInput" placeholder="Cole sua chave API secund&aacute;ria aqui..." style="width:100%;padding:10px;border:1px solid #c4b5fd;border-radius:8px;font-size:13px;margin-bottom:8px">
+      <button type="button" onclick="salvarConfigIA()" style="background:#7c3aed;color:#fff;border:none;border-radius:8px;padding:9px 14px;cursor:pointer;font-size:12px;font-weight:700;margin:0">Salvar Chave Secund&aacute;ria</button>
+      <div id="msgConfigIA" style="font-size:11px;margin-top:6px"></div>
+    </details>
   </div>
 
   <!-- Dark Mode -->
@@ -7883,8 +8030,12 @@ async function enviarGuardiaoChat() {
     <div style="color:#fff;font-size:15px;font-weight:700;margin-bottom:16px">✏️ Editar Produto</div>
     <input type="hidden" id="editProdIdx">
     <div style="margin-bottom:10px">
-      <label style="color:#94a3b8;font-size:12px">Código</label>
-      <input id="editProdCode" type="text" placeholder="Código" style="width:100%;padding:8px;border-radius:8px;border:1px solid #334155;background:#0f172a;color:#fff;font-size:13px;margin-top:4px">
+      <label style="color:#94a3b8;font-size:12px">C&oacute;digo da Empresa / EAN</label>
+      <input id="editProdCode" type="text" placeholder="C&oacute;digo" style="width:100%;padding:8px;border-radius:8px;border:1px solid #334155;background:#0f172a;color:#fff;font-size:13px;margin-top:4px">
+    </div>
+    <div style="margin-bottom:10px">
+      <label style="color:#93c5fd;font-size:12px">C&oacute;digo Interno da Loja (PLU) <span style="opacity:0.7">(opcional)</span></label>
+      <input id="editProdClientCode" type="text" placeholder="Ex: 88412" style="width:100%;padding:8px;border-radius:8px;border:1px solid #3b82f6;background:#0f172a;color:#fff;font-size:13px;margin-top:4px">
     </div>
     <div style="margin-bottom:10px">
       <label style="color:#94a3b8;font-size:12px">Nome *</label>
@@ -7900,7 +8051,7 @@ async function enviarGuardiaoChat() {
     </div>
     <div style="display:flex;gap:10px">
       <button onclick="fecharEditProd()" style="flex:1;padding:10px;border-radius:8px;border:none;background:#334155;color:#94a3b8;font-size:13px;cursor:pointer">Cancelar</button>
-      <button onclick="salvarEditProd()" style="flex:1;padding:10px;border-radius:8px;border:none;background:#6366f1;color:#fff;font-size:13px;font-weight:700;cursor:pointer">✅ Salvar</button>
+      <button onclick="salvarEditProd()" style="flex:1;padding:10px;border-radius:8px;border:none;background:#6366f1;color:#fff;font-size:13px;font-weight:700;cursor:pointer">&#9989; Salvar</button>
     </div>
   </div>
 </div>
