@@ -1,4 +1,4 @@
-const CACHE_NAME = 'localshelf-pwa-v1';
+const CACHE_NAME = 'localshelf-pwa-v2';
 const APP_SHELL = [
   './',
   './index.html',
@@ -39,6 +39,11 @@ self.addEventListener('fetch', function(event) {
 
   var url = new URL(req.url);
 
+  // Nunca interceptar chamadas de API (Supabase, Gemini, BrasilAPI, OpenStreetMap)
+  if (url.hostname.indexOf('supabase.co') >= 0 || url.hostname.indexOf('googleapis.com') >= 0) {
+    return;
+  }
+
   // Navegacao / index.html: Network-First com fallback offline no cache
   if (req.mode === 'navigate' || (url.origin === self.location.origin && (url.pathname.endsWith('/') || url.pathname.endsWith('/index.html')))) {
     event.respondWith(
@@ -74,8 +79,8 @@ self.addEventListener('fetch', function(event) {
     return;
   }
 
-  // Bibliotecas CDN (jsPDF, Chart.js, pdf.js): Cache-First apos primeiro uso, sem interceptar chamadas de API
-  if (url.hostname === 'cdnjs.cloudflare.com') {
+  // Bibliotecas CDN (jsPDF, Chart.js, pdf.js, SheetJS, Supabase JS): Cache-First apos primeiro uso
+  if (url.hostname === 'cdnjs.cloudflare.com' || url.hostname === 'cdn.jsdelivr.net') {
     event.respondWith(
       caches.match(req).then(function(cached) {
         if (cached) return cached;
