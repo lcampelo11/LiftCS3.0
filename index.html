@@ -709,6 +709,30 @@ body.dark-mode .log-wpp-preview{background:#0f172a!important;color:#e2e8f0!impor
 body.dark-mode .aud-foto-card{background:#1e293b!important;border-color:#334155!important}
 body.dark-mode .aud-foto-setor{background:#0f172a!important;color:#93c5fd!important;border-color:#334155!important}
 body.dark-mode .aud-foto-meta{background:#0f172a!important;color:#cbd5e1!important}
+/* Onboarding Idioma & Localizacao + Config Controls */
+.onb-overlay{position:fixed;inset:0;background:rgba(15,23,42,0.82);backdrop-filter:blur(6px);z-index:1000000;display:none;align-items:center;justify-content:center;padding:16px}
+.onb-box{background:#fff;border-radius:20px;padding:22px 20px;width:100%;max-width:410px;max-height:92vh;overflow-y:auto;box-shadow:0 24px 60px rgba(0,0,0,0.45);border:1px solid #cbd5e1;color:#0f172a;text-align:center}
+.onb-logo{height:54px;object-fit:contain;border-radius:12px;margin:0 auto 10px;display:block}
+.onb-title{font-size:19px;font-weight:800;color:#1e3a8a;margin-bottom:4px}
+.onb-sub{font-size:12px;color:#475569;line-height:1.45;margin-bottom:14px}
+.onb-sec-lbl{font-size:11px;font-weight:800;color:#1e40af;text-transform:uppercase;letter-spacing:0.5px;text-align:left;margin-bottom:6px}
+.onb-lang-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:14px}
+.onb-lang-btn{background:#f8fafc;color:#1e293b;border:1.5px solid #cbd5e1;border-radius:10px;padding:9px 6px;font-size:12px;font-weight:700;cursor:pointer;margin:0;transition:all 0.15s;display:flex;flex-direction:column;align-items:center;gap:3px}
+.onb-lang-btn.ativo{background:#eff6ff;color:#1d4ed8;border-color:#2563eb;box-shadow:0 0 0 2px rgba(37,99,235,0.18)}
+.onb-loc-card{background:#f0fdf4;border:1px solid #86efac;border-radius:12px;padding:12px;text-align:left;margin-bottom:12px}
+.onb-loc-status{font-size:11px;color:#166534;margin-top:8px;line-height:1.4;font-weight:600}
+.onb-btn-loc{width:100%;background:linear-gradient(135deg,#059669,#10b981);color:#fff;border:none;border-radius:10px;padding:11px 14px;font-size:13px;font-weight:700;cursor:pointer;margin:0}
+.onb-btn-skip{background:transparent;color:#64748b;border:none;font-size:12px;font-weight:600;cursor:pointer;padding:8px 12px;text-decoration:underline;margin-top:4px}
+.lang-pills-row{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px}
+.lang-pill-btn{background:#f8fafc;color:#1e293b;border:1.5px solid #cbd5e1;border-radius:8px;padding:8px 6px;font-size:12px;font-weight:700;cursor:pointer;margin:0;text-align:center}
+.lang-pill-btn.ativo{background:#1e40af;color:#fff;border-color:#1e40af}
+body.dark-mode .onb-box{background:#1e293b!important;color:#f1f5f9!important;border-color:#334155!important}
+body.dark-mode .onb-title,body.dark-mode .onb-sec-lbl{color:#93c5fd!important}
+body.dark-mode .onb-sub,body.dark-mode .onb-btn-skip{color:#cbd5e1!important}
+body.dark-mode .onb-lang-btn,body.dark-mode .lang-pill-btn{background:#0f172a!important;color:#e2e8f0!important;border-color:#334155!important}
+body.dark-mode .onb-lang-btn.ativo,body.dark-mode .lang-pill-btn.ativo{background:#1d4ed8!important;color:#fff!important;border-color:#60a5fa!important}
+body.dark-mode .onb-loc-card{background:#064e3b!important;border-color:#10b981!important}
+body.dark-mode .onb-loc-status{color:#a7f3d0!important}
 </style>
 </head>
 <body>
@@ -717,21 +741,21 @@ body.dark-mode .aud-foto-meta{background:#0f172a!important;color:#cbd5e1!importa
 <div id="splash" style="display:flex;">
   <img data-lcs-asset="logo-lcs" class="splash-logo" alt="LocalShelf">
   <h1>LOCALSHELF</h1>
-  <p class="tagline">Gestão Inteligente</p>
-  <div class="fg"><label>Seu Nome</label><input type="text" id="splashName" placeholder="Ex: Leandro Campelo"></div>
+  <p class="tagline" data-i18n="app_tagline">Gest&atilde;o Inteligente</p>
+  <div class="fg"><label data-i18n="splash_your_name">Seu Nome</label><input type="text" id="splashName" placeholder="Ex: Leandro Campelo" data-i18n-placeholder="splash_name_ph"></div>
   <div class="fg">
-    <label>Empresa</label>
-    <select id="splashCompany"><option value="">-- Selecione --</option></select>
+    <label data-i18n="splash_company">Empresa</label>
+    <select id="splashCompany"><option value="" data-i18n="splash_select_opt">-- Selecione --</option></select>
   </div>
-  <button class="btn-enter" onclick="enterApp()">ENTRAR</button>
+  <button class="btn-enter" onclick="enterApp()" data-i18n="splash_enter">ENTRAR</button>
   <div id="splashError" style="display:none;color:#fca5a5;font-size:12px;margin-top:8px;font-weight:600;text-align:center;"></div>
-  <button onclick="goToNewCompany()" style="background:linear-gradient(135deg,#1e40af,#3b82f6);color:#fff;border:none;border-radius:12px;padding:14px 28px;font-size:15px;font-weight:700;cursor:pointer;margin-top:8px;width:100%;max-width:300px;letter-spacing:0.5px">&#43; Cadastrar / Selecionar Empresa</button>
-  <button id="pwaInstallSplash" type="button" onclick="instalarPWA()">&#128242; Instalar App no Celular</button>
+  <button onclick="goToNewCompany()" data-i18n="splash_new_company" style="background:linear-gradient(135deg,#1e40af,#3b82f6);color:#fff;border:none;border-radius:12px;padding:14px 28px;font-size:15px;font-weight:700;cursor:pointer;margin-top:8px;width:100%;max-width:300px;letter-spacing:0.5px">&#43; Cadastrar / Selecionar Empresa</button>
+  <button id="pwaInstallSplash" type="button" onclick="instalarPWA()" data-i18n="splash_install_pwa">&#128242; Instalar App no Celular</button>
   <button class="splash-dm-btn" id="splashDmBtn" onclick="toggleDarkMode(!document.body.classList.contains('dark-mode'))">&#127769; Modo Escuro</button>
   <div class="splash-backup-links">
-    <button type="button" onclick="exportarBackup()">&#128229; Exportar Backup</button>
+    <button type="button" onclick="exportarBackup()" data-i18n="splash_export_backup">&#128229; Exportar Backup</button>
     <span>&middot;</span>
-    <button type="button" onclick="document.getElementById('splashImportBackup').click()">&#128194; Importar Backup</button>
+    <button type="button" onclick="document.getElementById('splashImportBackup').click()" data-i18n="splash_import_backup">&#128194; Importar Backup</button>
     <input type="file" id="splashImportBackup" accept=".json,application/json" style="display:none" onchange="importarBackup(this)">
   </div>
 </div>
@@ -753,13 +777,13 @@ body.dark-mode .aud-foto-meta{background:#0f172a!important;color:#cbd5e1!importa
   </div>
   <div class="hb-body">
     <button class="hb-item" onclick="closeHamburger();goToEditEmpresa()">
-      <span class="hb-icon">&#9999;&#65039;</span> Editar Empresa
+      <span class="hb-icon">&#9999;&#65039;</span> <span data-i18n="hb_edit_company">Editar Empresa</span>
     </button>
     <button class="hb-item" onclick="closeHamburger();goToUser()">
-      <span class="hb-icon">&#128100;</span> Dados do Usuario
+      <span class="hb-icon">&#128100;</span> <span data-i18n="hb_user_data">Dados do Usu&aacute;rio</span>
     </button>
     <button class="hb-item" onclick="closeHamburger();goToLogistica()">
-      <span class="hb-icon">&#128666;</span> Entregas do Dia (Logistica)
+      <span class="hb-icon">&#128666;</span> <span data-i18n="hb_logistics">Entregas do Dia (Log&iacute;stica)</span>
     </button>
     <div class="hb-sep"></div>
     <button class="hb-item" onclick="toggleDarkMode(!document.body.classList.contains('dark-mode'))" id="hbDarkBtn">
@@ -767,26 +791,26 @@ body.dark-mode .aud-foto-meta{background:#0f172a!important;color:#cbd5e1!importa
     </button>
     <div class="hb-sep"></div>
     <button class="hb-item" id="pwaInstallHb" style="display:none;color:#059669;font-weight:700" onclick="closeHamburger();instalarPWA()">
-      <span class="hb-icon">&#128242;</span> Instalar App (PWA)
+      <span class="hb-icon">&#128242;</span> <span data-i18n="hb_install_pwa">Instalar App (PWA)</span>
     </button>
 
   </div>
   <div class="hb-footer">
     <button class="hb-item" onclick="closeHamburger();goToNewCompany()">
-      <span class="hb-icon">&#127970;</span> Cadastrar Nova Empresa
+      <span class="hb-icon">&#127970;</span> <span data-i18n="hb_new_company">Cadastrar Nova Empresa</span>
     </button>
     <button class="hb-item" onclick="closeHamburger();voltarParaSplash()">
-      <span class="hb-icon">&#128257;</span> Trocar Empresa
+      <span class="hb-icon">&#128257;</span> <span data-i18n="hb_switch_company">Trocar Empresa</span>
     </button>
     <button class="hb-item" onclick="closeHamburger();goToConfigGeral()">
-      <span class="hb-icon">&#9881;&#65039;</span> Configuracoes
+      <span class="hb-icon">&#9881;&#65039;</span> <span data-i18n="hb_settings">Configura&ccedil;&otilde;es</span>
     </button>
     <div class="hb-sep"></div>
     <button class="hb-item" onclick="closeHamburger();exportarBackup()" style="font-size:12px;opacity:0.85">
-      <span class="hb-icon">&#128229;</span> Exportar Backup (JSON)
+      <span class="hb-icon">&#128229;</span> <span data-i18n="hb_export_backup">Exportar Backup (JSON)</span>
     </button>
     <button class="hb-item" onclick="closeHamburger();document.getElementById('hbImportBackup').click()" style="font-size:12px;opacity:0.85">
-      <span class="hb-icon">&#128194;</span> Importar Backup (JSON)
+      <span class="hb-icon">&#128194;</span> <span data-i18n="hb_import_backup">Importar Backup (JSON)</span>
     </button>
     <input type="file" id="hbImportBackup" accept=".json,application/json" style="display:none" onchange="importarBackup(this)">
   </div>
@@ -802,7 +826,7 @@ body.dark-mode .aud-foto-meta{background:#0f172a!important;color:#cbd5e1!importa
   <div class="ph-faixa" id="clientsFaixa">
     <div class="ph-faixa-bg"></div>
     <div class="ph-faixa-text">
-      <div class="ph-faixa-label">Empresa:</div>
+      <div class="ph-faixa-label" data-i18n="label_company">Empresa:</div>
       <div class="ph-faixa-nome" id="clientsTitle">Clientes</div>
     </div>
     <img class="ph-faixa-logo" id="clientsEmpresaLogo" src="" style="display:none">
@@ -810,8 +834,8 @@ body.dark-mode .aud-foto-meta{background:#0f172a!important;color:#cbd5e1!importa
   <div class="sm" id="msgClients"></div>
   <div id="clientsList"></div>
   <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
-    <button onclick="goToNewClient()" class="grn" style="flex:1;min-width:150px;margin:0;padding:12px;">+ Novo Cliente</button>
-    <button onclick="goToLogistica()" class="ora" style="flex:1;min-width:170px;margin:0;padding:12px;">&#128666; Entregas do Dia <span id="clientsLogisticaBadge" style="display:none;background:#fff;color:#b45309;padding:1px 6px;border-radius:10px;font-size:11px;font-weight:800;margin-left:4px">0</span></button>
+    <button onclick="goToNewClient()" class="grn" data-i18n="btn_new_client" style="flex:1;min-width:150px;margin:0;padding:12px;">+ Novo Cliente</button>
+    <button onclick="goToLogistica()" class="ora" style="flex:1;min-width:170px;margin:0;padding:12px;"><span data-i18n="btn_deliveries_today">&#128666; Entregas do Dia</span> <span id="clientsLogisticaBadge" style="display:none;background:#fff;color:#b45309;padding:1px 6px;border-radius:10px;font-size:11px;font-weight:800;margin-left:4px">0</span></button>
   </div>
 </div>
 
@@ -820,36 +844,36 @@ body.dark-mode .aud-foto-meta{background:#0f172a!important;color:#cbd5e1!importa
   <!-- Topbar LocalShelf -->
   <div class="topbar">
     <img data-lcs-asset="logo-lcs" alt="LocalShelf" style="height:38px;object-fit:contain;border-radius:6px">
-    <div style="display:flex;flex-direction:column;justify-content:center;line-height:1.1;flex:1;padding-left:8px"><span style="color:#fff;font-size:13px;font-weight:700;letter-spacing:1px">LOCALSHELF</span><span style="color:#94a3b8;font-size:10px;letter-spacing:2px">GESTÃO INTELIGENTE</span></div>
+    <div style="display:flex;flex-direction:column;justify-content:center;line-height:1.1;flex:1;padding-left:8px"><span style="color:#fff;font-size:13px;font-weight:700;letter-spacing:1px">LOCALSHELF</span><span style="color:#94a3b8;font-size:10px;letter-spacing:2px" data-i18n="app_tagline_upper">GEST&Atilde;O INTELIGENTE</span></div>
     <button class="topbar-hb" onclick="openHamburger()">&#9776;</button>
   </div>
   <!-- Faixa cliente -->
   <div class="ph-faixa" id="menuFaixa">
     <div class="ph-faixa-bg"></div>
     <div class="ph-faixa-text">
-      <div class="ph-faixa-label">Cliente:</div>
+      <div class="ph-faixa-label" data-i18n="label_client">Cliente:</div>
       <div class="ph-faixa-nome" id="menuTitle">Menu</div>
     </div>
     <img class="ph-faixa-logo" id="menuClientLogo" src="" style="display:none">
   </div>
   <div id="menuRotaBadge" style="display:none;margin-bottom:10px"></div>
   <div class="mo">
-    <button class="mb" onclick="goToPedidos()"><span class="mi">&#128230;</span><div><div>Sugestao de Pedido</div><div class="md">Gere sugestao com quantidades</div></div></button>
-    <button class="mb" onclick="goToEstoque()"><span class="mi">&#128202;</span><div><div>Controle de Estoque</div><div class="md">Registre estoque atual</div></div></button>
-    <button class="mb" onclick="goToRupturas()"><span class="mi">&#128680;</span><div><div>Controle de Rupturas</div><div class="md">Produtos em falta</div></div></button>
-    <button class="mb" onclick="goToValidade()"><span class="mi">&#128197;</span><div><div>Controle de Validade</div><div class="md">Monitore vencimentos</div></div></button>
-    <button class="mb" onclick="goToAuditoria()"><span class="mi">&#128203;</span><div><div>Auditoria / Historico</div><div class="md">Registro operacional</div></div></button>
-    <button class="mb" onclick="goToLojaIdeal()"><span class="mi">&#127968;</span><div><div>Modelo Operacional</div><div class="md">Biblioteca visual de referencia</div></div></button>
-    <button class="mb" onclick="goToDadosLoja()"><span class="mi">&#128101;</span><div><div>Dados da Loja</div><div class="md">Perfil e frequencia</div></div></button>
-    <button class="mb" onclick="abrirAuditoriaIA()" style="border-left:3px solid #7c3aed;background:linear-gradient(135deg,#faf5ff,#f3e8ff)"><span class="mi">&#128247;</span><div><div style="color:#7c3aed;font-weight:700">Auditoria por Imagem IA</div><div class="md">Analise execucao com fotos</div></div></button>
-    <button class="mb" onclick="goToTrocas()"><span class="mi">&#128260;</span><div><div>Historico de Trocas</div><div class="md">Registro de produtos trocados</div></div></button>
-    <button class="mb" onclick="goToRelatorios()"><span class="mi">&#128196;</span><div><div>Relatorios</div><div class="md">PDFs e exportacoes</div></div></button>
-    <button class="mb" onclick="goToConfig()"><span class="mi">&#9881;</span><div><div>Configuracoes</div><div class="md">Armazenamento e dados</div></div></button>
-    <div style="margin:8px 0 4px;padding:6px 10px;background:#f1f5f9;border-radius:8px;font-size:11px;font-weight:700;color:#64748b;letter-spacing:0.5px;text-align:center">&#128274; DADOS PARA CONTROLE INTERNO</div>
-    <button class="mb" onclick="goToPrecos()" style="border-color:#16a34a"><span class="mi">&#128178;</span><div><div style="color:#16a34a">Tabela de Precos</div><div class="md">Precos por produto (privado)</div></div></button>
-    <button class="mb" onclick="goToRelInterno()" style="border-color:#7c3aed"><span class="mi">&#128200;</span><div><div style="color:#7c3aed">Relatorio Interno</div><div class="md">Valores, meta e desempenho</div></div></button>
+    <button class="mb" onclick="goToPedidos()"><span class="mi">&#128230;</span><div><div data-i18n="menu_order">Sugest&atilde;o de Pedido</div><div class="md" data-i18n="menu_order_sub">Gere sugest&atilde;o com quantidades</div></div></button>
+    <button class="mb" onclick="goToEstoque()"><span class="mi">&#128202;</span><div><div data-i18n="menu_stock">Controle de Estoque</div><div class="md" data-i18n="menu_stock_sub">Registre estoque atual</div></div></button>
+    <button class="mb" onclick="goToRupturas()"><span class="mi">&#128680;</span><div><div data-i18n="menu_ruptures">Controle de Rupturas</div><div class="md" data-i18n="menu_ruptures_sub">Produtos em falta</div></div></button>
+    <button class="mb" onclick="goToValidade()"><span class="mi">&#128197;</span><div><div data-i18n="menu_validity">Controle de Validade</div><div class="md" data-i18n="menu_validity_sub">Monitore vencimentos</div></div></button>
+    <button class="mb" onclick="goToAuditoria()"><span class="mi">&#128203;</span><div><div data-i18n="menu_audit">Auditoria / Hist&oacute;rico</div><div class="md" data-i18n="menu_audit_sub">Registro operacional</div></div></button>
+    <button class="mb" onclick="goToLojaIdeal()"><span class="mi">&#127968;</span><div><div data-i18n="menu_ideal_store">Modelo Operacional</div><div class="md" data-i18n="menu_ideal_store_sub">Biblioteca visual de refer&ecirc;ncia</div></div></button>
+    <button class="mb" onclick="goToDadosLoja()"><span class="mi">&#128101;</span><div><div data-i18n="menu_store_data">Dados da Loja</div><div class="md" data-i18n="menu_store_data_sub">Perfil e frequ&ecirc;ncia</div></div></button>
+    <button class="mb" onclick="abrirAuditoriaIA()" style="border-left:3px solid #7c3aed;background:linear-gradient(135deg,#faf5ff,#f3e8ff)"><span class="mi">&#128247;</span><div><div style="color:#7c3aed;font-weight:700" data-i18n="menu_ai_audit">Auditoria por Imagem IA</div><div class="md" data-i18n="menu_ai_audit_sub">Analise execu&ccedil;&atilde;o com fotos</div></div></button>
+    <button class="mb" onclick="goToTrocas()"><span class="mi">&#128260;</span><div><div data-i18n="menu_exchanges">Hist&oacute;rico de Trocas</div><div class="md" data-i18n="menu_exchanges_sub">Registro de produtos trocados</div></div></button>
+    <button class="mb" onclick="goToRelatorios()"><span class="mi">&#128196;</span><div><div data-i18n="menu_reports">Relat&oacute;rios</div><div class="md" data-i18n="menu_reports_sub">PDFs e exporta&ccedil;&otilde;es</div></div></button>
+    <button class="mb" onclick="goToConfig()"><span class="mi">&#9881;</span><div><div data-i18n="menu_settings">Configura&ccedil;&otilde;es</div><div class="md" data-i18n="menu_settings_sub">Armazenamento e dados</div></div></button>
+    <div style="margin:8px 0 4px;padding:6px 10px;background:#f1f5f9;border-radius:8px;font-size:11px;font-weight:700;color:#64748b;letter-spacing:0.5px;text-align:center" data-i18n="menu_internal_header">&#128274; DADOS PARA CONTROLE INTERNO</div>
+    <button class="mb" onclick="goToPrecos()" style="border-color:#16a34a"><span class="mi">&#128178;</span><div><div style="color:#16a34a" data-i18n="menu_prices">Tabela de Pre&ccedil;os</div><div class="md" data-i18n="menu_prices_sub">Pre&ccedil;os por produto (privado)</div></div></button>
+    <button class="mb" onclick="goToRelInterno()" style="border-color:#7c3aed"><span class="mi">&#128200;</span><div><div style="color:#7c3aed" data-i18n="menu_internal_report">Relat&oacute;rio Interno</div><div class="md" data-i18n="menu_internal_report_sub">Valores, meta e desempenho</div></div></button>
   </div>
-  <div style="margin-top:14px;"><button onclick="backToClients()" class="sec">&#8592; Voltar</button></div>
+  <div style="margin-top:14px;"><button onclick="backToClients()" class="sec" data-i18n="btn_back">&#8592; Voltar</button></div>
 </div>
 
 <!-- RELATORIO INTERNO -->
@@ -1607,17 +1631,17 @@ body.dark-mode .aud-foto-meta{background:#0f172a!important;color:#cbd5e1!importa
   <div class="ph-faixa">
     <div class="ph-faixa-bg"></div>
     <div class="ph-faixa-text">
-      <div class="ph-faixa-label">Cliente:</div>
+      <div class="ph-faixa-label" data-i18n="label_client">Cliente:</div>
       <div class="ph-faixa-nome" id="dadosLojaTitle">-</div>
     </div>
     <img class="ph-faixa-logo" id="dadosLojaTitleLogo" src="" style="display:none">
   </div>
-  <div style="padding:8px 0 4px"><button onclick="goToMenu()" class="sec" style="font-size:12px;padding:6px 14px">&#8592; Voltar</button></div>
+  <div style="padding:8px 0 4px"><button onclick="goToMenu()" class="sec" data-i18n="btn_back" style="font-size:12px;padding:6px 14px">&#8592; Voltar</button></div>
   <div class="sm" id="msgDadosLoja"></div>
   <div style="margin-bottom:10px;display:flex;gap:6px;flex-wrap:wrap">
-    <button onclick="salvarDadosLoja()" class="grn" style="margin:0">&#128190; Salvar</button>
-    <button type="button" onclick="abrirRelatorioExecutivoPassagem()" style="background:linear-gradient(135deg,#0f766e,#059669);color:#fff;border:none;border-radius:8px;padding:8px 12px;font-size:12px;font-weight:700;cursor:pointer;margin:0">&#128203; Relat&oacute;rio Executivo / Passagem de Bast&atilde;o</button>
-    <button onclick="goToMenu()" class="sec" style="margin:0">&#8592; Voltar</button>
+    <button onclick="salvarDadosLoja()" class="grn" data-i18n="btn_save_icon" style="margin:0">&#128190; Salvar</button>
+    <button type="button" onclick="abrirRelatorioExecutivoPassagem()" data-i18n="btn_exec_report" style="background:linear-gradient(135deg,#0f766e,#059669);color:#fff;border:none;border-radius:8px;padding:8px 12px;font-size:12px;font-weight:700;cursor:pointer;margin:0">&#128203; Relat&oacute;rio Executivo / Passagem de Bast&atilde;o</button>
+    <button onclick="goToMenu()" class="sec" data-i18n="btn_back" style="margin:0">&#8592; Voltar</button>
   </div>
 
   <h3 style="color:#1e3a8a;font-size:14px;margin:14px 0 6px">Identificacao</h3>
@@ -1750,47 +1774,69 @@ body.dark-mode .aud-foto-meta{background:#0f172a!important;color:#cbd5e1!importa
 <!-- CONFIGURACOES -->
 <div class="page" id="pageConfigGeral">
   <div class="ph" style="background:linear-gradient(135deg,#1e40af,#3b82f6)">
-    <div class="ph-row"><h1 style="color:#fff">&#9881;&#65039; Configuracoes</h1></div>
+    <div class="ph-row"><h1 style="color:#fff" data-i18n="cfg_title">&#9881;&#65039; Configura&ccedil;&otilde;es</h1></div>
   </div>
-  <div style="padding:8px 0 4px"><button onclick="backToClients()" class="sec" style="font-size:12px;padding:6px 14px">&#8592; Voltar</button></div>
+  <div style="padding:8px 0 4px"><button onclick="backToClients()" class="sec" data-i18n="btn_back" style="font-size:12px;padding:6px 14px">&#8592; Voltar</button></div>
   <div class="sm" id="msgConfigGeral"></div>
+
+  <!-- Idioma & Localizacao -->
+  <div id="cfgIdiomaLocCard" style="border:1px solid #93c5fd;border-radius:10px;padding:14px;margin-bottom:10px;background:#f8fafc">
+    <div style="font-weight:700;color:#1e3a8a;margin-bottom:8px" data-i18n="cfg_lang_loc_title">&#127760; Idioma &amp; Localiza&ccedil;&atilde;o</div>
+    <div style="font-size:11px;color:#475569;margin-bottom:6px;font-weight:600" data-i18n="cfg_lang_label">Idioma do Aplicativo</div>
+    <div class="lang-pills-row">
+      <button type="button" class="lang-pill-btn" data-lang-opt="pt-BR" onclick="setAppLanguage('pt-BR', true)">&#127463;&#127479; Portugu&ecirc;s (BR)</button>
+      <button type="button" class="lang-pill-btn" data-lang-opt="en" onclick="setAppLanguage('en', true)">&#127482;&#127480; English</button>
+      <button type="button" class="lang-pill-btn" data-lang-opt="es" onclick="setAppLanguage('es', true)">&#127466;&#127480; Espa&ntilde;ol</button>
+    </div>
+    <div style="border-top:1px dashed #cbd5e1;padding-top:10px;margin-top:6px">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:6px">
+        <div style="font-size:12px;font-weight:700;color:#1e3a8a" data-i18n="cfg_loc_title">&#128205; Localiza&ccedil;&atilde;o &amp; Regional</div>
+        <span id="cfgLocationBadge" class="sync-pill" style="background:#e2e8f0;color:#475569">N&atilde;o ativada</span>
+      </div>
+      <div id="cfgLocationInfo" style="font-size:11px;color:#475569;margin-bottom:8px;line-height:1.45">Permita a localiza&ccedil;&atilde;o para preencher sua Regional automaticamente e preparar check-ins futuros nas lojas.</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        <button type="button" onclick="solicitarLocalizacaoUsuario('cfg')" data-i18n="cfg_btn_allow_loc" style="background:#059669;color:#fff;border:none;border-radius:8px;padding:9px 13px;cursor:pointer;font-size:12px;font-weight:700;margin:0">&#128205; Permitir / Atualizar Localiza&ccedil;&atilde;o</button>
+        <button type="button" id="cfgBtnDisableLoc" onclick="desativarLocalizacaoUsuario()" class="sec" data-i18n="cfg_btn_disable_loc" style="border:none;border-radius:8px;padding:9px 12px;cursor:pointer;font-size:12px;font-weight:600;margin:0">Desativar</button>
+      </div>
+    </div>
+  </div>
 
   <!-- Armazenamento -->
   <div style="border:1px solid #e2e8f0;border-radius:10px;padding:14px;margin-bottom:10px">
-    <div style="font-weight:700;color:#1e3a8a;margin-bottom:10px">&#128190; Armazenamento</div>
+    <div style="font-weight:700;color:#1e3a8a;margin-bottom:10px" data-i18n="cfg_storage_title">&#128190; Armazenamento</div>
     <div id="cfgArmazenamento"></div>
-    <button onclick="exportarBackup()" class="sec" style="width:100%;margin-top:8px">&#128229; Exportar Backup</button>
+    <button onclick="exportarBackup()" class="sec" data-i18n="splash_export_backup" style="width:100%;margin-top:8px">&#128229; Exportar Backup</button>
     <label style="display:block;width:100%;margin-top:6px">
-      <span class="sec" style="display:block;text-align:center;padding:8px;border-radius:8px;border:1px solid #cbd5e1;cursor:pointer;font-size:13px">&#128194; Importar Backup</span>
+      <span class="sec" data-i18n="splash_import_backup" style="display:block;text-align:center;padding:8px;border-radius:8px;border:1px solid #cbd5e1;cursor:pointer;font-size:13px">&#128194; Importar Backup</span>
       <input type="file" accept=".json" id="importBackupInput" style="display:none" onchange="importarBackup(this)">
     </label>
-    <button onclick="confirmarLimpezaGeral()" class="red" style="width:100%;margin-top:6px">&#128465;&#65039; Limpar Armazenamento</button>
+    <button onclick="confirmarLimpezaGeral()" class="red" data-i18n="cfg_clear_storage" style="width:100%;margin-top:6px">&#128465;&#65039; Limpar Armazenamento</button>
   </div>
 
   <!-- Por cliente -->
   <div style="border:1px solid #e2e8f0;border-radius:10px;padding:14px;margin-bottom:10px">
-    <div style="font-weight:700;color:#1e3a8a;margin-bottom:10px">&#128100; Dados por Cliente</div>
+    <div style="font-weight:700;color:#1e3a8a;margin-bottom:10px" data-i18n="cfg_by_client">&#128100; Dados por Cliente</div>
     <div id="cfgPorCliente"></div>
   </div>
 
   <!-- Excluir Empresa -->
   <div style="border:1px solid #fecaca;border-radius:10px;padding:14px;margin-bottom:10px;background:#fef2f2">
-    <div style="font-weight:700;color:#dc2626;margin-bottom:6px">&#9888;&#65039; Zona de Risco</div>
-    <div style="font-size:11px;color:#991b1b;margin-bottom:10px">Excluir uma empresa remove permanentemente a empresa, todos os seus clientes e todos os dados vinculados (pedidos, estoque, auditorias, etc.). Esta acao nao pode ser desfeita.</div>
+    <div style="font-weight:700;color:#dc2626;margin-bottom:6px" data-i18n="cfg_danger_zone">&#9888;&#65039; Zona de Risco</div>
+    <div style="font-size:11px;color:#991b1b;margin-bottom:10px" data-i18n="cfg_danger_desc">Excluir uma empresa remove permanentemente a empresa, todos os seus clientes e todos os dados vinculados (pedidos, estoque, auditorias, etc.). Esta acao nao pode ser desfeita.</div>
     <div id="cfgExcluirEmpresa"></div>
   </div>
 
   <!-- Chave API Google Gemini (gemini-2.5-flash) -->
   <div style="border:1px solid #93c5fd;border-radius:10px;padding:14px;margin-bottom:10px;background:#eff6ff">
-    <div style="font-weight:700;color:#1e3a8a;margin-bottom:4px">&#10024; Chave API Google Gemini (gemini-2.5-flash)</div>
-    <div style="font-size:11px;color:#475569;margin-bottom:8px;line-height:1.4">Salva exclusivamente no <b>localStorage</b> deste aparelho. Usada na busca inteligente de lojas e na leitura de fotos/PDFs de espelhos de pedido (De/Para PLU).</div>
+    <div style="font-weight:700;color:#1e3a8a;margin-bottom:4px" data-i18n="cfg_gemini_title">&#10024; Chave API Google Gemini (gemini-2.5-flash)</div>
+    <div style="font-size:11px;color:#475569;margin-bottom:8px;line-height:1.4" data-i18n="cfg_gemini_desc">Salva exclusivamente no <b>localStorage</b> deste aparelho. Usada na busca inteligente de lojas e na leitura de fotos/PDFs de espelhos de pedido (De/Para PLU).</div>
     <div class="cfg-key-row">
       <input type="password" id="googleGeminiKeyInput" placeholder="Cole sua chave AIza... do Google AI Studio" autocomplete="off" style="padding:10px;border:1px solid #93c5fd;border-radius:8px;font-size:13px">
       <button type="button" class="cfg-key-toggle" onclick="toggleMostrarGeminiKey()" title="Mostrar ou ocultar chave">&#128065;&#65039;</button>
     </div>
     <div style="display:flex;gap:8px;flex-wrap:wrap">
-      <button type="button" onclick="salvarConfigGemini()" style="background:#1e40af;color:#fff;border:none;border-radius:8px;padding:10px 16px;cursor:pointer;font-size:13px;font-weight:700;margin:0">Salvar Chave Gemini</button>
-      <button type="button" onclick="limparConfigGemini()" class="sec" style="border:none;border-radius:8px;padding:10px 14px;cursor:pointer;font-size:12px;font-weight:600;margin:0">Remover</button>
+      <button type="button" onclick="salvarConfigGemini()" data-i18n="cfg_btn_save_gemini" style="background:#1e40af;color:#fff;border:none;border-radius:8px;padding:10px 16px;cursor:pointer;font-size:13px;font-weight:700;margin:0">Salvar Chave Gemini</button>
+      <button type="button" onclick="limparConfigGemini()" class="sec" data-i18n="btn_remove" style="border:none;border-radius:8px;padding:10px 14px;cursor:pointer;font-size:12px;font-weight:600;margin:0">Remover</button>
     </div>
     <div id="msgConfigGemini" style="font-size:11px;margin-top:8px;font-weight:600"></div>
     <details style="margin-top:10px;border-top:1px dashed #bfdbfe;padding-top:8px">
@@ -1805,10 +1851,10 @@ body.dark-mode .aud-foto-meta{background:#0f172a!important;color:#cbd5e1!importa
   <!-- Nuvem Supabase (Banco + Fotos HD) -->
   <div class="supabase-card">
     <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px">
-      <div style="font-weight:700;color:#065f46">&#9729;&#65039; Nuvem Supabase (Banco + Fotos HD)</div>
+      <div style="font-weight:700;color:#065f46" data-i18n="cfg_supabase_title">&#9729;&#65039; Nuvem Supabase (Banco + Fotos HD)</div>
       <span class="sync-pill" id="supabaseSyncStatus">Offline-First Local</span>
     </div>
-    <div style="font-size:11px;color:#047857;margin-bottom:8px;line-height:1.4">Opcional e <b>100% offline-first</b>: sem sinal no PDV, salva localmente (localStorage + IndexedDB) e sincroniza automaticamente ao reconectar.</div>
+    <div style="font-size:11px;color:#047857;margin-bottom:8px;line-height:1.4" data-i18n="cfg_supabase_desc">Opcional e <b>100% offline-first</b>: sem sinal no PDV, salva localmente (localStorage + IndexedDB) e sincroniza automaticamente ao reconectar.</div>
     <div class="fg" style="margin-bottom:8px">
       <label style="color:#065f46">Supabase URL</label>
       <input type="url" id="supabaseUrlInput" placeholder="https://seu-projeto.supabase.co" autocomplete="off" style="padding:9px;border:1px solid #6ee7b7;border-radius:8px;font-size:12px">
@@ -1821,14 +1867,14 @@ body.dark-mode .aud-foto-meta{background:#0f172a!important;color:#cbd5e1!importa
       </div>
     </div>
     <div class="fg" style="margin-bottom:10px">
-      <label style="color:#065f46">Identificador do Promotor (Nome ou Matr&iacute;cula)</label>
+      <label style="color:#065f46" data-i18n="cfg_promotor_label">Identificador do Promotor (Nome ou Matr&iacute;cula)</label>
       <input type="text" id="supabasePromotorInput" placeholder="Ex: Lucas Campelo / MAT-1024" style="padding:9px;border:1px solid #6ee7b7;border-radius:8px;font-size:12px">
     </div>
     <div style="display:flex;gap:6px;flex-wrap:wrap">
-      <button type="button" onclick="salvarConfigSupabase()" style="background:#059669;color:#fff;border:none;border-radius:8px;padding:9px 14px;cursor:pointer;font-size:12px;font-weight:700;margin:0">Salvar &amp; Testar</button>
-      <button type="button" onclick="sincronizarFilaSupabase(true)" style="background:#0f766e;color:#fff;border:none;border-radius:8px;padding:9px 12px;cursor:pointer;font-size:12px;font-weight:700;margin:0">&#128260; Sincronizar Agora</button>
-      <button type="button" onclick="abrirModalSqlSupabase()" style="background:#1e3a8a;color:#fff;border:none;border-radius:8px;padding:9px 12px;cursor:pointer;font-size:12px;font-weight:700;margin:0">&#128451;&#65039; Gerar Script SQL do Banco</button>
-      <button type="button" onclick="limparConfigSupabase()" class="sec" style="border:none;border-radius:8px;padding:9px 12px;cursor:pointer;font-size:12px;font-weight:600;margin:0">Remover</button>
+      <button type="button" onclick="salvarConfigSupabase()" data-i18n="cfg_btn_save_test" style="background:#059669;color:#fff;border:none;border-radius:8px;padding:9px 14px;cursor:pointer;font-size:12px;font-weight:700;margin:0">Salvar &amp; Testar</button>
+      <button type="button" onclick="sincronizarFilaSupabase(true)" data-i18n="cfg_btn_sync_now" style="background:#0f766e;color:#fff;border:none;border-radius:8px;padding:9px 12px;cursor:pointer;font-size:12px;font-weight:700;margin:0">&#128260; Sincronizar Agora</button>
+      <button type="button" onclick="abrirModalSqlSupabase()" data-i18n="cfg_btn_sql" style="background:#1e3a8a;color:#fff;border:none;border-radius:8px;padding:9px 12px;cursor:pointer;font-size:12px;font-weight:700;margin:0">&#128451;&#65039; Gerar Script SQL do Banco</button>
+      <button type="button" onclick="limparConfigSupabase()" class="sec" data-i18n="btn_remove" style="border:none;border-radius:8px;padding:9px 12px;cursor:pointer;font-size:12px;font-weight:600;margin:0">Remover</button>
     </div>
     <div id="msgConfigSupabase" style="font-size:11px;margin-top:8px;font-weight:600"></div>
   </div>
@@ -1837,8 +1883,8 @@ body.dark-mode .aud-foto-meta{background:#0f172a!important;color:#cbd5e1!importa
   <div style="border:1px solid #334155;border-radius:10px;padding:14px;margin-bottom:10px;background:#1e293b">
     <div style="display:flex;justify-content:space-between;align-items:center">
       <div>
-        <div style="font-weight:700;color:#e2e8f0;margin-bottom:2px">🌙 Modo Escuro</div>
-        <div style="font-size:11px;color:#94a3b8">Alterna entre tema claro e escuro</div>
+        <div style="font-weight:700;color:#e2e8f0;margin-bottom:2px" data-i18n="cfg_dark_title">&#127769; Modo Escuro</div>
+        <div style="font-size:11px;color:#94a3b8" data-i18n="cfg_dark_sub">Alterna entre tema claro e escuro</div>
       </div>
       <label style="position:relative;display:inline-block;width:50px;height:26px">
         <input type="checkbox" id="darkModeToggle" onchange="toggleDarkMode(this.checked)" style="opacity:0;width:0;height:0">
@@ -1852,7 +1898,7 @@ body.dark-mode .aud-foto-meta{background:#0f172a!important;color:#cbd5e1!importa
   <!-- Versão -->
   <div style="border:1px solid #e2e8f0;border-radius:10px;padding:14px;margin-bottom:10px;text-align:center">
     <div style="font-size:12px;color:#64748b">LocalShelf</div>
-    <div style="font-size:18px;font-weight:700;color:#1e3a8a;margin:4px 0">Versao 1.0</div>
+    <div style="font-size:18px;font-weight:700;color:#1e3a8a;margin:4px 0" data-i18n="cfg_version">Vers&atilde;o 1.0</div>
     <div style="font-size:11px;color:#94a3b8">Junho 2026</div>
   </div>
 </div>
@@ -1919,15 +1965,15 @@ body.dark-mode .aud-foto-meta{background:#0f172a!important;color:#cbd5e1!importa
 
   <div style="padding:0 12px 12px">
     <div style="background:linear-gradient(135deg,#7c3aed,#a78bfa);border-radius:12px;padding:16px;margin-bottom:14px;color:#fff">
-      <div style="font-size:16px;font-weight:800;margin-bottom:4px">&#129302; Auditoria de Execucao por Imagem</div>
-      <div style="font-size:12px;opacity:0.85">Tire fotos da loja e a IA avalia a execucao comparando com o guia da empresa</div>
+      <div style="font-size:16px;font-weight:800;margin-bottom:4px" data-i18n="audia_title">&#129302; Auditoria de Execu&ccedil;&atilde;o por Imagem</div>
+      <div style="font-size:12px;opacity:0.85" data-i18n="audia_sub">Tire fotos da loja e a IA avalia a execu&ccedil;&atilde;o comparando com o guia da empresa</div>
     </div>
 
     <!-- Upload de fotos -->
     <div style="margin-bottom:14px">
-      <div style="font-weight:700;color:#1e3a8a;font-size:13px;margin-bottom:8px">1. Fotos da Loja (até 5 fotos)</div>
+      <div style="font-weight:700;color:#1e3a8a;font-size:13px;margin-bottom:8px" data-i18n="audia_photos_lbl">1. Fotos da Loja (at&eacute; 5 fotos)</div>
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:8px" id="gridFotosAudIA"></div>
-      <label for="uploadFotosAudIA" style="display:block;border:2px dashed #c4b5fd;border-radius:8px;padding:14px;text-align:center;cursor:pointer;background:#faf5ff;color:#7c3aed;font-size:13px">
+      <label for="uploadFotosAudIA" data-i18n="audia_add_photo" style="display:block;border:2px dashed #c4b5fd;border-radius:8px;padding:14px;text-align:center;cursor:pointer;background:#faf5ff;color:#7c3aed;font-size:13px">
         &#128247; Adicionar Foto
       </label>
       <input type="file" id="uploadFotosAudIA" accept="image/*" capture="environment" multiple style="display:none" onchange="adicionarFotosAudIA(this)">
@@ -1940,11 +1986,11 @@ body.dark-mode .aud-foto-meta{background:#0f172a!important;color:#cbd5e1!importa
 
     <!-- Resultado -->
     <div id="resultadoAudIA" style="display:none;margin-bottom:14px">
-      <div style="font-weight:700;color:#1e3a8a;font-size:13px;margin-bottom:8px">3. Resultado da Auditoria</div>
+      <div style="font-weight:700;color:#1e3a8a;font-size:13px;margin-bottom:8px" data-i18n="audia_result_lbl">3. Resultado da Auditoria</div>
 
       <!-- Score -->
       <div id="scoreAudIA" style="background:#f0fdf4;border:1px solid #86efac;border-radius:10px;padding:14px;margin-bottom:10px;text-align:center">
-        <div style="font-size:11px;font-weight:800;letter-spacing:0.6px;text-transform:uppercase;color:#475569;margin-bottom:2px">INDICE LOJA PERFEITA</div>
+        <div style="font-size:11px;font-weight:800;letter-spacing:0.6px;text-transform:uppercase;color:#475569;margin-bottom:2px" data-i18n="audia_perfect_store">INDICE LOJA PERFEITA</div>
         <div style="font-size:36px;font-weight:900;color:#16a34a" id="scoreValorAudIA">0%</div>
         <div id="scoreMetaBadgeAudIA" style="font-size:11px;font-weight:700;margin-top:4px;color:#16a34a">Meta Loja Perfeita: 80%+</div>
       </div>
@@ -1961,13 +2007,13 @@ body.dark-mode .aud-foto-meta{background:#0f172a!important;color:#cbd5e1!importa
 
       <!-- Justificativa -->
       <div style="margin-top:12px">
-        <div style="font-weight:700;color:#1e3a8a;font-size:13px;margin-bottom:6px">Justificativa / Observacoes</div>
-        <textarea id="justificativaAudIA" placeholder="Explique os desvios encontrados..." style="width:100%;min-height:80px;border:1px solid #e2e8f0;border-radius:8px;padding:10px;font-size:13px;resize:vertical"></textarea>
+        <div style="font-weight:700;color:#1e3a8a;font-size:13px;margin-bottom:6px" data-i18n="audia_notes_lbl">Justificativa / Observa&ccedil;&otilde;es</div>
+        <textarea id="justificativaAudIA" placeholder="Explique os desvios encontrados..." data-i18n-placeholder="audia_notes_ph" style="width:100%;min-height:80px;border:1px solid #e2e8f0;border-radius:8px;padding:10px;font-size:13px;resize:vertical"></textarea>
       </div>
 
       <div id="albumLinksAudIA"></div>
       <div style="display:flex;gap:8px;margin-top:10px">
-        <button onclick="salvarAuditoriaIA()" style="flex:1;background:#16a34a;color:#fff;border:none;border-radius:8px;padding:10px;cursor:pointer;font-size:13px;font-weight:700">&#128190; Salvar</button>
+        <button onclick="salvarAuditoriaIA()" data-i18n="btn_save_icon" style="flex:1;background:#16a34a;color:#fff;border:none;border-radius:8px;padding:10px;cursor:pointer;font-size:13px;font-weight:700">&#128190; Salvar</button>
         <button onclick="exportarAuditoriaIAPdf()" style="background:#1e40af;color:#fff;border:none;border-radius:8px;padding:10px 14px;cursor:pointer;font-size:13px">&#128196; PDF</button>
       </div>
     </div>
@@ -1975,16 +2021,16 @@ body.dark-mode .aud-foto-meta{background:#0f172a!important;color:#cbd5e1!importa
     <!-- Status loading -->
     <div id="loadingAudIA" style="display:none;text-align:center;padding:30px;color:#7c3aed">
       <div style="font-size:40px;margin-bottom:10px">&#9881;&#65039;</div>
-      <div style="font-size:14px;font-weight:600">Analisando fotos...</div>
-      <div style="font-size:12px;color:#94a3b8;margin-top:4px">Isso pode levar alguns segundos</div>
+      <div style="font-size:14px;font-weight:600" data-i18n="audia_analyzing">Analisando fotos...</div>
+      <div style="font-size:12px;color:#94a3b8;margin-top:4px" data-i18n="audia_wait">Isso pode levar alguns segundos</div>
     </div>
 
     <!-- Botão analisar -->
-    <button id="btnAnalisarAudIA" onclick="analisarAuditoriaIA()" style="width:100%;background:#7c3aed;color:#fff;border:none;border-radius:10px;padding:14px;cursor:pointer;font-size:14px;font-weight:700;margin-bottom:12px">
+    <button id="btnAnalisarAudIA" onclick="analisarAuditoriaIA()" data-i18n="audia_btn_analyze" style="width:100%;background:#7c3aed;color:#fff;border:none;border-radius:10px;padding:14px;cursor:pointer;font-size:14px;font-weight:700;margin-bottom:12px">
       &#129302; Analisar com IA
     </button>
 
-    <button onclick="goToMenu()" class="sec" style="width:100%">&#8592; Voltar ao Menu</button>
+    <button onclick="goToMenu()" class="sec" data-i18n="btn_back_menu" style="width:100%">&#8592; Voltar ao Menu</button>
   </div>
 </div>
 </div>
@@ -2829,7 +2875,8 @@ function goToNewCompany() {
     tempCompanyProducts = []; pendingCompanyLogo = null;
     _compProdFilter = "todos";
     ["companyName","companyCNPJ","companyContacts"].forEach(function(id){ var el=document.getElementById(id); if(el) el.value = ""; });
-    var regEl = document.getElementById("companyRegional"); if (regEl) regEl.value = "Nacional";
+    var _locUser = (typeof getUserLocationPrefs === "function") ? getUserLocationPrefs() : null;
+    var regEl = document.getElementById("companyRegional"); if (regEl) regEl.value = (_locUser && _locUser.regional) ? _locUser.regional : "Nacional";
     var stEl = document.getElementById("compPortfolioStatus"); if (stEl) { stEl.style.display = "none"; stEl.textContent = ""; }
     var cp = document.getElementById("companyLogoPreview"); if(cp) cp.innerHTML = "";
     var guiaTxt = document.getElementById("guiaEmpresaTexto"); if(guiaTxt) guiaTxt.value = "";
@@ -2924,10 +2971,10 @@ function goToMenu() {
         var stRota = (typeof getStatusEntregaLojaHoje === "function") ? getStatusEntregaLojaHoje(currentClient.id) : "";
         if (stRota === "em_rota") {
             rotaEl.style.display = "block";
-            rotaEl.innerHTML = "<div class='rota-hoje-badge' style='width:100%;justify-content:space-between;padding:8px 12px;border-radius:10px;font-size:12px'><span>&#128666; Caminh&atilde;o em Rota Hoje para esta loja</span><button type='button' onclick='goToLogistica()' style='background:#b45309;color:#fff;border:none;border-radius:6px;padding:4px 9px;font-size:11px;font-weight:700;cursor:pointer;margin:0'>Conferir Entrega</button></div>";
+            rotaEl.innerHTML = "<div class='rota-hoje-badge' style='width:100%;justify-content:space-between;padding:8px 12px;border-radius:10px;font-size:12px'><span>&#128666; " + escHtml(t("rota_em_rota_msg")) + "</span><button type='button' onclick='goToLogistica()' style='background:#b45309;color:#fff;border:none;border-radius:6px;padding:4px 9px;font-size:11px;font-weight:700;cursor:pointer;margin:0'>" + escHtml(t("menu_check_delivery")) + "</button></div>";
         } else if (stRota === "recebida") {
             rotaEl.style.display = "block";
-            rotaEl.innerHTML = "<div class='rota-recebida-badge' style='width:100%;justify-content:space-between;padding:8px 12px;border-radius:10px;font-size:12px'><span>&#9989; Entrega de Hoje Confirmada no Recebimento</span><button type='button' onclick='goToLogistica()' style='background:#059669;color:#fff;border:none;border-radius:6px;padding:4px 9px;font-size:11px;font-weight:700;cursor:pointer;margin:0'>Ver Detalhes</button></div>";
+            rotaEl.innerHTML = "<div class='rota-recebida-badge' style='width:100%;justify-content:space-between;padding:8px 12px;border-radius:10px;font-size:12px'><span>&#9989; " + escHtml(t("rota_confirmada_msg")) + "</span><button type='button' onclick='goToLogistica()' style='background:#059669;color:#fff;border:none;border-radius:6px;padding:4px 9px;font-size:11px;font-weight:700;cursor:pointer;margin:0'>" + escHtml(t("menu_view_details")) + "</button></div>";
         } else {
             rotaEl.style.display = "none";
             rotaEl.innerHTML = "";
@@ -4705,20 +4752,20 @@ function renderClientsList() {
     var div = document.getElementById("clientsList");
     var compId = currentCompany ? currentCompany.id : null;
     var filtered = Object.values(clients).filter(function(c){ return !compId||c.companyId===compId; });
-    if (!filtered.length) { div.innerHTML = "<p style='text-align:center;color:#999;padding:20px;font-size:13px'>Nenhum cliente. Toque em + Novo Cliente.</p>"; if (typeof atualizarBadgeLogisticaClientes === "function") atualizarBadgeLogisticaClientes(); return; }
+    if (!filtered.length) { div.innerHTML = "<p style='text-align:center;color:#999;padding:20px;font-size:13px'>" + escHtml(t("clients_empty")) + "</p>"; if (typeof atualizarBadgeLogisticaClientes === "function") atualizarBadgeLogisticaClientes(); return; }
     var html2 = "";
     filtered.forEach(function(c){
         var logo = c.logo ? "<img src='" + c.logo + "'>" : "&#x1F3EA;";
         var infoTipo = [c.canal ? ("Canal: " + c.canal) : "", c.perfil, c.checkouts ? (c.checkouts + " checkouts") : "", c.codigoCliente ? ("Cod: " + c.codigoCliente) : ""].filter(Boolean).join(" | ");
         var stRota = (typeof getStatusEntregaLojaHoje === "function") ? getStatusEntregaLojaHoje(c.id) : "";
         var badgeRota = stRota === "em_rota"
-            ? "<div><span class='rota-hoje-badge'>&#128666; Caminh&atilde;o em Rota Hoje</span></div>"
-            : (stRota === "recebida" ? "<div><span class='rota-recebida-badge'>&#9989; Entrega Confirmada Hoje</span></div>" : "");
+            ? "<div><span class='rota-hoje-badge'>&#128666; " + escHtml(t("rota_em_rota")) + "</span></div>"
+            : (stRota === "recebida" ? "<div><span class='rota-recebida-badge'>&#9989; " + escHtml(t("rota_confirmada")) + "</span></div>" : "");
         html2 += "<div class='cc'>";
         html2 += "<div class='clw'>" + logo + "</div>";
         html2 += "<div class='ci' data-cid='" + escAttr(c.id) + "' onclick='handleClientClick(this)'>";
         html2 += "<div class='cn'>" + escHtml(c.name) + "</div>";
-        html2 += "<div class='cs'>Contato: " + escHtml(c.buyer||"-") + " | " + escHtml(c.buyerPhone||"") + "</div>";
+        html2 += "<div class='cs'>" + escHtml(t("client_contact")) + " " + escHtml(c.buyer||"-") + " | " + escHtml(c.buyerPhone||"") + "</div>";
         if (infoTipo) html2 += "<div class='cs' style='color:#6366f1'>" + escHtml(infoTipo) + "</div>";
         html2 += badgeRota;
         html2 += "</div>";
@@ -7132,10 +7179,10 @@ function toggleDarkMode(ativo) {
     if (knob) knob.style.transform = ativo ? "translateX(24px)" : "translateX(0)";
     if (slider) slider.style.background = ativo ? "#6366f1" : "#475569";
     var sb = document.getElementById("splashDmBtn");
-    if (sb) { sb.style.background = ativo ? "rgba(99,102,241,0.4)" : "rgba(255,255,255,0.12)"; sb.innerHTML = ativo ? "&#9728;&#65039; Modo Claro" : "&#127769; Modo Escuro"; }
+    if (sb) { sb.style.background = ativo ? "rgba(99,102,241,0.4)" : "rgba(255,255,255,0.12)"; sb.innerHTML = ativo ? ("&#9728;&#65039; " + escHtml(t("mode_light"))) : ("&#127769; " + escHtml(t("mode_dark"))); }
     var hbIcon = document.getElementById("hbDarkIcon"); var hbLabel = document.getElementById("hbDarkLabel");
     if (hbIcon) hbIcon.innerHTML = ativo ? "&#9728;&#65039;" : "&#127769;";
-    if (hbLabel) hbLabel.textContent = ativo ? "Modo Claro" : "Modo Escuro";
+    if (hbLabel) hbLabel.textContent = ativo ? t("mode_light") : t("mode_dark");
 }
 
 function initDarkMode() {
@@ -7154,6 +7201,7 @@ document.addEventListener("DOMContentLoaded", function() {
     // Inicializar histórico
     history.pushState({page: "pageHome"}, "", "");
     loadCurrentUser();
+    if (typeof initI18nOnboarding === "function") initI18nOnboarding();
     setTimeout(verificarVencimentosGlobal, 3000);
 
     // Interceptar gesto de voltar do Android
@@ -7389,6 +7437,7 @@ function goToEditEmpresa() {
 function goToConfigGeral() {
     renderConfigGeral();
     carregarConfigIA();
+    if (typeof carregarConfigIdiomaLocalizacao === "function") carregarConfigIdiomaLocalizacao();
     showPage("pageConfigGeral");
 }
 
@@ -12811,6 +12860,683 @@ function confirmarRecebimentoLogistica() {
     showMsg("msgLogistica", "Entrega confirmada (" + cxRec + " cx) e registrada no histórico de giro ✓");
 }
 
+// ═══════════════════════════════════════════════════════════════════════════
+// INTERNACIONALIZACAO (i18n: PT-BR, EN, ES) + ONBOARDING + LOCALIZACAO
+// ═══════════════════════════════════════════════════════════════════════════
+var LS_LANG_KEY = "ls23_lang";
+var LS_ONBOARDING_KEY = "ls23_onboarding_done";
+var LS_LOCATION_KEY = "ls23_user_location";
+
+var LS_I18N = {
+    "pt-BR": {
+        app_tagline: "Gestão Inteligente",
+        app_tagline_upper: "GESTÃO INTELIGENTE",
+        splash_your_name: "Seu Nome",
+        splash_name_ph: "Ex: Leandro Campelo",
+        splash_company: "Empresa",
+        splash_select_opt: "-- Selecione --",
+        splash_enter: "ENTRAR",
+        splash_new_company: "+ Cadastrar / Selecionar Empresa",
+        splash_install_pwa: "📲 Instalar App no Celular",
+        splash_export_backup: "📥 Exportar Backup",
+        splash_import_backup: "📂 Importar Backup",
+        mode_dark: "Modo Escuro",
+        mode_light: "Modo Claro",
+        hb_edit_company: "Editar Empresa",
+        hb_user_data: "Dados do Usuário",
+        hb_logistics: "Entregas do Dia (Logística)",
+        hb_install_pwa: "Instalar App (PWA)",
+        hb_new_company: "Cadastrar Nova Empresa",
+        hb_switch_company: "Trocar Empresa",
+        hb_settings: "Configurações",
+        hb_export_backup: "Exportar Backup (JSON)",
+        hb_import_backup: "Importar Backup (JSON)",
+        label_company: "Empresa:",
+        label_client: "Cliente:",
+        btn_new_client: "+ Novo Cliente",
+        btn_deliveries_today: "🚚 Entregas do Dia",
+        btn_back: "← Voltar",
+        btn_back_menu: "← Voltar ao Menu",
+        btn_save_icon: "💾 Salvar",
+        btn_remove: "Remover",
+        btn_close: "Fechar",
+        btn_cancel: "Cancelar",
+        btn_exec_report: "📋 Relatório Executivo / Passagem de Bastão",
+        clients_empty: "Nenhum cliente. Toque em + Novo Cliente.",
+        client_contact: "Contato:",
+        rota_em_rota: "Caminhão em Rota Hoje",
+        rota_confirmada: "Entrega Confirmada Hoje",
+        rota_em_rota_msg: "Caminhão em Rota Hoje para esta loja",
+        rota_confirmada_msg: "Entrega de Hoje Confirmada no Recebimento",
+        menu_check_delivery: "Conferir Entrega",
+        menu_view_details: "Ver Detalhes",
+        menu_order: "Sugestão de Pedido",
+        menu_order_sub: "Gere sugestão com quantidades",
+        menu_stock: "Controle de Estoque",
+        menu_stock_sub: "Registre estoque atual",
+        menu_ruptures: "Controle de Rupturas",
+        menu_ruptures_sub: "Produtos em falta",
+        menu_validity: "Controle de Validade",
+        menu_validity_sub: "Monitore vencimentos",
+        menu_audit: "Auditoria / Histórico",
+        menu_audit_sub: "Registro operacional",
+        menu_ideal_store: "Modelo Operacional",
+        menu_ideal_store_sub: "Biblioteca visual de referência",
+        menu_store_data: "Dados da Loja",
+        menu_store_data_sub: "Perfil e frequência",
+        menu_ai_audit: "Auditoria por Imagem IA",
+        menu_ai_audit_sub: "Analise execução com fotos",
+        menu_exchanges: "Histórico de Trocas",
+        menu_exchanges_sub: "Registro de produtos trocados",
+        menu_reports: "Relatórios",
+        menu_reports_sub: "PDFs e exportações",
+        menu_settings: "Configurações",
+        menu_settings_sub: "Armazenamento e dados",
+        menu_internal_header: "🔒 DADOS PARA CONTROLE INTERNO",
+        menu_prices: "Tabela de Preços",
+        menu_prices_sub: "Preços por produto (privado)",
+        menu_internal_report: "Relatório Interno",
+        menu_internal_report_sub: "Valores, meta e desempenho",
+        cfg_title: "⚙️ Configurações",
+        cfg_lang_loc_title: "🌐 Idioma & Localização",
+        cfg_lang_label: "Idioma do Aplicativo",
+        cfg_loc_title: "📍 Localização & Regional",
+        cfg_btn_allow_loc: "📍 Permitir / Atualizar Localização",
+        cfg_btn_disable_loc: "Desativar",
+        cfg_storage_title: "💾 Armazenamento",
+        cfg_clear_storage: "🗑️ Limpar Armazenamento",
+        cfg_by_client: "👤 Dados por Cliente",
+        cfg_danger_zone: "⚠️ Zona de Risco",
+        cfg_danger_desc: "Excluir uma empresa remove permanentemente a empresa, todos os seus clientes e todos os dados vinculados (pedidos, estoque, auditorias, etc.). Esta ação não pode ser desfeita.",
+        cfg_gemini_title: "✨ Chave API Google Gemini (gemini-2.5-flash)",
+        cfg_gemini_desc: "Salva exclusivamente no localStorage deste aparelho. Usada na busca inteligente de lojas e na leitura de fotos/PDFs de espelhos de pedido (De/Para PLU).",
+        cfg_btn_save_gemini: "Salvar Chave Gemini",
+        cfg_supabase_title: "☁️ Nuvem Supabase (Banco + Fotos HD)",
+        cfg_supabase_desc: "Opcional e 100% offline-first: sem sinal no PDV, salva localmente (localStorage + IndexedDB) e sincroniza automaticamente ao reconectar.",
+        cfg_promotor_label: "Identificador do Promotor (Nome ou Matrícula)",
+        cfg_btn_save_test: "Salvar & Testar",
+        cfg_btn_sync_now: "🔄 Sincronizar Agora",
+        cfg_btn_sql: "🗄️ Gerar Script SQL do Banco",
+        cfg_dark_title: "🌙 Modo Escuro",
+        cfg_dark_sub: "Alterna entre tema claro e escuro",
+        cfg_version: "Versão 1.0",
+        audia_title: "🤖 Auditoria de Execução por Imagem",
+        audia_sub: "Tire fotos da loja e a IA avalia a execução comparando com o guia da empresa",
+        audia_photos_lbl: "1. Fotos da Loja (até 5 fotos)",
+        audia_add_photo: "📷 Adicionar Foto",
+        audia_result_lbl: "3. Resultado da Auditoria",
+        audia_perfect_store: "ÍNDICE LOJA PERFEITA",
+        audia_notes_lbl: "Justificativa / Observações",
+        audia_notes_ph: "Explique os desvios encontrados...",
+        audia_analyzing: "Analisando fotos...",
+        audia_wait: "Isso pode levar alguns segundos",
+        audia_btn_analyze: "🤖 Analisar com IA",
+        guardiao_ask: "Pergunte ao Guardião",
+        guardiao_sub: "Assistente Gemini 2.5",
+        guardiao_tab_chat: "💬 Chat",
+        guardiao_tab_base: "📚 Guia & Pílulas",
+        guardiao_tab_giro: "📊 Giro & FEFO",
+        guardiao_tab_rel: "📋 Relatório",
+        guardiao_input_ph: "Pergunte sobre guia, giro, FEFO ou peça resumo...",
+        log_title: "🚚 Entregas do Dia (Logística)",
+        log_subtitle: "TRIAGEM LOGÍSTICA",
+        log_back_stores: "← Voltar p/ Lojas",
+        log_import_title: "1. Importar Romaneio / Planilha da Transportadora",
+        log_btn_upload: "📄 Subir Excel / CSV (.xlsx)",
+        log_btn_team: "👥 Importar Base da Equipe/Supervisão",
+        log_btn_match: "🔍 Cruzar Tabela com Minhas Lojas",
+        log_btn_clear: "Limpar Dia",
+        log_wpp_title: "📲 Resumo Pronto para WhatsApp",
+        log_btn_copy_wpp: "📋 Copiar WhatsApp",
+        offline_banner: "🔌 Modo Offline — dados salvos localmente",
+        onb_welcome_title: "Bem-vindo ao LocalShelf",
+        onb_welcome_sub: "Configure seu idioma e a localização inicial para preencher sua Regional automaticamente.",
+        onb_lang_lbl: "1. Escolha o Idioma",
+        onb_loc_lbl: "2. Localização & Regional",
+        onb_loc_desc: "Detectamos sua cidade/UF para configurar sua Regional e preparar futuros check-ins nas lojas.",
+        onb_btn_allow_loc: "📍 Permitir Localização durante o uso",
+        onb_btn_skip_loc: "Continuar sem localização",
+        loc_badge_off: "Não ativada",
+        loc_badge_on: "Ativada",
+        loc_badge_skip: "Sem localização",
+        loc_detecting: "Detectando sua localização...",
+        loc_not_supported: "Geolocalização não suportada neste navegador/aparelho.",
+        loc_denied: "Permissão negada ou indisponível. Você pode ativar depois nas Configurações.",
+        loc_saved_coords: "Coordenadas salvas ({lat}, {lng}) • Regional: {reg}",
+        loc_detected: "Local detectado: {city} ({uf}) • Regional: {reg}",
+        loc_disabled_msg: "Localização desativada neste aparelho."
+    },
+    "en": {
+        app_tagline: "Smart Shelf Management",
+        app_tagline_upper: "SMART MANAGEMENT",
+        splash_your_name: "Your Name",
+        splash_name_ph: "e.g. Alex Carter",
+        splash_company: "Company",
+        splash_select_opt: "-- Select --",
+        splash_enter: "ENTER",
+        splash_new_company: "+ Register / Select Company",
+        splash_install_pwa: "📲 Install App on Phone",
+        splash_export_backup: "📥 Export Backup",
+        splash_import_backup: "📂 Import Backup",
+        mode_dark: "Dark Mode",
+        mode_light: "Light Mode",
+        hb_edit_company: "Edit Company",
+        hb_user_data: "User Profile",
+        hb_logistics: "Today's Deliveries (Logistics)",
+        hb_install_pwa: "Install App (PWA)",
+        hb_new_company: "Register New Company",
+        hb_switch_company: "Switch Company",
+        hb_settings: "Settings",
+        hb_export_backup: "Export Backup (JSON)",
+        hb_import_backup: "Import Backup (JSON)",
+        label_company: "Company:",
+        label_client: "Store / Client:",
+        btn_new_client: "+ New Store",
+        btn_deliveries_today: "🚚 Today's Deliveries",
+        btn_back: "← Back",
+        btn_back_menu: "← Back to Menu",
+        btn_save_icon: "💾 Save",
+        btn_remove: "Remove",
+        btn_close: "Close",
+        btn_cancel: "Cancel",
+        btn_exec_report: "📋 Executive Report / Shift Handover",
+        clients_empty: "No stores yet. Tap + New Store.",
+        client_contact: "Contact:",
+        rota_em_rota: "Truck En Route Today",
+        rota_confirmada: "Delivery Confirmed Today",
+        rota_em_rota_msg: "Truck En Route Today for this store",
+        rota_confirmada_msg: "Today's Delivery Confirmed at Receiving",
+        menu_check_delivery: "Check Delivery",
+        menu_view_details: "View Details",
+        menu_order: "Order Suggestion",
+        menu_order_sub: "Generate suggested quantities",
+        menu_stock: "Stock Control",
+        menu_stock_sub: "Record current inventory",
+        menu_ruptures: "Out-of-Stock Control",
+        menu_ruptures_sub: "Missing items",
+        menu_validity: "Shelf-Life Control",
+        menu_validity_sub: "Track expiration dates",
+        menu_audit: "Audit / History",
+        menu_audit_sub: "Operational log",
+        menu_ideal_store: "Operational Model",
+        menu_ideal_store_sub: "Visual reference library",
+        menu_store_data: "Store Details",
+        menu_store_data_sub: "Profile & visit frequency",
+        menu_ai_audit: "AI Image Audit",
+        menu_ai_audit_sub: "Analyze execution with photos",
+        menu_exchanges: "Returns & Exchanges",
+        menu_exchanges_sub: "Exchanged items history",
+        menu_reports: "Reports",
+        menu_reports_sub: "PDFs and exports",
+        menu_settings: "Settings",
+        menu_settings_sub: "Storage and data",
+        menu_internal_header: "🔒 INTERNAL CONTROL DATA",
+        menu_prices: "Price Table",
+        menu_prices_sub: "Product prices (private)",
+        menu_internal_report: "Internal Report",
+        menu_internal_report_sub: "Revenue, target & performance",
+        cfg_title: "⚙️ Settings",
+        cfg_lang_loc_title: "🌐 Language & Location",
+        cfg_lang_label: "App Language",
+        cfg_loc_title: "📍 Location & Region",
+        cfg_btn_allow_loc: "📍 Allow / Update Location",
+        cfg_btn_disable_loc: "Disable",
+        cfg_storage_title: "💾 Storage",
+        cfg_clear_storage: "🗑️ Clear Storage",
+        cfg_by_client: "👤 Data by Store",
+        cfg_danger_zone: "⚠️ Danger Zone",
+        cfg_danger_desc: "Deleting a company permanently removes the company, all its stores and all linked records (orders, stock, audits, etc.). This action cannot be undone.",
+        cfg_gemini_title: "✨ Google Gemini API Key (gemini-2.5-flash)",
+        cfg_gemini_desc: "Saved strictly in this device's localStorage. Used for smart store lookup and reading order mirror photos/PDFs (PLU mapping).",
+        cfg_btn_save_gemini: "Save Gemini Key",
+        cfg_supabase_title: "☁️ Supabase Cloud (DB + HD Photos)",
+        cfg_supabase_desc: "Optional & 100% offline-first: with no signal in-store, saves locally (localStorage + IndexedDB) and auto-syncs once online.",
+        cfg_promotor_label: "Merchandiser ID (Name or Badge)",
+        cfg_btn_save_test: "Save & Test",
+        cfg_btn_sync_now: "🔄 Sync Now",
+        cfg_btn_sql: "🗄️ Generate DB SQL Script",
+        cfg_dark_title: "🌙 Dark Mode",
+        cfg_dark_sub: "Switch between light and dark theme",
+        cfg_version: "Version 1.0",
+        audia_title: "🤖 AI Execution Image Audit",
+        audia_sub: "Take store photos and AI evaluates execution against the company guide",
+        audia_photos_lbl: "1. Store Photos (up to 5 photos)",
+        audia_add_photo: "📷 Add Photo",
+        audia_result_lbl: "3. Audit Result",
+        audia_perfect_store: "PERFECT STORE SCORE",
+        audia_notes_lbl: "Justification / Notes",
+        audia_notes_ph: "Explain the deviations found...",
+        audia_analyzing: "Analyzing photos...",
+        audia_wait: "This may take a few seconds",
+        audia_btn_analyze: "🤖 Analyze with AI",
+        guardiao_ask: "Ask Guardian",
+        guardiao_sub: "Gemini 2.5 Assistant",
+        guardiao_tab_chat: "💬 Chat",
+        guardiao_tab_base: "📚 Guide & Pills",
+        guardiao_tab_giro: "📊 Turnover & FEFO",
+        guardiao_tab_rel: "📋 Report",
+        guardiao_input_ph: "Ask about guide, turnover, FEFO or request a summary...",
+        log_title: "🚚 Today's Deliveries (Logistics)",
+        log_subtitle: "LOGISTICS TRIAGE",
+        log_back_stores: "← Back to Stores",
+        log_import_title: "1. Import Carrier Manifest / Spreadsheet",
+        log_btn_upload: "📄 Upload Excel / CSV (.xlsx)",
+        log_btn_team: "👥 Import Team/Supervisor Roster",
+        log_btn_match: "🔍 Match Sheet with My Stores",
+        log_btn_clear: "Clear Day",
+        log_wpp_title: "📲 Ready-to-Send WhatsApp Summary",
+        log_btn_copy_wpp: "📋 Copy WhatsApp",
+        offline_banner: "🔌 Offline Mode — data saved locally",
+        onb_welcome_title: "Welcome to LocalShelf",
+        onb_welcome_sub: "Choose your language and initial location to auto-fill your Region.",
+        onb_lang_lbl: "1. Choose Language",
+        onb_loc_lbl: "2. Location & Region",
+        onb_loc_desc: "We detect your city/state to set your Region and prepare future store check-ins.",
+        onb_btn_allow_loc: "📍 Allow Location While Using",
+        onb_btn_skip_loc: "Continue without location",
+        loc_badge_off: "Not enabled",
+        loc_badge_on: "Enabled",
+        loc_badge_skip: "Location skipped",
+        loc_detecting: "Detecting your location...",
+        loc_not_supported: "Geolocation is not supported on this browser/device.",
+        loc_denied: "Permission denied or unavailable. You can enable it later in Settings.",
+        loc_saved_coords: "Coordinates saved ({lat}, {lng}) • Region: {reg}",
+        loc_detected: "Detected: {city} ({uf}) • Region: {reg}",
+        loc_disabled_msg: "Location disabled on this device."
+    },
+    "es": {
+        app_tagline: "Gestión Inteligente",
+        app_tagline_upper: "GESTIÓN INTELIGENTE",
+        splash_your_name: "Tu Nombre",
+        splash_name_ph: "Ej: Carlos Mendoza",
+        splash_company: "Empresa",
+        splash_select_opt: "-- Seleccionar --",
+        splash_enter: "ENTRAR",
+        splash_new_company: "+ Registrar / Seleccionar Empresa",
+        splash_install_pwa: "📲 Instalar App en el Móvil",
+        splash_export_backup: "📥 Exportar Respaldo",
+        splash_import_backup: "📂 Importar Respaldo",
+        mode_dark: "Modo Oscuro",
+        mode_light: "Modo Claro",
+        hb_edit_company: "Editar Empresa",
+        hb_user_data: "Datos del Usuario",
+        hb_logistics: "Entregas del Día (Logística)",
+        hb_install_pwa: "Instalar App (PWA)",
+        hb_new_company: "Registrar Nueva Empresa",
+        hb_switch_company: "Cambiar Empresa",
+        hb_settings: "Configuración",
+        hb_export_backup: "Exportar Respaldo (JSON)",
+        hb_import_backup: "Importar Respaldo (JSON)",
+        label_company: "Empresa:",
+        label_client: "Tienda / Cliente:",
+        btn_new_client: "+ Nueva Tienda",
+        btn_deliveries_today: "🚚 Entregas del Día",
+        btn_back: "← Volver",
+        btn_back_menu: "← Volver al Menú",
+        btn_save_icon: "💾 Guardar",
+        btn_remove: "Eliminar",
+        btn_close: "Cerrar",
+        btn_cancel: "Cancelar",
+        btn_exec_report: "📋 Informe Ejecutivo / Cambio de Turno",
+        clients_empty: "Sin tiendas. Toca + Nueva Tienda.",
+        client_contact: "Contacto:",
+        rota_em_rota: "Camión en Ruta Hoy",
+        rota_confirmada: "Entrega Confirmada Hoy",
+        rota_em_rota_msg: "Camión en Ruta Hoy para esta tienda",
+        rota_confirmada_msg: "Entrega de Hoy Confirmada en Recepción",
+        menu_check_delivery: "Verificar Entrega",
+        menu_view_details: "Ver Detalles",
+        menu_order: "Sugerencia de Pedido",
+        menu_order_sub: "Genera sugerencia con cantidades",
+        menu_stock: "Control de Stock",
+        menu_stock_sub: "Registra inventario actual",
+        menu_ruptures: "Control de Quiebres",
+        menu_ruptures_sub: "Productos agotados",
+        menu_validity: "Control de Caducidad",
+        menu_validity_sub: "Monitorea vencimientos",
+        menu_audit: "Auditoría / Historial",
+        menu_audit_sub: "Registro operativo",
+        menu_ideal_store: "Modelo Operativo",
+        menu_ideal_store_sub: "Biblioteca visual de referencia",
+        menu_store_data: "Datos de la Tienda",
+        menu_store_data_sub: "Perfil y frecuencia",
+        menu_ai_audit: "Auditoría por Imagen IA",
+        menu_ai_audit_sub: "Analiza ejecución con fotos",
+        menu_exchanges: "Historial de Cambios",
+        menu_exchanges_sub: "Registro de devoluciones",
+        menu_reports: "Informes",
+        menu_reports_sub: "PDFs y exportaciones",
+        menu_settings: "Configuración",
+        menu_settings_sub: "Almacenamiento y datos",
+        menu_internal_header: "🔒 DATOS DE CONTROL INTERNO",
+        menu_prices: "Lista de Precios",
+        menu_prices_sub: "Precios por producto (privado)",
+        menu_internal_report: "Informe Interno",
+        menu_internal_report_sub: "Valores, meta y desempeño",
+        cfg_title: "⚙️ Configuración",
+        cfg_lang_loc_title: "🌐 Idioma y Ubicación",
+        cfg_lang_label: "Idioma de la Aplicación",
+        cfg_loc_title: "📍 Ubicación y Regional",
+        cfg_btn_allow_loc: "📍 Permitir / Actualizar Ubicación",
+        cfg_btn_disable_loc: "Desactivar",
+        cfg_storage_title: "💾 Almacenamiento",
+        cfg_clear_storage: "🗑️ Limpiar Almacenamiento",
+        cfg_by_client: "👤 Datos por Tienda",
+        cfg_danger_zone: "⚠️ Zona de Riesgo",
+        cfg_danger_desc: "Eliminar una empresa borra permanentemente la empresa, todas sus tiendas y todos los datos vinculados (pedidos, stock, auditorías, etc.). Esta acción no se puede deshacer.",
+        cfg_gemini_title: "✨ Clave API Google Gemini (gemini-2.5-flash)",
+        cfg_gemini_desc: "Guardada solo en el localStorage de este dispositivo. Usada en la búsqueda inteligente de tiendas y lectura de fotos/PDFs (mapeo PLU).",
+        cfg_btn_save_gemini: "Guardar Clave Gemini",
+        cfg_supabase_title: "☁️ Nube Supabase (BD + Fotos HD)",
+        cfg_supabase_desc: "Opcional y 100% offline-first: sin señal en tienda, guarda localmente (localStorage + IndexedDB) y sincroniza automáticamente al reconectar.",
+        cfg_promotor_label: "Identificador del Promotor (Nombre o Matrícula)",
+        cfg_btn_save_test: "Guardar y Probar",
+        cfg_btn_sync_now: "🔄 Sincronizar Ahora",
+        cfg_btn_sql: "🗄️ Generar Script SQL de BD",
+        cfg_dark_title: "🌙 Modo Oscuro",
+        cfg_dark_sub: "Alterna entre tema claro y oscuro",
+        cfg_version: "Versión 1.0",
+        audia_title: "🤖 Auditoría de Ejecución por Imagen",
+        audia_sub: "Toma fotos de la tienda y la IA evalúa la ejecución frente a la guía de la empresa",
+        audia_photos_lbl: "1. Fotos de la Tienda (hasta 5 fotos)",
+        audia_add_photo: "📷 Añadir Foto",
+        audia_result_lbl: "3. Resultado de la Auditoría",
+        audia_perfect_store: "ÍNDICE TIENDA PERFECTA",
+        audia_notes_lbl: "Justificación / Observaciones",
+        audia_notes_ph: "Explica las desviaciones encontradas...",
+        audia_analyzing: "Analizando fotos...",
+        audia_wait: "Esto puede tardar unos segundos",
+        audia_btn_analyze: "🤖 Analizar con IA",
+        guardiao_ask: "Pregunta al Guardián",
+        guardiao_sub: "Asistente Gemini 2.5",
+        guardiao_tab_chat: "💬 Chat",
+        guardiao_tab_base: "📚 Guía y Píldoras",
+        guardiao_tab_giro: "📊 Rotación y FEFO",
+        guardiao_tab_rel: "📋 Informe",
+        guardiao_input_ph: "Pregunta sobre guía, rotación, FEFO o pide resumen...",
+        log_title: "🚚 Entregas del Día (Logística)",
+        log_subtitle: "TRIAJE LOGÍSTICO",
+        log_back_stores: "← Volver a Tiendas",
+        log_import_title: "1. Importar Planilla / Hoja de Ruta",
+        log_btn_upload: "📄 Subir Excel / CSV (.xlsx)",
+        log_btn_team: "👥 Importar Base del Equipo/Supervisión",
+        log_btn_match: "🔍 Cruzar Tabla con Mis Tiendas",
+        log_btn_clear: "Limpiar Día",
+        log_wpp_title: "📲 Resumen Listo para WhatsApp",
+        log_btn_copy_wpp: "📋 Copiar WhatsApp",
+        offline_banner: "🔌 Modo Sin Conexión — datos guardados localmente",
+        onb_welcome_title: "Bienvenido a LocalShelf",
+        onb_welcome_sub: "Configura tu idioma y ubicación inicial para completar tu Regional automáticamente.",
+        onb_lang_lbl: "1. Elige el Idioma",
+        onb_loc_lbl: "2. Ubicación y Regional",
+        onb_loc_desc: "Detectamos tu ciudad/estado para configurar tu Regional y preparar futuros check-ins en tiendas.",
+        onb_btn_allow_loc: "📍 Permitir Ubicación durante el uso",
+        onb_btn_skip_loc: "Continuar sin ubicación",
+        loc_badge_off: "No activada",
+        loc_badge_on: "Activada",
+        loc_badge_skip: "Sin ubicación",
+        loc_detecting: "Detectando tu ubicación...",
+        loc_not_supported: "Geolocalización no compatible con este navegador/dispositivo.",
+        loc_denied: "Permiso denegado o no disponible. Puedes activarlo luego en Configuración.",
+        loc_saved_coords: "Coordenadas guardadas ({lat}, {lng}) • Regional: {reg}",
+        loc_detected: "Detectado: {city} ({uf}) • Regional: {reg}",
+        loc_disabled_msg: "Ubicación desactivada en este dispositivo."
+    }
+};
+
+function getAppLanguage() {
+    var lang = localStorage.getItem(LS_LANG_KEY) || "pt-BR";
+    if (!LS_I18N[lang]) lang = "pt-BR";
+    return lang;
+}
+
+function t(key, vars) {
+    var lang = getAppLanguage();
+    var dict = LS_I18N[lang] || LS_I18N["pt-BR"];
+    var txt = (dict[key] !== undefined) ? dict[key] : ((LS_I18N["pt-BR"][key] !== undefined) ? LS_I18N["pt-BR"][key] : key);
+    if (vars && typeof vars === "object") {
+        Object.keys(vars).forEach(function(k) {
+            txt = txt.replace(new RegExp("\\{" + k + "\\}", "g"), String(vars[k]));
+        });
+    }
+    return txt;
+}
+
+function aplicarIdiomaUI(lang) {
+    var targetLang = LS_I18N[lang] ? lang : getAppLanguage();
+    document.documentElement.lang = targetLang;
+    document.querySelectorAll("[data-i18n]").forEach(function(el) {
+        var k = el.getAttribute("data-i18n");
+        if (k) el.textContent = t(k);
+    });
+    document.querySelectorAll("[data-i18n-placeholder]").forEach(function(el) {
+        var k = el.getAttribute("data-i18n-placeholder");
+        if (k) el.setAttribute("placeholder", t(k));
+    });
+    document.querySelectorAll("[data-lang-opt]").forEach(function(btn) {
+        btn.classList.toggle("ativo", btn.getAttribute("data-lang-opt") === targetLang);
+    });
+    var ativoDark = document.body.classList.contains("dark-mode");
+    var sb = document.getElementById("splashDmBtn");
+    if (sb) sb.innerHTML = ativoDark ? ("&#9728;&#65039; " + escHtml(t("mode_light"))) : ("&#127769; " + escHtml(t("mode_dark")));
+    var hbLabel = document.getElementById("hbDarkLabel");
+    if (hbLabel) hbLabel.textContent = ativoDark ? t("mode_light") : t("mode_dark");
+    var gfEl = document.getElementById("guardiao-float");
+    var gfBalao = document.getElementById("guardiao-float-balao");
+    if (gfBalao && (!gfEl || !gfEl.classList.contains("alerta"))) {
+        gfBalao.textContent = t("guardiao_ask");
+    }
+    carregarConfigIdiomaLocalizacao();
+    if (window._currentPage === "pageClients" && typeof renderClientsList === "function") renderClientsList();
+    if (window._currentPage === "pageMenu" && currentClient && typeof goToMenu === "function") {
+        var rotaEl = document.getElementById("menuRotaBadge");
+        if (rotaEl && rotaEl.style.display === "block") goToMenu();
+    }
+}
+
+function setAppLanguage(lang, markDone) {
+    var valid = LS_I18N[lang] ? lang : "pt-BR";
+    localStorage.setItem(LS_LANG_KEY, valid);
+    if (markDone) localStorage.setItem(LS_ONBOARDING_KEY, "1");
+    aplicarIdiomaUI(valid);
+}
+
+function _mapearUfParaRegional(uf, stateName) {
+    var u = String(uf || "").toUpperCase().trim();
+    var st = String(stateName || "").toUpperCase();
+    if (u === "RJ" || st.indexOf("RIO DE JANEIRO") >= 0) return "RJ / Leste";
+    if (u === "SP" || st.indexOf("SAO PAULO") >= 0 || st.indexOf("SÃO PAULO") >= 0) return "SP";
+    if (u === "MG" || u === "ES" || st.indexOf("MINAS GERAIS") >= 0 || st.indexOf("ESPIRITO SANTO") >= 0 || st.indexOf("ESPÍRITO SANTO") >= 0) return "MG / ES";
+    if (["PR","SC","RS"].indexOf(u) >= 0) return "Sul";
+    if (["BA","SE","AL","PE","PB","RN","CE","PI","MA"].indexOf(u) >= 0) return "Nordeste";
+    if (["GO","DF","MT","MS"].indexOf(u) >= 0) return "Centro-Oeste";
+    if (["AM","PA","AC","RO","RR","AP","TO"].indexOf(u) >= 0) return "Norte";
+    return "Nacional";
+}
+
+function getUserLocationPrefs() {
+    var raw = localStorage.getItem(LS_LOCATION_KEY);
+    if (!raw) return null;
+    try { return JSON.parse(raw); } catch(e) { return null; }
+}
+
+function registrarCheckinLocalizacaoLoja(cliId) {
+    var loc = getUserLocationPrefs();
+    if (!loc || loc.status !== "granted" || !cliId || !clients[cliId]) return null;
+    var checkin = {
+        lat: loc.lat,
+        lng: loc.lng,
+        city: loc.city || "",
+        uf: loc.uf || "",
+        regional: loc.regional || "",
+        at: new Date().toISOString()
+    };
+    clients[cliId].lastCheckinGeo = checkin;
+    return checkin;
+}
+
+function _aplicarRegionalNaInterface(locObj) {
+    if (!locObj || !locObj.regional) return;
+    var regEl = document.getElementById("companyRegional");
+    if (regEl && (!regEl.value || regEl.value === "Nacional")) {
+        regEl.value = locObj.regional;
+    }
+    var userRegEl = document.getElementById("userRegiao");
+    if (userRegEl && !userRegEl.value.trim() && locObj.city) {
+        userRegEl.value = locObj.city + (locObj.uf ? (" - " + locObj.uf) : "");
+    }
+}
+
+async function solicitarLocalizacaoUsuario(origem) {
+    var statusOnb = document.getElementById("onbLocationStatus");
+    var statusCfg = document.getElementById("cfgLocationInfo");
+    if (statusOnb) statusOnb.textContent = t("loc_detecting");
+    if (statusCfg) statusCfg.textContent = t("loc_detecting");
+
+    if (typeof navigator === "undefined" || !navigator.geolocation || typeof navigator.geolocation.getCurrentPosition !== "function") {
+        if (statusOnb) statusOnb.textContent = t("loc_not_supported");
+        if (statusCfg) statusCfg.textContent = t("loc_not_supported");
+        return false;
+    }
+
+    return new Promise(function(resolve) {
+        navigator.geolocation.getCurrentPosition(async function(pos) {
+            var lat = Number(pos.coords.latitude.toFixed(5));
+            var lng = Number(pos.coords.longitude.toFixed(5));
+            var city = "";
+            var uf = "";
+            var stateName = "";
+            try {
+                if (typeof fetch === "function") {
+                    var resp = await fetch("https://nominatim.openstreetmap.org/reverse?format=json&lat=" + encodeURIComponent(lat) + "&lon=" + encodeURIComponent(lng) + "&zoom=10&addressdetails=1", {
+                        headers: { "Accept": "application/json" }
+                    });
+                    if (resp && resp.ok) {
+                        var data = await resp.json();
+                        var addr = data && data.address ? data.address : {};
+                        city = addr.city || addr.town || addr.village || addr.municipality || "";
+                        stateName = addr.state || "";
+                        var iso = addr["ISO3166-2-lvl4"] || "";
+                        if (iso.indexOf("BR-") === 0) uf = iso.slice(3).toUpperCase();
+                        else if (addr.state_code) uf = String(addr.state_code).toUpperCase();
+                    }
+                }
+            } catch(e) {
+                console.warn("Reverse geocode offline/falhou:", e);
+            }
+            var regional = _mapearUfParaRegional(uf, stateName);
+            var locObj = {
+                status: "granted",
+                lat: lat,
+                lng: lng,
+                city: city,
+                uf: uf,
+                state: stateName,
+                regional: regional,
+                updatedAt: new Date().toISOString()
+            };
+            localStorage.setItem(LS_LOCATION_KEY, JSON.stringify(locObj));
+            localStorage.setItem(LS_ONBOARDING_KEY, "1");
+            if (!localStorage.getItem(LS_LANG_KEY)) localStorage.setItem(LS_LANG_KEY, getAppLanguage());
+            _aplicarRegionalNaInterface(locObj);
+            carregarConfigIdiomaLocalizacao();
+
+            var resumo = city
+                ? t("loc_detected", { city: city, uf: uf || stateName || "-", reg: regional })
+                : t("loc_saved_coords", { lat: lat, lng: lng, reg: regional });
+            if (statusOnb) statusOnb.textContent = resumo;
+            if (origem === "onb") {
+                setTimeout(fecharModalOnboarding, 650);
+            }
+            resolve(true);
+        }, function(err) {
+            console.warn("Geolocation error:", err);
+            if (statusOnb) statusOnb.textContent = t("loc_denied");
+            if (statusCfg) statusCfg.textContent = t("loc_denied");
+            carregarConfigIdiomaLocalizacao();
+            resolve(false);
+        }, { enableHighAccuracy: false, timeout: 8000, maximumAge: 300000 });
+    });
+}
+
+function continuarSemLocalizacaoOnboarding() {
+    var existing = getUserLocationPrefs();
+    if (!existing || existing.status !== "granted") {
+        localStorage.setItem(LS_LOCATION_KEY, JSON.stringify({
+            status: "skipped",
+            regional: "Nacional",
+            updatedAt: new Date().toISOString()
+        }));
+    }
+    if (!localStorage.getItem(LS_LANG_KEY)) localStorage.setItem(LS_LANG_KEY, getAppLanguage());
+    localStorage.setItem(LS_ONBOARDING_KEY, "1");
+    carregarConfigIdiomaLocalizacao();
+    fecharModalOnboarding();
+}
+
+function desativarLocalizacaoUsuario() {
+    localStorage.setItem(LS_LOCATION_KEY, JSON.stringify({
+        status: "disabled",
+        regional: "Nacional",
+        updatedAt: new Date().toISOString()
+    }));
+    carregarConfigIdiomaLocalizacao();
+}
+
+function carregarConfigIdiomaLocalizacao() {
+    var lang = getAppLanguage();
+    document.querySelectorAll("[data-lang-opt]").forEach(function(btn) {
+        btn.classList.toggle("ativo", btn.getAttribute("data-lang-opt") === lang);
+    });
+    var loc = getUserLocationPrefs();
+    var badge = document.getElementById("cfgLocationBadge");
+    var info = document.getElementById("cfgLocationInfo");
+    var btnDis = document.getElementById("cfgBtnDisableLoc");
+    var onbSt = document.getElementById("onbLocationStatus");
+
+    if (loc && loc.status === "granted") {
+        var msg = loc.city
+            ? t("loc_detected", { city: loc.city, uf: loc.uf || loc.state || "-", reg: loc.regional || "Nacional" })
+            : t("loc_saved_coords", { lat: loc.lat, lng: loc.lng, reg: loc.regional || "Nacional" });
+        if (badge) { badge.textContent = t("loc_badge_on"); badge.style.background = "#dcfce7"; badge.style.color = "#166534"; }
+        if (info) info.textContent = msg;
+        if (onbSt) onbSt.textContent = msg;
+        if (btnDis) btnDis.style.display = "inline-block";
+    } else if (loc && loc.status === "skipped") {
+        if (badge) { badge.textContent = t("loc_badge_skip"); badge.style.background = "#fef3c7"; badge.style.color = "#92400e"; }
+        if (info) info.textContent = t("onb_loc_desc");
+        if (btnDis) btnDis.style.display = "none";
+    } else {
+        if (badge) { badge.textContent = t("loc_badge_off"); badge.style.background = "#e2e8f0"; badge.style.color = "#475569"; }
+        if (info) info.textContent = (loc && loc.status === "disabled") ? t("loc_disabled_msg") : t("onb_loc_desc");
+        if (btnDis) btnDis.style.display = "none";
+    }
+}
+
+function abrirModalOnboarding(force) {
+    var modal = document.getElementById("modalOnboarding");
+    if (!modal) return;
+    if (!force && (localStorage.getItem(LS_ONBOARDING_KEY) === "1" || localStorage.getItem(LS_LANG_KEY))) return;
+    aplicarIdiomaUI(getAppLanguage());
+    modal.style.display = "flex";
+}
+
+function fecharModalOnboarding() {
+    var modal = document.getElementById("modalOnboarding");
+    if (modal) modal.style.display = "none";
+}
+
+function initI18nOnboarding() {
+    var savedLang = localStorage.getItem(LS_LANG_KEY);
+    var hasOnb = localStorage.getItem(LS_ONBOARDING_KEY) === "1";
+    aplicarIdiomaUI(savedLang || "pt-BR");
+    var loc = getUserLocationPrefs();
+    if (loc && loc.status === "granted") _aplicarRegionalNaInterface(loc);
+    if (!hasOnb && !savedLang) {
+        abrirModalOnboarding(true);
+    }
+}
+
 </script>
 
 <!-- GUARDIÃO LOCALSHELF -->
@@ -12845,7 +13571,7 @@ function confirmarRecebimentoLogistica() {
 <div id="guardiao-float" onclick="abrirGuardiaoChat()">
   <span id="guardiao-float-badge"></span>
   <img data-lcs-asset="guardiao-sm" alt="Guardião" id="guardiao-float-img">
-  <div id="guardiao-float-balao">Pergunte ao Guardião</div>
+  <div id="guardiao-float-balao" data-i18n="guardiao_ask">Pergunte ao Guardião</div>
 </div>
 
 <div id="guardiao-chat">
@@ -12853,15 +13579,15 @@ function confirmarRecebimentoLogistica() {
     <img data-lcs-asset="guardiao-sm" alt="Guardião LocalShelf" class="gchat-header-img">
     <div class="gchat-header-txt">
       <div class="gchat-header-nome">Guardião LocalShelf</div>
-      <div class="gchat-header-sub" id="gchat-cliente">Assistente Gemini 2.5</div>
+      <div class="gchat-header-sub" id="gchat-cliente" data-i18n="guardiao_sub">Assistente Gemini 2.5</div>
     </div>
     <button class="gchat-close" onclick="fecharGuardiaoChat()">&#10005;</button>
   </div>
   <div class="gchat-tabs" id="gchat-tabs">
-    <button type="button" class="gchat-tab ativo" data-gtab="chat" onclick="switchGuardiaoTab('chat')">&#128172; Chat</button>
-    <button type="button" class="gchat-tab" data-gtab="base" onclick="switchGuardiaoTab('base')">&#128218; Guia &amp; P&iacute;lulas</button>
-    <button type="button" class="gchat-tab" data-gtab="giro" onclick="switchGuardiaoTab('giro')">&#128202; Giro &amp; FEFO</button>
-    <button type="button" class="gchat-tab" data-gtab="rel" onclick="switchGuardiaoTab('rel')">&#128203; Relat&oacute;rio</button>
+    <button type="button" class="gchat-tab ativo" data-gtab="chat" data-i18n="guardiao_tab_chat" onclick="switchGuardiaoTab('chat')">&#128172; Chat</button>
+    <button type="button" class="gchat-tab" data-gtab="base" data-i18n="guardiao_tab_base" onclick="switchGuardiaoTab('base')">&#128218; Guia &amp; P&iacute;lulas</button>
+    <button type="button" class="gchat-tab" data-gtab="giro" data-i18n="guardiao_tab_giro" onclick="switchGuardiaoTab('giro')">&#128202; Giro &amp; FEFO</button>
+    <button type="button" class="gchat-tab" data-gtab="rel" data-i18n="guardiao_tab_rel" onclick="switchGuardiaoTab('rel')">&#128203; Relat&oacute;rio</button>
   </div>
   <div id="gchat-alerta-strip" onclick="switchGuardiaoTab('giro')"></div>
 
@@ -12869,7 +13595,7 @@ function confirmarRecebimentoLogistica() {
   <div id="gchat-view-chat" class="gchat-view ativo">
     <div class="gchat-body" id="gchat-body"></div>
     <div class="gchat-input-bar">
-      <input type="text" id="gchat-input" placeholder="Pergunte sobre guia, giro, FEFO ou peça resumo..." onkeydown="if(event.key==='Enter')enviarGuardiaoChat()">
+      <input type="text" id="gchat-input" placeholder="Pergunte sobre guia, giro, FEFO ou peça resumo..." data-i18n-placeholder="guardiao_input_ph" onkeydown="if(event.key==='Enter')enviarGuardiaoChat()">
       <button onclick="enviarGuardiaoChat()" id="gchat-send">&#10148;</button>
     </div>
   </div>
@@ -12974,32 +13700,32 @@ function confirmarRecebimentoLogistica() {
 <div class="page" id="pageLogistica">
   <div class="topbar">
     <img data-lcs-asset="logo-lcs" alt="LocalShelf" style="height:38px;object-fit:contain;border-radius:6px">
-    <div style="display:flex;flex-direction:column;justify-content:center;line-height:1.1;flex:1;padding-left:8px"><span style="color:#fff;font-size:13px;font-weight:700;letter-spacing:1px">LOCALSHELF</span><span style="color:#94a3b8;font-size:10px;letter-spacing:2px">TRIAGEM LOG&Iacute;STICA</span></div>
+    <div style="display:flex;flex-direction:column;justify-content:center;line-height:1.1;flex:1;padding-left:8px"><span style="color:#fff;font-size:13px;font-weight:700;letter-spacing:1px">LOCALSHELF</span><span style="color:#94a3b8;font-size:10px;letter-spacing:2px" data-i18n="log_subtitle">TRIAGEM LOG&Iacute;STICA</span></div>
     <button class="topbar-hb" onclick="openHamburger()">&#9776;</button>
   </div>
   <div class="ph" style="background:linear-gradient(135deg,#b45309,#f59e0b)">
-    <div class="ph-row"><h1 style="color:#fff">&#128666; Entregas do Dia (Log&iacute;stica)</h1></div>
+    <div class="ph-row"><h1 style="color:#fff" data-i18n="log_title">&#128666; Entregas do Dia (Log&iacute;stica)</h1></div>
   </div>
   <div style="padding:8px 0 6px;display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-    <button onclick="backToClients()" class="sec" style="font-size:12px;padding:6px 14px;margin:0">&#8592; Voltar p/ Lojas</button>
+    <button onclick="backToClients()" class="sec" data-i18n="log_back_stores" style="font-size:12px;padding:6px 14px;margin:0">&#8592; Voltar p/ Lojas</button>
     <input type="date" id="logisticaData" onchange="renderLogisticaLista()" style="width:auto;padding:6px 10px;font-size:12px;margin:0">
   </div>
   <div class="sm" id="msgLogistica"></div>
 
   <div class="log-card">
-    <div style="font-weight:800;color:#1e3a8a;font-size:13px;margin-bottom:4px">1. Importar Romaneio / Planilha da Transportadora</div>
+    <div style="font-weight:800;color:#1e3a8a;font-size:13px;margin-bottom:4px" data-i18n="log_import_title">1. Importar Romaneio / Planilha da Transportadora</div>
     <div style="font-size:11px;color:#475569;margin-bottom:8px;line-height:1.4">Suba o arquivo Excel (<b>.xlsx/.xls/.csv</b>) ou cole a tabela abaixo. O sistema cruza por <b>CNPJ</b>, <b>C&oacute;digo do Cliente</b> ou <b>Nome/Endere&ccedil;o</b> e filtra apenas suas lojas.</div>
     <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">
-      <button type="button" onclick="document.getElementById('logisticaFileInput').click()" style="background:#1e40af;color:#fff;border:none;border-radius:8px;padding:9px 12px;font-size:12px;font-weight:700;cursor:pointer;margin:0">&#128196; Subir Excel / CSV (.xlsx)</button>
+      <button type="button" onclick="document.getElementById('logisticaFileInput').click()" data-i18n="log_btn_upload" style="background:#1e40af;color:#fff;border:none;border-radius:8px;padding:9px 12px;font-size:12px;font-weight:700;cursor:pointer;margin:0">&#128196; Subir Excel / CSV (.xlsx)</button>
       <input type="file" id="logisticaFileInput" accept=".xlsx,.xls,.csv,.tsv,.txt" style="display:none" onchange="importarPlanilhaLogistica(this)">
-      <button type="button" onclick="document.getElementById('logisticaEquipeInput').click()" class="sec" style="font-size:11px;padding:8px 10px;margin:0">&#128101; Importar Base da Equipe/Supervis&atilde;o</button>
+      <button type="button" onclick="document.getElementById('logisticaEquipeInput').click()" class="sec" data-i18n="log_btn_team" style="font-size:11px;padding:8px 10px;margin:0">&#128101; Importar Base da Equipe/Supervis&atilde;o</button>
       <input type="file" id="logisticaEquipeInput" accept=".xlsx,.xls,.csv,.tsv,.json" style="display:none" onchange="importarBaseEquipeLogistica(this)">
     </div>
     <div id="logisticaEquipeInfo" style="font-size:11px;color:#475569;margin-bottom:8px"></div>
     <textarea id="logisticaTextoCola" placeholder="Ou cole aqui as linhas da tabela da transportadora (CNPJ | C&oacute;d. Cliente | Loja | Endere&ccedil;o | NF/Pedido | Caixas)..." style="min-height:84px;font-size:12px"></textarea>
     <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px">
-      <button type="button" onclick="processarTextoColadoLogistica()" class="grn" style="flex:1;margin:0">&#128269; Cruzar Tabela com Minhas Lojas</button>
-      <button type="button" onclick="limparLogisticaDia()" class="sec" style="font-size:11px;margin:0">Limpar Dia</button>
+      <button type="button" onclick="processarTextoColadoLogistica()" class="grn" data-i18n="log_btn_match" style="flex:1;margin:0">&#128269; Cruzar Tabela com Minhas Lojas</button>
+      <button type="button" onclick="limparLogisticaDia()" class="sec" data-i18n="log_btn_clear" style="font-size:11px;margin:0">Limpar Dia</button>
     </div>
   </div>
 
@@ -13011,8 +13737,8 @@ function confirmarRecebimentoLogistica() {
 
   <div id="logisticaResumoContainer" class="log-card" style="display:none">
     <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:6px">
-      <div style="font-weight:800;color:#1e3a8a;font-size:13px">&#128242; Resumo Pronto para WhatsApp</div>
-      <button type="button" onclick="copiarResumoLogisticaWpp()" style="background:#059669;color:#fff;border:none;border-radius:7px;padding:6px 11px;font-size:11px;font-weight:700;cursor:pointer;margin:0">&#128203; Copiar WhatsApp</button>
+      <div style="font-weight:800;color:#1e3a8a;font-size:13px" data-i18n="log_wpp_title">&#128242; Resumo Pronto para WhatsApp</div>
+      <button type="button" onclick="copiarResumoLogisticaWpp()" data-i18n="log_btn_copy_wpp" style="background:#059669;color:#fff;border:none;border-radius:7px;padding:6px 11px;font-size:11px;font-weight:700;cursor:pointer;margin:0">&#128203; Copiar WhatsApp</button>
     </div>
     <textarea id="logisticaWppResumo" class="log-wpp-preview" readonly></textarea>
   </div>
@@ -13032,7 +13758,7 @@ function confirmarRecebimentoLogistica() {
     <textarea id="sqlSupabaseTexto" class="sql-code-box" readonly></textarea>
     <div style="display:flex;gap:8px;margin-top:10px">
       <button type="button" onclick="copiarSqlSupabase()" style="flex:1;background:#059669;color:#fff;border:none;border-radius:8px;padding:10px;font-size:13px;font-weight:700;cursor:pointer;margin:0">&#128203; Copiar SQL Completo</button>
-      <button type="button" onclick="fecharModalSqlSupabase()" class="sec" style="margin:0">Fechar</button>
+      <button type="button" onclick="fecharModalSqlSupabase()" class="sec" data-i18n="btn_close" style="margin:0">Fechar</button>
     </div>
     <div id="msgSqlSupabase" style="font-size:11px;color:#059669;font-weight:700;margin-top:6px"></div>
   </div>
@@ -13042,7 +13768,7 @@ function confirmarRecebimentoLogistica() {
 <div id="modalRelatorioExecutivo" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.68);z-index:999995;align-items:center;justify-content:center;padding:12px">
   <div style="background:#fff;border-radius:16px;padding:18px;width:95%;max-width:560px;max-height:90vh;overflow-y:auto;box-shadow:0 20px 50px rgba(0,0,0,0.45)">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-      <h3 style="color:#0f766e;font-size:15px;margin:0">&#128203; Relat&oacute;rio Executivo / Passagem de Bast&atilde;o</h3>
+      <h3 style="color:#0f766e;font-size:15px;margin:0" data-i18n="btn_exec_report">&#128203; Relat&oacute;rio Executivo / Passagem de Bast&atilde;o</h3>
       <button type="button" onclick="fecharModalRelatorioExecutivo()" style="background:#e2e8f0;color:#1e293b;border:none;border-radius:50%;width:28px;height:28px;cursor:pointer;margin:0">&#10005;</button>
     </div>
     <div id="relExecConteudo"></div>
@@ -13077,8 +13803,33 @@ function confirmarRecebimentoLogistica() {
     </div>
     <div style="display:flex;gap:8px">
       <button type="button" onclick="confirmarRecebimentoLogistica()" class="grn" style="flex:1;margin:0">&#9989; Confirmar Recebimento</button>
-      <button type="button" onclick="fecharModalConfirmarEntregaLog()" class="sec" style="margin:0">Cancelar</button>
+      <button type="button" onclick="fecharModalConfirmarEntregaLog()" class="sec" data-i18n="btn_cancel" style="margin:0">Cancelar</button>
     </div>
+  </div>
+</div>
+
+<!-- MODAL ONBOARDING INICIAL (IDIOMA & LOCALIZACAO) -->
+<div id="modalOnboarding" class="onb-overlay">
+  <div class="onb-box">
+    <img data-lcs-asset="logo-lcs" class="onb-logo" alt="LocalShelf">
+    <div class="onb-title" data-i18n="onb_welcome_title">Bem-vindo ao LocalShelf</div>
+    <div class="onb-sub" data-i18n="onb_welcome_sub">Configure seu idioma e a localiza&ccedil;&atilde;o inicial para preencher sua Regional automaticamente.</div>
+
+    <div class="onb-sec-lbl" data-i18n="onb_lang_lbl">1. Escolha o Idioma</div>
+    <div class="onb-lang-grid">
+      <button type="button" class="onb-lang-btn ativo" data-lang-opt="pt-BR" onclick="setAppLanguage('pt-BR', false)"><span>&#127463;&#127479;</span><span>Portugu&ecirc;s (BR)</span></button>
+      <button type="button" class="onb-lang-btn" data-lang-opt="en" onclick="setAppLanguage('en', false)"><span>&#127482;&#127480;</span><span>English</span></button>
+      <button type="button" class="onb-lang-btn" data-lang-opt="es" onclick="setAppLanguage('es', false)"><span>&#127466;&#127480;</span><span>Espa&ntilde;ol</span></button>
+    </div>
+
+    <div class="onb-sec-lbl" data-i18n="onb_loc_lbl">2. Localiza&ccedil;&atilde;o &amp; Regional</div>
+    <div class="onb-loc-card">
+      <div style="font-size:11px;color:#065f46;line-height:1.45;margin-bottom:8px" data-i18n="onb_loc_desc">Detectamos sua cidade/UF para configurar sua Regional e preparar futuros check-ins nas lojas.</div>
+      <button type="button" class="onb-btn-loc" onclick="solicitarLocalizacaoUsuario('onb')" data-i18n="onb_btn_allow_loc">&#128205; Permitir Localiza&ccedil;&atilde;o durante o uso</button>
+      <div class="onb-loc-status" id="onbLocationStatus"></div>
+    </div>
+
+    <button type="button" class="onb-btn-skip" onclick="continuarSemLocalizacaoOnboarding()" data-i18n="onb_btn_skip_loc">Continuar sem localiza&ccedil;&atilde;o</button>
   </div>
 </div>
 
@@ -13086,7 +13837,7 @@ function confirmarRecebimentoLogistica() {
   <button id="lcsLightboxClose" type="button" onclick="fecharLightbox()" aria-label="Fechar">&#10005;</button>
   <img id="lcsLightboxImg" src="" alt="Visualizacao">
 </div>
-<div id="offlineBanner">&#128268; Modo Offline — dados salvos localmente</div>
+<div id="offlineBanner" data-i18n="offline_banner">&#128268; Modo Offline — dados salvos localmente</div>
 <div id="pwaIosModal" onclick="if(event.target===this)fecharPwaIosModal()">
   <div class="pwa-ios-box">
     <h3>Instalar LocalShelf</h3>
