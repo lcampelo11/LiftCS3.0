@@ -733,6 +733,30 @@ body.dark-mode .onb-lang-btn,body.dark-mode .lang-pill-btn{background:#0f172a!im
 body.dark-mode .onb-lang-btn.ativo,body.dark-mode .lang-pill-btn.ativo{background:#1d4ed8!important;color:#fff!important;border-color:#60a5fa!important}
 body.dark-mode .onb-loc-card{background:#064e3b!important;border-color:#10b981!important}
 body.dark-mode .onb-loc-status{color:#a7f3d0!important}
+/* Busca Inteligente de Empresa + Catalogo Automatico IA */
+.smart-comp-confirm{display:none;background:linear-gradient(135deg,#ecfdf5,#f0fdf4);border:1.5px solid #10b981;border-radius:12px;padding:12px;margin:8px 0 12px;box-shadow:0 6px 18px rgba(16,185,129,0.14)}
+.smart-comp-confirm.ativo{display:block}
+.smart-comp-head{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.smart-comp-logo{width:46px;height:46px;border-radius:10px;object-fit:contain;background:#fff;border:1px solid #cbd5e1;flex-shrink:0}
+.smart-comp-title{font-size:13px;font-weight:800;color:#065f46;line-height:1.25}
+.smart-comp-meta{font-size:11px;color:#047857;line-height:1.4;margin-top:2px}
+.smart-comp-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.post-confirm-cat-banner{display:none;background:linear-gradient(135deg,#eef2ff,#faf5ff);border:1.5px solid #8b5cf6;border-radius:12px;padding:11px 12px;margin:8px 0 12px}
+.post-confirm-cat-banner.ativo{display:block}
+.cat-ia-modal-overlay{display:none;position:fixed;inset:0;background:rgba(15,23,42,0.78);backdrop-filter:blur(4px);z-index:999997;align-items:center;justify-content:center;padding:12px}
+.cat-ia-modal-box{background:#fff;border-radius:18px;padding:16px;width:100%;max-width:560px;max-height:90vh;display:flex;flex-direction:column;box-shadow:0 24px 60px rgba(0,0,0,0.45);border:1px solid #cbd5e1}
+.cat-ia-list{flex:1;overflow-y:auto;border:1px solid #e2e8f0;border-radius:10px;padding:6px;margin:8px 0;background:#f8fafc;min-height:160px}
+.cat-ia-row{display:flex;align-items:center;gap:9px;background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:8px;margin-bottom:6px;cursor:pointer;transition:border-color 0.15s}
+.cat-ia-row.checked{border-color:#7c3aed;background:#faf5ff}
+.cat-ia-thumb{width:40px;height:40px;border-radius:8px;object-fit:contain;background:#f1f5f9;border:1px solid #e2e8f0;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:18px}
+body.dark-mode .smart-comp-confirm{background:#064e3b!important;border-color:#10b981!important}
+body.dark-mode .smart-comp-title{color:#a7f3d0!important}
+body.dark-mode .smart-comp-meta{color:#6ee7b7!important}
+body.dark-mode .post-confirm-cat-banner{background:#1e1b4b!important;border-color:#8b5cf6!important;color:#e0e7ff!important}
+body.dark-mode .cat-ia-modal-box{background:#1e293b!important;color:#f1f5f9!important;border-color:#334155!important}
+body.dark-mode .cat-ia-list{background:#0f172a!important;border-color:#334155!important}
+body.dark-mode .cat-ia-row{background:#1e293b!important;border-color:#334155!important;color:#f1f5f9!important}
+body.dark-mode .cat-ia-row.checked{background:#2e1065!important;border-color:#a855f7!important}
 </style>
 </head>
 <body>
@@ -1126,8 +1150,22 @@ body.dark-mode .onb-loc-status{color:#a7f3d0!important}
     <button class="topbar-hb" onclick="openHamburger()">&#9776;</button>
   </div>
   <div class="sm" id="msgCompany"></div>
+  <div class="smart-search-card" id="smartCompanyBox" style="margin-bottom:10px">
+    <div class="smart-search-title">&#10024; Busca Inteligente de Empresa / Ind&uacute;stria (IA)</div>
+    <div class="smart-search-sub">Digite o nome da ind&uacute;stria abaixo (ex: <b>PepsiCo</b>) para buscar automaticamente com o Gemini (<b>gemini-2.5-flash</b>) usando a UF/Localiza&ccedil;&atilde;o atual, ou toque em <b>Buscar Empresa com IA</b>. Edição manual continua sempre liberada.</div>
+    <div class="smart-search-row">
+      <input type="text" id="smartCompanyQuery" placeholder="Ex: PepsiCo, Nestle, Mondelez, Ambev..." onkeydown="if(event.key==='Enter'){event.preventDefault();buscarEmpresaComIA(true);}">
+      <button type="button" id="btnSmartCompanySearch" onclick="buscarEmpresaComIA(true)">&#10024; Buscar Empresa com IA</button>
+    </div>
+    <div class="smart-status" id="smartCompanyStatus"></div>
+    <div id="smartCompanyConfirmCard" class="smart-comp-confirm"></div>
+    <div id="postConfirmCatalogBanner" class="post-confirm-cat-banner">
+      <div style="font-size:12px;font-weight:800;color:#4c1d95;margin-bottom:6px">&#128640; Empresa confirmada! Gere o portf&oacute;lio regional com 1 clique:</div>
+      <button type="button" onclick="gerarCatalogoAutomaticoEmpresaIA()" style="width:100%;background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;border:none;border-radius:9px;padding:10px 14px;font-size:13px;font-weight:800;cursor:pointer;margin:0">&#10024; Gerar Cat&aacute;logo Autom&aacute;tico da Empresa (IA)</button>
+    </div>
+  </div>
   <div class="grid2">
-    <div class="fg"><label>Nome *</label><input type="text" id="companyName" placeholder="Ex: PepsiCo"></div>
+    <div class="fg"><label>Nome *</label><input type="text" id="companyName" placeholder="Ex: PepsiCo" oninput="onCompanyNameSmartInput()"></div>
     <div class="fg"><label>CNPJ *</label><input type="text" id="companyCNPJ" placeholder="Ex: 12.345.678/0001-90"></div>
   </div>
   <div class="grid2">
@@ -1146,6 +1184,11 @@ body.dark-mode .onb-loc-status{color:#a7f3d0!important}
     </div>
     <div class="fg"><label>Contatos</label><input type="text" id="companyContacts" placeholder="Email, site, regional..."></div>
   </div>
+  <div class="grid2">
+    <div class="fg"><label>Raz&atilde;o Social <span style="color:#94a3b8;font-weight:400;font-size:11px">(opcional)</span></label><input type="text" id="companyRazaoSocial" placeholder="Ex: PepsiCo do Brasil Ltda"></div>
+    <div class="fg"><label>Segmento <span style="color:#94a3b8;font-weight:400;font-size:11px">(opcional)</span></label><input type="text" id="companySegmento" placeholder="Ex: Snacks, Alimentos e Bebidas"></div>
+  </div>
+  <div class="fg"><label>Endere&ccedil;o do CD / Filial Regional <span style="color:#94a3b8;font-weight:400;font-size:11px">(opcional)</span></label><input type="text" id="companyEnderecoCD" placeholder="Ex: Rod. Washington Luiz - Duque de Caxias / RJ"></div>
   <div class="fg">
     <label>Logo (Opcional)</label>
     <div id="companyLogoPreview"></div>
@@ -1155,8 +1198,11 @@ body.dark-mode .onb-loc-status{color:#a7f3d0!important}
 
   <!-- IMPORTADOR INTELIGENTE DE PORTFOLIO -->
   <div class="comp-import-card" id="compPortfolioImporter">
-    <div class="comp-import-title">&#10024; Importador Inteligente de Portf&oacute;lio (PDF, Planilha ou Foto)</div>
-    <div class="comp-import-sub">Suba PDF (ex: Guia de Execu&ccedil;&atilde;o), planilha (CSV/Excel .xlsx) ou foto/print de tabela. O Gemini extrai Nome, Gramatura, SKU/EAN, Categoria, Status e atualiza gramaturas alteradas sem duplicar itens.</div>
+    <div class="comp-import-title">&#10024; Importador Inteligente de Portf&oacute;lio (IA Autom&aacute;tico, PDF, Planilha ou Foto)</div>
+    <div class="comp-import-sub">Gere o cat&aacute;logo regional automaticamente via Gemini (<b>gemini-2.5-flash</b>) com 1 clique, ou suba PDF (Guia de Execu&ccedil;&atilde;o), planilha (CSV/Excel .xlsx) ou foto/print de tabela.</div>
+    <div style="margin-bottom:8px">
+      <button type="button" id="btnGerarCatalogoIA" onclick="gerarCatalogoAutomaticoEmpresaIA()" style="width:100%;background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;border:none;border-radius:9px;padding:11px 14px;font-size:13px;font-weight:800;cursor:pointer;margin:0;box-shadow:0 4px 12px rgba(79,70,229,0.28)">&#10024; Gerar Cat&aacute;logo Autom&aacute;tico da Empresa (IA)</button>
+    </div>
     <div class="comp-import-actions">
       <button type="button" onclick="document.getElementById('compPortfolioInput').click()" style="background:linear-gradient(135deg,#6d28d9,#7c3aed)">&#128196; Subir PDF / Excel / Foto</button>
       <button type="button" onclick="buscarMiniaturasPortfolioAuto()" class="sec" style="background:#0f766e">&#128444;&#65039; Buscar Miniaturas (Guia + OpenFoodFacts)</button>
@@ -2874,9 +2920,13 @@ function goToNewCompany() {
     currentClient = null;
     tempCompanyProducts = []; pendingCompanyLogo = null;
     _compProdFilter = "todos";
-    ["companyName","companyCNPJ","companyContacts"].forEach(function(id){ var el=document.getElementById(id); if(el) el.value = ""; });
+    ["companyName","companyCNPJ","companyContacts","companyRazaoSocial","companySegmento","companyEnderecoCD","smartCompanyQuery"].forEach(function(id){ var el=document.getElementById(id); if(el) el.value = ""; });
     var _locUser = (typeof getUserLocationPrefs === "function") ? getUserLocationPrefs() : null;
     var regEl = document.getElementById("companyRegional"); if (regEl) regEl.value = (_locUser && _locUser.regional) ? _locUser.regional : "Nacional";
+    var scSt = document.getElementById("smartCompanyStatus"); if (scSt) { scSt.style.display = "none"; scSt.textContent = ""; }
+    var scCard = document.getElementById("smartCompanyConfirmCard"); if (scCard) { scCard.classList.remove("ativo"); scCard.innerHTML = ""; }
+    var postBan = document.getElementById("postConfirmCatalogBanner"); if (postBan) postBan.classList.remove("ativo");
+    if (typeof _ultimaSugestaoEmpresaIA !== "undefined") _ultimaSugestaoEmpresaIA = null;
     var stEl = document.getElementById("compPortfolioStatus"); if (stEl) { stEl.style.display = "none"; stEl.textContent = ""; }
     var cp = document.getElementById("companyLogoPreview"); if(cp) cp.innerHTML = "";
     var guiaTxt = document.getElementById("guiaEmpresaTexto"); if(guiaTxt) guiaTxt.value = "";
@@ -4435,12 +4485,15 @@ function loadCurrentUser() {
 function saveCompany() {
     var name=document.getElementById("companyName").value.trim(), cnpj=document.getElementById("companyCNPJ").value.trim(), contacts=document.getElementById("companyContacts").value.trim();
     var regional=(document.getElementById("companyRegional")||{}).value||"Nacional";
+    var razaoSocial=((document.getElementById("companyRazaoSocial")||{}).value||"").trim();
+    var segmento=((document.getElementById("companySegmento")||{}).value||"").trim();
+    var enderecoCd=((document.getElementById("companyEnderecoCD")||{}).value||"").trim();
     if (!name||!cnpj) { alert("Preencha nome e CNPJ"); return; }
     if (!tempCompanyProducts.length) { alert("Adicione pelo menos um produto"); return; }
     var id = (currentCompany && currentCompany.id) ? currentCompany.id : Date.now().toString();
     var logoFinal = (pendingCompanyLogo !== null) ? pendingCompanyLogo : (currentCompany ? currentCompany.logo : null);
     var prevCompany = companies[id] || null;
-    var company = {id:id,name:name,cnpj:cnpj,contacts:contacts,regional:regional,logo:logoFinal,products:tempCompanyProducts.slice()};
+    var company = {id:id,name:name,cnpj:cnpj,contacts:contacts,regional:regional,razaoSocial:razaoSocial,segmento:segmento,enderecoCd:enderecoCd,logo:logoFinal,products:tempCompanyProducts.slice()};
     companies[id] = company;
     if (!lsSetJSON("ls23_companies", companies)) {
         if (prevCompany) companies[id] = prevCompany; else delete companies[id];
@@ -4452,7 +4505,7 @@ function saveCompany() {
     // Atualizar select do splash
     var sel = document.getElementById("splashCompany");
     if (sel) { sel.innerHTML = "<option value=''>-- Selecione --</option>"; Object.values(companies).forEach(function(c){ sel.innerHTML += "<option value='"+escAttr(c.id)+"'>"+escHtml(c.name)+"</option>"; }); sel.value = id; }
-    ["companyName","companyCNPJ","companyContacts"].forEach(function(x){ document.getElementById(x).value=""; });
+    ["companyName","companyCNPJ","companyContacts","companyRazaoSocial","companySegmento","companyEnderecoCD","smartCompanyQuery"].forEach(function(x){ var el=document.getElementById(x); if(el) el.value=""; });
     document.getElementById("companyLogoPreview").innerHTML=""; pendingCompanyLogo=null; tempCompanyProducts=[];
     updateCompanyProductsTable(); showMsg("msgCompany","Empresa salva!");
     setTimeout(function(){
@@ -4470,12 +4523,15 @@ function saveCompany() {
 function saveCompanyStay() {
     var name=document.getElementById("companyName").value.trim(), cnpj=document.getElementById("companyCNPJ").value.trim(), contacts=document.getElementById("companyContacts").value.trim();
     var regional=(document.getElementById("companyRegional")||{}).value||"Nacional";
+    var razaoSocial=((document.getElementById("companyRazaoSocial")||{}).value||"").trim();
+    var segmento=((document.getElementById("companySegmento")||{}).value||"").trim();
+    var enderecoCd=((document.getElementById("companyEnderecoCD")||{}).value||"").trim();
     if (!name||!cnpj) { alert("Preencha nome e CNPJ"); return false; }
     if (!tempCompanyProducts.length) { alert("Adicione pelo menos um produto"); return false; }
     var id = (currentCompany && currentCompany.id) ? currentCompany.id : Date.now().toString();
     var logoFinal = (pendingCompanyLogo !== null) ? pendingCompanyLogo : (currentCompany ? currentCompany.logo : null);
     var prevCompany = companies[id] || null;
-    var company = {id:id,name:name,cnpj:cnpj,contacts:contacts,regional:regional,logo:logoFinal,products:tempCompanyProducts.slice()};
+    var company = {id:id,name:name,cnpj:cnpj,contacts:contacts,regional:regional,razaoSocial:razaoSocial,segmento:segmento,enderecoCd:enderecoCd,logo:logoFinal,products:tempCompanyProducts.slice()};
     companies[id] = company;
     if (!lsSetJSON("ls23_companies", companies)) {
         if (prevCompany) companies[id] = prevCompany; else delete companies[id];
@@ -7420,6 +7476,12 @@ function goToEditEmpresa() {
     setTimeout(carregarGuiaNoFormulario, 100);
     document.getElementById("companyCNPJ").value = currentCompany.cnpj||"";
     document.getElementById("companyContacts").value = currentCompany.contacts||"";
+    if (document.getElementById("companyRazaoSocial")) document.getElementById("companyRazaoSocial").value = currentCompany.razaoSocial || "";
+    if (document.getElementById("companySegmento")) document.getElementById("companySegmento").value = currentCompany.segmento || "";
+    if (document.getElementById("companyEnderecoCD")) document.getElementById("companyEnderecoCD").value = currentCompany.enderecoCd || "";
+    var scSt = document.getElementById("smartCompanyStatus"); if (scSt) { scSt.style.display = "none"; scSt.textContent = ""; }
+    var scCard = document.getElementById("smartCompanyConfirmCard"); if (scCard) { scCard.classList.remove("ativo"); scCard.innerHTML = ""; }
+    var postBan = document.getElementById("postConfirmCatalogBanner"); if (postBan) postBan.classList.remove("ativo");
     var logoPreview = document.getElementById("companyLogoPreview");
     logoPreview.innerHTML = currentCompany.logo ? "<img src='"+currentCompany.logo+"' class='lp'>" : "";
     var stPort = document.getElementById("compPortfolioStatus");
@@ -13537,6 +13599,429 @@ function initI18nOnboarding() {
     }
 }
 
+// ═══════════════════════════════════════════════════════════════════════════
+// BUSCA INTELIGENTE DE EMPRESA (GEMINI) + CATALOGO REGIONAL AUTOMATICO (1 CLIQUE)
+// ═══════════════════════════════════════════════════════════════════════════
+var _smartCompanyTimer = null;
+var _smartCompanyLastAutoQuery = "";
+var _ultimaSugestaoEmpresaIA = null;
+var _catalogoIaGerado = [];
+
+function _obterUfContextoDispositivo() {
+    var loc = (typeof getUserLocationPrefs === "function") ? getUserLocationPrefs() : null;
+    var regSel = (document.getElementById("companyRegional") || {}).value || "";
+    var uf = (loc && loc.uf) ? String(loc.uf).toUpperCase() : "";
+    var cidade = (loc && loc.city) ? loc.city : "";
+    var regional = regSel && regSel !== "Nacional" ? regSel : ((loc && loc.regional) ? loc.regional : "Nacional");
+    if (!uf && regional) {
+        if (regional.indexOf("RJ") === 0) uf = "RJ";
+        else if (regional === "SP") uf = "SP";
+        else if (regional.indexOf("MG") === 0) uf = "MG";
+        else if (regional === "Sul") uf = "RS/PR/SC";
+        else if (regional === "Nordeste") uf = "BA/PE/CE";
+    }
+    return { uf: uf || "Brasil", cidade: cidade, regional: regional || "Nacional" };
+}
+
+async function _buscarLogoIndustriaAuto(nome, siteDominio) {
+    var candidatos = [];
+    if (siteDominio) {
+        var dom = String(siteDominio).replace(/^https?:\/\//i, "").replace(/^www\./i, "").split("/")[0].trim();
+        if (dom && dom.indexOf(".") > 0) {
+            candidatos.push("https://www.google.com/s2/favicons?domain=" + encodeURIComponent(dom) + "&sz=128");
+            candidatos.push("https://icons.duckduckgo.com/ip3/" + dom + ".ico");
+        }
+    }
+    for (var i = 0; i < candidatos.length; i++) {
+        try {
+            if (typeof carregarLogoUrlComoJpeg200 === "function") {
+                var j = await carregarLogoUrlComoJpeg200(candidatos[i], 24);
+                if (j) return j;
+            }
+        } catch(e) {}
+    }
+    try {
+        if (typeof buscarLogoNivel1Dominio === "function") {
+            var n1 = await buscarLogoNivel1Dominio(nome);
+            if (n1 && n1.dataUrl) return n1.dataUrl;
+        }
+    } catch(e2) {}
+    try {
+        if (typeof buscarLogoNivel2Wikimedia === "function") {
+            var n2 = await buscarLogoNivel2Wikimedia(nome);
+            if (n2 && n2.dataUrl) return n2.dataUrl;
+        }
+    } catch(e3) {}
+    return (typeof gerarAvatarLojaJpeg200 === "function") ? gerarAvatarLojaJpeg200(nome || "EMP") : "";
+}
+
+function onCompanyNameSmartInput() {
+    var nameEl = document.getElementById("companyName");
+    var q = nameEl ? nameEl.value.trim() : "";
+    if (_smartCompanyTimer) clearTimeout(_smartCompanyTimer);
+    if (currentCompany && currentCompany.id && currentCompany.name && normProdKey(currentCompany.name) === normProdKey(q)) return;
+    if (q.length < 4 || !getGoogleGeminiKey()) return;
+    if (normProdKey(q) === normProdKey(_smartCompanyLastAutoQuery)) return;
+    _smartCompanyTimer = setTimeout(function() {
+        var sq = document.getElementById("smartCompanyQuery");
+        if (sq && !sq.value.trim()) sq.value = q;
+        buscarEmpresaComIA(false);
+    }, 950);
+}
+
+async function buscarEmpresaComIA(manualTrigger) {
+    var sqEl = document.getElementById("smartCompanyQuery");
+    var nmEl = document.getElementById("companyName");
+    var stEl = document.getElementById("smartCompanyStatus");
+    var cardEl = document.getElementById("smartCompanyConfirmCard");
+    var btn = document.getElementById("btnSmartCompanySearch");
+    var query = (sqEl && sqEl.value.trim()) || (nmEl && nmEl.value.trim()) || "";
+    if (!query || query.length < 2) {
+        if (manualTrigger) alert("Digite o nome da indústria (ex: PepsiCo) para buscar com IA.");
+        return;
+    }
+    if (!getGoogleGeminiKey()) {
+        if (manualTrigger) alert("Configure a Chave API Google Gemini (gemini-2.5-flash) em Configurações para usar a busca automática.");
+        return;
+    }
+    _smartCompanyLastAutoQuery = query;
+    var ctx = _obterUfContextoDispositivo();
+    if (stEl) {
+        stEl.style.display = "block";
+        stEl.style.color = "#1e40af";
+        stEl.textContent = "✨ Consultando Gemini (gemini-2.5-flash) para \"" + query + "\" (" + ctx.uf + ")...";
+    }
+    if (cardEl) { cardEl.classList.remove("ativo"); cardEl.innerHTML = ""; }
+    if (btn) { btn.disabled = true; btn.textContent = "Buscando..."; }
+
+    try {
+        var prompt = "Você é um especialista em cadastro corporativo e trade marketing no Brasil.\n" +
+            "O usuário digitou a indústria/empresa: \"" + query + "\".\n" +
+            "Localização / UF atual do usuário: " + (ctx.cidade ? ctx.cidade + " / " : "") + ctx.uf + " (Regional: " + ctx.regional + ").\n" +
+            "Retorne APENAS um JSON válido com os dados oficiais desta empresa no Brasil e sua filial/CD na UF informada:\n" +
+            "{\n" +
+            "  \"nomeFantasia\": \"Nome comercial curto (ex: PepsiCo)\",\n" +
+            "  \"razaoSocial\": \"Razão social oficial (ex: PepsiCo do Brasil Ltda)\",\n" +
+            "  \"cnpj\": \"CNPJ principal ou da filial regional no formato 00.000.000/0000-00\",\n" +
+            "  \"enderecoCd\": \"Endereço provável do centro de distribuição ou filial na UF informada\",\n" +
+            "  \"segmento\": \"Segmento principal (ex: Snacks, Alimentos e Bebidas)\",\n" +
+            "  \"regionalSugerida\": \"Um exato dentre: Nacional | RJ / Leste | SP | MG / ES | Sul | Nordeste | Centro-Oeste | Norte\",\n" +
+            "  \"ufLabel\": \"Sigla UF (ex: RJ)\",\n" +
+            "  \"siteDominio\": \"domínio oficial (ex: pepsico.com.br)\",\n" +
+            "  \"contatosResumo\": \"Site ou SAC oficial\"\n" +
+            "}";
+        var raw = await chamarGoogleGeminiFlash(prompt, [], true);
+        var obj = extrairJsonGemini(raw);
+        if (Array.isArray(obj)) obj = obj[0] || {};
+        if (!obj || (!obj.razaoSocial && !obj.nomeFantasia)) {
+            throw new Error("Não foi possível identificar a empresa.");
+        }
+        var cnpjFmt = obj.cnpj ? (formatarCNPJ(obj.cnpj) || String(obj.cnpj).trim()) : "";
+        var regOpts = ["Nacional","RJ / Leste","SP","MG / ES","Sul","Nordeste","Centro-Oeste","Norte"];
+        var regSug = regOpts.indexOf(obj.regionalSugerida) >= 0 ? obj.regionalSugerida : ctx.regional;
+        var nomeSug = String(obj.nomeFantasia || query).trim();
+        var logoSug = await _buscarLogoIndustriaAuto(nomeSug, obj.siteDominio);
+
+        _ultimaSugestaoEmpresaIA = {
+            nomeFantasia: nomeSug,
+            razaoSocial: String(obj.razaoSocial || nomeSug).trim(),
+            cnpj: cnpjFmt,
+            enderecoCd: String(obj.enderecoCd || "").trim(),
+            segmento: String(obj.segmento || "").trim(),
+            regionalSugerida: regSug,
+            ufLabel: String(obj.ufLabel || ctx.uf || regSug).trim(),
+            siteDominio: String(obj.siteDominio || "").trim(),
+            contatosResumo: String(obj.contatosResumo || "").trim(),
+            logo: logoSug || ""
+        };
+
+        if (cardEl) {
+            var logoHtml = _ultimaSugestaoEmpresaIA.logo
+                ? "<img src='" + _ultimaSugestaoEmpresaIA.logo + "' class='smart-comp-logo' alt='Logo'>"
+                : "<div class='smart-comp-logo' style='display:flex;align-items:center;justify-content:center;font-size:20px'>&#127970;</div>";
+            cardEl.innerHTML =
+                "<div class='smart-comp-head'>" + logoHtml +
+                "<div>" +
+                "<div class='smart-comp-title'>&#10024; Encontramos: " + escHtml(_ultimaSugestaoEmpresaIA.razaoSocial) + " - Regional " + escHtml(_ultimaSugestaoEmpresaIA.ufLabel) + ". Confirmar dados?</div>" +
+                "<div class='smart-comp-meta'>" +
+                (_ultimaSugestaoEmpresaIA.cnpj ? "<b>CNPJ:</b> " + escHtml(_ultimaSugestaoEmpresaIA.cnpj) + " &bull; " : "") +
+                (_ultimaSugestaoEmpresaIA.segmento ? "<b>Segmento:</b> " + escHtml(_ultimaSugestaoEmpresaIA.segmento) : "") +
+                (_ultimaSugestaoEmpresaIA.enderecoCd ? "<br><b>CD/Filial:</b> " + escHtml(_ultimaSugestaoEmpresaIA.enderecoCd) : "") +
+                "</div></div></div>" +
+                "<div class='smart-comp-actions'>" +
+                "<button type='button' onclick='confirmarEmpresaSugeridaIA()' style='flex:1;background:#059669;color:#fff;border:none;border-radius:8px;padding:9px 12px;font-size:12px;font-weight:800;cursor:pointer;margin:0'>&#9989; Confirmar dados</button>" +
+                "<button type='button' onclick='descartarSugestaoEmpresaIA()' class='sec' style='padding:9px 12px;font-size:12px;margin:0'>Ignorar</button>" +
+                "</div>";
+            cardEl.classList.add("ativo");
+        }
+        if (stEl) {
+            stEl.style.color = "#059669";
+            stEl.textContent = "Sugestão pronta! Revise o card abaixo e toque em Confirmar dados.";
+        }
+    } catch(err) {
+        if (stEl) {
+            stEl.style.color = "#b91c1c";
+            stEl.textContent = "Busca IA indisponível (" + (err && err.message ? err.message : "erro") + "). Preencha os campos manualmente.";
+        }
+    } finally {
+        if (btn) { btn.disabled = false; btn.innerHTML = "&#10024; Buscar Empresa com IA"; }
+    }
+}
+
+function confirmarEmpresaSugeridaIA() {
+    var sug = _ultimaSugestaoEmpresaIA;
+    if (!sug) return;
+    if (document.getElementById("companyName")) document.getElementById("companyName").value = sug.nomeFantasia || sug.razaoSocial;
+    if (document.getElementById("companyCNPJ") && sug.cnpj) document.getElementById("companyCNPJ").value = sug.cnpj;
+    if (document.getElementById("companyRegional") && sug.regionalSugerida) document.getElementById("companyRegional").value = sug.regionalSugerida;
+    if (document.getElementById("companyRazaoSocial")) document.getElementById("companyRazaoSocial").value = sug.razaoSocial || "";
+    if (document.getElementById("companySegmento")) document.getElementById("companySegmento").value = sug.segmento || "";
+    if (document.getElementById("companyEnderecoCD")) document.getElementById("companyEnderecoCD").value = sug.enderecoCd || "";
+    if (document.getElementById("companyContacts")) {
+        document.getElementById("companyContacts").value = sug.contatosResumo || sug.siteDominio || "";
+    }
+    if (sug.logo) {
+        pendingCompanyLogo = sug.logo;
+        var prev = document.getElementById("companyLogoPreview");
+        if (prev) prev.innerHTML = "<img src='" + sug.logo + "' class='lp'>";
+    }
+    var cardEl = document.getElementById("smartCompanyConfirmCard");
+    if (cardEl) { cardEl.classList.remove("ativo"); cardEl.innerHTML = ""; }
+    var stEl = document.getElementById("smartCompanyStatus");
+    if (stEl) {
+        stEl.style.display = "block";
+        stEl.style.color = "#059669";
+        stEl.textContent = "✅ Dados preenchidos: " + (sug.razaoSocial || sug.nomeFantasia) + " (" + sug.ufLabel + ").";
+    }
+    var postBan = document.getElementById("postConfirmCatalogBanner");
+    if (postBan) postBan.classList.add("ativo");
+}
+
+function descartarSugestaoEmpresaIA() {
+    _ultimaSugestaoEmpresaIA = null;
+    var cardEl = document.getElementById("smartCompanyConfirmCard");
+    if (cardEl) { cardEl.classList.remove("ativo"); cardEl.innerHTML = ""; }
+}
+
+function abrirModalCatalogoIA() {
+    var m = document.getElementById("modalCatalogoIA");
+    if (m) m.style.display = "flex";
+}
+function fecharModalCatalogoIA() {
+    var m = document.getElementById("modalCatalogoIA");
+    if (m) m.style.display = "none";
+}
+
+function renderCatalogoIALista() {
+    var listEl = document.getElementById("catIaListBody");
+    var countEl = document.getElementById("catIaSelectedCount");
+    if (!listEl) return;
+    var selCount = _catalogoIaGerado.filter(function(it){ return it._checked !== false; }).length;
+    if (countEl) countEl.textContent = selCount + " de " + _catalogoIaGerado.length + " selecionado(s)";
+    if (!_catalogoIaGerado.length) {
+        listEl.innerHTML = "<div style='text-align:center;color:#64748b;padding:24px;font-size:12px'>Nenhum item gerado ainda.</div>";
+        return;
+    }
+    listEl.innerHTML = _catalogoIaGerado.map(function(it, idx) {
+        var chk = it._checked !== false;
+        var thumbHtml = it.thumb
+            ? "<img src='" + it.thumb + "' class='cat-ia-thumb' alt='SKU'>"
+            : "<div class='cat-ia-thumb'>&#128230;</div>";
+        return "<div class='cat-ia-row" + (chk ? " checked" : "") + "' onclick='toggleCatalogoIAItem(" + idx + ")'>" +
+            "<input type='checkbox' " + (chk ? "checked" : "") + " onclick='event.stopPropagation();toggleCatalogoIAItem(" + idx + ")' style='width:18px;height:18px;margin:0;accent-color:#7c3aed;flex-shrink:0'>" +
+            thumbHtml +
+            "<div style='flex:1;min-width:0'>" +
+            "<div style='font-size:12px;font-weight:700;display:flex;align-items:center;gap:5px;flex-wrap:wrap'>" +
+            "<span>" + escHtml(it.name) + "</span> " + renderGramaturaSeloHtml(it.gramatura) +
+            "</div>" +
+            "<div style='font-size:10px;color:#64748b;margin-top:3px;display:flex;gap:6px;flex-wrap:wrap'>" +
+            "<span><b>Cx:</b> " + (it.quantity || 1) + " un</span>" +
+            (it.code ? "<span style='font-family:monospace'><b>EAN/SKU:</b> " + escHtml(it.code) + "</span>" : "") +
+            "<span><b>Cat:</b> " + escHtml(it.category || "Geral") + "</span>" +
+            "<span class='status-selo ativo'>" + escHtml(it.status || "Ativo") + "</span>" +
+            "</div></div></div>";
+    }).join("");
+}
+
+function toggleCatalogoIAItem(idx) {
+    if (!_catalogoIaGerado[idx]) return;
+    _catalogoIaGerado[idx]._checked = (_catalogoIaGerado[idx]._checked === false);
+    renderCatalogoIALista();
+}
+
+function toggleTodosCatalogoIA(marcar) {
+    _catalogoIaGerado.forEach(function(it){ it._checked = !!marcar; });
+    renderCatalogoIALista();
+}
+
+async function _buscarMiniaturasOpenFoodFactsEmLote(lista) {
+    var stEl = document.getElementById("catIaModalStatus");
+    var total = lista.length;
+    var concluidos = 0, encontrados = 0;
+    var concurrency = 3;
+    var cursor = 0;
+
+    async function worker() {
+        while (cursor < total) {
+            var i = cursor++;
+            var item = lista[i];
+            try {
+                if (typeof buscarThumbnailOpenFoodFacts === "function") {
+                    var thumb = await buscarThumbnailOpenFoodFacts(item);
+                    if (thumb) {
+                        item.thumb = thumb;
+                        encontrados++;
+                    }
+                }
+            } catch(e) {}
+            concluidos++;
+            if (stEl) {
+                stEl.style.color = "#0f766e";
+                stEl.textContent = "🌐 Open Food Facts: " + concluidos + "/" + total + " verificados (" + encontrados + " miniatura(s) oficial(is) carregada(s))...";
+            }
+            if (concluidos % 2 === 0 || concluidos === total) renderCatalogoIALista();
+        }
+    }
+
+    var workers = [];
+    for (var w = 0; w < Math.min(concurrency, total); w++) workers.push(worker());
+    await Promise.all(workers);
+    if (stEl) {
+        stEl.style.color = "#059669";
+        stEl.textContent = "✅ Catálogo pronto: " + total + " SKUs gerados, " + encontrados + " miniatura(s) Open Food Facts + selos coloridos de gramatura. Revise e salve abaixo!";
+    }
+    renderCatalogoIALista();
+}
+
+async function gerarCatalogoAutomaticoEmpresaIA() {
+    var compName = ((document.getElementById("companyName") || {}).value || "").trim() ||
+        (_ultimaSugestaoEmpresaIA && _ultimaSugestaoEmpresaIA.razaoSocial) || "";
+    if (!compName) {
+        alert("Informe ou confirme o Nome da Empresa antes de gerar o catálogo automático.");
+        return;
+    }
+    if (!getGoogleGeminiKey()) {
+        alert("Configure sua chave API Google Gemini (gemini-2.5-flash) em Configurações para gerar o catálogo automático.");
+        return;
+    }
+    var ctx = _obterUfContextoDispositivo();
+    var segmento = ((document.getElementById("companySegmento") || {}).value || "").trim() ||
+        (_ultimaSugestaoEmpresaIA && _ultimaSugestaoEmpresaIA.segmento) || "";
+    var razao = ((document.getElementById("companyRazaoSocial") || {}).value || "").trim() || compName;
+
+    var stModal = document.getElementById("catIaModalStatus");
+    var titleEl = document.getElementById("catIaModalTitle");
+    if (titleEl) titleEl.textContent = "✨ Catálogo Regional: " + compName + " (" + ctx.uf + ")";
+    _catalogoIaGerado = [];
+    renderCatalogoIALista();
+    abrirModalCatalogoIA();
+    if (stModal) {
+        stModal.style.color = "#4f46e5";
+        stModal.textContent = "⏳ Gerando linhas e SKUs regionais para " + razao + " (" + ctx.uf + " / " + ctx.regional + ") via Gemini 2.5...";
+    }
+
+    try {
+        var prompt = "Você é um especialista sênior em portfólio comercial de varejo e trade marketing no Brasil.\n" +
+            "Indústria: " + razao + " (Nome curto: " + compName + ")" + (segmento ? " | Segmento: " + segmento : "") + "\n" +
+            "Região / UF foco: " + ctx.uf + " (" + ctx.regional + ").\n" +
+            "Gere uma tabela estruturada com as principais linhas e SKUs realmente comercializados por esta indústria nessa região do Brasil " +
+            "(se for PepsiCo do Brasil, inclua principais SKUs de Doritos, Ruffles, Lay's, Cheetos, Fandangos, Cebolitos, Torcida, Toddy, Toddynho, Quaker, Kero Coco, Milharina, etc. de 22 a 35 SKUs variados).\n" +
+            "Para CADA item informe obrigatoriamente:\n" +
+            "- nome: Nome completo do produto e sabor (ex: \"Doritos Queijo Nacho\", \"Toddynho Original\")\n" +
+            "- gramatura: Peso ou volume exato (ex: \"45g\", \"76g\", \"120g\", \"140g\", \"200ml\", \"1L\")\n" +
+            "- quantidade: Quantidade padrão por caixa (un/cx, número inteiro ex: 20, 24, 27, 30)\n" +
+            "- codigo: Código EAN-13 real brasileiro quando conhecido (13 dígitos) ou código SKU padrão\n" +
+            "- categoria: Categoria comercial (ex: \"Salty Snacks\", \"Foods / Achocolatados\", \"Aveias\", \"Bebidas\")\n" +
+            "- status: \"Ativo\"\n\n" +
+            "Retorne APENAS JSON válido no formato:\n" +
+            "{\"produtos\":[{\"nome\":\"...\",\"gramatura\":\"...\",\"quantidade\":24,\"codigo\":\"789...\",\"categoria\":\"...\",\"status\":\"Ativo\"}]}";
+
+        var raw = await chamarGoogleGeminiFlash(prompt, [], true);
+        var obj = extrairJsonGemini(raw);
+        var arr = Array.isArray(obj) ? obj : (obj && Array.isArray(obj.produtos) ? obj.produtos : []);
+        if (!arr.length) throw new Error("O Gemini não retornou itens estruturados.");
+
+        _catalogoIaGerado = arr.map(function(it) {
+            var mk = (typeof extrairMarcadorPrioridade === "function") ? extrairMarcadorPrioridade(it.nome || it.name || "") : { name: String(it.nome || it.name || "").trim(), priority: false };
+            var gram = String(it.gramatura || "").trim();
+            var cat = String(it.categoria || it.category || "").trim() || inferirCategoriaSKU(mk.name, "");
+            return {
+                code: String(it.codigo || it.ean || it.code || "").trim(),
+                name: mk.name,
+                gramatura: gram,
+                quantity: parseInt(it.quantidade || it.quantity) || 1,
+                priority: mk.priority || isPriorityProduct(mk.name),
+                category: cat,
+                status: "Ativo",
+                activeRegional: true,
+                thumb: "",
+                _checked: true
+            };
+        }).filter(function(p){ return !!p.name; });
+
+        renderCatalogoIALista();
+        _buscarMiniaturasOpenFoodFactsEmLote(_catalogoIaGerado);
+    } catch(err) {
+        if (stModal) {
+            stModal.style.color = "#dc2626";
+            stModal.textContent = "Erro ao gerar catálogo: " + (err && err.message ? err.message : err);
+        }
+    }
+}
+
+function confirmarSalvarCatalogoIA() {
+    var selecionados = _catalogoIaGerado.filter(function(it){ return it._checked !== false; });
+    if (!selecionados.length) { alert("Marque pelo menos 1 produto para salvar no portfólio."); return; }
+
+    var added = 0, updated = 0;
+    selecionados.forEach(function(it) {
+        var cleanProd = {
+            code: it.code || "",
+            name: it.name,
+            gramatura: it.gramatura || "",
+            quantity: parseInt(it.quantity) || 1,
+            priority: !!it.priority,
+            category: it.category || "Geral",
+            status: "Ativo",
+            activeRegional: true,
+            thumb: it.thumb || ""
+        };
+        if (typeof mergeCompanySmartProduct === "function") {
+            var res = mergeCompanySmartProduct(tempCompanyProducts, cleanProd, { allowGramaturaUpdate: true, incomingList: selecionados });
+            if (res.added) added++;
+            else if (res.updated) updated++;
+        } else {
+            tempCompanyProducts.push(cleanProd);
+            added++;
+        }
+    });
+
+    updateCompanyProductsTable();
+    fecharModalCatalogoIA();
+
+    var name = ((document.getElementById("companyName") || {}).value || "").trim();
+    var cnpj = ((document.getElementById("companyCNPJ") || {}).value || "").trim();
+    var stPort = document.getElementById("compPortfolioStatus");
+    if (name && cnpj) {
+        var okStay = saveCompanyStay();
+        if (okStay && typeof sincronizarFilaSupabase === "function" && isSupabaseConfigurado && isSupabaseConfigurado() && navigator.onLine !== false) {
+            sincronizarFilaSupabase(false);
+        }
+        if (stPort) {
+            stPort.style.display = "block";
+            stPort.style.color = "#059669";
+            stPort.innerHTML = "&#9989; <b>" + added + "</b> adicionado(s), <b>" + updated + "</b> atualizado(s) e salvos no <b>localStorage + Supabase</b>!";
+        }
+        showMsg("msgCompany", "Portfólio salvo no localStorage e Supabase (" + selecionados.length + " SKUs)! ✓");
+    } else {
+        if (stPort) {
+            stPort.style.display = "block";
+            stPort.style.color = "#b45309";
+            stPort.innerHTML = "&#9989; <b>" + selecionados.length + "</b> SKU(s) adicionados à prévia! Preencha Nome + CNPJ e toque em <b>Salvar Dados da Empresa</b> para gravar no localStorage e Supabase.";
+        }
+    }
+}
+
 </script>
 
 <!-- GUARDIÃO LOCALSHELF -->
@@ -13830,6 +14315,29 @@ function initI18nOnboarding() {
     </div>
 
     <button type="button" class="onb-btn-skip" onclick="continuarSemLocalizacaoOnboarding()" data-i18n="onb_btn_skip_loc">Continuar sem localiza&ccedil;&atilde;o</button>
+  </div>
+</div>
+
+<!-- MODAL REVISAO CATALOGO AUTOMATICO EMPRESA (IA) -->
+<div id="modalCatalogoIA" class="cat-ia-modal-overlay">
+  <div class="cat-ia-modal-box">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px">
+      <h3 id="catIaModalTitle" style="margin:0;font-size:15px;color:#4c1d95">&#10024; Cat&aacute;logo Regional Autom&aacute;tico (IA)</h3>
+      <button type="button" onclick="fecharModalCatalogoIA()" style="background:#e2e8f0;color:#1e293b;border:none;border-radius:50%;width:28px;height:28px;cursor:pointer;margin:0">&#10005;</button>
+    </div>
+    <div id="catIaModalStatus" style="font-size:11px;font-weight:700;color:#4f46e5;margin-bottom:6px;line-height:1.35"></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:4px">
+      <span id="catIaSelectedCount" style="font-size:11px;font-weight:700;color:#475569">0 selecionado(s)</span>
+      <div style="display:flex;gap:6px">
+        <button type="button" onclick="toggleTodosCatalogoIA(true)" class="sec" style="padding:4px 9px;font-size:11px;margin:0">Marcar todos</button>
+        <button type="button" onclick="toggleTodosCatalogoIA(false)" class="sec" style="padding:4px 9px;font-size:11px;margin:0">Desmarcar todos</button>
+      </div>
+    </div>
+    <div id="catIaListBody" class="cat-ia-list"></div>
+    <div style="display:flex;gap:8px;margin-top:6px">
+      <button type="button" onclick="confirmarSalvarCatalogoIA()" style="flex:1;background:linear-gradient(135deg,#059669,#10b981);color:#fff;border:none;border-radius:10px;padding:11px 14px;font-size:13px;font-weight:800;cursor:pointer;margin:0">&#128190; Salvar Portf&oacute;lio (localStorage + Supabase)</button>
+      <button type="button" onclick="fecharModalCatalogoIA()" class="sec" style="margin:0">Fechar</button>
+    </div>
   </div>
 </div>
 
