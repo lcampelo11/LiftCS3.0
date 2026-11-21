@@ -1,4 +1,4 @@
-const CACHE_NAME = 'localshelf-pwa-v3';
+const CACHE_NAME = 'localshelf-pwa-v4';
 const APP_SHELL = [
   './',
   './index.html',

@@ -66,7 +66,9 @@ window.addEventListener('unhandledrejection', function(e) {
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
+html,body{overscroll-behavior-y:none}
 body{font-family:'Segoe UI',sans-serif;background:#0a0a2e;color:#333;min-height:100vh}
+#app,#splash{overscroll-behavior-y:none}
 /* SPLASH */
 #splash{display:none;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(135deg,#0a0a2e 0%,#0d1b6e 50%,#0a0a2e 100%);padding:24px}
 #splash img.splash-logo{width:160px;height:160px;object-fit:contain;margin-bottom:16px;border-radius:32px}
@@ -757,6 +759,14 @@ body.dark-mode .cat-ia-modal-box{background:#1e293b!important;color:#f1f5f9!impo
 body.dark-mode .cat-ia-list{background:#0f172a!important;border-color:#334155!important}
 body.dark-mode .cat-ia-row{background:#1e293b!important;border-color:#334155!important;color:#f1f5f9!important}
 body.dark-mode .cat-ia-row.checked{background:#2e1065!important;border-color:#a855f7!important}
+/* Anti-Pull-to-Refresh em containers e modais rolaveis */
+.page,.modal-overlay,.onb-box,.cat-ia-modal-box,.cat-ia-list,.gchat-body,.gchat-scroll,.hb-drawer,.hb-body,#modalImportacaoIA,#modalRiRegistro,#modalTroca,#modalConfirmacao,#modalSqlSupabase > div,#modalRelatorioExecutivo > div,#modalConfirmarEntregaLog > div{overscroll-behavior-y:contain}
+.gemini-models-list{display:none;margin-top:8px;padding:8px;background:rgba(255,255,255,0.78);border:1px solid #bfdbfe;border-radius:8px}
+.gemini-model-chip{display:inline-flex;align-items:center;gap:4px;background:#fff;color:#1e3a8a;border:1px solid #93c5fd;border-radius:7px;padding:5px 8px;font-size:11px;font-weight:700;cursor:pointer;margin:2px}
+.gemini-model-chip.ativo{background:#1e40af;color:#fff;border-color:#1e40af}
+body.dark-mode .gemini-models-list{background:#0f172a!important;border-color:#334155!important}
+body.dark-mode .gemini-model-chip{background:#1e293b!important;color:#93c5fd!important;border-color:#334155!important}
+body.dark-mode .gemini-model-chip.ativo{background:#2563eb!important;color:#fff!important;border-color:#60a5fa!important}
 </style>
 </head>
 <body>
@@ -824,7 +834,7 @@ body.dark-mode .cat-ia-row.checked{background:#2e1065!important;border-color:#a8
       <span class="hb-icon">&#127970;</span> <span data-i18n="hb_new_company">Cadastrar Nova Empresa</span>
     </button>
     <button class="hb-item" onclick="closeHamburger();voltarParaSplash()">
-      <span class="hb-icon">&#128257;</span> <span data-i18n="hb_switch_company">Trocar Empresa</span>
+      <span class="hb-icon">&#128257;</span> <span data-i18n="hb_switch_company">Trocar Perfil / Empresa</span>
     </button>
     <button class="hb-item" onclick="closeHamburger();goToConfigGeral()">
       <span class="hb-icon">&#9881;&#65039;</span> <span data-i18n="hb_settings">Configura&ccedil;&otilde;es</span>
@@ -843,7 +853,8 @@ body.dark-mode .cat-ia-row.checked{background:#2e1065!important;border-color:#a8
 <div class="page active" id="pageClients">
   <!-- Topbar LocalShelf -->
   <div class="topbar">
-    <img data-lcs-asset="logo-header" alt="LocalShelf" style="height:36px;max-width:80%;object-fit:contain;margin-right:auto">
+    <img data-lcs-asset="logo-header" alt="LocalShelf" style="height:36px;max-width:58%;object-fit:contain;margin-right:auto">
+    <button type="button" onclick="voltarParaSplash()" title="Trocar Perfil / Empresa" data-i18n="btn_switch_profile" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.22);color:#cbd5e1;font-size:10px;font-weight:600;padding:5px 8px;border-radius:7px;cursor:pointer;margin:0 8px 0 0;white-space:nowrap">&#128257; Trocar Perfil / Empresa</button>
     <button class="topbar-hb" onclick="openHamburger()">&#9776;</button>
   </div>
   <!-- Faixa empresa -->
@@ -1152,7 +1163,7 @@ body.dark-mode .cat-ia-row.checked{background:#2e1065!important;border-color:#a8
   <div class="sm" id="msgCompany"></div>
   <div class="smart-search-card" id="smartCompanyBox" style="margin-bottom:10px">
     <div class="smart-search-title">&#10024; Busca Inteligente de Empresa / Ind&uacute;stria (IA)</div>
-    <div class="smart-search-sub">Digite o nome da ind&uacute;stria abaixo (ex: <b>PepsiCo</b>) para buscar automaticamente com o Gemini (<b>gemini-2.5-flash</b>) usando a UF/Localiza&ccedil;&atilde;o atual, ou toque em <b>Buscar Empresa com IA</b>. Edição manual continua sempre liberada.</div>
+    <div class="smart-search-sub">Digite o nome da ind&uacute;stria abaixo (ex: <b>PepsiCo</b>) para buscar automaticamente com o Gemini (<b>gemini-3.8-flash</b>) usando a UF/Localiza&ccedil;&atilde;o atual, ou toque em <b>Buscar Empresa com IA</b>. Edição manual continua sempre liberada.</div>
     <div class="smart-search-row">
       <input type="text" id="smartCompanyQuery" placeholder="Ex: PepsiCo, Nestle, Mondelez, Ambev..." onkeydown="if(event.key==='Enter'){event.preventDefault();buscarEmpresaComIA(true);}">
       <button type="button" id="btnSmartCompanySearch" onclick="buscarEmpresaComIA(true)">&#10024; Buscar Empresa com IA</button>
@@ -1199,7 +1210,7 @@ body.dark-mode .cat-ia-row.checked{background:#2e1065!important;border-color:#a8
   <!-- IMPORTADOR INTELIGENTE DE PORTFOLIO -->
   <div class="comp-import-card" id="compPortfolioImporter">
     <div class="comp-import-title">&#10024; Importador Inteligente de Portf&oacute;lio (IA Autom&aacute;tico, PDF, Planilha ou Foto)</div>
-    <div class="comp-import-sub">Gere o cat&aacute;logo regional automaticamente via Gemini (<b>gemini-2.5-flash</b>) com 1 clique, ou suba PDF (Guia de Execu&ccedil;&atilde;o), planilha (CSV/Excel .xlsx) ou foto/print de tabela.</div>
+    <div class="comp-import-sub">Gere o cat&aacute;logo regional automaticamente via Gemini (<b>gemini-3.8-flash</b>) com 1 clique, ou suba PDF (Guia de Execu&ccedil;&atilde;o), planilha (CSV/Excel .xlsx) ou foto/print de tabela.</div>
     <div style="margin-bottom:8px">
       <button type="button" id="btnGerarCatalogoIA" onclick="gerarCatalogoAutomaticoEmpresaIA()" style="width:100%;background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;border:none;border-radius:9px;padding:11px 14px;font-size:13px;font-weight:800;cursor:pointer;margin:0;box-shadow:0 4px 12px rgba(79,70,229,0.28)">&#10024; Gerar Cat&aacute;logo Autom&aacute;tico da Empresa (IA)</button>
     </div>
@@ -1872,13 +1883,21 @@ body.dark-mode .cat-ia-row.checked{background:#2e1065!important;border-color:#a8
     <div id="cfgExcluirEmpresa"></div>
   </div>
 
-  <!-- Chave API Google Gemini (gemini-2.5-flash) -->
+  <!-- Chave API Google Gemini (gemini-3.8-flash + Motor Aberto) -->
   <div style="border:1px solid #93c5fd;border-radius:10px;padding:14px;margin-bottom:10px;background:#eff6ff">
-    <div style="font-weight:700;color:#1e3a8a;margin-bottom:4px" data-i18n="cfg_gemini_title">&#10024; Chave API Google Gemini (gemini-2.5-flash)</div>
-    <div style="font-size:11px;color:#475569;margin-bottom:8px;line-height:1.4" data-i18n="cfg_gemini_desc">Salva exclusivamente no <b>localStorage</b> deste aparelho. Usada na busca inteligente de lojas e na leitura de fotos/PDFs de espelhos de pedido (De/Para PLU).</div>
+    <div style="font-weight:700;color:#1e3a8a;margin-bottom:4px" data-i18n="cfg_gemini_title">&#10024; Chave API Google Gemini (gemini-3.8-flash)</div>
+    <div style="font-size:11px;color:#475569;margin-bottom:8px;line-height:1.4" data-i18n="cfg_gemini_desc">Salva exclusivamente no <b>localStorage</b> deste aparelho. Usada na busca inteligente de empresas/lojas, cat&aacute;logo autom&aacute;tico, auditoria visual, Guardi&atilde;o e leitura de fotos/PDFs (com fallback anti-obsolesc&ecirc;ncia).</div>
     <div class="cfg-key-row">
       <input type="password" id="googleGeminiKeyInput" placeholder="Cole sua chave AIza... do Google AI Studio" autocomplete="off" style="padding:10px;border:1px solid #93c5fd;border-radius:8px;font-size:13px">
       <button type="button" class="cfg-key-toggle" onclick="toggleMostrarGeminiKey()" title="Mostrar ou ocultar chave">&#128065;&#65039;</button>
+    </div>
+    <div style="margin:6px 0 8px">
+      <label style="font-size:11px;font-weight:700;color:#1e3a8a;display:block;margin-bottom:4px" data-i18n="cfg_gemini_model_lbl">Modelo Ativo (ex: gemini-3.8-flash)</label>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
+        <input type="text" id="googleGeminiModelInput" value="gemini-3.8-flash" placeholder="gemini-3.8-flash" onblur="salvarModeloGeminiInput(true)" style="flex:1;min-width:170px;padding:9px;border:1px solid #93c5fd;border-radius:8px;font-size:12px;font-family:monospace;margin:0">
+        <button type="button" id="btnDetectarModelosGemini" onclick="detectarModelosGeminiDisponiveis()" data-i18n="cfg_btn_detect_models" style="background:#0f766e;color:#fff;border:none;border-radius:8px;padding:9px 12px;cursor:pointer;font-size:12px;font-weight:700;margin:0">&#128269; Detectar Modelos Dispon&iacute;veis</button>
+      </div>
+      <div id="geminiModelsList" class="gemini-models-list"></div>
     </div>
     <div style="display:flex;gap:8px;flex-wrap:wrap">
       <button type="button" onclick="salvarConfigGemini()" data-i18n="cfg_btn_save_gemini" style="background:#1e40af;color:#fff;border:none;border-radius:8px;padding:10px 16px;cursor:pointer;font-size:13px;font-weight:700;margin:0">Salvar Chave Gemini</button>
@@ -1886,9 +1905,11 @@ body.dark-mode .cat-ia-row.checked{background:#2e1065!important;border-color:#a8
     </div>
     <div id="msgConfigGemini" style="font-size:11px;margin-top:8px;font-weight:600"></div>
     <details style="margin-top:10px;border-top:1px dashed #bfdbfe;padding-top:8px">
-      <summary style="font-size:11px;color:#6d28d9;font-weight:600;cursor:pointer">&#129302; Chave API Secund&aacute;ria / Emerg&ecirc;ncia (Assistente &amp; Importa&ccedil;&atilde;o legada)</summary>
-      <div style="font-size:11px;color:#7c3aed;margin:6px 0 8px">Opcional. Deixe em branco para usar a chave padr&atilde;o do sistema.</div>
-      <input type="password" id="geminiKeyInput" placeholder="Cole sua chave API secund&aacute;ria aqui..." style="width:100%;padding:10px;border:1px solid #c4b5fd;border-radius:8px;font-size:13px;margin-bottom:8px">
+      <summary style="font-size:11px;color:#6d28d9;font-weight:600;cursor:pointer">&#129302; Chave API Secund&aacute;ria / Compat&iacute;vel OpenAI (OpenAI, Grok, OpenRouter, Groq)</summary>
+      <div style="font-size:11px;color:#7c3aed;margin:6px 0 8px">Opcional. Aceita chaves e endpoints compat&iacute;veis com <code>/v1/chat/completions</code> (OpenAI, xAI Grok, OpenRouter ou Groq). Deixe o endpoint em branco para usar o padr&atilde;o legado.</div>
+      <input type="password" id="geminiKeyInput" placeholder="Cole sua chave API secund&aacute;ria (sk-..., xai-..., gsk_...)" style="width:100%;padding:10px;border:1px solid #c4b5fd;border-radius:8px;font-size:13px;margin-bottom:6px">
+      <input type="url" id="secAiEndpointInput" placeholder="Endpoint opcional (ex: https://api.openai.com/v1/chat/completions)" style="width:100%;padding:9px;border:1px solid #c4b5fd;border-radius:8px;font-size:12px;font-family:monospace;margin-bottom:6px">
+      <input type="text" id="secAiModelInput" placeholder="Modelo secund&aacute;rio opcional (ex: gpt-4o-mini, grok-3-mini)" style="width:100%;padding:9px;border:1px solid #c4b5fd;border-radius:8px;font-size:12px;font-family:monospace;margin-bottom:8px">
       <button type="button" onclick="salvarConfigIA()" style="background:#7c3aed;color:#fff;border:none;border-radius:8px;padding:9px 14px;cursor:pointer;font-size:12px;font-weight:700;margin:0">Salvar Chave Secund&aacute;ria</button>
       <div id="msgConfigIA" style="font-size:11px;margin-top:6px"></div>
     </details>
@@ -2698,6 +2719,7 @@ function abrirLightbox(src) {
     if (!lb || !img) return;
     img.src = src;
     lb.classList.add("ativo");
+    if (typeof _pushAppHistoryState === "function") _pushAppHistoryState("modal_lightbox");
 }
 function fecharLightbox() {
     var lb = document.getElementById("lcsLightbox");
@@ -2721,7 +2743,11 @@ var _canalManualOverride = false;
 var _smartStoreResults = [];
 var _compProdFilter = "todos";
 
-// ── ACESSO DIRETO & CHAVE GOOGLE GEMINI (gemini-2.5-flash) ────────────────
+// ── ACESSO DIRETO & MOTOR GEMINI ANTI-OBSOLESCÊNCIA (gemini-3.8-flash) ──────
+var LS_GEMINI_MODEL_KEY = "ls23_gemini_model";
+var LS_GEMINI_MODEL_DEFAULT = "gemini-3.8-flash";
+var LS_SEC_ENDPOINT_KEY = "ls23_sec_ai_endpoint";
+var LS_SEC_MODEL_KEY = "ls23_sec_ai_model";
 var _k=["gsk_QsV6XlFuA2","14CquXxKIuWGdy","b3FYwDPFSuCAWK","FYEsInlAlLB7oe"];
 var _L23_BUILTIN_KEY=_k[0]+_k[1]+_k[2]+_k[3];
 function getApiKey(){return localStorage.getItem("ls23_gemini_key")||_L23_BUILTIN_KEY;}
@@ -2732,22 +2758,180 @@ function getGoogleGeminiKey() {
     if (legacy.indexOf("AIza") === 0) return legacy;
     return "";
 }
+function _sanitizarNomeModeloGemini(m) {
+    var clean = String(m || "").trim().replace(/^models\//i, "");
+    return clean || LS_GEMINI_MODEL_DEFAULT;
+}
+function getGeminiModel() {
+    var m = "";
+    try { m = localStorage.getItem(LS_GEMINI_MODEL_KEY) || ""; } catch(e) {}
+    return _sanitizarNomeModeloGemini(m);
+}
+function setGeminiModel(modelName, syncInput) {
+    var clean = _sanitizarNomeModeloGemini(modelName);
+    lsSet(LS_GEMINI_MODEL_KEY, clean);
+    if (syncInput !== false) {
+        var inp = document.getElementById("googleGeminiModelInput");
+        if (inp) inp.value = clean;
+    }
+    return clean;
+}
+function salvarModeloGeminiInput(silent) {
+    var inp = document.getElementById("googleGeminiModelInput");
+    var val = setGeminiModel(inp ? inp.value : LS_GEMINI_MODEL_DEFAULT, true);
+    if (!silent) {
+        var msgEl = document.getElementById("msgConfigGemini");
+        if (msgEl) {
+            msgEl.style.color = "#16a34a";
+            msgEl.textContent = "Modelo ativo atualizado: " + val + " ✓";
+        }
+    }
+    return val;
+}
+function _scoreFlashModelPriority(id) {
+    var lower = String(id || "").toLowerCase();
+    var score = 0;
+    if (lower.indexOf("flash") >= 0) score += 1000;
+    if (lower.indexOf("gemini") >= 0) score += 200;
+    if (lower.indexOf("lite") >= 0) score -= 40;
+    if (lower.indexOf("thinking") >= 0 || lower.indexOf("exp") >= 0) score -= 25;
+    var mVer = lower.match(/gemini-(\d+(?:\.\d+)?)/);
+    if (mVer) score += Math.round(parseFloat(mVer[1]) * 30);
+    return score;
+}
+function _selecionarMelhorFlashModel(modelsList, excluirModelo) {
+    if (!Array.isArray(modelsList)) return "";
+    var excl = _sanitizarNomeModeloGemini(excluirModelo || "").toLowerCase();
+    var candidatos = modelsList.filter(function(m) {
+        if (!m) return false;
+        var id = _sanitizarNomeModeloGemini(m.id || m.name || "");
+        var methods = m.supportedGenerationMethods || m.methods || [];
+        var canGen = !methods.length || methods.indexOf("generateContent") >= 0;
+        if (!canGen) return false;
+        var low = id.toLowerCase();
+        if (low.indexOf("gemini") < 0) return false;
+        if (excl && low === excl) return false;
+        return true;
+    }).map(function(m) {
+        var id = _sanitizarNomeModeloGemini(m.id || m.name || "");
+        return { id: id, score: _scoreFlashModelPriority(id) };
+    });
+    if (!candidatos.length) return "";
+    candidatos.sort(function(a, b) { return b.score - a.score; });
+    return candidatos[0].id;
+}
+async function listarModelosGeminiAPI(apiKey) {
+    var key = String(apiKey || getGoogleGeminiKey() || "").trim();
+    if (!key) throw new Error("CHAVE_GOOGLE_NAO_CONFIGURADA");
+    var url = "https://generativelanguage.googleapis.com/v1beta/models?key=" + encodeURIComponent(key);
+    var ctrl = (typeof AbortController !== "undefined") ? new AbortController() : null;
+    var timer = ctrl ? setTimeout(function(){ ctrl.abort(); }, 15000) : null;
+    try {
+        var resp = await fetch(url, { method: "GET", signal: ctrl ? ctrl.signal : undefined });
+        if (!resp.ok) {
+            var errMsg = "";
+            try { var ej = await resp.json(); errMsg = ej.error && ej.error.message ? ej.error.message : ""; } catch(e2) {}
+            throw new Error("Erro ao listar modelos (" + resp.status + "): " + (errMsg || "falha"));
+        }
+        var data = await resp.json();
+        var rawList = (data && Array.isArray(data.models)) ? data.models : [];
+        return rawList.filter(function(m) {
+            var methods = m && m.supportedGenerationMethods;
+            return Array.isArray(methods) && methods.indexOf("generateContent") >= 0;
+        }).map(function(m) {
+            return {
+                id: _sanitizarNomeModeloGemini(m.name),
+                displayName: m.displayName || _sanitizarNomeModeloGemini(m.name),
+                description: m.description || "",
+                supportedGenerationMethods: m.supportedGenerationMethods || []
+            };
+        }).sort(function(a, b) {
+            return _scoreFlashModelPriority(b.id) - _scoreFlashModelPriority(a.id);
+        });
+    } finally {
+        if (timer) clearTimeout(timer);
+    }
+}
+function selecionarModeloGeminiChip(modelId) {
+    var val = setGeminiModel(modelId, true);
+    var msgEl = document.getElementById("msgConfigGemini");
+    if (msgEl) {
+        msgEl.style.color = "#16a34a";
+        msgEl.textContent = "Modelo \"" + val + "\" selecionado e salvo no localStorage ✓";
+    }
+    var listEl = document.getElementById("geminiModelsList");
+    if (listEl) {
+        listEl.querySelectorAll(".gemini-model-chip").forEach(function(btn) {
+            btn.classList.toggle("ativo", btn.getAttribute("data-model-id") === val);
+        });
+    }
+}
+async function detectarModelosGeminiDisponiveis() {
+    var keyInp = document.getElementById("googleGeminiKeyInput");
+    var rawKey = keyInp ? keyInp.value.trim() : "";
+    var apiKey = (rawKey && rawKey.indexOf("•") < 0) ? rawKey : getGoogleGeminiKey();
+    var msgEl = document.getElementById("msgConfigGemini");
+    var listEl = document.getElementById("geminiModelsList");
+    var btn = document.getElementById("btnDetectarModelosGemini");
+    if (!apiKey) {
+        if (msgEl) { msgEl.style.color = "#dc2626"; msgEl.textContent = "Informe/salve uma Chave API Google Gemini antes de detectar os modelos."; }
+        return [];
+    }
+    if (btn) { btn.disabled = true; btn.textContent = "Detectando..."; }
+    if (msgEl) { msgEl.style.color = "#1e40af"; msgEl.textContent = "Consultando modelos ativos em /v1beta/models..."; }
+    try {
+        var modelos = await listarModelosGeminiAPI(apiKey);
+        var ativoAtual = getGeminiModel();
+        if (listEl) {
+            if (!modelos.length) {
+                listEl.innerHTML = "<div style='font-size:11px;color:#b45309'>Nenhum modelo com generateContent retornado para esta chave.</div>";
+            } else {
+                listEl.innerHTML = "<div style='font-size:11px;font-weight:700;color:#1e3a8a;margin-bottom:4px'>" +
+                    modelos.length + " modelo(s) ativo(s) — toque para selecionar:</div>" +
+                    "<div style='display:flex;flex-wrap:wrap;gap:4px'>" +
+                    modelos.slice(0, 18).map(function(m) {
+                        var isAtivo = (m.id === ativoAtual);
+                        return "<button type='button' class='gemini-model-chip" + (isAtivo ? " ativo" : "") +
+                            "' data-model-id='" + escAttr(m.id) + "' onclick='selecionarModeloGeminiChip(this.getAttribute(\"data-model-id\"))'>" +
+                            escHtml(m.id) + "</button>";
+                    }).join("") +
+                    "</div>";
+            }
+            listEl.style.display = "block";
+        }
+        if (msgEl) {
+            msgEl.style.color = "#059669";
+            msgEl.textContent = modelos.length + " modelo(s) encontrado(s). Modelo ativo: " + ativoAtual;
+        }
+        return modelos;
+    } catch(err) {
+        if (msgEl) {
+            msgEl.style.color = "#dc2626";
+            msgEl.textContent = "Falha ao detectar modelos: " + (err && err.message ? err.message : err);
+        }
+        return [];
+    } finally {
+        if (btn) { btn.disabled = false; btn.innerHTML = "&#128269; Detectar Modelos Dispon&iacute;veis"; }
+    }
+}
 function salvarConfigGemini() {
     var el = document.getElementById("googleGeminiKeyInput");
     var raw = el ? el.value.trim() : "";
+    var modEl = document.getElementById("googleGeminiModelInput");
+    var modeloSalvo = setGeminiModel(modEl ? modEl.value : getGeminiModel(), true);
     var msgEl = document.getElementById("msgConfigGemini");
     if (!raw || raw.indexOf("•") >= 0) {
         var atual = getGoogleGeminiKey();
         if (atual) {
-            if (msgEl) { msgEl.style.color = "#16a34a"; msgEl.textContent = "Chave Google Gemini mantida e ativa ✓"; }
+            if (msgEl) { msgEl.style.color = "#16a34a"; msgEl.textContent = "Chave Google Gemini mantida e ativa ✓ (" + modeloSalvo + ")"; }
         } else {
-            if (msgEl) { msgEl.style.color = "#dc2626"; msgEl.textContent = "Cole uma chave API válida do Google Gemini (AIza...)."; }
+            if (msgEl) { msgEl.style.color = "#dc2626"; msgEl.textContent = "Cole uma chave API válida do Google Gemini (AIza...). Modelo salvo: " + modeloSalvo; }
         }
         return;
     }
     lsSet("ls23_google_gemini_key", raw);
     if (el) { el.type = "password"; el.value = "••••••••"; }
-    if (msgEl) { msgEl.style.color = "#16a34a"; msgEl.textContent = "Chave Google Gemini salva no localStorage ✓ (gemini-2.5-flash pronto)"; }
+    if (msgEl) { msgEl.style.color = "#16a34a"; msgEl.textContent = "Chave Google Gemini salva no localStorage ✓ (" + modeloSalvo + " pronto)"; }
 }
 function removerConfigGemini() {
     try { localStorage.removeItem("ls23_google_gemini_key"); } catch(e) {}
@@ -2769,9 +2953,10 @@ function toggleMostrarGeminiKey() {
         el.type = "password";
     }
 }
-async function chamarGoogleGeminiFlash(prompt, partsArray, jsonMode) {
+async function chamarGoogleGeminiFlash(prompt, partsArray, jsonMode, _retriedFallback) {
     var apiKey = getGoogleGeminiKey();
     if (!apiKey) throw new Error("CHAVE_GOOGLE_NAO_CONFIGURADA");
+    var modeloAtivo = getGeminiModel();
     var parts = [];
     if (Array.isArray(partsArray)) {
         partsArray.forEach(function(pt) {
@@ -2785,7 +2970,7 @@ async function chamarGoogleGeminiFlash(prompt, partsArray, jsonMode) {
     if (prompt) parts.push({ text: prompt });
     var genCfg = { temperature: 0.2 };
     if (jsonMode) genCfg.responseMimeType = "application/json";
-    var url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" + encodeURIComponent(apiKey);
+    var url = "https://generativelanguage.googleapis.com/v1beta/models/" + encodeURIComponent(modeloAtivo) + ":generateContent?key=" + encodeURIComponent(apiKey);
     var ctrl = (typeof AbortController !== "undefined") ? new AbortController() : null;
     var timer = ctrl ? setTimeout(function(){ ctrl.abort(); }, 45000) : null;
     try {
@@ -2801,6 +2986,20 @@ async function chamarGoogleGeminiFlash(prompt, partsArray, jsonMode) {
         if (!resp.ok) {
             var errMsg = "";
             try { var ej = await resp.json(); errMsg = ej.error && ej.error.message ? ej.error.message : ""; } catch(e2) {}
+            var isModelUnavailable = (resp.status === 404) || (/model|not found|not supported|deprecated|unavailable|indispon/i.test(errMsg || ""));
+            if (isModelUnavailable && !_retriedFallback) {
+                try {
+                    var modelosDisp = await listarModelosGeminiAPI(apiKey);
+                    var altModelo = _selecionarMelhorFlashModel(modelosDisp, modeloAtivo);
+                    if (altModelo) {
+                        console.warn("LocalShelf AI Fallback: modelo '" + modeloAtivo + "' indisponível (" + resp.status + "). Usando automaticamente '" + altModelo + "'.");
+                        setGeminiModel(altModelo, true);
+                        return await chamarGoogleGeminiFlash(prompt, partsArray, jsonMode, true);
+                    }
+                } catch(fbErr) {
+                    console.warn("Fallback automático /v1beta/models falhou:", fbErr);
+                }
+            }
             if (resp.status === 400 || resp.status === 403) throw new Error("Chave Google Gemini inválida ou sem permissão (" + resp.status + "). " + errMsg);
             if (resp.status === 429) throw new Error("Limite de requisições da API Gemini atingido (429). Aguarde instantes.");
             throw new Error("Erro Gemini (" + resp.status + "): " + (errMsg || "falha na resposta"));
@@ -2850,12 +3049,36 @@ function verificarLicenca() {
 
 function verificarExpiracao() {}
 
+function _tentarAutoLoginSessao() {
+    if (typeof loadCurrentUser === "function") loadCurrentUser();
+    var lastCompId = "";
+    try { lastCompId = (localStorage.getItem("ls23_lastCompany") || "").trim(); } catch(e) {}
+    if (currentUser && lastCompId && companies && companies[lastCompId]) {
+        currentCompany = companies[lastCompId];
+        window._openedSplashFromApp = false;
+        var sp = document.getElementById("splash");
+        var ap = document.getElementById("app");
+        if (sp) sp.style.display = "none";
+        if (ap) ap.style.display = "block";
+        window._skipHistoryPush = true;
+        try { showClientsPage(); } finally { window._skipHistoryPush = false; }
+        if (window.history && typeof window.history.replaceState === "function") {
+            try { window.history.replaceState({ page: "pageClients" }, "", ""); } catch(e2) {}
+        }
+        return true;
+    }
+    return false;
+}
+
 function inicializarApp() {
     if (typeof _hydratarAssetsLCS === "function") _hydratarAssetsLCS();
     gerarDeviceId();
+    initSplash();
+    if (_tentarAutoLoginSessao()) {
+        return;
+    }
     document.getElementById("splash").style.display = "flex";
     document.getElementById("app").style.display = "none";
-    initSplash();
 }
 
 // ── SPLASH ────────────────────────────────────────────────────────────────
@@ -2938,12 +3161,48 @@ function goToNewCompany() {
 }
 
 // ── NAVEGACAO ─────────────────────────────────────────────────────────────
+function _pushAppHistoryState(tag) {
+    if (window._skipHistoryPush) return;
+    if (window.history && typeof window.history.pushState === "function") {
+        try {
+            window.history.pushState({ page: window._currentPage || "pageClients", overlay: tag || null }, "", "");
+        } catch(e) {}
+    }
+}
+function _isElVisibleModal(id) {
+    var el = document.getElementById(id);
+    if (!el) return false;
+    return !!(el.style.display && el.style.display !== "none");
+}
+function _fecharModalAtivoNoVoltar() {
+    var lb = document.getElementById("lcsLightbox");
+    if (lb && lb.classList.contains("ativo")) { fecharLightbox(); return true; }
+    var iosM = document.getElementById("pwaIosModal");
+    if (iosM && iosM.classList.contains("ativo")) { fecharPwaIosModal(); return true; }
+    if (_isElVisibleModal("modalCatalogoIA")) { fecharModalCatalogoIA(); return true; }
+    if (_isElVisibleModal("modalOnboarding")) { fecharModalOnboarding(); return true; }
+    var gc = document.getElementById("guardiao-chat");
+    if (gc && gc.classList.contains("ativo")) { fecharGuardiaoChat(); return true; }
+    if (_isElVisibleModal("modalEditProd")) { fecharEditProd(); return true; }
+    if (_isElVisibleModal("modalEditCompProd")) { fecharEditCompProd(); return true; }
+    if (_isElVisibleModal("modalImportacaoIA")) { fecharImportacaoIA(); return true; }
+    if (_isElVisibleModal("modalSqlSupabase")) { fecharModalSqlSupabase(); return true; }
+    if (_isElVisibleModal("modalRelatorioExecutivo")) { fecharModalRelatorioExecutivo(); return true; }
+    if (_isElVisibleModal("modalConfirmarEntregaLog")) { fecharModalConfirmarEntregaLog(); return true; }
+    if (_isElVisibleModal("modalRiRegistro")) { fecharRiRegistro(); return true; }
+    if (_isElVisibleModal("modalTroca")) { fecharModalTroca(); return true; }
+    if (_isElVisibleModal("modalConfirmacao")) { fecharModalConfirmacao(); return true; }
+    if (_isElVisibleModal("modalNomeCat")) { modalCatCancelar(); return true; }
+    var hb = document.getElementById("hbDrawer");
+    if (hb && hb.classList.contains("open")) { closeHamburger(); return true; }
+    return false;
+}
 function showPage(id) {
     if (typeof limparBuscas === "function") limparBuscas();
     document.querySelectorAll(".page").forEach(function(p){ p.classList.remove("active"); });
     document.getElementById(id).classList.add("active");
     window._currentPage = id;
-    history.pushState({page: id}, "", "");
+    _pushAppHistoryState(null);
     atualizarLogosCliente();
     // Garantir que a logo do sistema LocalShelf permanece no topbar (nunca sobrescrita por logo de empresa/cliente)
     var _assets = window._LCS_ASSETS || {};
@@ -3672,7 +3931,7 @@ async function buscarLojaInteligente() {
             if (st) { st.style.color = "#16a34a"; st.textContent = "CNPJ encontrado via BrasilAPI: " + cnpjRes.nome; }
         } else {
             var temGemini = !!getGoogleGeminiKey();
-            if (st) st.textContent = "Consultando OpenStreetMap" + (temGemini ? " e Gemini (gemini-2.5-flash)" : "") + " em paralelo...";
+            if (st) st.textContent = "Consultando OpenStreetMap" + (temGemini ? " e Gemini (" + getGeminiModel() + ")" : "") + " em paralelo...";
             var results = await Promise.allSettled([
                 buscarOpenStreetMapNominatim(q),
                 temGemini ? buscarLojasGeminiFlash(q) : Promise.resolve([])
@@ -3839,7 +4098,7 @@ async function processarEspelhoPedidoGemini(input) {
         input.value = "";
         return;
     }
-    if (st) { st.style.display = "block"; st.style.color = "#6d28d9"; st.textContent = "⏳ Lendo espelho de pedido com Gemini (gemini-2.5-flash)..."; }
+    if (st) { st.style.display = "block"; st.style.color = "#6d28d9"; st.textContent = "⏳ Lendo espelho de pedido com Gemini (" + getGeminiModel() + ")..."; }
     try {
         var part = await prepararArquivoParaGemini(file, 1400);
         var catResumo = tempClientProducts.slice(0, 80).map(function(p){ return (p.code || "-") + " | " + p.name + " " + p.gramatura; }).join("\n");
@@ -3983,6 +4242,7 @@ function abrirEditCompProd(i) {
     document.getElementById("editCompProdStatus").value = p.status || "Ativo";
     document.getElementById("editCompProdRegional").checked = (p.activeRegional !== false);
     document.getElementById("modalEditCompProd").style.display = "flex";
+    if (typeof _pushAppHistoryState === "function") _pushAppHistoryState("modal_edit_comp_prod");
 }
 function fecharEditCompProd() {
     document.getElementById("modalEditCompProd").style.display = "none";
@@ -4119,7 +4379,7 @@ async function importarPortfolioInteligente(input) {
                 tabelaTexto = await file.text();
             }
             if (geminiKey) {
-                if (stEl) stEl.textContent = "✨ Extraindo e padronizando planilha via Gemini (gemini-2.5-flash)...";
+                if (stEl) stEl.textContent = "✨ Extraindo e padronizando planilha via Gemini (" + getGeminiModel() + ")...";
                 var promptTab = "Analise esta tabela de portfólio comercial e extraia TODOS os produtos.\n" +
                     "Para cada produto retorne: nome, gramatura (ex: '120G', '183G', '1KG'), codigo (SKU ou EAN se houver), categoria, status ('Ativo', 'Lancamento' ou 'Descontinuado') e quantidade (qtd por caixa, padrão 1).\n" +
                     "Retorne APENAS um JSON válido: {\"produtos\":[{\"nome\":\"...\",\"gramatura\":\"...\",\"codigo\":\"...\",\"categoria\":\"...\",\"status\":\"Ativo\",\"quantidade\":1}]}\n\n" +
@@ -4153,7 +4413,7 @@ async function importarPortfolioInteligente(input) {
             }
         } else {
             if (!geminiKey) throw new Error("Configure a chave do Google Gemini em Configurações para ler imagens/prints de catálogo.");
-            if (stEl) stEl.textContent = "✨ Extraindo tabela da imagem via Gemini (gemini-2.5-flash)...";
+            if (stEl) stEl.textContent = "✨ Extraindo tabela da imagem via Gemini (" + getGeminiModel() + ")...";
             var imgPart = await prepararArquivoParaGemini(file, 1500);
             var imgSrc = "data:" + imgPart.mimeType + ";base64," + imgPart.data;
             var promptImg = "Analise esta imagem/print de catálogo ou tabela de portfólio e extraia todos os produtos.\n" +
@@ -4700,6 +4960,7 @@ function editClientProduct(i) {
     document.getElementById("editProdGram").value  = p.gramatura||"";
     document.getElementById("editProdQty").value   = p.quantity||1;
     document.getElementById("modalEditProd").style.display = "flex";
+    if (typeof _pushAppHistoryState === "function") _pushAppHistoryState("modal_edit_prod");
 }
 function salvarEditProd() {
     var i    = parseInt(document.getElementById("editProdIdx").value);
@@ -5497,6 +5758,7 @@ function addLojaIdealCat() {
     var inp = document.getElementById("modalCatInput");
     inp.value = "";
     document.getElementById("modalNomeCat").style.display = "flex";
+    if (typeof _pushAppHistoryState === "function") _pushAppHistoryState("modal_nome_cat");
     setTimeout(function(){ inp.focus(); }, 100);
 }
 
@@ -5657,6 +5919,7 @@ function addRiRegistro() {
     document.getElementById("riRegEditIdx").value="-1";
     window._riRegFotoTemp=null;
     document.getElementById("modalRiRegistro").style.display="block";
+    if (typeof _pushAppHistoryState === "function") _pushAppHistoryState("modal_ri_reg");
 }
 
 function editRiRegistro(i) {
@@ -5671,6 +5934,7 @@ function editRiRegistro(i) {
     window._riRegFotoTemp=r.foto||null;
     document.getElementById("riRegFotoPreview").innerHTML=r.foto?"<img src='"+r.foto+"' style='width:60px;height:45px;object-fit:contain;border-radius:4px'>":"";
     document.getElementById("modalRiRegistro").style.display="block";
+    if (typeof _pushAppHistoryState === "function") _pushAppHistoryState("modal_ri_reg");
 }
 
 function fecharRiRegistro() { document.getElementById("modalRiRegistro").style.display="none"; }
@@ -5878,6 +6142,7 @@ function addTroca() {
     var cxEl = document.getElementById("trocaCaixas"); if (cxEl) cxEl.value = "";
     window._trocaFotosTemp=[];
     document.getElementById("modalTroca").style.display="block";
+    if (typeof _pushAppHistoryState === "function") _pushAppHistoryState("modal_troca");
 }
 
 function editarTroca(i) {
@@ -5893,6 +6158,7 @@ function editarTroca(i) {
     window._trocaFotosTemp=(t.fotos||[]).slice();
     renderTrocaFotoPreview();
     document.getElementById("modalTroca").style.display="block";
+    if (typeof _pushAppHistoryState === "function") _pushAppHistoryState("modal_troca");
 }
 
 function fecharModalTroca() {
@@ -7170,6 +7436,7 @@ function abrirConfirmacao(idx) {
     document.getElementById("confValor").oninput = atualizarDiff;
     atualizarDiff();
     document.getElementById("modalConfirmacao").style.display = "block";
+    if (typeof _pushAppHistoryState === "function") _pushAppHistoryState("modal_confirmacao");
 }
 
 function fecharModalConfirmacao() {
@@ -7254,31 +7521,60 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 document.addEventListener("DOMContentLoaded", function() {
-    // Inicializar histórico
-    history.pushState({page: "pageHome"}, "", "");
     loadCurrentUser();
+    if (typeof _tentarAutoLoginSessao === "function") _tentarAutoLoginSessao();
+    if (window.history && typeof window.history.replaceState === "function") {
+        try { window.history.replaceState({ page: window._currentPage || "pageClients" }, "", ""); } catch(e) {}
+    }
     if (typeof initI18nOnboarding === "function") initI18nOnboarding();
     setTimeout(verificarVencimentosGlobal, 3000);
 
-    // Interceptar gesto de voltar do Android
+    // Interceptar gesto de voltar do smartphone (History API)
     var _exitPending = false;
     window.addEventListener("popstate", function(e) {
+        // 1. Prioridade maxima: fechar modal/drawer/Guardião ativo sem sair do app
+        if (typeof _fecharModalAtivoNoVoltar === "function" && _fecharModalAtivoNoVoltar()) {
+            _pushAppHistoryState(null);
+            return;
+        }
         var sp = document.getElementById("splash");
-        if (sp && sp.style.display !== "none") return;
+        if (sp && sp.style.display !== "none") {
+            if (window._openedSplashFromApp && currentCompany && currentUser) {
+                window._openedSplashFromApp = false;
+                sp.style.display = "none";
+                var ap = document.getElementById("app");
+                if (ap) ap.style.display = "block";
+                showClientsPage();
+                return;
+            }
+            return;
+        }
         var cur = window._currentPage || "pageClients";
-        var homepages = ["pageClients"];
-        if (homepages.indexOf(cur) !== -1) {
+        var clientSubPages = [
+            "pageOrder","pageEstoque","pageRupturas","pageValidade",
+            "pageAuditoria","pageLojaIdeal","pageDadosLoja","pageTrocas",
+            "pageRelInterno","pagePrecos","pageRelatorios","pageExtrato","pageAuditoriaIA"
+        ];
+        if (cur === "pageClients") {
             if (_exitPending) { return; }
             _exitPending = true;
             showMsg("msgClients", "Pressione voltar novamente para sair");
-            history.pushState({page: cur}, "", "");
+            _pushAppHistoryState(null);
             setTimeout(function(){ _exitPending = false; }, 3000);
-        } else if (cur === "pageMenu" || !currentClient) {
-            history.pushState({page: cur}, "", "");
+        } else if (clientSubPages.indexOf(cur) >= 0 && currentClient) {
+            goToMenu();
+        } else if (cur === "pageMenu" || cur === "pageCompany" || cur === "pageClient" || cur === "pageLogistica" || cur === "pageConfigGeral" || cur === "pageUser") {
+            if (currentCompany) {
+                backToClients();
+            } else {
+                voltarParaSplash();
+            }
+        } else if (currentClient) {
+            goToMenu();
+        } else if (currentCompany) {
             backToClients();
         } else {
-            history.pushState({page: cur}, "", "");
-            goToMenu();
+            voltarParaSplash();
         }
     });
     var inp = document.getElementById("confImagem");
@@ -7444,6 +7740,7 @@ function openHamburger() {
     document.getElementById("hbOverlay").classList.add("open");
     var gfO = document.getElementById("guardiao-float");
     if (gfO) { window._gfWasVisible = (gfO.style.display !== "none"); gfO.style.display = "none"; }
+    if (typeof _pushAppHistoryState === "function") _pushAppHistoryState("modal_hamburger");
 }
 
 function closeHamburger() {
@@ -8534,7 +8831,7 @@ async function comprimirImagemParaIA(base64, mime) {
     });
 }
 
-// ── GUARDIÃO & IA UNIFICADA: Google Gemini 2.5 Flash direto ───────────────
+// ── GUARDIÃO & IA UNIFICADA: Motor Aberto Google Gemini (gemini-3.8-flash + Fallback) ───
 async function chamarGuardiaoGemini(prompt, partsArray, jsonMode) {
     if (getGoogleGeminiKey()) {
         return await chamarGoogleGeminiFlash(prompt, partsArray || [], !!jsonMode);
@@ -8559,8 +8856,14 @@ async function chamarGeminiIA(prompt, imagemBase64, mimeType) {
     if (!apiKey) {
         throw new Error("CHAVE_NAO_CONFIGURADA");
     }
-    // Fallback legado Groq caso apenas a chave legada esteja preenchida
-    var url = "https://api.groq.com/openai/v1/chat/completions";
+    // Endpoint aberto compatível com OpenAI / Grok (xAI) / OpenRouter / Groq
+    var customUrl = "";
+    var customModel = "";
+    try {
+        customUrl = (localStorage.getItem(LS_SEC_ENDPOINT_KEY) || "").trim();
+        customModel = (localStorage.getItem(LS_SEC_MODEL_KEY) || "").trim();
+    } catch(e) {}
+    var url = customUrl || "https://api.groq.com/openai/v1/chat/completions";
     var mensagens = [];
     if (imagemBase64) {
         mensagens = [{ role: "user", content: [
@@ -8570,13 +8873,24 @@ async function chamarGeminiIA(prompt, imagemBase64, mimeType) {
     } else {
         mensagens = [{ role: "user", content: prompt }];
     }
-    var modelo = imagemBase64 ? "meta-llama/llama-4-scout-17b-16e-instruct" : "llama-3.3-70b-versatile";
+    var modelo = customModel;
+    if (!modelo) {
+        if (url.indexOf("api.openai.com") >= 0) modelo = "gpt-4o-mini";
+        else if (url.indexOf("api.x.ai") >= 0) modelo = imagemBase64 ? "grok-2-vision-1212" : "grok-3-mini";
+        else if (url.indexOf("openrouter.ai") >= 0) modelo = "google/" + getGeminiModel();
+        else modelo = imagemBase64 ? "meta-llama/llama-4-scout-17b-16e-instruct" : "llama-3.3-70b-versatile";
+    }
+    var headers = {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + apiKey
+    };
+    if (url.indexOf("openrouter.ai") >= 0) {
+        headers["HTTP-Referer"] = (typeof location !== "undefined" && location.origin) ? location.origin : "https://localshelf.app";
+        headers["X-Title"] = "LocalShelf";
+    }
     var resp = await fetch(url, {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "Authorization": "Bearer " + apiKey
-        },
+        headers: headers,
         body: JSON.stringify({ model: modelo, messages: mensagens, max_tokens: 2048 })
     });
     if (!resp.ok) {
@@ -8612,6 +8926,7 @@ function abrirImportacaoIA(tipo) {
         document.getElementById("painelFotoIA").style.display = "none";
         switchTabIA("texto");
         modal.style.display = "block";
+        if (typeof _pushAppHistoryState === "function") _pushAppHistoryState("modal_importacao_ia");
         var apiKey = getGoogleGeminiKey() || getApiKey() || "";
         document.getElementById("msgChaveIA").style.display = apiKey ? "none" : "block";
     } catch(e) {
@@ -9457,39 +9772,59 @@ function exportarAuditoriaIAPdf() {
 
 function salvarConfigIA() {
     var keyEl = document.getElementById("geminiKeyInput");
+    var epEl = document.getElementById("secAiEndpointInput");
+    var modEl = document.getElementById("secAiModelInput");
     var key = keyEl ? keyEl.value.trim() : "";
     // Ignorar se o campo mostra placeholder de dots (já salvo antes)
     if (key && key.indexOf("•") >= 0) key = "";
     if (key) {
-        localStorage.setItem("ls23_gemini_key", key);
+        lsSet("ls23_gemini_key", key);
         LS23_API_KEY = key;
+    }
+    if (epEl) {
+        var epVal = epEl.value.trim();
+        if (epVal) lsSet(LS_SEC_ENDPOINT_KEY, epVal);
+        else { try { localStorage.removeItem(LS_SEC_ENDPOINT_KEY); } catch(e) {} }
+    }
+    if (modEl) {
+        var modVal = modEl.value.trim();
+        if (modVal) lsSet(LS_SEC_MODEL_KEY, modVal);
+        else { try { localStorage.removeItem(LS_SEC_MODEL_KEY); } catch(e) {} }
     }
     var el = document.getElementById("msgConfigIA");
     if (el) {
-        el.style.color = key ? "#16a34a" : "#ef4444";
-        el.textContent = key ? "Chave API salva ✓" : "Nenhuma chave inserida.";
+        var ativo = key || localStorage.getItem("ls23_gemini_key") || "";
+        el.style.color = ativo ? "#16a34a" : "#ef4444";
+        el.textContent = ativo ? "Configuração API secundária salva ✓" : "Nenhuma chave inserida.";
     }
 }
 
 function carregarConfigIA() {
     var gKey = getGoogleGeminiKey() || "";
     var gEl = document.getElementById("googleGeminiKeyInput");
-    if (gEl) gEl.value = gKey;
+    if (gEl) gEl.value = gKey ? "••••••••" : "";
+    var gModEl = document.getElementById("googleGeminiModelInput");
+    var gMod = getGeminiModel();
+    if (gModEl) gModEl.value = gMod;
     var gMsg = document.getElementById("msgConfigGemini");
     if (gMsg) {
         if (gKey) {
             gMsg.style.color = "#16a34a";
-            gMsg.textContent = "Chave Google Gemini configurada neste aparelho \u2713 (gemini-2.5-flash ativo)";
+            gMsg.textContent = "Chave Google Gemini configurada neste aparelho ✓ (" + gMod + " ativo)";
         } else {
             gMsg.style.color = "#64748b";
-            gMsg.textContent = "Nenhuma chave Google Gemini configurada ainda.";
+            gMsg.textContent = "Nenhuma chave Google Gemini configurada ainda. Modelo padrão: " + gMod;
         }
     }
     var key = getApiKey() || "";
     var el = document.getElementById("geminiKeyInput");
     if (el) el.value = key ? "\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022" : "";
+    var epEl = document.getElementById("secAiEndpointInput");
+    if (epEl) epEl.value = localStorage.getItem(LS_SEC_ENDPOINT_KEY) || "";
+    var modEl = document.getElementById("secAiModelInput");
+    if (modEl) modEl.value = localStorage.getItem(LS_SEC_MODEL_KEY) || "";
     var msg = document.getElementById("msgConfigIA");
-    if (msg && key) { msg.style.color = "#16a34a"; msg.textContent = "Chave API configurada \u2713"; }
+    if (msg && key) { msg.style.color = "#16a34a"; msg.textContent = "Chave API secundária configurada \u2713"; }
 
     if (typeof getSupabaseConfig === "function") {
         var sb = getSupabaseConfig();
@@ -9794,7 +10129,7 @@ async function adicionarPilulaInput(input, origem) {
         var tituloAuto = tituloUsuario || file.name.replace(/\.[^.]+$/, "");
 
         if (getGoogleGeminiKey()) {
-            setStatus("🤖 Interpretando pílula com Gemini 2.5...", "#a5b4fc");
+            setStatus("🤖 Interpretando pílula com Gemini (" + getGeminiModel() + ")...", "#a5b4fc");
             var parts = [];
             for (var i = 0; i < Math.min(imgs.length, 3); i++) {
                 var compImg = await comprimirImagemParaIA(imgs[i].data, imgs[i].mime);
@@ -9959,7 +10294,7 @@ async function processarGuiaFotos() {
     var fim = Math.min(inicio + LOTE_GUIA, _fotosGuia.length);
     var totalGeral = _fotosGuia.length;
 
-    guardiaoMostrar("processando", "Indexando Guia (Gemini 2.5)...", "Paginas " + (inicio+1) + " a " + fim + " de " + totalGeral);
+    guardiaoMostrar("processando", "Indexando Guia (" + getGeminiModel() + ")...", "Paginas " + (inicio+1) + " a " + fim + " de " + totalGeral);
 
     var prompt = "Voce e um especialista em trade marketing analisando uma pagina de um GUIA DE EXECUCAO COMERCIAL (ex: Guia de Execucao OT). " +
         "A imagem pode conter texto, planogramas, sortimento por perfil (Vizinhanca, Super, Hiper, Atacado), regras de SOD, SOE, FEFO, tiras cross ou auditoria. " +
@@ -9973,7 +10308,7 @@ async function processarGuiaFotos() {
         var textoCompleto = "";
         var quotaEstourou = false;
         for (var fi = inicio; fi < fim; fi++) {
-            guardiaoMostrar("processando", "Pagina " + (fi+1) + " de " + totalGeral, "Lendo pagina com Gemini 2.5...");
+            guardiaoMostrar("processando", "Pagina " + (fi+1) + " de " + totalGeral, "Lendo pagina com Gemini (" + getGeminiModel() + ")...");
             if (fi > inicio) await new Promise(function(r){ setTimeout(r, 1500); });
             var comp = await _comTimeout(comprimirImagemParaIA(_fotosGuia[fi].data, _fotosGuia[fi].mime), 15000, "Tempo esgotado ao comprimir imagem da página " + (fi+1));
             var resp = await _comTimeout(chamarClaudeWorker(prompt + " (Pagina " + (fi+1) + " de " + totalGeral + ".)", comp.data, comp.mime, "classificar"), 45000, "Tempo esgotado na resposta da IA (página " + (fi+1) + "). Verifique sua conexão.");
@@ -10264,10 +10599,12 @@ function verificarVencimentosGlobal() {
 }
 
 function voltarParaSplash() {
-    // Volta para a tela de seleção de empresa sem perder dados
+    // Trocar Perfil / Empresa sem perder dados salvos
+    window._openedSplashFromApp = true;
     document.getElementById("app").style.display = "none";
     document.getElementById("splash").style.display = "flex";
     initSplash();
+    if (typeof _pushAppHistoryState === "function") _pushAppHistoryState("splash_switch");
 }
 
 function atualizarFaixaCliente() {
@@ -11026,18 +11363,20 @@ function abrirGuardiaoChat() {
     _gchatAberto = true;
     if (_gchatResetTimer) { clearTimeout(_gchatResetTimer); _gchatResetTimer = null; }
     var cliEl = document.getElementById("gchat-cliente");
+    var modeloG = (typeof getGeminiModel === "function") ? getGeminiModel() : "gemini-3.8-flash";
     if (cliEl) {
         var compNm = currentCompany ? (" • " + currentCompany.name) : "";
-        cliEl.textContent = (currentClient ? (currentClient.name + (currentClient.canal ? " (" + currentClient.canal + ")" : "")) : "Assistente Gemini 2.5") + compNm;
+        cliEl.textContent = (currentClient ? (currentClient.name + (currentClient.canal ? " (" + currentClient.canal + ")" : "")) : ("Assistente " + modeloG)) + compNm;
     }
     if (typeof atualizarAlertaOrbGuardiao === "function") atualizarAlertaOrbGuardiao();
     switchGuardiaoTab(_gchatActiveTab || "chat");
     chat.classList.add("ativo");
+    if (typeof _pushAppHistoryState === "function") _pushAppHistoryState("modal_guardiao");
     var body = document.getElementById("gchat-body");
     if (body && body.children.length === 0) {
         var saudacao = currentClient
-            ? "Olá! Sou o Guardião LocalShelf (Gemini 2.5). Já carreguei o perfil de " + currentClient.name + ", contratos, portfólio regional, Giro Real/FEFO e suas Pílulas/Guia. Como posso ajudar?"
-            : "Olá! Sou o Guardião LocalShelf (Gemini 2.5). Selecione um cliente para acessar Giro, FEFO, Relatórios e regras por perfil de loja.";
+            ? "Olá! Sou o Guardião LocalShelf (" + modeloG + "). Já carreguei o perfil de " + currentClient.name + ", contratos, portfólio regional, Giro Real/FEFO e suas Pílulas/Guia. Como posso ajudar?"
+            : "Olá! Sou o Guardião LocalShelf (" + modeloG + "). Selecione um cliente para acessar Giro, FEFO, Relatórios e regras por perfil de loja.";
         adicionarMsgChat("bot", saudacao);
         montarSugestoesGuardiao();
     }
@@ -11330,7 +11669,7 @@ async function enviarGuardiaoChat() {
     var gKey = getGoogleGeminiKey();
     var legadoKey = getApiKey() || "";
     if (!gKey && !legadoKey) {
-        adicionarMsgChat("bot", "Configure sua chave Google Gemini em Configurações para conversar com o Guardião (gemini-2.5-flash).");
+        adicionarMsgChat("bot", "Configure sua chave Google Gemini em Configurações para conversar com o Guardião (" + getGeminiModel() + ").");
         return;
     }
 
@@ -12068,6 +12407,7 @@ function abrirModalSqlSupabase() {
     if (txt) txt.value = gerarScriptSqlSupabase();
     if (msg) msg.textContent = "";
     if (modal) modal.style.display = "flex";
+    if (typeof _pushAppHistoryState === "function") _pushAppHistoryState("modal_sql_supabase");
 }
 
 function fecharModalSqlSupabase() {
@@ -12280,6 +12620,7 @@ function abrirRelatorioExecutivoPassagem() {
     if (linkEl) linkEl.href = "https://wa.me/?text=" + encodeURIComponent(wppTxt);
     var modal = document.getElementById("modalRelatorioExecutivo");
     if (modal) modal.style.display = "flex";
+    if (typeof _pushAppHistoryState === "function") _pushAppHistoryState("modal_rel_exec");
 }
 
 function fecharModalRelatorioExecutivo() {
@@ -12815,6 +13156,7 @@ function abrirModalConfirmarEntregaLog(deliveryId) {
     document.getElementById("confLogObs").value = deliv.obsRecebimento || "";
     var modal = document.getElementById("modalConfirmarEntregaLog");
     if (modal) modal.style.display = "flex";
+    if (typeof _pushAppHistoryState === "function") _pushAppHistoryState("modal_conf_entrega");
 }
 
 function fecharModalConfirmarEntregaLog() {
@@ -12949,7 +13291,8 @@ var LS_I18N = {
         hb_logistics: "Entregas do Dia (Logística)",
         hb_install_pwa: "Instalar App (PWA)",
         hb_new_company: "Cadastrar Nova Empresa",
-        hb_switch_company: "Trocar Empresa",
+        hb_switch_company: "Trocar Perfil / Empresa",
+        btn_switch_profile: "🔁 Trocar Perfil / Empresa",
         hb_settings: "Configurações",
         hb_export_backup: "Exportar Backup (JSON)",
         hb_import_backup: "Importar Backup (JSON)",
@@ -13010,8 +13353,10 @@ var LS_I18N = {
         cfg_by_client: "👤 Dados por Cliente",
         cfg_danger_zone: "⚠️ Zona de Risco",
         cfg_danger_desc: "Excluir uma empresa remove permanentemente a empresa, todos os seus clientes e todos os dados vinculados (pedidos, estoque, auditorias, etc.). Esta ação não pode ser desfeita.",
-        cfg_gemini_title: "✨ Chave API Google Gemini (gemini-2.5-flash)",
-        cfg_gemini_desc: "Salva exclusivamente no localStorage deste aparelho. Usada na busca inteligente de lojas e na leitura de fotos/PDFs de espelhos de pedido (De/Para PLU).",
+        cfg_gemini_title: "✨ Chave API Google Gemini (gemini-3.8-flash)",
+        cfg_gemini_desc: "Salva exclusivamente no localStorage deste aparelho. Usada na busca inteligente de empresas/lojas, catálogo automático, auditoria visual, Guardião e leitura de fotos/PDFs (com fallback anti-obsolescência).",
+        cfg_gemini_model_lbl: "Modelo Ativo (ex: gemini-3.8-flash)",
+        cfg_btn_detect_models: "🔍 Detectar Modelos Disponíveis",
         cfg_btn_save_gemini: "Salvar Chave Gemini",
         cfg_supabase_title: "☁️ Nuvem Supabase (Banco + Fotos HD)",
         cfg_supabase_desc: "Opcional e 100% offline-first: sem sinal no PDV, salva localmente (localStorage + IndexedDB) e sincroniza automaticamente ao reconectar.",
@@ -13034,7 +13379,7 @@ var LS_I18N = {
         audia_wait: "Isso pode levar alguns segundos",
         audia_btn_analyze: "🤖 Analisar com IA",
         guardiao_ask: "Pergunte ao Guardião",
-        guardiao_sub: "Assistente Gemini 2.5",
+        guardiao_sub: "Assistente Gemini 3.8",
         guardiao_tab_chat: "💬 Chat",
         guardiao_tab_base: "📚 Guia & Pílulas",
         guardiao_tab_giro: "📊 Giro & FEFO",
@@ -13087,7 +13432,8 @@ var LS_I18N = {
         hb_logistics: "Today's Deliveries (Logistics)",
         hb_install_pwa: "Install App (PWA)",
         hb_new_company: "Register New Company",
-        hb_switch_company: "Switch Company",
+        hb_switch_company: "Switch Profile / Company",
+        btn_switch_profile: "🔁 Switch Profile / Company",
         hb_settings: "Settings",
         hb_export_backup: "Export Backup (JSON)",
         hb_import_backup: "Import Backup (JSON)",
@@ -13148,8 +13494,10 @@ var LS_I18N = {
         cfg_by_client: "👤 Data by Store",
         cfg_danger_zone: "⚠️ Danger Zone",
         cfg_danger_desc: "Deleting a company permanently removes the company, all its stores and all linked records (orders, stock, audits, etc.). This action cannot be undone.",
-        cfg_gemini_title: "✨ Google Gemini API Key (gemini-2.5-flash)",
-        cfg_gemini_desc: "Saved strictly in this device's localStorage. Used for smart store lookup and reading order mirror photos/PDFs (PLU mapping).",
+        cfg_gemini_title: "✨ Google Gemini API Key (gemini-3.8-flash)",
+        cfg_gemini_desc: "Saved strictly in this device's localStorage. Used for smart company/store lookup, auto catalog, visual audit, Guardian and PDF/photo reading (with anti-obsolescence fallback).",
+        cfg_gemini_model_lbl: "Active Model (e.g. gemini-3.8-flash)",
+        cfg_btn_detect_models: "🔍 Detect Available Models",
         cfg_btn_save_gemini: "Save Gemini Key",
         cfg_supabase_title: "☁️ Supabase Cloud (DB + HD Photos)",
         cfg_supabase_desc: "Optional & 100% offline-first: with no signal in-store, saves locally (localStorage + IndexedDB) and auto-syncs once online.",
@@ -13172,7 +13520,7 @@ var LS_I18N = {
         audia_wait: "This may take a few seconds",
         audia_btn_analyze: "🤖 Analyze with AI",
         guardiao_ask: "Ask Guardian",
-        guardiao_sub: "Gemini 2.5 Assistant",
+        guardiao_sub: "Gemini 3.8 Assistant",
         guardiao_tab_chat: "💬 Chat",
         guardiao_tab_base: "📚 Guide & Pills",
         guardiao_tab_giro: "📊 Turnover & FEFO",
@@ -13225,7 +13573,8 @@ var LS_I18N = {
         hb_logistics: "Entregas del Día (Logística)",
         hb_install_pwa: "Instalar App (PWA)",
         hb_new_company: "Registrar Nueva Empresa",
-        hb_switch_company: "Cambiar Empresa",
+        hb_switch_company: "Cambiar Perfil / Empresa",
+        btn_switch_profile: "🔁 Cambiar Perfil / Empresa",
         hb_settings: "Configuración",
         hb_export_backup: "Exportar Respaldo (JSON)",
         hb_import_backup: "Importar Respaldo (JSON)",
@@ -13286,8 +13635,10 @@ var LS_I18N = {
         cfg_by_client: "👤 Datos por Tienda",
         cfg_danger_zone: "⚠️ Zona de Riesgo",
         cfg_danger_desc: "Eliminar una empresa borra permanentemente la empresa, todas sus tiendas y todos los datos vinculados (pedidos, stock, auditorías, etc.). Esta acción no se puede deshacer.",
-        cfg_gemini_title: "✨ Clave API Google Gemini (gemini-2.5-flash)",
-        cfg_gemini_desc: "Guardada solo en el localStorage de este dispositivo. Usada en la búsqueda inteligente de tiendas y lectura de fotos/PDFs (mapeo PLU).",
+        cfg_gemini_title: "✨ Clave API Google Gemini (gemini-3.8-flash)",
+        cfg_gemini_desc: "Guardada solo en el localStorage de este dispositivo. Usada en búsqueda de empresas/tiendas, catálogo automático, auditoría visual, Guardián y lectura PDF/foto (con respaldo automático).",
+        cfg_gemini_model_lbl: "Modelo Activo (ej: gemini-3.8-flash)",
+        cfg_btn_detect_models: "🔍 Detectar Modelos Disponibles",
         cfg_btn_save_gemini: "Guardar Clave Gemini",
         cfg_supabase_title: "☁️ Nube Supabase (BD + Fotos HD)",
         cfg_supabase_desc: "Opcional y 100% offline-first: sin señal en tienda, guarda localmente (localStorage + IndexedDB) y sincroniza automáticamente al reconectar.",
@@ -13310,7 +13661,7 @@ var LS_I18N = {
         audia_wait: "Esto puede tardar unos segundos",
         audia_btn_analyze: "🤖 Analizar con IA",
         guardiao_ask: "Pregunta al Guardián",
-        guardiao_sub: "Asistente Gemini 2.5",
+        guardiao_sub: "Asistente Gemini 3.8",
         guardiao_tab_chat: "💬 Chat",
         guardiao_tab_base: "📚 Guía y Píldoras",
         guardiao_tab_giro: "📊 Rotación y FEFO",
@@ -13681,7 +14032,7 @@ async function buscarEmpresaComIA(manualTrigger) {
         return;
     }
     if (!getGoogleGeminiKey()) {
-        if (manualTrigger) alert("Configure a Chave API Google Gemini (gemini-2.5-flash) em Configurações para usar a busca automática.");
+        if (manualTrigger) alert("Configure a Chave API Google Gemini (" + getGeminiModel() + ") em Configurações para usar a busca automática.");
         return;
     }
     _smartCompanyLastAutoQuery = query;
@@ -13689,7 +14040,7 @@ async function buscarEmpresaComIA(manualTrigger) {
     if (stEl) {
         stEl.style.display = "block";
         stEl.style.color = "#1e40af";
-        stEl.textContent = "✨ Consultando Gemini (gemini-2.5-flash) para \"" + query + "\" (" + ctx.uf + ")...";
+        stEl.textContent = "✨ Consultando Gemini (" + getGeminiModel() + ") para \"" + query + "\" (" + ctx.uf + ")...";
     }
     if (cardEl) { cardEl.classList.remove("ativo"); cardEl.innerHTML = ""; }
     if (btn) { btn.disabled = true; btn.textContent = "Buscando..."; }
@@ -13806,6 +14157,7 @@ function descartarSugestaoEmpresaIA() {
 function abrirModalCatalogoIA() {
     var m = document.getElementById("modalCatalogoIA");
     if (m) m.style.display = "flex";
+    if (typeof _pushAppHistoryState === "function") _pushAppHistoryState("modal_catalogo_ia");
 }
 function fecharModalCatalogoIA() {
     var m = document.getElementById("modalCatalogoIA");
@@ -13901,7 +14253,7 @@ async function gerarCatalogoAutomaticoEmpresaIA() {
         return;
     }
     if (!getGoogleGeminiKey()) {
-        alert("Configure sua chave API Google Gemini (gemini-2.5-flash) em Configurações para gerar o catálogo automático.");
+        alert("Configure sua chave API Google Gemini (" + getGeminiModel() + ") em Configurações para gerar o catálogo automático.");
         return;
     }
     var ctx = _obterUfContextoDispositivo();
@@ -13917,7 +14269,7 @@ async function gerarCatalogoAutomaticoEmpresaIA() {
     abrirModalCatalogoIA();
     if (stModal) {
         stModal.style.color = "#4f46e5";
-        stModal.textContent = "⏳ Gerando linhas e SKUs regionais para " + razao + " (" + ctx.uf + " / " + ctx.regional + ") via Gemini 2.5...";
+        stModal.textContent = "⏳ Gerando linhas e SKUs regionais para " + razao + " (" + ctx.uf + " / " + ctx.regional + ") via " + getGeminiModel() + "...";
     }
 
     try {
@@ -14064,7 +14416,7 @@ function confirmarSalvarCatalogoIA() {
     <img data-lcs-asset="guardiao-sm" alt="Guardião LocalShelf" class="gchat-header-img">
     <div class="gchat-header-txt">
       <div class="gchat-header-nome">Guardião LocalShelf</div>
-      <div class="gchat-header-sub" id="gchat-cliente" data-i18n="guardiao_sub">Assistente Gemini 2.5</div>
+      <div class="gchat-header-sub" id="gchat-cliente" data-i18n="guardiao_sub">Assistente Gemini 3.8</div>
     </div>
     <button class="gchat-close" onclick="fecharGuardiaoChat()">&#10005;</button>
   </div>
