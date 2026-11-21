@@ -1330,8 +1330,8 @@ body.dark-mode .gemini-model-chip.ativo{background:#2563eb!important;color:#fff!
 
   <!-- BUSCADOR HIBRIDO INTELIGENTE -->
   <div class="smart-search-card" id="smartStoreBox">
-    <div class="smart-search-title">&#128269; Busca Inteligente de Loja ou CNPJ</div>
-    <div class="smart-search-sub">Digite o CNPJ (14 d&iacute;gitos) para preencher via BrasilAPI, ou digite Nome + Regi&atilde;o (ex: <b>Presunic Caxias</b>) para buscar no OpenStreetMap e Gemini. Offline? Preencha manualmente abaixo.</div>
+    <div class="smart-search-title">&#128269; Busca Inteligente de Loja ou CNPJ (2 Est&aacute;gios)</div>
+    <div class="smart-search-sub">Digite o CNPJ (14 d&iacute;gitos) ou Nome da Rede/Loja (ex: <b>Mega Box</b>, <b>Presunic Caxias</b>). Est&aacute;gio 1 lista as unidades pr&oacute;ximas &agrave; sua UF; ao tocar em uma loja, o Est&aacute;gio 2 cruza <b>gemini-3.8-flash + BrasilAPI</b> para extrair CNPJ, endere&ccedil;o completo, canal/porte e logo oficial.</div>
     <div class="smart-search-row">
       <input type="text" id="smartStoreQuery" placeholder="Ex: Presunic Caxias ou 33.041.260/0652-90" onkeydown="if(event.key==='Enter'){event.preventDefault();buscarLojaInteligente();}">
       <button type="button" id="btnSmartStoreSearch" onclick="buscarLojaInteligente()">Buscar</button>
@@ -3425,9 +3425,16 @@ async function chamarGoogleGeminiFlash(prompt, partsArray, jsonMode, _retriedFal
             }
         });
     }
-    if (prompt) parts.push({ text: prompt });
+    var promptFinal = String(prompt || "");
+    if (jsonMode && promptFinal) {
+        if (!/exclusivamente.*json|apenas.*json/i.test(promptFinal)) {
+            promptFinal += "\n\nIMPORTANTE: Responda EXCLUSIVAMENTE com JSON válido (sem blocos markdown ```json, sem texto antes ou depois).";
+        } else {
+            promptFinal += "\n\nNão inclua texto explicativo antes ou depois do JSON.";
+        }
+    }
+    if (promptFinal) parts.push({ text: promptFinal });
     var genCfg = { temperature: 0.2 };
-    if (jsonMode) genCfg.responseMimeType = "application/json";
     var url = "https://generativelanguage.googleapis.com/v1beta/models/" + encodeURIComponent(modeloAtivo) + ":generateContent?key=" + encodeURIComponent(apiKey);
     var ctrl = (typeof AbortController !== "undefined") ? new AbortController() : null;
     var timer = ctrl ? setTimeout(function(){ ctrl.abort(); }, 45000) : null;
@@ -3476,14 +3483,41 @@ async function chamarGoogleGeminiFlash(prompt, partsArray, jsonMode, _retriedFal
         if (timer) clearTimeout(timer);
     }
 }
-function extrairJsonGemini(raw) {
-    var txt = String(raw || "").trim().replace(/```json\s*/gi, "").replace(/```/g, "").trim();
-    try { return JSON.parse(txt); } catch(e) {}
-    var arrMatch = txt.match(/\[[\s\S]*\]/);
-    if (arrMatch) { try { return JSON.parse(arrMatch[0]); } catch(e2) {} }
-    var objMatch = txt.match(/\{[\s\S]*\}/);
-    if (objMatch) { try { return JSON.parse(objMatch[0]); } catch(e3) {} }
+function parseGeminiJSON(text) {
+    var raw = String(text || "").trim();
+    if (!raw) throw new Error("Resposta vazia da IA.");
+    var clean = raw
+        .replace(/```(?:json)?\s*/gi, "")
+        .replace(/```/g, "")
+        .trim();
+    try { return JSON.parse(clean); } catch(e0) {}
+
+    var firstObj = clean.indexOf("{");
+    var lastObj = clean.lastIndexOf("}");
+    var firstArr = clean.indexOf("[");
+    var lastArr = clean.lastIndexOf("]");
+
+    var candidates = [];
+    if (firstArr >= 0 && lastArr > firstArr && (firstObj < 0 || firstArr < firstObj)) {
+        candidates.push(clean.slice(firstArr, lastArr + 1));
+        if (firstObj >= 0 && lastObj > firstObj) candidates.push(clean.slice(firstObj, lastObj + 1));
+    } else {
+        if (firstObj >= 0 && lastObj > firstObj) candidates.push(clean.slice(firstObj, lastObj + 1));
+        if (firstArr >= 0 && lastArr > firstArr) candidates.push(clean.slice(firstArr, lastArr + 1));
+    }
+
+    for (var i = 0; i < candidates.length; i++) {
+        var cand = candidates[i];
+        try { return JSON.parse(cand); } catch(e1) {}
+        try {
+            var repaired = cand.replace(/,\s*([}\]])/g, "$1");
+            return JSON.parse(repaired);
+        } catch(e2) {}
+    }
     throw new Error("Resposta da IA não está em formato JSON válido.");
+}
+function extrairJsonGemini(raw) {
+    return parseGeminiJSON(raw);
 }
 
 function gerarDeviceId() {
@@ -3973,15 +4007,19 @@ function limparNomeRedeParaBusca(nome) {
 function inferirDominioRede(nome) {
     var clean = normTextAccent(nome).toLowerCase();
     var mapa = [
+        ["mega box", "megaboxatacado.com.br"], ["megabox", "megaboxatacado.com.br"],
+        ["dom atacadista", "domatacadista.com.br"], ["multimarket", "multimarket.com.br"], ["multi market", "multimarket.com.br"],
+        ["costazul", "supermercadoscostazul.com.br"], ["bramil", "bramil.com.br"],
+        ["real eden", "supermercadosrealeden.com.br"], ["supermarket", "redesupermarket.com.br"],
         ["prezunic", "prezunic.com.br"], ["presunic", "prezunic.com.br"],
         ["guanabara", "supermercadosguanabara.com.br"], ["mundial", "supermercadosmundial.com.br"],
-        ["supermarket", "redesupermarket.com.br"], ["zona sul", "zonasul.com.br"],
-        ["hortifruti", "hortifruti.com.br"], ["princesa", "princesasupermercados.com.br"],
-        ["rede economia", "redeeconomia.com.br"], ["vianense", "vianense.com.br"],
-        ["campeao", "supermercadoscampeao.com.br"], ["inter", "supermercadosinter.com.br"],
-        ["carrefour", "carrefour.com.br"], ["assai", "assai.com.br"],
-        ["atacadao", "atacadao.com.br"], ["pao de acucar", "paodeacucar.com"],
-        ["extra", "clubeextra.com.br"], ["sams", "samsclub.com.br"], ["sam's", "samsclub.com.br"],
+        ["zona sul", "zonasul.com.br"], ["hortifruti", "hortifruti.com.br"],
+        ["princesa", "princesasupermercados.com.br"], ["rede economia", "redeeconomia.com.br"],
+        ["vianense", "vianense.com.br"], ["campeao", "supermercadoscampeao.com.br"],
+        ["inter", "supermercadosinter.com.br"], ["carrefour", "carrefour.com.br"],
+        ["assai", "assai.com.br"], ["atacadao", "atacadao.com.br"],
+        ["pao de acucar", "paodeacucar.com"], ["extra", "clubeextra.com.br"],
+        ["sams", "samsclub.com.br"], ["sam's", "samsclub.com.br"],
         ["dia", "dia.com.br"], ["oba", "obahortifruti.com.br"],
         ["savegnago", "savegnago.com.br"], ["sonda", "sonda.com.br"],
         ["hirota", "hirota.com.br"], ["st marche", "marche.com.br"],
@@ -4026,9 +4064,9 @@ function carregarLogoUrlComoJpeg200(url, minPx) {
         img.src = url;
     });
 }
-function gerarAvatarLojaJpeg200(storeName) {
+function gerarAvatarLojaJpeg200(storeName, customColors) {
     var raw = String(storeName || "LS").trim();
-    var stop = { supermercado:1, supermercados:1, mercado:1, minimercado:1, hipermercado:1, atacadao:1, atacado:1, loja:1, rede:1, de:1, da:1, do:1, dos:1, das:1, e:1 };
+    var stop = { supermercado:1, supermercados:1, mercado:1, minimercado:1, hipermercado:1, atacadao:1, atacado:1, atacarejo:1, loja:1, rede:1, de:1, da:1, do:1, dos:1, das:1, e:1 };
     var words = raw.split(/\s+/).filter(Boolean);
     var sig = words.filter(function(w){ return !stop[normTextAccent(w).toLowerCase()]; });
     if (!sig.length) sig = words;
@@ -4040,9 +4078,16 @@ function gerarAvatarLojaJpeg200(storeName) {
         ["#5b21b6", "#8b5cf6"], ["#9f1239", "#f43f5e"], ["#166534", "#22c55e"],
         ["#0369a1", "#0ea5e9"], ["#3730a3", "#6366f1"]
     ];
-    var hash = 0;
-    for (var i = 0; i < raw.length; i++) hash = ((hash << 5) - hash + raw.charCodeAt(i)) | 0;
-    var pal = palettes[Math.abs(hash) % palettes.length];
+    var pal = null;
+    if (Array.isArray(customColors) && customColors.length >= 1 && /^#[0-9a-f]{3,8}$/i.test(String(customColors[0] || "").trim())) {
+        var c1 = String(customColors[0]).trim();
+        var c2 = (customColors[1] && /^#[0-9a-f]{3,8}$/i.test(String(customColors[1]).trim())) ? String(customColors[1]).trim() : c1;
+        pal = [c1, c2];
+    } else {
+        var hash = 0;
+        for (var i = 0; i < raw.length; i++) hash = ((hash << 5) - hash + raw.charCodeAt(i)) | 0;
+        pal = palettes[Math.abs(hash) % palettes.length];
+    }
     try {
         var c = document.createElement("canvas");
         c.width = 200; c.height = 200;
@@ -4068,10 +4113,12 @@ function gerarAvatarLojaJpeg200(storeName) {
         return c.toDataURL("image/jpeg", 0.85);
     } catch(e) { return ""; }
 }
-async function buscarLogoNivel1Dominio(storeName) {
-    var domain = inferirDominioRede(storeName);
+async function buscarLogoNivel1Dominio(storeName, siteDominio) {
+    var domainRaw = String(siteDominio || "").replace(/^https?:\/\//i, "").replace(/^www\./i, "").split("/")[0].trim();
+    var domain = (domainRaw && domainRaw.indexOf(".") > 0) ? domainRaw : inferirDominioRede(storeName);
     if (!domain) return null;
     var candidates = [
+        "https://logo.clearbit.com/" + encodeURIComponent(domain) + "?size=200",
         "https://www.google.com/s2/favicons?domain=" + encodeURIComponent(domain) + "&sz=128",
         "https://icons.duckduckgo.com/ip3/" + encodeURIComponent(domain) + ".ico"
     ];
@@ -4128,12 +4175,12 @@ async function buscarLogoInteligenteAuto(storeName, opts) {
     opts = opts || {};
     var nome = String(storeName || (document.getElementById("clientName") || {}).value || "").trim();
     if (!nome) return null;
-    renderClientLogoStudio(pendingClientLogo, "Buscando logo oficial (Nível 1: Domínio)...");
-    var n1 = await buscarLogoNivel1Dominio(nome);
+    renderClientLogoStudio(pendingClientLogo, "Buscando logo oficial (Clearbit / Google / Domínio)...");
+    var n1 = await buscarLogoNivel1Dominio(nome, opts.siteDominio);
     if (n1 && n1.dataUrl) {
         pendingClientLogo = n1.dataUrl;
         _pendingClientLogoSource = "domain";
-        renderClientLogoStudio(n1.dataUrl, "Nível 1: Logo do domínio (" + n1.domain + ")");
+        renderClientLogoStudio(n1.dataUrl, "Nível 1: Logo oficial (" + n1.domain + ")");
         return { level: 1, dataUrl: n1.dataUrl };
     }
     renderClientLogoStudio(pendingClientLogo, "Buscando logo na Wikimedia Commons (Nível 2)...");
@@ -4144,11 +4191,12 @@ async function buscarLogoInteligenteAuto(storeName, opts) {
         renderClientLogoStudio(n2.dataUrl, "Nível 2: Wikimedia Commons");
         return { level: 2, dataUrl: n2.dataUrl };
     }
-    var avatar = gerarAvatarLojaJpeg200(nome);
+    var avatar = gerarAvatarLojaJpeg200(nome, opts.coresBandeira);
     if (avatar) {
         pendingClientLogo = avatar;
         _pendingClientLogoSource = "avatar";
-        renderClientLogoStudio(avatar, "Nível 3: Avatar automático da loja");
+        var coresTxt = Array.isArray(opts.coresBandeira) && opts.coresBandeira.length ? " nas cores da bandeira" : "";
+        renderClientLogoStudio(avatar, "Nível 3: Emblema oficial" + coresTxt);
         return { level: 3, dataUrl: avatar };
     }
     renderClientLogoStudio(null, "Nível 4: Use a câmera ou galeria para adicionar logo");
@@ -4177,6 +4225,7 @@ function limparLogoCliente() {
     renderClientLogoStudio(null, "Logo removida. Use Busca Auto, Avatar ou Câmera.");
 }
 
+var _ultimoPorteLojaSugerido = "";
 function autoClassificarTipologia(force) {
     var ckEl = document.getElementById("clientCheckouts");
     var canalEl = document.getElementById("clientCanal");
@@ -4196,24 +4245,30 @@ function autoClassificarTipologia(force) {
         ((cnaeEl && cnaeEl.value) || "")
     ).toUpperCase();
 
-    var isAtacado = /\b(ATACAD|ATACAREJO|CASH\s*&?\s*CARRY|ASSAI|MAXXI|MAKRO|TENDA|ROLD[AO]|FORT ATACAD|MINEIRAO|SPANI|SAM'?S)\b/.test(textAll) ||
+    var isAtacado = /\b(ATACAD|ATACAREJO|CASH\s*&?\s*CARRY|ASSAI|MAXXI|MAKRO|TENDA|ROLD[AO]|FORT ATACAD|MINEIRAO|SPANI|SAM'?S|MEGA\s*BOX|MEGABOX|DOM\s+ATACAD)\b/.test(textAll) ||
         /\b46[39]\d/.test(textAll) || textAll.indexOf("COMERCIO ATACADISTA") >= 0;
 
     var sugCanal = "", sugPerfil = "", motivo = "";
     if (isAtacado) {
-        sugCanal = "Atacado"; sugPerfil = "Atacarejo"; motivo = "Atacado / Cash & Carry detectado no nome ou CNAE";
+        sugCanal = "Atacado"; sugPerfil = "Atacarejo"; motivo = "Atacarejo / Cash & Carry detectado";
     } else if (ck > 0) {
         if (ck <= 4) { sugCanal = "Vizinhanca"; sugPerfil = "Vizinhanca"; motivo = ck + " checkout(s) (até 4 = Vizinhança)"; }
         else if (ck <= 14) { sugCanal = "Super"; sugPerfil = "Supermercado"; motivo = ck + " checkouts (5 a 14 = Super)"; }
         else { sugCanal = "Hiper"; sugPerfil = "Hipermercado"; motivo = ck + " checkouts (15+ = Hiper)"; }
     }
 
+    var porteTxt = _ultimoPorteLojaSugerido ? (" &bull; <b>Porte:</b> " + escHtml(_ultimoPorteLojaSugerido)) : "";
     if (sugCanal && hintEl) {
-        hintEl.innerHTML = "&#128161; <b>Tipologia sugerida:</b> " + escHtml(sugCanal) + " &rarr; Perfil <b>" + escHtml(sugPerfil) + "</b> (" + escHtml(motivo) + ")";
+        hintEl.innerHTML = "&#128161; <b>Canal sugerido:</b> " + escHtml(sugCanal) + " &rarr; Perfil <b>" + escHtml(sugPerfil) + "</b> (" + escHtml(motivo) + ")" + porteTxt;
         hintEl.classList.add("ativo");
     } else if (hintEl) {
-        hintEl.innerHTML = "";
-        hintEl.classList.remove("ativo");
+        if (porteTxt) {
+            hintEl.innerHTML = "&#128161; " + porteTxt.replace(/^ &bull; /, "");
+            hintEl.classList.add("ativo");
+        } else {
+            hintEl.innerHTML = "";
+            hintEl.classList.remove("ativo");
+        }
     }
 
     if (sugCanal && (!_canalManualOverride || force)) {
@@ -4223,7 +4278,7 @@ function autoClassificarTipologia(force) {
             onClientPerfilChange();
         }
     }
-    return sugCanal ? { canal: sugCanal, perfil: sugPerfil, motivo: motivo } : null;
+    return sugCanal ? { canal: sugCanal, perfil: sugPerfil, motivo: motivo, porte: _ultimoPorteLojaSugerido } : null;
 }
 function onClientCanalChange(fromAuto) {
     if (!fromAuto) _canalManualOverride = true;
@@ -4235,6 +4290,22 @@ function onClientCanalChange(fromAuto) {
         perfilEl.value = mapaPerfil[canalEl.value];
         onClientPerfilChange();
     }
+}
+
+function _formatarPorteBrasilApi(porte) {
+    var p = String(porte || "").trim().toUpperCase();
+    if (!p) return "";
+    if (p.indexOf("MICRO") >= 0) return "Microempresa (ME)";
+    if (p.indexOf("PEQUENO") >= 0) return "Empresa de Pequeno Porte (EPP)";
+    if (p === "DEMAIS") return "Médio / Grande Porte";
+    return porte;
+}
+function _formatarEnderecoBrasilApi(d) {
+    var logradouro = [d.descricao_tipo_de_logradouro, d.logradouro].filter(Boolean).join(" ").trim();
+    var p1 = [logradouro, d.numero, d.complemento].filter(Boolean).join(", ");
+    var p2 = [d.bairro, (d.municipio && d.uf) ? (d.municipio + "/" + d.uf) : (d.municipio || d.uf || "")].filter(Boolean).join(" - ");
+    var cepFmt = d.cep ? ("CEP " + String(d.cep).replace(/\D/g, "").replace(/^(\d{5})(\d{3})$/, "$1-$2")) : "";
+    return [p1, p2, cepFmt].filter(Boolean).join(" | ");
 }
 
 async function consultarBrasilApiCnpj(cnpjDigits) {
@@ -4252,77 +4323,206 @@ async function consultarBrasilApiCnpj(cnpjDigits) {
         }
         var d = await resp.json();
         var logradouro = [d.descricao_tipo_de_logradouro, d.logradouro].filter(Boolean).join(" ").trim();
-        var end = [
-            [logradouro, d.numero, d.complemento].filter(Boolean).join(", "),
-            [d.bairro, d.municipio && d.uf ? (d.municipio + "/" + d.uf) : (d.municipio || d.uf || "")].filter(Boolean).join(" - "),
-            d.cep ? ("CEP " + d.cep) : ""
-        ].filter(Boolean).join(" | ");
+        var end = _formatarEnderecoBrasilApi(d);
         return {
             source: "BrasilAPI",
             nome: (d.nome_fantasia || d.razao_social || "").trim(),
+            nomeFantasia: (d.nome_fantasia || "").trim(),
             razaoSocial: (d.razao_social || "").trim(),
             cnpj: formatarCNPJ(digits),
             endereco: end,
-            cnae: [d.cnae_fiscal, d.cnae_fiscal_descricao].filter(Boolean).join(" - ")
+            logradouro: logradouro,
+            numero: String(d.numero || "").trim(),
+            complemento: String(d.complemento || "").trim(),
+            bairro: String(d.bairro || "").trim(),
+            municipio: String(d.municipio || "").trim(),
+            uf: String(d.uf || "").trim().toUpperCase(),
+            cep: String(d.cep || "").replace(/\D/g, ""),
+            cnae: [d.cnae_fiscal, d.cnae_fiscal_descricao].filter(Boolean).join(" - "),
+            porte: _formatarPorteBrasilApi(d.porte),
+            situacao: String(d.descricao_situacao_cadastral || "").trim(),
+            telefone: String(d.ddd_telefone_1 || "").trim()
         };
     } finally {
         if (timer) clearTimeout(timer);
     }
 }
-async function buscarOpenStreetMapNominatim(query) {
-    var url = "https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&countrycodes=br&limit=6&q=" + encodeURIComponent(query);
+async function buscarOpenStreetMapNominatim(query, ctx) {
+    var qTexto = String(query || "").trim();
+    var ufCtx = (ctx && ctx.uf && ctx.uf !== "Brasil") ? ctx.uf : "";
+    var url = "https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&countrycodes=br&limit=8&q=" + encodeURIComponent(qTexto);
     var resp = await fetch(url, { headers: { "Accept": "application/json", "Accept-Language": "pt-BR" } });
     if (!resp.ok) throw new Error("Nominatim " + resp.status);
     var list = await resp.json();
+    if ((!Array.isArray(list) || !list.length) && ufCtx && qTexto.toUpperCase().indexOf(ufCtx.toUpperCase()) < 0) {
+        var urlUf = "https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&countrycodes=br&limit=8&q=" + encodeURIComponent(qTexto + " " + ufCtx);
+        var respUf = await fetch(urlUf, { headers: { "Accept": "application/json", "Accept-Language": "pt-BR" } });
+        if (respUf.ok) list = await respUf.json();
+    }
     if (!Array.isArray(list)) return [];
     return list.map(function(item) {
         var addr = item.address || {};
         var nm = item.name || (item.display_name ? item.display_name.split(",")[0] : query);
         var rua = [addr.road, addr.house_number].filter(Boolean).join(", ");
-        var reg = [addr.suburb || addr.neighbourhood, addr.city || addr.town || addr.municipality, addr.state].filter(Boolean).join(" - ");
+        var municipio = addr.city || addr.town || addr.municipality || "";
+        var estado = addr.state_code ? String(addr.state_code).toUpperCase() : (addr.state || "");
+        var reg = [addr.suburb || addr.neighbourhood, municipio, estado].filter(Boolean).join(" - ");
         return {
             source: "OpenStreetMap",
             nome: String(nm || "").trim(),
             razaoSocial: "",
             cnpj: "",
-            endereco: [rua, reg].filter(Boolean).join(" | ") || item.display_name || "",
+            endereco: [rua, reg, addr.postcode ? ("CEP " + addr.postcode) : ""].filter(Boolean).join(" | ") || item.display_name || "",
+            municipio: municipio,
+            uf: estado,
+            cep: addr.postcode || "",
             cnae: "",
+            porte: "",
             checkoutsEstimado: null
         };
     });
 }
-async function buscarLojasGeminiFlash(query) {
+async function buscarLojasGeminiFlash(query, ctx) {
     var key = getGoogleGeminiKey();
     if (!key) return [];
-    var prompt = "Você é um assistente de cadastro comercial no Brasil. " +
-        "O usuário procurou pela loja/unidade: \"" + query + "\". " +
-        "Liste até 5 prováveis lojas/unidades reais dessa rede nessa região do Brasil. " +
-        "Retorne APENAS um JSON array válido com objetos neste formato exato: " +
-        "[{\"nome\":\"...\",\"razaoSocial\":\"...\",\"cnpj\":\"...\",\"endereco\":\"...\",\"canalSugerido\":\"Vizinhanca|Super|Hiper|Atacado\",\"checkoutsEstimado\":8}]. " +
-        "Se não tiver certeza do CNPJ exato da filial, deixe \"cnpj\":\"\" ou informe o CNPJ provável apenas se for muito conhecido; nunca invente endereço absurdo.";
+    ctx = ctx || _obterUfContextoDispositivo();
+    var ufInfo = (ctx.cidade ? ctx.cidade + " / " : "") + (ctx.uf || "Brasil");
+    var prompt = "Você é um assistente sênior de inteligência comercial e geocadastro varejista no Brasil (Estágio 1 - Busca de Unidades).\n" +
+        "O promotor procurou por: \"" + query + "\".\n" +
+        "Localização / UF prioritária do promotor: " + ufInfo + " (Regional: " + (ctx.regional || "Nacional") + ").\n" +
+        "Liste até 6 lojas/filiais reais dessa rede priorizando as unidades localizadas na UF/região informada.\n" +
+        "Retorne APENAS um JSON array válido com objetos neste formato exato:\n" +
+        "[{\"nome\":\"Nome da Loja e Unidade/Bairro\",\"bandeira\":\"Nome da rede\",\"razaoSocial\":\"Razão Social quando conhecida\",\"cnpj\":\"00.000.000/0000-00 ou vazio\",\"endereco\":\"Logradouro, número - Bairro, Município/UF | CEP\",\"municipio\":\"Cidade\",\"uf\":\"UF\",\"canalSugerido\":\"Vizinhanca|Super|Hiper|Atacado\",\"porteSugerido\":\"Pequeno Porte|Médio Porte|Grande Porte\",\"checkoutsEstimado\":10,\"siteDominio\":\"dominio.com.br\"}]\n" +
+        "Se não tiver certeza do CNPJ exato da filial no Estágio 1, deixe \"cnpj\":\"\" (o Estágio 2 fará a extração profunda). Nunca invente dados absurdos.";
     var txt = await chamarGoogleGeminiFlash(prompt, [], true);
-    var arr = extrairJsonGemini(txt);
+    var arr = parseGeminiJSON(txt);
+    if (!Array.isArray(arr) && arr && Array.isArray(arr.unidades)) arr = arr.unidades;
     if (!Array.isArray(arr)) return [];
     return arr.map(function(it) {
         return {
             source: "Gemini IA",
             nome: String(it.nome || query).trim(),
+            bandeira: String(it.bandeira || it.nome || "").trim(),
             razaoSocial: String(it.razaoSocial || "").trim(),
-            cnpj: it.cnpj ? formatarCNPJ(it.cnpj) || String(it.cnpj).trim() : "",
+            cnpj: it.cnpj ? (formatarCNPJ(it.cnpj) || String(it.cnpj).trim()) : "",
             endereco: String(it.endereco || "").trim(),
+            municipio: String(it.municipio || "").trim(),
+            uf: String(it.uf || "").trim().toUpperCase(),
             cnae: "",
             canalSugerido: String(it.canalSugerido || "").trim(),
-            checkoutsEstimado: parseInt(it.checkoutsEstimado) || null
+            porte: String(it.porteSugerido || it.porte || "").trim(),
+            checkoutsEstimado: parseInt(it.checkoutsEstimado) || null,
+            siteDominio: String(it.siteDominio || "").trim()
         };
     });
 }
-function aplicarDadosLojaNoFormulario(item) {
+async function enriquecerDossieLojaCascata(item, ctx) {
+    if (!item) return { item: item, brasilApiOk: false, geminiOk: false };
+    ctx = ctx || _obterUfContextoDispositivo();
+    var enriched = Object.assign({}, item);
+    var brasilApiOk = false;
+    var geminiOk = false;
+
+    // Estágio 2A: Extração profunda de dossiê da unidade selecionada via gemini-3.8-flash
+    if (getGoogleGeminiKey()) {
+        try {
+            var ufCtx = (ctx.cidade ? ctx.cidade + " / " : "") + (ctx.uf || "Brasil");
+            var prompt2 = "Você é um investigador comercial corporativo no Brasil (Estágio 2 - Extração Completa de Dossiê de Loja).\n" +
+                "O promotor selecionou especificamente esta unidade:\n" +
+                "- Loja/Unidade: \"" + (enriched.nome || "") + "\"\n" +
+                (enriched.endereco ? "- Endereço preliminar: \"" + enriched.endereco + "\"\n" : "") +
+                (enriched.cnpj ? "- CNPJ preliminar: \"" + enriched.cnpj + "\"\n" : "") +
+                "- Localização de referência: " + ufCtx + "\n\n" +
+                "Cruze seus conhecimentos públicos dessa rede e dessa filial para retornar o dossiê completo em APENAS um objeto JSON válido:\n" +
+                "{\n" +
+                "  \"cnpj\": \"CNPJ exato de 14 dígitos da filial ou da matriz quando único (apenas dígitos ou formatado 00.000.000/0000-00; deixe vazio se realmente desconhecer)\",\n" +
+                "  \"razaoSocial\": \"Razão Social oficial completa\",\n" +
+                "  \"nomeFantasia\": \"Nome Fantasia / Bandeira da unidade\",\n" +
+                "  \"logradouro\": \"Rua/Av/Rodovia\",\n" +
+                "  \"numero\": \"Número ou S/N\",\n" +
+                "  \"bairro\": \"Bairro\",\n" +
+                "  \"municipio\": \"Município\",\n" +
+                "  \"uf\": \"UF (2 letras)\",\n" +
+                "  \"cep\": \"CEP 00000-000\",\n" +
+                "  \"enderecoCompleto\": \"Logradouro, Número - Bairro, Município/UF | CEP\",\n" +
+                "  \"cnae\": \"Código e descrição CNAE\",\n" +
+                "  \"canalSugerido\": \"Vizinhanca|Super|Hiper|Atacado\",\n" +
+                "  \"perfilSugerido\": \"Vizinhanca|Mercado|Supermercado|Hipermercado|Atacarejo|Conveniencia\",\n" +
+                "  \"porteSugerido\": \"Microempresa (ME)|Pequeno Porte (EPP)|Médio Porte|Grande Porte\",\n" +
+                "  \"checkoutsEstimado\": 12,\n" +
+                "  \"siteDominio\": \"domínio oficial da rede (ex: megaboxatacado.com.br, prezunic.com.br)\",\n" +
+                "  \"coresBandeira\": [\"#HexPrimaria\", \"#HexSecundaria\"]\n" +
+                "}";
+            var raw2 = await chamarGoogleGeminiFlash(prompt2, [], true);
+            var d = parseGeminiJSON(raw2);
+            if (Array.isArray(d)) d = d[0] || {};
+            if (d && typeof d === "object") {
+                geminiOk = true;
+                var cnpjDig2 = String(d.cnpj || "").replace(/\D/g, "");
+                if (cnpjDig2.length === 14) enriched.cnpj = formatarCNPJ(cnpjDig2);
+                if (d.razaoSocial) enriched.razaoSocial = String(d.razaoSocial).trim();
+                if (d.nomeFantasia) enriched.nome = String(d.nomeFantasia).trim();
+                var endMontado = "";
+                if (d.logradouro || d.municipio) {
+                    var p1 = [d.logradouro, d.numero].filter(Boolean).join(", ");
+                    var p2 = [d.bairro, (d.municipio && d.uf) ? (d.municipio + "/" + d.uf) : (d.municipio || d.uf || "")].filter(Boolean).join(" - ");
+                    var p3 = d.cep ? ("CEP " + String(d.cep).replace(/\D/g, "").replace(/^(\d{5})(\d{3})$/, "$1-$2")) : "";
+                    endMontado = [p1, p2, p3].filter(Boolean).join(" | ");
+                }
+                if (d.enderecoCompleto && d.enderecoCompleto.length > (endMontado || "").length) {
+                    endMontado = String(d.enderecoCompleto).trim();
+                }
+                if (endMontado && (!enriched.endereco || endMontado.length >= enriched.endereco.length - 5)) {
+                    enriched.endereco = endMontado;
+                }
+                if (d.cnae) enriched.cnae = String(d.cnae).trim();
+                if (d.canalSugerido) enriched.canalSugerido = String(d.canalSugerido).trim();
+                if (d.perfilSugerido) enriched.perfilSugerido = String(d.perfilSugerido).trim();
+                if (d.porteSugerido) enriched.porte = String(d.porteSugerido).trim();
+                if (parseInt(d.checkoutsEstimado) > 0) enriched.checkoutsEstimado = parseInt(d.checkoutsEstimado);
+                if (d.siteDominio) enriched.siteDominio = String(d.siteDominio).trim();
+                if (Array.isArray(d.coresBandeira) && d.coresBandeira.length) enriched.coresBandeira = d.coresBandeira;
+            }
+        } catch(eGem2) {
+            console.warn("Estágio 2 Gemini loja falhou (mantendo Estágio 1):", eGem2 && eGem2.message ? eGem2.message : eGem2);
+        }
+    }
+
+    // Estágio 2B: Validação oficial na Receita Federal / BrasilAPI sempre que CNPJ de 14 dígitos for identificado
+    var cnpjDigFinal = String(enriched.cnpj || "").replace(/\D/g, "");
+    if (cnpjDigFinal.length === 14) {
+        try {
+            var bRes = await consultarBrasilApiCnpj(cnpjDigFinal);
+            if (bRes && bRes.razaoSocial) {
+                brasilApiOk = true;
+                enriched.cnpj = bRes.cnpj;
+                enriched.razaoSocial = bRes.razaoSocial;
+                if (bRes.nomeFantasia && (!enriched.nome || enriched.source === "BrasilAPI")) {
+                    enriched.nome = bRes.nomeFantasia;
+                }
+                if (bRes.endereco) enriched.endereco = bRes.endereco;
+                if (bRes.cnae) enriched.cnae = bRes.cnae;
+                if (bRes.porte) enriched.porte = bRes.porte;
+                if (bRes.telefone) enriched.telefone = bRes.telefone;
+            }
+        } catch(eBr) {
+            console.warn("Estágio 2 BrasilAPI fallback:", eBr && eBr.message ? eBr.message : eBr);
+        }
+    }
+
+    return { item: enriched, brasilApiOk: brasilApiOk, geminiOk: geminiOk };
+}
+function aplicarDadosLojaNoFormulario(item, skipLogo) {
     if (!item) return;
+    _ultimoPorteLojaSugerido = item.porte || item.porteSugerido || "";
     if (item.nome) document.getElementById("clientName").value = item.nome;
     if (item.cnpj) document.getElementById("clientCNPJ").value = item.cnpj;
     if (document.getElementById("clientRazaoSocial")) document.getElementById("clientRazaoSocial").value = item.razaoSocial || "";
     if (document.getElementById("clientEndereco")) document.getElementById("clientEndereco").value = item.endereco || "";
     if (document.getElementById("clientCNAE")) document.getElementById("clientCNAE").value = item.cnae || "";
+    if (item.telefone && document.getElementById("clientBuyerPhone") && !document.getElementById("clientBuyerPhone").value) {
+        document.getElementById("clientBuyerPhone").value = item.telefone;
+    }
     if (item.checkoutsEstimado && !document.getElementById("clientCheckouts").value) {
         document.getElementById("clientCheckouts").value = item.checkoutsEstimado;
     }
@@ -4331,7 +4531,19 @@ function aplicarDadosLojaNoFormulario(item) {
         document.getElementById("clientCanal").value = item.canalSugerido;
         onClientCanalChange(true);
     }
-    buscarLogoInteligenteAuto(item.nome || document.getElementById("clientName").value);
+    if (item.perfilSugerido && document.getElementById("clientPerfil") && (!document.getElementById("clientPerfil").value || document.getElementById("clientPerfil").value !== "Personalizado")) {
+        var validPerfis = ["Vizinhanca","Mercado","Supermercado","Hipermercado","Atacarejo","Conveniencia"];
+        if (validPerfis.indexOf(item.perfilSugerido) >= 0) {
+            document.getElementById("clientPerfil").value = item.perfilSugerido;
+            onClientPerfilChange();
+        }
+    }
+    if (!skipLogo) {
+        buscarLogoInteligenteAuto(item.nome || document.getElementById("clientName").value, {
+            siteDominio: item.siteDominio || "",
+            coresBandeira: item.coresBandeira || null
+        });
+    }
 }
 function renderSmartStoreResults() {
     var box = document.getElementById("smartStoreResults");
@@ -4344,22 +4556,50 @@ function renderSmartStoreResults() {
     box.innerHTML = _smartStoreResults.map(function(r, idx) {
         var bCls = r.source === "Gemini IA" ? " gemini" : (r.source === "BrasilAPI" ? " brasilapi" : "");
         return "<div class='smart-res-item' onclick='selecionarResultadoLoja(" + idx + ")'>" +
-            "<div class='smart-res-top'><span class='smart-res-nome'>" + escHtml(r.nome) + "</span>" +
+            "<div class='smart-res-top'><span class='smart-res-nome'>" + escHtml(r.nome) + (r.uf ? " (" + escHtml(r.uf) + ")" : "") + "</span>" +
             "<span class='smart-res-badge" + bCls + "'>" + escHtml(r.source) + "</span></div>" +
             (r.endereco ? "<div class='smart-res-end'>" + escHtml(r.endereco) + "</div>" : "") +
-            (r.cnpj || r.razaoSocial ? "<div class='smart-res-meta'>" + escHtml([r.cnpj ? "CNPJ: " + r.cnpj : "", r.razaoSocial].filter(Boolean).join(" | ")) + "</div>" : "") +
+            "<div class='smart-res-meta'>" + escHtml([r.cnpj ? "CNPJ: " + r.cnpj : "Toque para extrair CNPJ + Dossiê completo", r.razaoSocial].filter(Boolean).join(" | ")) + "</div>" +
             "</div>";
     }).join("");
     box.classList.add("ativo");
 }
-function selecionarResultadoLoja(idx) {
+async function selecionarResultadoLoja(idx) {
     var item = _smartStoreResults[idx];
     if (!item) return;
-    aplicarDadosLojaNoFormulario(item);
     var box = document.getElementById("smartStoreResults");
     if (box) { box.innerHTML = ""; box.classList.remove("ativo"); }
+    // Aplica imediatamente os dados preliminares do Estágio 1 (sem disparar logo ainda para evitar chamada dupla)
+    aplicarDadosLojaNoFormulario(item, true);
     var st = document.getElementById("smartStoreStatus");
-    if (st) { st.style.display = "block"; st.textContent = "Unidade selecionada: " + item.nome + ". Confira os campos e salve."; }
+    if (st) {
+        st.style.display = "block";
+        st.style.color = "#1e40af";
+        st.textContent = "⏳ Estágio 2: Extraindo dossiê completo de \"" + item.nome + "\" (" + getGeminiModel() + " + BrasilAPI)...";
+    }
+    try {
+        var ctx = _obterUfContextoDispositivo();
+        var res = await enriquecerDossieLojaCascata(item, ctx);
+        aplicarDadosLojaNoFormulario(res.item, false);
+        if (st) {
+            if (res.brasilApiOk) {
+                st.style.color = "#16a34a";
+                st.textContent = "✅ Dossiê completo validado (Gemini + BrasilAPI): " + res.item.nome + (res.item.cnpj ? " | CNPJ " + res.item.cnpj : "") + ".";
+            } else if (res.geminiOk) {
+                st.style.color = "#16a34a";
+                st.textContent = "✅ Dossiê preenchido via " + getGeminiModel() + ": " + res.item.nome + (res.item.cnpj ? " | CNPJ " + res.item.cnpj : " (confira o CNPJ se necessário)") + ".";
+            } else {
+                st.style.color = "#0369a1";
+                st.textContent = "Unidade selecionada: " + res.item.nome + ". Confira os campos e salve.";
+            }
+        }
+    } catch(err2) {
+        aplicarDadosLojaNoFormulario(item, false);
+        if (st) {
+            st.style.color = "#b45309";
+            st.textContent = "Unidade selecionada (" + item.nome + "). Confira os campos manualmente.";
+        }
+    }
 }
 async function consultarCnpjDireto() {
     var cnpjVal = (document.getElementById("clientCNPJ") || {}).value || "";
@@ -4376,6 +4616,7 @@ async function buscarLojaInteligente() {
     var q = qEl ? qEl.value.trim() : "";
     if (!q) { alert("Digite o nome da loja + região ou os 14 dígitos do CNPJ."); return; }
     var digits = q.replace(/\D/g, "");
+    var ctx = _obterUfContextoDispositivo();
     if (st) { st.style.display = "block"; st.style.color = "#1e40af"; }
     if (btn) { btn.disabled = true; btn.textContent = "Buscando..."; }
     _smartStoreResults = [];
@@ -4385,14 +4626,22 @@ async function buscarLojaInteligente() {
         if (digits.length === 14 && /^[\d.\-\/\s]+$/.test(q)) {
             if (st) st.textContent = "Consultando CNPJ " + formatarCNPJ(digits) + " na BrasilAPI...";
             var cnpjRes = await consultarBrasilApiCnpj(digits);
-            aplicarDadosLojaNoFormulario(cnpjRes);
-            if (st) { st.style.color = "#16a34a"; st.textContent = "CNPJ encontrado via BrasilAPI: " + cnpjRes.nome; }
+            if (getGoogleGeminiKey()) {
+                if (st) st.textContent = "⏳ BrasilAPI ok! Enriquecendo bandeira, canal e domínio oficial via " + getGeminiModel() + "...";
+                var cascCnpj = await enriquecerDossieLojaCascata(cnpjRes, ctx);
+                aplicarDadosLojaNoFormulario(cascCnpj.item, false);
+                if (st) { st.style.color = "#16a34a"; st.textContent = "✅ CNPJ validado na BrasilAPI + " + getGeminiModel() + ": " + cascCnpj.item.nome; }
+            } else {
+                aplicarDadosLojaNoFormulario(cnpjRes, false);
+                if (st) { st.style.color = "#16a34a"; st.textContent = "✅ CNPJ encontrado via BrasilAPI: " + cnpjRes.nome; }
+            }
         } else {
             var temGemini = !!getGoogleGeminiKey();
-            if (st) st.textContent = "Consultando OpenStreetMap" + (temGemini ? " e Gemini (" + getGeminiModel() + ")" : "") + " em paralelo...";
+            var ufTag = (ctx && ctx.uf && ctx.uf !== "Brasil") ? (" (priorizando " + ctx.uf + ")") : "";
+            if (st) st.textContent = "Estágio 1: Buscando unidades no OpenStreetMap" + (temGemini ? " e " + getGeminiModel() : "") + ufTag + "...";
             var results = await Promise.allSettled([
-                buscarOpenStreetMapNominatim(q),
-                temGemini ? buscarLojasGeminiFlash(q) : Promise.resolve([])
+                buscarOpenStreetMapNominatim(q, ctx),
+                temGemini ? buscarLojasGeminiFlash(q, ctx) : Promise.resolve([])
             ]);
             var merged = [];
             var seen = {};
@@ -4404,13 +4653,27 @@ async function buscarLojaInteligente() {
                     });
                 }
             });
+            // Priorizar unidades da UF/Cidade atual do promotor no topo da lista
+            var ufAlvo = (ctx && ctx.uf && ctx.uf !== "Brasil") ? ctx.uf.toUpperCase() : "";
+            var cidAlvo = (ctx && ctx.cidade) ? normTextAccent(ctx.cidade).toLowerCase() : "";
+            merged.sort(function(a, b) {
+                function scoreItem(it) {
+                    var s = 0;
+                    var endNorm = normTextAccent(it.endereco || "").toLowerCase();
+                    var ufIt = String(it.uf || "").toUpperCase();
+                    if (ufAlvo && (ufIt === ufAlvo || endNorm.indexOf(ufAlvo.toLowerCase()) >= 0)) s += 4;
+                    if (cidAlvo && endNorm.indexOf(cidAlvo) >= 0) s += 3;
+                    if (it.source === "Gemini IA") s += 1;
+                    return s;
+                }
+                return scoreItem(b) - scoreItem(a);
+            });
             _smartStoreResults = merged;
             renderSmartStoreResults();
             if (merged.length) {
                 if (st) {
                     st.style.color = "#16a34a";
-                    st.textContent = merged.length + " unidade(s) encontrada(s). Toque em uma para preencher." +
-                        (!temGemini ? " (Dica: configure a chave Google Gemini para obter também CNPJ provável.)" : "");
+                    st.textContent = merged.length + " unidade(s) encontrada(s)" + ufTag + ". Toque em uma para disparar o Estágio 2 (CNPJ + Dossiê + Logo).";
                 }
             } else {
                 if (st) {
@@ -6914,11 +7177,11 @@ async function gerarGraficoAuditoria() {
     try {
         var resposta = await chamarGeminiIA(prompt, null, null);
         var jsonMatch = resposta.match(/\{[\s\S]*"labels"[\s\S]*"scores"[\s\S]*\}/);
-        var analiseTexto = resposta.replace(/\{[\s\S]*\}/, "").trim();
+        var analiseTexto = resposta.replace(/```(?:json)?[\s\S]*?```/gi, "").replace(/\{[\s\S]*\}/, "").trim();
 
-        if (jsonMatch) {
+        if (jsonMatch || /"labels"/.test(resposta)) {
             try {
-                var dados = JSON.parse(jsonMatch[0]);
+                var dados = parseGeminiJSON(jsonMatch ? jsonMatch[0] : resposta);
                 canvasEl.style.display = "block";
                 if (_graficoAuditoriaInstance) { _graficoAuditoriaInstance.destroy(); }
                 var cor = dados.tendencia === "crescimento" ? "#16a34a" :
@@ -7106,11 +7369,11 @@ async function gerarGraficoEvolutivo() {
 
         // Extrai JSON da resposta
         var jsonMatch = resposta.match(/\{[\s\S]*"labels"[\s\S]*"scores"[\s\S]*\}/);
-        var analiseTexto = resposta.replace(/\{[\s\S]*\}/, "").trim();
+        var analiseTexto = resposta.replace(/```(?:json)?[\s\S]*?```/gi, "").replace(/\{[\s\S]*\}/, "").trim();
 
-        if (jsonMatch) {
+        if (jsonMatch || /"labels"/.test(resposta)) {
             try {
-                var dados = JSON.parse(jsonMatch[0]);
+                var dados = parseGeminiJSON(jsonMatch ? jsonMatch[0] : resposta);
                 // Renderiza gráfico
                 canvasEl.style.display = "block";
                 if (_graficoEvolutivoInstance) { _graficoEvolutivoInstance.destroy(); }
@@ -9483,23 +9746,16 @@ async function processarImportacaoIA() {
                 if (fi > 0) await new Promise(function(r){ setTimeout(r, 6000); });
                 guardiaoMsg("Foto " + (fi+1) + " de " + _fotosImportacaoIA.length, "Aguarde...");
                 var res = await chamarGeminiIA(promptFoto, comp.data, comp.mime);
-                var jsonStr = res;
-                var match = jsonStr.match(/\[\s*\{.*?\}\s*\]/s);
-                if (match) jsonStr = match[0];
-                else jsonStr = jsonStr.replace(/```json|```/g, "").trim();
                 try {
-                    var itens = JSON.parse(jsonStr);
-                    todosItens = todosItens.concat(itens);
+                    var itens = parseGeminiJSON(res);
+                    if (Array.isArray(itens)) todosItens = todosItens.concat(itens);
                 } catch(parseErr) { console.warn("Foto " + (fi+1) + " nao retornou JSON valido"); }
             }
             _itensRevisaoIA = todosItens;
         } else {
             var resultado = await chamarGeminiIA(prompt, null, null);
-            var jsonStr2 = resultado;
-            var match2 = jsonStr2.match(/\[\s*\{.*?\}\s*\]/s);
-            if (match2) jsonStr2 = match2[0];
-            else jsonStr2 = jsonStr2.replace(/```json|```/g, "").trim();
-            _itensRevisaoIA = JSON.parse(jsonStr2);
+            var parsedText = parseGeminiJSON(resultado);
+            _itensRevisaoIA = Array.isArray(parsedText) ? parsedText : [];
         }
         guardiaoMostrar("confirmacao", "Produtos detectados!", _itensRevisaoIA.length + " produto(s) encontrado(s). Revise antes de confirmar.");
         guardiaoEsconder(2000);
@@ -9671,11 +9927,8 @@ async function gerarGuiaExecucaoIA(perfil, guia) {
         "Guia da empresa (pode estar dividido por paginas abaixo):\n" + fonteGuia;
     try {
         var resultado = await chamarGeminiIA(prompt, null, null);
-        var jsonStr = resultado;
-        var matchG = jsonStr.match(/\[\s*\{.*\}\s*\]/s);
-        if (matchG) jsonStr = matchG[0];
-        else jsonStr = jsonStr.replace(/```json|```/g, "").trim();
-        var checklist = JSON.parse(jsonStr);
+        var checklist = parseGeminiJSON(resultado);
+        if (!Array.isArray(checklist)) checklist = [];
         renderGuiaExecucao(checklist);
         // Salvar
         var key = "ls23_guia_execucao_" + currentClient.companyId + "_" + currentClient.id;
@@ -10683,12 +10936,9 @@ function renderPilulasLista(containerId, compId) {
 function _parseGuiaResposta(texto) {
     var descricao = texto, tags = [];
     try {
-        var m = texto.match(/\{[\s\S]*\}/);
-        if (m) {
-            var obj = JSON.parse(m[0]);
-            if (obj.descricao) descricao = String(obj.descricao);
-            if (Array.isArray(obj.tags)) tags = obj.tags.map(function(t){ return String(t).toLowerCase().trim(); });
-        }
+        var obj = parseGeminiJSON(texto);
+        if (obj && obj.descricao) descricao = String(obj.descricao);
+        if (obj && Array.isArray(obj.tags)) tags = obj.tags.map(function(t){ return String(t).toLowerCase().trim(); });
     } catch(e) { /* mantem texto puro, sem tags */ }
     return { descricao: descricao, tags: tags };
 }
@@ -13988,14 +14238,14 @@ function _obterUfContextoDispositivo() {
     return { uf: uf || "Brasil", cidade: cidade, regional: regional || "Nacional" };
 }
 
-async function _buscarLogoIndustriaAuto(nome, siteDominio) {
+async function _buscarLogoIndustriaAuto(nome, siteDominio, coresBandeira) {
     var candidatos = [];
-    if (siteDominio) {
-        var dom = String(siteDominio).replace(/^https?:\/\//i, "").replace(/^www\./i, "").split("/")[0].trim();
-        if (dom && dom.indexOf(".") > 0) {
-            candidatos.push("https://www.google.com/s2/favicons?domain=" + encodeURIComponent(dom) + "&sz=128");
-            candidatos.push("https://icons.duckduckgo.com/ip3/" + dom + ".ico");
-        }
+    var dom = siteDominio ? String(siteDominio).replace(/^https?:\/\//i, "").replace(/^www\./i, "").split("/")[0].trim() : "";
+    if (!dom && typeof inferirDominioRede === "function") dom = inferirDominioRede(nome);
+    if (dom && dom.indexOf(".") > 0) {
+        candidatos.push("https://logo.clearbit.com/" + encodeURIComponent(dom) + "?size=200");
+        candidatos.push("https://www.google.com/s2/favicons?domain=" + encodeURIComponent(dom) + "&sz=128");
+        candidatos.push("https://icons.duckduckgo.com/ip3/" + encodeURIComponent(dom) + ".ico");
     }
     for (var i = 0; i < candidatos.length; i++) {
         try {
@@ -14007,7 +14257,7 @@ async function _buscarLogoIndustriaAuto(nome, siteDominio) {
     }
     try {
         if (typeof buscarLogoNivel1Dominio === "function") {
-            var n1 = await buscarLogoNivel1Dominio(nome);
+            var n1 = await buscarLogoNivel1Dominio(nome, dom);
             if (n1 && n1.dataUrl) return n1.dataUrl;
         }
     } catch(e2) {}
@@ -14017,7 +14267,7 @@ async function _buscarLogoIndustriaAuto(nome, siteDominio) {
             if (n2 && n2.dataUrl) return n2.dataUrl;
         }
     } catch(e3) {}
-    return (typeof gerarAvatarLojaJpeg200 === "function") ? gerarAvatarLojaJpeg200(nome || "EMP") : "";
+    return (typeof gerarAvatarLojaJpeg200 === "function") ? gerarAvatarLojaJpeg200(nome || "EMP", coresBandeira) : "";
 }
 
 function onCompanyNameSmartInput() {
@@ -14042,10 +14292,12 @@ async function buscarEmpresaComIA(manualTrigger) {
     var btn = document.getElementById("btnSmartCompanySearch");
     var query = (sqEl && sqEl.value.trim()) || (nmEl && nmEl.value.trim()) || "";
     if (!query || query.length < 2) {
-        if (manualTrigger) alert("Digite o nome da indústria (ex: PepsiCo) para buscar com IA.");
+        if (manualTrigger) alert("Digite o nome da indústria (ex: PepsiCo) ou CNPJ para buscar com IA.");
         return;
     }
-    if (!getGoogleGeminiKey()) {
+    var digits = query.replace(/\D/g, "");
+    var isCnpjDirect = (digits.length === 14 && /^[\d.\-\/\s]+$/.test(query));
+    if (!isCnpjDirect && !getGoogleGeminiKey()) {
         if (manualTrigger) alert("Configure a Chave API Google Gemini (" + getGeminiModel() + ") em Configurações para usar a busca automática.");
         return;
     }
@@ -14054,49 +14306,84 @@ async function buscarEmpresaComIA(manualTrigger) {
     if (stEl) {
         stEl.style.display = "block";
         stEl.style.color = "#1e40af";
-        stEl.textContent = "✨ Consultando Gemini (" + getGeminiModel() + ") para \"" + query + "\" (" + ctx.uf + ")...";
+        stEl.textContent = isCnpjDirect
+            ? ("⏳ Estágio 1: Consultando CNPJ " + formatarCNPJ(digits) + " na BrasilAPI...")
+            : ("✨ Estágio 1/2: Consultando Gemini (" + getGeminiModel() + ") + BrasilAPI para \"" + query + "\" (" + ctx.uf + ")...");
     }
     if (cardEl) { cardEl.classList.remove("ativo"); cardEl.innerHTML = ""; }
     if (btn) { btn.disabled = true; btn.textContent = "Buscando..."; }
 
     try {
-        var prompt = "Você é um especialista em cadastro corporativo e trade marketing no Brasil.\n" +
-            "O usuário digitou a indústria/empresa: \"" + query + "\".\n" +
-            "Localização / UF atual do usuário: " + (ctx.cidade ? ctx.cidade + " / " : "") + ctx.uf + " (Regional: " + ctx.regional + ").\n" +
-            "Retorne APENAS um JSON válido com os dados oficiais desta empresa no Brasil e sua filial/CD na UF informada:\n" +
-            "{\n" +
-            "  \"nomeFantasia\": \"Nome comercial curto (ex: PepsiCo)\",\n" +
-            "  \"razaoSocial\": \"Razão social oficial (ex: PepsiCo do Brasil Ltda)\",\n" +
-            "  \"cnpj\": \"CNPJ principal ou da filial regional no formato 00.000.000/0000-00\",\n" +
-            "  \"enderecoCd\": \"Endereço provável do centro de distribuição ou filial na UF informada\",\n" +
-            "  \"segmento\": \"Segmento principal (ex: Snacks, Alimentos e Bebidas)\",\n" +
-            "  \"regionalSugerida\": \"Um exato dentre: Nacional | RJ / Leste | SP | MG / ES | Sul | Nordeste | Centro-Oeste | Norte\",\n" +
-            "  \"ufLabel\": \"Sigla UF (ex: RJ)\",\n" +
-            "  \"siteDominio\": \"domínio oficial (ex: pepsico.com.br)\",\n" +
-            "  \"contatosResumo\": \"Site ou SAC oficial\"\n" +
-            "}";
-        var raw = await chamarGoogleGeminiFlash(prompt, [], true);
-        var obj = extrairJsonGemini(raw);
-        if (Array.isArray(obj)) obj = obj[0] || {};
-        if (!obj || (!obj.razaoSocial && !obj.nomeFantasia)) {
+        var bApiDireta = null;
+        if (isCnpjDirect && typeof consultarBrasilApiCnpj === "function") {
+            bApiDireta = await consultarBrasilApiCnpj(digits);
+        }
+
+        var obj = {};
+        if (getGoogleGeminiKey()) {
+            var qRef = bApiDireta ? (bApiDireta.razaoSocial + " (CNPJ " + bApiDireta.cnpj + ")") : query;
+            var prompt = "Você é um especialista em cadastro corporativo e trade marketing no Brasil.\n" +
+                "O usuário digitou a indústria/empresa: \"" + qRef + "\".\n" +
+                "Localização / UF atual do usuário: " + (ctx.cidade ? ctx.cidade + " / " : "") + ctx.uf + " (Regional: " + ctx.regional + ").\n" +
+                "Retorne APENAS um JSON válido com os dados oficiais desta empresa no Brasil e sua filial/CD na UF informada:\n" +
+                "{\n" +
+                "  \"nomeFantasia\": \"Nome comercial curto (ex: PepsiCo)\",\n" +
+                "  \"razaoSocial\": \"Razão social oficial (ex: PepsiCo do Brasil Ltda)\",\n" +
+                "  \"cnpj\": \"CNPJ oficial da matriz ou filial regional no formato 00.000.000/0000-00\",\n" +
+                "  \"enderecoCd\": \"Endereço completo do centro de distribuição ou filial na UF informada\",\n" +
+                "  \"segmento\": \"Segmento principal (ex: Snacks, Alimentos e Bebidas)\",\n" +
+                "  \"porteSugerido\": \"Grande Porte / Médio Porte / etc.\",\n" +
+                "  \"regionalSugerida\": \"Um exato dentre: Nacional | RJ / Leste | SP | MG / ES | Sul | Nordeste | Centro-Oeste | Norte\",\n" +
+                "  \"ufLabel\": \"Sigla UF (ex: RJ)\",\n" +
+                "  \"siteDominio\": \"domínio oficial (ex: pepsico.com.br)\",\n" +
+                "  \"coresBandeira\": [\"#HexPrimaria\", \"#HexSecundaria\"],\n" +
+                "  \"contatosResumo\": \"Site ou SAC oficial\"\n" +
+                "}";
+            var raw = await chamarGoogleGeminiFlash(prompt, [], true);
+            obj = parseGeminiJSON(raw);
+            if (Array.isArray(obj)) obj = obj[0] || {};
+        }
+
+        if (!bApiDireta && (!obj || (!obj.razaoSocial && !obj.nomeFantasia))) {
             throw new Error("Não foi possível identificar a empresa.");
         }
-        var cnpjFmt = obj.cnpj ? (formatarCNPJ(obj.cnpj) || String(obj.cnpj).trim()) : "";
+
+        // Estágio 2: Cruzamento profundo com BrasilAPI usando o CNPJ encontrado pelo Gemini
+        var cnpjDigits = bApiDireta ? digits : String(obj.cnpj || "").replace(/\D/g, "");
+        var bApiData = bApiDireta || null;
+        var brasilApiValidado = !!bApiDireta;
+        if (!bApiData && cnpjDigits.length === 14 && typeof consultarBrasilApiCnpj === "function") {
+            if (stEl) stEl.textContent = "⏳ Estágio 2: Validando CNPJ " + formatarCNPJ(cnpjDigits) + " na Receita Federal (BrasilAPI)...";
+            try {
+                bApiData = await consultarBrasilApiCnpj(cnpjDigits);
+                if (bApiData && bApiData.razaoSocial) brasilApiValidado = true;
+            } catch(eBrEmp) {
+                console.warn("BrasilAPI empresa fallback:", eBrEmp && eBrEmp.message ? eBrEmp.message : eBrEmp);
+            }
+        }
+
+        var cnpjFmt = (bApiData && bApiData.cnpj) ? bApiData.cnpj : (obj.cnpj ? (formatarCNPJ(obj.cnpj) || String(obj.cnpj).trim()) : "");
+        var razaoFinal = (bApiData && bApiData.razaoSocial) ? bApiData.razaoSocial : String(obj.razaoSocial || obj.nomeFantasia || query).trim();
+        var nomeSug = String(obj.nomeFantasia || (bApiData && bApiData.nomeFantasia) || razaoFinal || query).trim();
         var regOpts = ["Nacional","RJ / Leste","SP","MG / ES","Sul","Nordeste","Centro-Oeste","Norte"];
         var regSug = regOpts.indexOf(obj.regionalSugerida) >= 0 ? obj.regionalSugerida : ctx.regional;
-        var nomeSug = String(obj.nomeFantasia || query).trim();
-        var logoSug = await _buscarLogoIndustriaAuto(nomeSug, obj.siteDominio);
+        var segFinal = String(obj.segmento || (bApiData && bApiData.cnae) || "").trim();
+        var endFinal = String(obj.enderecoCd || (bApiData && bApiData.endereco) || "").trim();
+        var porteFinal = (bApiData && bApiData.porte) || String(obj.porteSugerido || "").trim();
+        var logoSug = await _buscarLogoIndustriaAuto(nomeSug, obj.siteDominio, obj.coresBandeira);
 
         _ultimaSugestaoEmpresaIA = {
             nomeFantasia: nomeSug,
-            razaoSocial: String(obj.razaoSocial || nomeSug).trim(),
+            razaoSocial: razaoFinal,
             cnpj: cnpjFmt,
-            enderecoCd: String(obj.enderecoCd || "").trim(),
-            segmento: String(obj.segmento || "").trim(),
+            enderecoCd: endFinal,
+            segmento: segFinal,
+            porte: porteFinal,
+            brasilApiValidado: brasilApiValidado,
             regionalSugerida: regSug,
-            ufLabel: String(obj.ufLabel || ctx.uf || regSug).trim(),
+            ufLabel: String((bApiData && bApiData.uf) || obj.ufLabel || ctx.uf || regSug).trim(),
             siteDominio: String(obj.siteDominio || "").trim(),
-            contatosResumo: String(obj.contatosResumo || "").trim(),
+            contatosResumo: String(obj.contatosResumo || (bApiData && bApiData.telefone) || "").trim(),
             logo: logoSug || ""
         };
 
@@ -14104,12 +14391,16 @@ async function buscarEmpresaComIA(manualTrigger) {
             var logoHtml = _ultimaSugestaoEmpresaIA.logo
                 ? "<img src='" + _ultimaSugestaoEmpresaIA.logo + "' class='smart-comp-logo' alt='Logo'>"
                 : "<div class='smart-comp-logo' style='display:flex;align-items:center;justify-content:center;font-size:20px'>&#127970;</div>";
+            var seloBrasilApi = _ultimaSugestaoEmpresaIA.brasilApiValidado
+                ? " <span class='smart-res-badge brasilapi' style='margin-left:4px'>Validado BrasilAPI</span>"
+                : "";
             cardEl.innerHTML =
                 "<div class='smart-comp-head'>" + logoHtml +
                 "<div>" +
-                "<div class='smart-comp-title'>&#10024; Encontramos: " + escHtml(_ultimaSugestaoEmpresaIA.razaoSocial) + " - Regional " + escHtml(_ultimaSugestaoEmpresaIA.ufLabel) + ". Confirmar dados?</div>" +
+                "<div class='smart-comp-title'>&#10024; Encontramos: " + escHtml(_ultimaSugestaoEmpresaIA.razaoSocial) + " - Regional " + escHtml(_ultimaSugestaoEmpresaIA.ufLabel) + seloBrasilApi + ". Confirmar dados?</div>" +
                 "<div class='smart-comp-meta'>" +
                 (_ultimaSugestaoEmpresaIA.cnpj ? "<b>CNPJ:</b> " + escHtml(_ultimaSugestaoEmpresaIA.cnpj) + " &bull; " : "") +
+                (_ultimaSugestaoEmpresaIA.porte ? "<b>Porte:</b> " + escHtml(_ultimaSugestaoEmpresaIA.porte) + " &bull; " : "") +
                 (_ultimaSugestaoEmpresaIA.segmento ? "<b>Segmento:</b> " + escHtml(_ultimaSugestaoEmpresaIA.segmento) : "") +
                 (_ultimaSugestaoEmpresaIA.enderecoCd ? "<br><b>CD/Filial:</b> " + escHtml(_ultimaSugestaoEmpresaIA.enderecoCd) : "") +
                 "</div></div></div>" +
@@ -14121,7 +14412,7 @@ async function buscarEmpresaComIA(manualTrigger) {
         }
         if (stEl) {
             stEl.style.color = "#059669";
-            stEl.textContent = "Sugestão pronta! Revise o card abaixo e toque em Confirmar dados.";
+            stEl.textContent = "Sugestão pronta" + (_ultimaSugestaoEmpresaIA.brasilApiValidado ? " (validada via BrasilAPI)" : "") + "! Revise o card abaixo e toque em Confirmar dados.";
         }
     } catch(err) {
         if (stEl) {
