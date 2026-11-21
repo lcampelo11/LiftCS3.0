@@ -296,7 +296,34 @@ tr.prod-del td{text-decoration:line-through;opacity:.5}
 .guardiao-placa-icone { font-size:30px; }
 .guardiao-placa-icone.processando { display:inline-block;animation:g-spin 1.8s linear infinite; }
 .guardiao-placa-msg { color:#fff;font-size:15px;font-weight:700;text-align:center;margin-top:2px; }
-.guardiao-placa-sub { color:#94a3b8;font-size:11px;text-align:center; }
+.guardiao-placa-sub { color:#cbd5e1;font-size:11px;text-align:center;max-width:280px;line-height:1.35; }
+.guardiao-progress-wrap { display:none;width:100%;min-width:210px;max-width:270px;margin-top:6px; }
+.guardiao-progress-wrap.ativo { display:block; }
+.guardiao-progress-track { width:100%;height:7px;background:rgba(15,23,42,0.8);border:1px solid rgba(148,163,184,0.3);border-radius:999px;overflow:hidden; }
+.guardiao-progress-bar { width:0%;height:100%;background:linear-gradient(90deg,#f97316,#fb923c,#38bdf8);border-radius:999px;transition:width 0.35s ease; }
+.guardiao-progress-txt { font-size:10px;color:#cbd5e1;text-align:center;margin-top:4px;font-weight:700; }
+.guardiao-btn-bg { display:none;margin-top:8px;width:100%;background:rgba(30,41,59,0.92);color:#e2e8f0;border:1px solid rgba(148,163,184,0.45);border-radius:8px;padding:8px 12px;cursor:pointer;font-size:12px;font-weight:700;transition:background .15s; }
+.guardiao-btn-bg:hover { background:#334155; }
+#bgTaskBar {
+    display:none;position:fixed;top:54px;left:10px;right:10px;max-width:540px;margin:0 auto;
+    background:rgba(15,23,42,0.97);border:1.5px solid #f97316;border-radius:12px;
+    padding:9px 12px;z-index:9999990;color:#fff;cursor:pointer;
+    box-shadow:0 8px 24px rgba(0,0,0,0.48);backdrop-filter:blur(8px);
+}
+#bgTaskBar.ativo { display:flex;align-items:center;gap:10px; }
+#bgTaskBar.concluido { border-color:#22c55e;background:rgba(6,78,59,0.97); }
+#bgTaskBar.erro { border-color:#ef4444;background:rgba(127,29,29,0.97); }
+.bg-task-orb { width:34px;height:34px;border-radius:50%;object-fit:contain;flex-shrink:0;animation:g-glow-orange 1.8s ease-in-out infinite; }
+#bgTaskBar.concluido .bg-task-orb { animation:g-glow-green 1.5s ease-in-out infinite; }
+.bg-task-info { flex:1;min-width:0; }
+.bg-task-title { font-size:12px;font-weight:800;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+.bg-task-sub { font-size:10px;color:#cbd5e1;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+.bg-task-track { width:100%;height:5px;background:rgba(255,255,255,0.16);border-radius:999px;overflow:hidden;margin-top:5px; }
+.bg-task-fill { width:0%;height:100%;background:linear-gradient(90deg,#f97316,#38bdf8);border-radius:999px;transition:width 0.35s ease; }
+#bgTaskBar.concluido .bg-task-fill { background:#4ade80;width:100% !important; }
+.bg-task-pct { font-size:11px;font-weight:800;color:#fed7aa;flex-shrink:0; }
+#bgTaskBar.concluido .bg-task-pct { color:#bbf7d0; }
+.bg-task-close { background:none;border:none;color:#94a3b8;font-size:15px;cursor:pointer;padding:2px 4px;margin:0;flex-shrink:0; }
 .guardiao-label-topo { font-size:9px;font-weight:800;letter-spacing:3px;color:#60a5fa;text-transform:uppercase;margin-bottom:4px;opacity:0.7; }
 #guardiao-toast {
     display:none;position:fixed;bottom:20px;right:16px;
@@ -589,7 +616,14 @@ body.dark-mode button.sec, body.dark-mode .sec { background: linear-gradient(135
 .smart-search-row{display:flex;gap:6px;align-items:stretch}
 .smart-search-row input{flex:1;margin:0}
 .smart-search-row button{margin:0;white-space:nowrap;padding:9px 14px}
-.smart-status{font-size:11px;margin-top:8px;color:#1e40af;display:none}
+.smart-status{font-size:12px;margin-top:8px;color:#1e40af;display:none;padding:8px 10px;border-radius:8px;line-height:1.4;font-weight:600}
+.smart-status.smart-alert-warn{background:#fffbeb;border:1.5px solid #f59e0b;color:#92400e !important}
+.smart-status.smart-alert-ok{background:#f0fdf4;border:1.5px solid #22c55e;color:#166534 !important}
+.smart-status.smart-alert-err{background:#fef2f2;border:1.5px solid #ef4444;color:#991b1b !important}
+.fg input.field-missing-warn,.fg select.field-missing-warn{border:2px solid #f59e0b !important;background:#fffbeb !important;box-shadow:0 0 0 3px rgba(245,158,11,0.2) !important}
+body.dark-mode .smart-status.smart-alert-warn{background:rgba(120,53,15,0.42) !important;border-color:#f59e0b !important;color:#fde68a !important}
+body.dark-mode .smart-status.smart-alert-ok{background:rgba(6,78,59,0.42) !important;border-color:#22c55e !important;color:#bbf7d0 !important}
+body.dark-mode .fg input.field-missing-warn,body.dark-mode .fg select.field-missing-warn{border-color:#f59e0b !important;background:rgba(120,53,15,0.38) !important}
 .smart-results{margin-top:8px;display:none;flex-direction:column;gap:6px;max-height:260px;overflow-y:auto}
 .smart-results.ativo{display:flex}
 .smart-res-item{background:#fff;border:1px solid #cbd5e1;border-radius:9px;padding:9px 10px;cursor:pointer;transition:border-color .15s,background .15s}
@@ -2298,7 +2332,7 @@ var LS_I18N = {
         audia_wait: "Isso pode levar alguns segundos",
         audia_btn_analyze: "🤖 Analisar com IA",
         guardiao_ask: "Pergunte ao Guardião",
-        guardiao_sub: "Assistente Gemini 3.8",
+        guardiao_sub: "Assistente Inteligente",
         guardiao_tab_chat: "💬 Chat",
         guardiao_tab_base: "📚 Guia & Pílulas",
         guardiao_tab_giro: "📊 Giro & FEFO",
@@ -2439,7 +2473,7 @@ var LS_I18N = {
         audia_wait: "This may take a few seconds",
         audia_btn_analyze: "🤖 Analyze with AI",
         guardiao_ask: "Ask Guardian",
-        guardiao_sub: "Gemini 3.8 Assistant",
+        guardiao_sub: "Smart Assistant",
         guardiao_tab_chat: "💬 Chat",
         guardiao_tab_base: "📚 Guide & Pills",
         guardiao_tab_giro: "📊 Turnover & FEFO",
@@ -2580,7 +2614,7 @@ var LS_I18N = {
         audia_wait: "Esto puede tardar unos segundos",
         audia_btn_analyze: "🤖 Analizar con IA",
         guardiao_ask: "Pregunta al Guardián",
-        guardiao_sub: "Asistente Gemini 3.8",
+        guardiao_sub: "Asistente Inteligente",
         guardiao_tab_chat: "💬 Chat",
         guardiao_tab_base: "📚 Guía y Píldoras",
         guardiao_tab_giro: "📊 Rotación y FEFO",
@@ -3910,6 +3944,8 @@ function goToNewClient() {
     document.getElementById("clientPerfil").value = ""; document.getElementById("clientCheckouts").value = "";
     var cpw = document.getElementById("clientPerfilCustomWrap"); if (cpw) cpw.style.display = "none";
     document.getElementById("pageClientTitle").textContent = "Cadastro de Cliente";
+    if (typeof _limparDestaquesCamposCliente === "function") _limparDestaquesCamposCliente();
+    if (typeof _vincularLimpezaCamposCliente === "function") _vincularLimpezaCamposCliente();
     if (typeof setClientSearchLoading === "function") setClientSearchLoading(false);
     updateClientProductsTable(); loadCompanySelectForClient(); showPage("pageClient");
     atualizarFaixaCliente();
@@ -3963,6 +3999,8 @@ function editClient(clientId) {
     if (cpw) cpw.style.display = (c.perfil==="Personalizado") ? "block" : "none";
     var cpc = document.getElementById("clientPerfilCustom"); if (cpc) cpc.value = c.perfilCustom||"";
     document.getElementById("pageClientTitle").textContent = "Editar Cliente";
+    if (typeof _limparDestaquesCamposCliente === "function") _limparDestaquesCamposCliente();
+    if (typeof _vincularLimpezaCamposCliente === "function") _vincularLimpezaCamposCliente();
     if (typeof setClientSearchLoading === "function") setClientSearchLoading(false);
     autoClassificarTipologia(false);
     updateClientProductsTable();
@@ -4421,7 +4459,7 @@ async function consultarBrasilApiCnpj(cnpjDigits) {
     var digits = String(cnpjDigits || "").replace(/\D/g, "");
     if (digits.length !== 14) throw new Error("CNPJ deve ter 14 dígitos.");
     var ctrl = (typeof AbortController !== "undefined") ? new AbortController() : null;
-    var timer = ctrl ? setTimeout(function(){ ctrl.abort(); }, 10000) : null;
+    var timer = ctrl ? setTimeout(function(){ ctrl.abort(); }, 25000) : null;
     try {
         var resp = await fetch("https://brasilapi.com.br/api/cnpj/v1/" + digits, {
             signal: ctrl ? ctrl.signal : undefined
@@ -4434,7 +4472,7 @@ async function consultarBrasilApiCnpj(cnpjDigits) {
         var logradouro = [d.descricao_tipo_de_logradouro, d.logradouro].filter(Boolean).join(" ").trim();
         var end = _formatarEnderecoBrasilApi(d);
         return {
-            source: "BrasilAPI",
+            source: "CadastroOficial",
             nome: (d.nome_fantasia || d.razao_social || "").trim(),
             nomeFantasia: (d.nome_fantasia || "").trim(),
             razaoSocial: (d.razao_social || "").trim(),
@@ -4491,25 +4529,73 @@ async function buscarOpenStreetMapNominatim(query, ctx) {
         };
     });
 }
+async function buscarClienteSupabasePrimeiro(query, ctx) {
+    try {
+        if (typeof isSupabaseConfigurado !== "function" || !isSupabaseConfigurado()) return [];
+        if (typeof navigator !== "undefined" && navigator.onLine === false) return [];
+        var sb = (typeof getSupabaseClient === "function") ? getSupabaseClient() : null;
+        if (!sb) return [];
+
+        var qRaw = String(query || "").trim();
+        var digits = qRaw.replace(/\D/g, "");
+        var rows = [];
+        if (digits.length === 14) {
+            var cnpjFmt = formatarCNPJ(digits);
+            var rCnpj = await sb.from("clientes").select("*").or("cnpj.eq." + cnpjFmt + ",cnpj.ilike.%" + digits + "%").limit(10);
+            if (rCnpj && Array.isArray(rCnpj.data)) rows = rCnpj.data;
+        }
+        if (!rows.length && qRaw.length >= 2) {
+            var termo = qRaw.replace(/[%_,()]/g, " ").trim();
+            var rTxt = await sb.from("clientes").select("*").or("name.ilike.%" + termo + "%,razao_social.ilike.%" + termo + "%").limit(12);
+            if (rTxt && Array.isArray(rTxt.data)) rows = rTxt.data;
+        }
+        if (!rows.length) return [];
+
+        return rows.map(function(row) {
+            var p = (row && row.payload && typeof row.payload === "object") ? row.payload : {};
+            var nome = String(p.name || row.name || "").trim();
+            if (!nome) return null;
+            return {
+                source: "Supabase",
+                supabaseValidado: true,
+                nome: nome,
+                bandeira: nome,
+                razaoSocial: String(p.razaoSocial || row.razao_social || "").trim(),
+                cnpj: String(p.cnpj || row.cnpj || "").trim(),
+                endereco: String(p.endereco || row.endereco || "").trim(),
+                cnae: String(p.cnae || row.cnae || "").trim(),
+                checkoutsEstimado: parseInt(p.checkouts || row.checkouts) || null,
+                canalSugerido: String(p.canal || row.canal || "").trim(),
+                perfilSugerido: String(p.perfil || row.perfil || "").trim(),
+                buyer: String(p.buyer || "").trim(),
+                buyerPhone: String(p.buyerPhone || "").trim(),
+                logo: String(p.logo || "").trim(),
+                uf: ""
+            };
+        }).filter(Boolean);
+    } catch(eSbCli) {
+        console.warn("Supabase clientes fallback:", eSbCli && eSbCli.message ? eSbCli.message : eSbCli);
+        return [];
+    }
+}
 async function buscarLojasGeminiFlash(query, ctx) {
     var key = getGoogleGeminiKey();
     if (!key) return [];
     ctx = ctx || _obterUfContextoDispositivo();
     var ufInfo = (ctx.cidade ? ctx.cidade + " / " : "") + (ctx.uf || "Brasil");
-    var prompt = "Você é um assistente sênior de inteligência comercial e geocadastro varejista no Brasil (Estágio 1 - Busca de Unidades).\n" +
-        "O promotor procurou por: \"" + query + "\".\n" +
-        "Localização / UF prioritária do promotor: " + ufInfo + " (Regional: " + (ctx.regional || "Nacional") + ").\n" +
-        "Liste até 6 lojas/filiais reais dessa rede priorizando as unidades localizadas na UF/região informada.\n" +
-        "Retorne APENAS um JSON array válido com objetos neste formato exato:\n" +
-        "[{\"nome\":\"Nome da Loja e Unidade/Bairro\",\"bandeira\":\"Nome da rede\",\"razaoSocial\":\"Razão Social quando conhecida\",\"cnpj\":\"00.000.000/0000-00 ou vazio\",\"endereco\":\"Logradouro, número - Bairro, Município/UF | CEP\",\"municipio\":\"Cidade\",\"uf\":\"UF\",\"canalSugerido\":\"Vizinhanca|Super|Hiper|Atacado\",\"porteSugerido\":\"Pequeno Porte|Médio Porte|Grande Porte\",\"checkoutsEstimado\":10,\"siteDominio\":\"dominio.com.br\"}]\n" +
-        "Se não tiver certeza do CNPJ exato da filial no Estágio 1, deixe \"cnpj\":\"\" (o Estágio 2 fará a extração profunda). Nunca invente dados absurdos.";
+    var prompt = "Assistente de geocadastro varejista no Brasil.\n" +
+        "Busca: \"" + query + "\". Localização prioritária: " + ufInfo + ".\n" +
+        "Liste até 5 unidades reais dessa loja priorizando a UF/região informada.\n" +
+        "Retorne APENAS JSON array:\n" +
+        "[{\"nome\":\"Nome Unidade/Bairro\",\"razaoSocial\":\"\",\"cnpj\":\"00.000.000/0000-00 ou vazio\",\"endereco\":\"Rua, nº - Bairro, Cidade/UF\",\"municipio\":\"\",\"uf\":\"\",\"canalSugerido\":\"Vizinhanca|Super|Hiper|Atacado\",\"checkoutsEstimado\":null,\"siteDominio\":\"\"}]\n" +
+        "Nunca invente CNPJ ou números sem certeza; deixe vazio/null se desconhecer.";
     var txt = await chamarGoogleGeminiFlash(prompt, [], true);
     var arr = parseGeminiJSON(txt);
     if (!Array.isArray(arr) && arr && Array.isArray(arr.unidades)) arr = arr.unidades;
     if (!Array.isArray(arr)) return [];
     return arr.map(function(it) {
         return {
-            source: "Gemini IA",
+            source: "Sugestao",
             nome: String(it.nome || query).trim(),
             bandeira: String(it.bandeira || it.nome || "").trim(),
             razaoSocial: String(it.razaoSocial || "").trim(),
@@ -4526,63 +4612,36 @@ async function buscarLojasGeminiFlash(query, ctx) {
     });
 }
 async function enriquecerDossieLojaCascata(item, ctx) {
-    if (!item) return { item: item, brasilApiOk: false, geminiOk: false };
+    if (!item) return { item: item, cnpjOficialOk: false, buscaIaOk: false };
     ctx = ctx || _obterUfContextoDispositivo();
     var enriched = Object.assign({}, item);
-    var brasilApiOk = false;
-    var geminiOk = false;
+    if (item.source === "Supabase") {
+        return { item: enriched, cnpjOficialOk: String(enriched.cnpj || "").replace(/\D/g, "").length === 14, buscaIaOk: true, supabaseHit: true };
+    }
+    var cnpjOficialOk = false;
+    var buscaIaOk = false;
 
-    // Estágio 2A: Extração profunda de dossiê da unidade selecionada via gemini-3.8-flash
     if (getGoogleGeminiKey()) {
         try {
             var ufCtx = (ctx.cidade ? ctx.cidade + " / " : "") + (ctx.uf || "Brasil");
-            var prompt2 = "Você é um investigador comercial corporativo no Brasil (Estágio 2 - Extração Completa de Dossiê de Loja).\n" +
-                "O promotor selecionou especificamente esta unidade:\n" +
-                "- Loja/Unidade: \"" + (enriched.nome || "") + "\"\n" +
-                (enriched.endereco ? "- Endereço preliminar: \"" + enriched.endereco + "\"\n" : "") +
-                (enriched.cnpj ? "- CNPJ preliminar: \"" + enriched.cnpj + "\"\n" : "") +
-                "- Localização de referência: " + ufCtx + "\n\n" +
-                "Cruze seus conhecimentos públicos dessa rede e dessa filial para retornar o dossiê completo em APENAS um objeto JSON válido:\n" +
-                "{\n" +
-                "  \"cnpj\": \"CNPJ exato de 14 dígitos da filial ou da matriz quando único (apenas dígitos ou formatado 00.000.000/0000-00; deixe vazio se realmente desconhecer)\",\n" +
-                "  \"razaoSocial\": \"Razão Social oficial completa\",\n" +
-                "  \"nomeFantasia\": \"Nome Fantasia / Bandeira da unidade\",\n" +
-                "  \"logradouro\": \"Rua/Av/Rodovia\",\n" +
-                "  \"numero\": \"Número ou S/N\",\n" +
-                "  \"bairro\": \"Bairro\",\n" +
-                "  \"municipio\": \"Município\",\n" +
-                "  \"uf\": \"UF (2 letras)\",\n" +
-                "  \"cep\": \"CEP 00000-000\",\n" +
-                "  \"enderecoCompleto\": \"Logradouro, Número - Bairro, Município/UF | CEP\",\n" +
-                "  \"cnae\": \"Código e descrição CNAE\",\n" +
-                "  \"canalSugerido\": \"Vizinhanca|Super|Hiper|Atacado\",\n" +
-                "  \"perfilSugerido\": \"Vizinhanca|Mercado|Supermercado|Hipermercado|Atacarejo|Conveniencia\",\n" +
-                "  \"porteSugerido\": \"Microempresa (ME)|Pequeno Porte (EPP)|Médio Porte|Grande Porte\",\n" +
-                "  \"checkoutsEstimado\": 12,\n" +
-                "  \"siteDominio\": \"domínio oficial da rede (ex: megaboxatacado.com.br, prezunic.com.br)\",\n" +
-                "  \"coresBandeira\": [\"#HexPrimaria\", \"#HexSecundaria\"]\n" +
-                "}";
+            var prompt2 = "Extração rápida de cadastro comercial no Brasil para a loja:\n" +
+                "- Nome: \"" + (enriched.nome || "") + "\"\n" +
+                (enriched.endereco ? "- Endereço: \"" + enriched.endereco + "\"\n" : "") +
+                (enriched.cnpj ? "- CNPJ: \"" + enriched.cnpj + "\"\n" : "") +
+                "- UF referência: " + ufCtx + "\n\n" +
+                "Retorne APENAS JSON enxuto com os dados reais confirmáveis (deixe vazio/null se não tiver certeza, nunca invente):\n" +
+                "{\"cnpj\":\"\",\"razaoSocial\":\"\",\"nomeFantasia\":\"\",\"enderecoCompleto\":\"\",\"cnae\":\"\",\"canalSugerido\":\"Vizinhanca|Super|Hiper|Atacado\",\"perfilSugerido\":\"Vizinhanca|Mercado|Supermercado|Hipermercado|Atacarejo|Conveniencia\",\"porteSugerido\":\"\",\"checkoutsEstimado\":null,\"siteDominio\":\"\"}";
             var raw2 = await chamarGoogleGeminiFlash(prompt2, [], true);
             var d = parseGeminiJSON(raw2);
             if (Array.isArray(d)) d = d[0] || {};
             if (d && typeof d === "object") {
-                geminiOk = true;
+                buscaIaOk = true;
                 var cnpjDig2 = String(d.cnpj || "").replace(/\D/g, "");
                 if (cnpjDig2.length === 14) enriched.cnpj = formatarCNPJ(cnpjDig2);
                 if (d.razaoSocial) enriched.razaoSocial = String(d.razaoSocial).trim();
                 if (d.nomeFantasia) enriched.nome = String(d.nomeFantasia).trim();
-                var endMontado = "";
-                if (d.logradouro || d.municipio) {
-                    var p1 = [d.logradouro, d.numero].filter(Boolean).join(", ");
-                    var p2 = [d.bairro, (d.municipio && d.uf) ? (d.municipio + "/" + d.uf) : (d.municipio || d.uf || "")].filter(Boolean).join(" - ");
-                    var p3 = d.cep ? ("CEP " + String(d.cep).replace(/\D/g, "").replace(/^(\d{5})(\d{3})$/, "$1-$2")) : "";
-                    endMontado = [p1, p2, p3].filter(Boolean).join(" | ");
-                }
-                if (d.enderecoCompleto && d.enderecoCompleto.length > (endMontado || "").length) {
-                    endMontado = String(d.enderecoCompleto).trim();
-                }
-                if (endMontado && (!enriched.endereco || endMontado.length >= enriched.endereco.length - 5)) {
-                    enriched.endereco = endMontado;
+                if (d.enderecoCompleto && String(d.enderecoCompleto).trim().length >= (enriched.endereco || "").length - 5) {
+                    enriched.endereco = String(d.enderecoCompleto).trim();
                 }
                 if (d.cnae) enriched.cnae = String(d.cnae).trim();
                 if (d.canalSugerido) enriched.canalSugerido = String(d.canalSugerido).trim();
@@ -4590,23 +4649,21 @@ async function enriquecerDossieLojaCascata(item, ctx) {
                 if (d.porteSugerido) enriched.porte = String(d.porteSugerido).trim();
                 if (parseInt(d.checkoutsEstimado) > 0) enriched.checkoutsEstimado = parseInt(d.checkoutsEstimado);
                 if (d.siteDominio) enriched.siteDominio = String(d.siteDominio).trim();
-                if (Array.isArray(d.coresBandeira) && d.coresBandeira.length) enriched.coresBandeira = d.coresBandeira;
             }
         } catch(eGem2) {
-            console.warn("Estágio 2 Gemini loja falhou (mantendo Estágio 1):", eGem2 && eGem2.message ? eGem2.message : eGem2);
+            console.warn("Enriquecimento loja:", eGem2 && eGem2.message ? eGem2.message : eGem2);
         }
     }
 
-    // Estágio 2B: Validação oficial na Receita Federal / BrasilAPI sempre que CNPJ de 14 dígitos for identificado
     var cnpjDigFinal = String(enriched.cnpj || "").replace(/\D/g, "");
     if (cnpjDigFinal.length === 14) {
         try {
             var bRes = await consultarBrasilApiCnpj(cnpjDigFinal);
             if (bRes && bRes.razaoSocial) {
-                brasilApiOk = true;
+                cnpjOficialOk = true;
                 enriched.cnpj = bRes.cnpj;
                 enriched.razaoSocial = bRes.razaoSocial;
-                if (bRes.nomeFantasia && (!enriched.nome || enriched.source === "BrasilAPI")) {
+                if (bRes.nomeFantasia && (!enriched.nome || enriched.source === "CadastroOficial" || enriched.source === "BrasilAPI")) {
                     enriched.nome = bRes.nomeFantasia;
                 }
                 if (bRes.endereco) enriched.endereco = bRes.endereco;
@@ -4615,11 +4672,11 @@ async function enriquecerDossieLojaCascata(item, ctx) {
                 if (bRes.telefone) enriched.telefone = bRes.telefone;
             }
         } catch(eBr) {
-            console.warn("Estágio 2 BrasilAPI fallback:", eBr && eBr.message ? eBr.message : eBr);
+            console.warn("Validação CNPJ fallback:", eBr && eBr.message ? eBr.message : eBr);
         }
     }
 
-    return { item: enriched, brasilApiOk: brasilApiOk, geminiOk: geminiOk };
+    return { item: enriched, cnpjOficialOk: cnpjOficialOk, buscaIaOk: buscaIaOk };
 }
 var _companyLookupBusy = false;
 var _clientLookupBusy = false;
@@ -4643,6 +4700,90 @@ function setClientSearchLoading(active) {
         btnSave.classList.toggle("is-save-locked", !!active);
     }
 }
+function _limparDestaquesCamposCliente() {
+    ["clientName","clientCNPJ","clientEndereco","clientCheckouts","clientCanal","clientPerfil"].forEach(function(id) {
+        var el = document.getElementById(id);
+        if (el) el.classList.remove("field-missing-warn");
+    });
+}
+function _vincularLimpezaCamposCliente() {
+    ["clientName","clientCNPJ","clientEndereco","clientCheckouts","clientCanal","clientPerfil"].forEach(function(id) {
+        var el = document.getElementById(id);
+        if (!el || el._warnBound) return;
+        el._warnBound = true;
+        var clearFn = function() {
+            var val = String(el.value || "").trim();
+            if (id === "clientCNPJ") {
+                if (val.replace(/\D/g, "").length === 14) el.classList.remove("field-missing-warn");
+            } else if (id === "clientCheckouts") {
+                if ((parseInt(val) || 0) > 0) el.classList.remove("field-missing-warn");
+            } else if (val) {
+                el.classList.remove("field-missing-warn");
+            }
+        };
+        el.addEventListener("input", clearFn);
+        el.addEventListener("change", clearFn);
+    });
+}
+function _avaliarEExibirCompletudeCliente(opts) {
+    opts = opts || {};
+    _limparDestaquesCamposCliente();
+    _vincularLimpezaCamposCliente();
+    var nomeVal = String((document.getElementById("clientName") || {}).value || "").trim();
+    var cnpjEl = document.getElementById("clientCNPJ");
+    var endEl = document.getElementById("clientEndereco");
+    var ckEl = document.getElementById("clientCheckouts");
+    var canalEl = document.getElementById("clientCanal");
+    var perfilEl = document.getElementById("clientPerfil");
+
+    var cnpjDig = String((cnpjEl && cnpjEl.value) || "").replace(/\D/g, "");
+    var cnpjOk = cnpjDig.length === 14;
+    var endOk = String((endEl && endEl.value) || "").trim().length >= 5;
+    var ckOk = (parseInt((ckEl && ckEl.value) || "") || 0) > 0;
+    var canalOk = !!String((canalEl && canalEl.value) || "").trim();
+    var perfilOk = !!String((perfilEl && perfilEl.value) || "").trim();
+
+    if (!cnpjOk && cnpjEl) cnpjEl.classList.add("field-missing-warn");
+    if (!endOk && endEl) endEl.classList.add("field-missing-warn");
+    if (!ckOk && ckEl) ckEl.classList.add("field-missing-warn");
+    if (!canalOk && canalEl) canalEl.classList.add("field-missing-warn");
+    if (!perfilOk && perfilEl) perfilEl.classList.add("field-missing-warn");
+
+    var encontrados = [];
+    if (endOk) encontrados.push("Endereço");
+    if (cnpjOk) encontrados.push("CNPJ");
+    if (ckOk) encontrados.push("nº de checkouts");
+
+    var faltando = [];
+    if (!cnpjOk) faltando.push("CNPJ");
+    if (!ckOk) faltando.push("nº de checkouts");
+    if (!endOk) faltando.push("endereço");
+    if (!perfilOk) faltando.push("perfil da loja");
+
+    var st = document.getElementById("smartStoreStatus");
+    if (!st) return { complete: faltando.length === 0, faltando: faltando };
+    st.style.display = "block";
+    st.classList.remove("smart-alert-warn", "smart-alert-ok", "smart-alert-err");
+
+    if (cnpjOk && endOk && ckOk && perfilOk) {
+        st.classList.add("smart-alert-ok");
+        st.style.color = "";
+        st.textContent = "✅ Dados completos carregados: " + (nomeVal || "Loja") + " | CNPJ " + formatarCNPJ(cnpjDig) + ".";
+        return { complete: true, faltando: [] };
+    }
+
+    var prefixo = encontrados.length
+        ? (encontrados.join(" e ") + " localizado" + (encontrados.length > 1 ? "s" : "") + ". ")
+        : "Dados básicos preenchidos. ";
+    var listaFaltando = faltando.length > 1
+        ? (faltando.slice(0, -1).join(", ") + " e " + faltando[faltando.length - 1])
+        : (faltando[0] || "dados complementares");
+
+    st.classList.add("smart-alert-warn");
+    st.style.color = "";
+    st.textContent = "⚠️ " + prefixo + listaFaltando + " não encontrado(s) automaticamente — preencha ou consulte o CNPJ antes de salvar.";
+    return { complete: false, faltando: faltando };
+}
 async function aplicarDadosLojaNoFormulario(item, skipLogo) {
     if (!item) return null;
     _ultimoPorteLojaSugerido = item.porte || item.porteSugerido || "";
@@ -4651,11 +4792,19 @@ async function aplicarDadosLojaNoFormulario(item, skipLogo) {
     if (document.getElementById("clientRazaoSocial")) document.getElementById("clientRazaoSocial").value = item.razaoSocial || "";
     if (document.getElementById("clientEndereco")) document.getElementById("clientEndereco").value = item.endereco || "";
     if (document.getElementById("clientCNAE")) document.getElementById("clientCNAE").value = item.cnae || "";
-    if (item.telefone && document.getElementById("clientBuyerPhone") && !document.getElementById("clientBuyerPhone").value) {
-        document.getElementById("clientBuyerPhone").value = item.telefone;
+    if ((item.buyer || item.contato) && document.getElementById("clientBuyer") && !document.getElementById("clientBuyer").value) {
+        document.getElementById("clientBuyer").value = item.buyer || item.contato;
+    }
+    var tel = item.buyerPhone || item.telefone || "";
+    if (tel && document.getElementById("clientBuyerPhone") && !document.getElementById("clientBuyerPhone").value) {
+        document.getElementById("clientBuyerPhone").value = tel;
     }
     if (item.checkoutsEstimado && !document.getElementById("clientCheckouts").value) {
         document.getElementById("clientCheckouts").value = item.checkoutsEstimado;
+    }
+    if (item.logo && typeof renderClientLogoStudio === "function") {
+        pendingClientLogo = item.logo;
+        renderClientLogoStudio(item.logo, "Base compartilhada");
     }
     var sug = autoClassificarTipologia(true);
     if (!sug && item.canalSugerido && document.getElementById("clientCanal")) {
@@ -4669,13 +4818,13 @@ async function aplicarDadosLojaNoFormulario(item, skipLogo) {
             onClientPerfilChange();
         }
     }
-    if (!skipLogo) {
+    if (!skipLogo && !item.logo) {
         return await buscarLogoInteligenteAuto(item.nome || document.getElementById("clientName").value, {
             siteDominio: item.siteDominio || "",
             coresBandeira: item.coresBandeira || null
         });
     }
-    return null;
+    return item.logo || null;
 }
 function renderSmartStoreResults() {
     var box = document.getElementById("smartStoreResults");
@@ -4686,13 +4835,13 @@ function renderSmartStoreResults() {
         return;
     }
     box.innerHTML = _smartStoreResults.map(function(r, idx) {
-        var bCls = r.source === "Gemini IA" ? " gemini" : (r.source === "BrasilAPI" ? " brasilapi" : "");
-        var badgeLabel = r.source === "BrasilAPI" ? "Cadastro Oficial" : (r.source === "OpenStreetMap" ? "Mapa" : "Sugestão");
+        var bCls = r.source === "Supabase" ? " brasilapi" : (r.source === "Sugestao" ? " gemini" : (r.source === "CadastroOficial" || r.source === "BrasilAPI" ? " brasilapi" : ""));
+        var badgeLabel = r.source === "Supabase" ? "Base Compartilhada" : (r.source === "CadastroOficial" || r.source === "BrasilAPI" ? "Cadastro Oficial" : (r.source === "OpenStreetMap" ? "Mapa" : "Localizado"));
         return "<div class='smart-res-item' onclick='selecionarResultadoLoja(" + idx + ")'>" +
             "<div class='smart-res-top'><span class='smart-res-nome'>" + escHtml(r.nome) + (r.uf ? " (" + escHtml(r.uf) + ")" : "") + "</span>" +
             "<span class='smart-res-badge" + bCls + "'>" + escHtml(badgeLabel) + "</span></div>" +
             (r.endereco ? "<div class='smart-res-end'>" + escHtml(r.endereco) + "</div>" : "") +
-            "<div class='smart-res-meta'>" + escHtml([r.cnpj ? "CNPJ: " + r.cnpj : "Toque para preencher os dados completos", r.razaoSocial].filter(Boolean).join(" | ")) + "</div>" +
+            "<div class='smart-res-meta'>" + escHtml([r.cnpj ? "CNPJ: " + r.cnpj : "Toque para buscar cadastro", r.razaoSocial].filter(Boolean).join(" | ")) + "</div>" +
             "</div>";
     }).join("");
     box.classList.add("ativo");
@@ -4703,40 +4852,47 @@ async function selecionarResultadoLoja(idx) {
     var box = document.getElementById("smartStoreResults");
     if (box) { box.innerHTML = ""; box.classList.remove("ativo"); }
     setClientSearchLoading(true);
-    // Aplica imediatamente os dados preliminares (sem disparar logo ainda para evitar chamada dupla)
     aplicarDadosLojaNoFormulario(item, true);
     var st = document.getElementById("smartStoreStatus");
     if (st) {
         st.style.display = "block";
+        st.classList.remove("smart-alert-warn", "smart-alert-ok", "smart-alert-err");
         st.style.color = "#1e40af";
         st.textContent = "⏳ Buscando dados completos de \"" + item.nome + "\"...";
+    }
+    if (item.source !== "Supabase") {
+        iniciarTarefaGuardiao({
+            id: "busca_cliente_detalhe",
+            titulo: "Buscando dados da loja...",
+            sub: "Localizando CNPJ e cadastro completo",
+            canBackground: true,
+            totalSteps: 2,
+            pageTarget: "pageClient"
+        });
     }
     try {
         var ctx = _obterUfContextoDispositivo();
         var res = await enriquecerDossieLojaCascata(item, ctx);
-        await aplicarDadosLojaNoFormulario(res.item, false);
-        var cnpjPreenchido = String((document.getElementById("clientCNPJ") || {}).value || "").replace(/\D/g, "").length === 14;
-        if (st) {
-            if (!cnpjPreenchido) {
-                st.style.color = "#b45309";
-                st.textContent = "Dados básicos preenchidos. Confira ou complete o CNPJ antes de salvar.";
-            } else if (res.brasilApiOk || res.geminiOk) {
-                st.style.color = "#16a34a";
-                st.textContent = "✅ Dados completos preenchidos: " + res.item.nome + (res.item.cnpj ? " | CNPJ " + res.item.cnpj : "") + ".";
-            } else {
-                st.style.color = "#0369a1";
-                st.textContent = "Unidade selecionada: " + res.item.nome + ". Confira os campos e salve.";
-            }
+        await aplicarDadosLojaNoFormulario(res.item, true);
+        var aval = _avaliarEExibirCompletudeCliente();
+        if (item.source !== "Supabase") {
+            concluirTarefaGuardiao(
+                aval.complete ? "✅ Cadastro completo!" : "⚠️ Dados parciais preenchidos",
+                aval.complete ? (res.item.nome + " pronta para salvar.") : "Verifique os campos destacados em amarelo.",
+                { keepOverlayMs: 1400, onReturn: function(){ showPage("pageClient"); } }
+            );
+        }
+        // Carregar logotipo em segundo plano sem travar o formulário nem o botão Salvar
+        if (!res.item.logo && typeof buscarLogoInteligenteAuto === "function") {
+            buscarLogoInteligenteAuto(res.item.nome || document.getElementById("clientName").value, {
+                siteDominio: res.item.siteDominio || "",
+                coresBandeira: res.item.coresBandeira || null
+            }).catch(function(){});
         }
     } catch(err2) {
-        await aplicarDadosLojaNoFormulario(item, false);
-        var cnpjFallbackOk = String((document.getElementById("clientCNPJ") || {}).value || "").replace(/\D/g, "").length === 14;
-        if (st) {
-            st.style.color = "#b45309";
-            st.textContent = cnpjFallbackOk
-                ? ("Unidade selecionada (" + item.nome + "). Confira os campos antes de salvar.")
-                : "Dados básicos preenchidos. Confira ou complete o CNPJ antes de salvar.";
-        }
+        await aplicarDadosLojaNoFormulario(item, true);
+        _avaliarEExibirCompletudeCliente();
+        falharTarefaGuardiao("Busca parcial", "Preencha os campos destacados em amarelo antes de salvar.");
     } finally {
         setClientSearchLoading(false);
     }
@@ -4757,32 +4913,73 @@ async function buscarLojaInteligente() {
     if (!q) { alert("Digite o nome da loja + região ou os 14 dígitos do CNPJ."); return; }
     var digits = q.replace(/\D/g, "");
     var ctx = _obterUfContextoDispositivo();
-    if (st) { st.style.display = "block"; st.style.color = "#1e40af"; }
+    if (st) {
+        st.style.display = "block";
+        st.classList.remove("smart-alert-warn", "smart-alert-ok", "smart-alert-err");
+        st.style.color = "#1e40af";
+    }
     if (btn) { btn.disabled = true; btn.textContent = "Buscando..."; }
     setClientSearchLoading(true);
     _smartStoreResults = [];
     renderSmartStoreResults();
+    iniciarTarefaGuardiao({
+        id: "busca_cliente",
+        titulo: "Buscando loja...",
+        sub: "Consultando base compartilhada e registros públicos",
+        canBackground: true,
+        totalSteps: 2,
+        pageTarget: "pageClient"
+    });
 
     try {
+        // 1. SEMPRE CONSULTAR SUPABASE PRIMEIRO (Base Compartilhada instantânea)
+        var sbHits = await buscarClienteSupabasePrimeiro(q, ctx);
+        if (sbHits.length && digits.length === 14) {
+            await aplicarDadosLojaNoFormulario(sbHits[0], true);
+            var avalSb = _avaliarEExibirCompletudeCliente();
+            concluirTarefaGuardiao("✅ Loja encontrada na base!", sbHits[0].nome + " carregada instantaneamente.", {
+                keepOverlayMs: 1200,
+                onReturn: function(){ showPage("pageClient"); }
+            });
+            return;
+        }
+
         if (digits.length === 14 && /^[\d.\-\/\s]+$/.test(q)) {
             if (st) st.textContent = "Consultando CNPJ " + formatarCNPJ(digits) + "...";
+            atualizarProgressoTarefa("Consultando CNPJ...", formatarCNPJ(digits), 1, 2);
             var cnpjRes = await consultarBrasilApiCnpj(digits);
             if (getGoogleGeminiKey()) {
-                if (st) st.textContent = "⏳ Carregando dados completos e logo oficial...";
                 var cascCnpj = await enriquecerDossieLojaCascata(cnpjRes, ctx);
-                await aplicarDadosLojaNoFormulario(cascCnpj.item, false);
-                if (st) { st.style.color = "#16a34a"; st.textContent = "✅ Dados completos carregados: " + cascCnpj.item.nome; }
+                await aplicarDadosLojaNoFormulario(cascCnpj.item, true);
+                var avalCnpj = _avaliarEExibirCompletudeCliente();
+                concluirTarefaGuardiao(avalCnpj.complete ? "✅ Dados completos!" : "⚠️ CNPJ validado (complete o perfil)", cascCnpj.item.nome, { keepOverlayMs: 1400, onReturn: function(){ showPage("pageClient"); } });
+                if (!cascCnpj.item.logo && typeof buscarLogoInteligenteAuto === "function") {
+                    buscarLogoInteligenteAuto(cascCnpj.item.nome, { siteDominio: cascCnpj.item.siteDominio || "" }).catch(function(){});
+                }
             } else {
-                await aplicarDadosLojaNoFormulario(cnpjRes, false);
-                if (st) { st.style.color = "#16a34a"; st.textContent = "✅ Dados cadastrais carregados: " + cnpjRes.nome; }
+                await aplicarDadosLojaNoFormulario(cnpjRes, true);
+                var avalSimp = _avaliarEExibirCompletudeCliente();
+                concluirTarefaGuardiao("📋 Dados do CNPJ carregados", cnpjRes.nome, { keepOverlayMs: 1400, onReturn: function(){ showPage("pageClient"); } });
+                if (typeof buscarLogoInteligenteAuto === "function") {
+                    buscarLogoInteligenteAuto(cnpjRes.nome, {}).catch(function(){});
+                }
             }
+        } else if (sbHits.length) {
+            _smartStoreResults = sbHits;
+            renderSmartStoreResults();
+            if (st) {
+                st.classList.add("smart-alert-ok");
+                st.textContent = "⚡ " + sbHits.length + " loja(s) encontrada(s) na base compartilhada. Toque para preencher instantaneamente.";
+            }
+            concluirTarefaGuardiao("⚡ Lojas encontradas!", sbHits.length + " registro(s) na base compartilhada.", { keepOverlayMs: 1000, onReturn: function(){ showPage("pageClient"); } });
         } else {
-            var temGemini = !!getGoogleGeminiKey();
+            var temBuscaExterna = !!getGoogleGeminiKey();
             var ufTag = (ctx && ctx.uf && ctx.uf !== "Brasil") ? (" (" + ctx.uf + ")") : "";
             if (st) st.textContent = "Buscando unidades próximas" + ufTag + "...";
+            atualizarProgressoTarefa("Buscando unidades próximas" + ufTag + "...", "Consultando mapas e cadastro comercial", 1, 2);
             var results = await Promise.allSettled([
                 buscarOpenStreetMapNominatim(q, ctx),
-                temGemini ? buscarLojasGeminiFlash(q, ctx) : Promise.resolve([])
+                temBuscaExterna ? buscarLojasGeminiFlash(q, ctx) : Promise.resolve([])
             ]);
             var merged = [];
             var seen = {};
@@ -4794,7 +4991,6 @@ async function buscarLojaInteligente() {
                     });
                 }
             });
-            // Priorizar unidades da UF/Cidade atual do promotor no topo da lista
             var ufAlvo = (ctx && ctx.uf && ctx.uf !== "Brasil") ? ctx.uf.toUpperCase() : "";
             var cidAlvo = (ctx && ctx.cidade) ? normTextAccent(ctx.cidade).toLowerCase() : "";
             merged.sort(function(a, b) {
@@ -4804,7 +5000,7 @@ async function buscarLojaInteligente() {
                     var ufIt = String(it.uf || "").toUpperCase();
                     if (ufAlvo && (ufIt === ufAlvo || endNorm.indexOf(ufAlvo.toLowerCase()) >= 0)) s += 4;
                     if (cidAlvo && endNorm.indexOf(cidAlvo) >= 0) s += 3;
-                    if (it.source === "Gemini IA") s += 1;
+                    if (it.source === "Sugestao") s += 1;
                     return s;
                 }
                 return scoreItem(b) - scoreItem(a);
@@ -4813,21 +5009,25 @@ async function buscarLojaInteligente() {
             renderSmartStoreResults();
             if (merged.length) {
                 if (st) {
-                    st.style.color = "#16a34a";
-                    st.textContent = merged.length + " unidade(s) encontrada(s)" + ufTag + ". Toque em uma unidade para preencher os dados completos.";
+                    st.style.color = "#1e40af";
+                    st.textContent = merged.length + " unidade(s) encontrada(s)" + ufTag + ". Toque em uma unidade para completar e validar os dados.";
                 }
+                concluirTarefaGuardiao("✅ " + merged.length + " unidade(s) encontrada(s)", "Toque em uma unidade da lista para preencher.", { keepOverlayMs: 1100, onReturn: function(){ showPage("pageClient"); } });
             } else {
                 if (st) {
-                    st.style.color = "#b45309";
+                    st.classList.add("smart-alert-warn");
                     st.textContent = "Nenhuma loja encontrada automaticamente para \"" + q + "\". Você pode preencher os campos manualmente.";
                 }
+                falharTarefaGuardiao("Nenhuma unidade encontrada", "Preencha os campos manualmente se desejar.");
             }
         }
     } catch(err) {
+        var msgErrCli = _traduzirErroAmigavelIA(err) + " Preencha os campos manualmente se desejar.";
         if (st) {
-            st.style.color = "#b91c1c";
-            st.textContent = _traduzirErroAmigavelIA(err) + " Preencha os campos manualmente se desejar.";
+            st.classList.add("smart-alert-err");
+            st.textContent = msgErrCli;
         }
+        falharTarefaGuardiao("Erro na busca", msgErrCli);
     } finally {
         setClientSearchLoading(false);
         if (btn) { btn.disabled = false; btn.textContent = "Buscar"; }
@@ -4952,7 +5152,7 @@ async function processarEspelhoPedidoGemini(input) {
     if (!file) return;
     var st = document.getElementById("pluEspelhoStatus");
     if (!getGoogleGeminiKey()) {
-        alert("Configure sua chave API do Google Gemini em Configurações para ler espelhos de pedido automaticamente.");
+        alert("Configure sua chave de acesso nas Configurações para ler espelhos de pedido automaticamente.");
         input.value = "";
         return;
     }
@@ -4962,8 +5162,17 @@ async function processarEspelhoPedidoGemini(input) {
         return;
     }
     if (st) { st.style.display = "block"; st.style.color = "#6d28d9"; st.textContent = "⏳ Lendo espelho de pedido..."; }
+    iniciarTarefaGuardiao({
+        id: "espelho_plu",
+        titulo: "Lendo espelho de pedido...",
+        sub: file.name,
+        canBackground: true,
+        totalSteps: 2,
+        pageTarget: "pageClient"
+    });
     try {
         var part = await prepararArquivoParaGemini(file, 1400);
+        atualizarProgressoTarefa("Cruzando códigos PLU...", tempClientProducts.length + " produto(s) no cliente", 1, 2);
         var catResumo = tempClientProducts.slice(0, 80).map(function(p){ return (p.code || "-") + " | " + p.name + " " + p.gramatura; }).join("\n");
         var prompt = "Analise este espelho/pedido interno da loja (imagem ou PDF) e extraia TODOS os produtos listados com o código interno/PLU usado pela loja.\n" +
             "Retorne APENAS um JSON array válido no formato: [{\"codigo_loja\":\"12345\",\"descricao\":\"Doritos Nacho 120g\",\"ean\":\"789...\"}].\n" +
@@ -4979,8 +5188,14 @@ async function processarEspelhoPedidoGemini(input) {
             st.textContent = "Espelho processado: " + res.matched + " SKU(s) vinculados de " + itens.length + " linha(s) lida(s)." +
                 (res.unmatched.length ? " Não vinculados: " + res.unmatched.slice(0, 4).join(", ") : "");
         }
+        concluirTarefaGuardiao("✅ Espelho processado!", res.matched + " SKU(s) vinculados.", {
+            keepOverlayMs: 1200,
+            onReturn: function(){ showPage("pageClient"); }
+        });
     } catch(err) {
-        if (st) { st.style.color = "#dc2626"; st.textContent = "Erro ao ler espelho: " + (err && err.message ? err.message : err); }
+        var msgErr = _traduzirErroAmigavelIA(err);
+        falharTarefaGuardiao("Erro ao ler espelho", msgErr);
+        if (st) { st.style.color = "#dc2626"; st.textContent = "Erro ao ler espelho: " + msgErr; }
     } finally {
         input.value = "";
     }
@@ -5222,6 +5437,14 @@ async function importarPortfolioInteligente(input) {
     var geminiKey = getGoogleGeminiKey();
 
     if (stEl) { stEl.style.display = "block"; stEl.style.color = "#4c1d95"; stEl.textContent = "⏳ Analisando arquivo " + file.name + "..."; }
+    iniciarTarefaGuardiao({
+        id: "import_portfolio",
+        titulo: "Analisando portfólio...",
+        sub: file.name,
+        canBackground: true,
+        totalSteps: isPdf ? 2 : 1,
+        pageTarget: "pageCompany"
+    });
 
     try {
         var extraidos = [];
@@ -5243,6 +5466,7 @@ async function importarPortfolioInteligente(input) {
             }
             if (geminiKey) {
                 if (stEl) stEl.textContent = "✨ Extraindo e padronizando planilha...";
+                atualizarProgressoTarefa("Padronizando planilha...", file.name, 0, 1);
                 var promptTab = "Analise esta tabela de portfólio comercial e extraia TODOS os produtos.\n" +
                     "Para cada produto retorne: nome, gramatura (ex: '120G', '183G', '1KG'), codigo (SKU ou EAN se houver), categoria, status ('Ativo', 'Lancamento' ou 'Descontinuado') e quantidade (qtd por caixa, padrão 1).\n" +
                     "Retorne APENAS um JSON válido: {\"produtos\":[{\"nome\":\"...\",\"gramatura\":\"...\",\"codigo\":\"...\",\"categoria\":\"...\",\"status\":\"Ativo\",\"quantidade\":1}]}\n\n" +
@@ -5254,11 +5478,14 @@ async function importarPortfolioInteligente(input) {
                 extraidos = parseTabelaLocalFallback(tabelaTexto);
             }
         } else if (isPdf) {
-            if (!geminiKey) throw new Error("Configure sua chave nas Configurações para extrair tabelas e embalagens de PDFs.");
-            if (stEl) stEl.textContent = "📄 Renderizando páginas do PDF...";
+            if (!geminiKey) throw new Error("Configure sua chave de acesso nas Configurações para extrair tabelas e embalagens de PDFs.");
+            if (stEl) stEl.textContent = "📄 Preparando páginas do PDF...";
+            atualizarProgressoTarefa("Preparando páginas do PDF...", file.name, 0, 2);
             var paginas = await pdfParaImagens(file, 15);
             for (var pi = 0; pi < paginas.length; pi++) {
-                if (stEl) stEl.textContent = "✨ Lendo página " + (pi + 1) + " de " + paginas.length + "...";
+                var msgPg = "Lendo página " + (pi + 1) + " de " + paginas.length + "...";
+                if (stEl) stEl.textContent = "✨ " + msgPg;
+                atualizarProgressoTarefa(msgPg, file.name, pi, paginas.length);
                 var promptPdf = "Analise esta página de catálogo / Guia de Execução e extraia todos os SKUs de produtos listados.\n" +
                     "Para cada produto identifique: nome, gramatura (ex: '120G'), codigo (SKU ou EAN se visível), categoria, status ('Ativo', 'Lancamento' ou 'Descontinuado'), quantidade (por caixa, padrão 1), e se a embalagem aparecer desenhada/fotografada na página informe box_embalagem: [ymin, xmin, ymax, xmax] normalizado de 0 a 1000 (ou null se não houver imagem da embalagem).\n" +
                     "Retorne APENAS JSON: {\"produtos\":[{\"nome\":\"...\",\"gramatura\":\"...\",\"codigo\":\"...\",\"categoria\":\"...\",\"status\":\"Ativo\",\"quantidade\":1,\"box_embalagem\":[100,200,300,400]}]}";
@@ -5275,8 +5502,9 @@ async function importarPortfolioInteligente(input) {
                 }
             }
         } else {
-            if (!geminiKey) throw new Error("Configure sua chave nas Configurações para ler imagens/prints de catálogo.");
+            if (!geminiKey) throw new Error("Configure sua chave de acesso nas Configurações para ler imagens/prints de catálogo.");
             if (stEl) stEl.textContent = "✨ Extraindo tabela da imagem...";
+            atualizarProgressoTarefa("Lendo imagem de catálogo...", file.name, 0, 1);
             var imgPart = await prepararArquivoParaGemini(file, 1500);
             var imgSrc = "data:" + imgPart.mimeType + ";base64," + imgPart.data;
             var promptImg = "Analise esta imagem/print de catálogo ou tabela de portfólio e extraia todos os produtos.\n" +
@@ -5333,8 +5561,14 @@ async function importarPortfolioInteligente(input) {
                 (gramUpdates.length ? " | <b>" + gramUpdates.length + "</b> gramatura(s) ajustada(s)" : "") +
                 (thumbsCapturadas ? " | <b>" + thumbsCapturadas + "</b> miniatura(s) extraída(s)" : "") + ".";
         }
+        concluirTarefaGuardiao("✅ Portfólio importado!", addCount + " novo(s), " + updCount + " atualizado(s).", {
+            keepOverlayMs: 1200,
+            onReturn: function(){ showPage("pageCompany"); }
+        });
     } catch(err) {
-        if (stEl) { stEl.style.color = "#dc2626"; stEl.textContent = "Erro na importação: " + (err && err.message ? err.message : err); }
+        var msgErr = _traduzirErroAmigavelIA(err);
+        falharTarefaGuardiao("Erro na importação", msgErr);
+        if (stEl) { stEl.style.color = "#dc2626"; stEl.textContent = "Erro na importação: " + msgErr; }
     } finally {
         input.value = "";
     }
@@ -7278,7 +7512,7 @@ var _graficoAuditoriaInstance = null;
 async function gerarGraficoAuditoria() {
     if (!currentClient) return;
     var apiKey = getGoogleGeminiKey() || getApiKey() || "";
-    if (!apiKey) { alert("Configure a chave Google Gemini em Configuracoes para usar esta funcionalidade."); return; }
+    if (!apiKey) { alert("Configure a chave de acesso nas Configurações para usar esta funcionalidade."); return; }
 
     var statusEl = document.getElementById("graficoAuditoriaStatus");
     var canvasEl = document.getElementById("graficoAuditoriaCanvas");
@@ -7468,7 +7702,7 @@ var _graficoEvolutivoInstance = null;
 async function gerarGraficoEvolutivo() {
     if (!currentClient) return;
     var apiKey = getGoogleGeminiKey() || getApiKey() || "";
-    if (!apiKey) { alert("Configure a chave Google Gemini em Configuracoes para usar esta funcionalidade."); return; }
+    if (!apiKey) { alert("Configure a chave de acesso nas Configurações para usar esta funcionalidade."); return; }
 
     var statusEl  = document.getElementById("graficoEvolutivoStatus");
     var canvasEl  = document.getElementById("graficoEvolutivoCanvas");
@@ -9854,7 +10088,7 @@ function renderGridFotosImportIA() {
 async function processarImportacaoIA() {
     var apiKey = getGoogleGeminiKey() || getApiKey() || "";
     if (!apiKey) {
-        alert("Configure a chave Google Gemini em Configurações antes de usar esta funcionalidade.");
+        alert("Configure sua chave de acesso nas Configurações antes de usar esta funcionalidade.");
         return;
     }
     var texto = document.getElementById("textoImportacaoIA").value.trim();
@@ -9868,7 +10102,7 @@ async function processarImportacaoIA() {
     document.getElementById("btnProcessarIA").style.display = "none";
     document.getElementById("statusImportacaoIA").style.display = "block";
     document.getElementById("resultadoImportacaoIA").style.display = "none";
-    guardiaoMostrar("processando", "Analisando produtos...", "Aguarde enquanto a IA processa as imagens");
+    iniciarTarefaGuardiao({ id: "import_ia", titulo: "Analisando produtos...", sub: "Extraindo informações da lista", canBackground: !!temFoto, totalSteps: temFoto ? _fotosImportacaoIA.length : 1, pageTarget: window._currentPage || "pageCompany" });
 
     var prompt = "Você é um assistente de cadastro de produtos para sistema de gestão comercial. " +
         "Analise o texto ou imagem fornecido e extraia uma lista de produtos. " +
@@ -9881,15 +10115,13 @@ async function processarImportacaoIA() {
     try {
         var todosItens = [];
         if (temFoto) {
-            // Processar cada foto em sequência e acumular resultados
-            document.getElementById("statusImportacaoIA").innerHTML = "&#9881;&#65039; Processando foto 1 de " + _fotosImportacaoIA.length + "...";
+            document.getElementById("statusImportacaoIA").innerHTML = "&#9881;&#65039; Lendo foto 1 de " + _fotosImportacaoIA.length + "...";
             for (var fi = 0; fi < _fotosImportacaoIA.length; fi++) {
-                document.getElementById("statusImportacaoIA").innerHTML = "&#9881;&#65039; Processando foto " + (fi+1) + " de " + _fotosImportacaoIA.length + "...";
-                guardiaoMsg("Foto " + (fi+1) + " de " + _fotosImportacaoIA.length, "Extraindo produtos da imagem...");
+                document.getElementById("statusImportacaoIA").innerHTML = "&#9881;&#65039; Lendo foto " + (fi+1) + " de " + _fotosImportacaoIA.length + "...";
+                atualizarProgressoTarefa("Lendo foto " + (fi+1) + " de " + _fotosImportacaoIA.length + "...", "Extraindo produtos da imagem", fi, _fotosImportacaoIA.length);
                 var comp = await comprimirImagemParaIA(_fotosImportacaoIA[fi].data, _fotosImportacaoIA[fi].mime);
                 var promptFoto = prompt + (fi > 0 ? " Esta e a foto " + (fi+1) + " de " + _fotosImportacaoIA.length + " do mesmo catalogo. Extraia apenas os produtos desta pagina." : "");
-                if (fi > 0) await new Promise(function(r){ setTimeout(r, 6000); });
-                guardiaoMsg("Foto " + (fi+1) + " de " + _fotosImportacaoIA.length, "Aguarde...");
+                if (fi > 0) await new Promise(function(r){ setTimeout(r, 2500); });
                 var res = await chamarGeminiIA(promptFoto, comp.data, comp.mime);
                 try {
                     var itens = parseGeminiJSON(res);
@@ -9902,18 +10134,20 @@ async function processarImportacaoIA() {
             var parsedText = parseGeminiJSON(resultado);
             _itensRevisaoIA = Array.isArray(parsedText) ? parsedText : [];
         }
-        guardiaoMostrar("confirmacao", "Produtos detectados!", _itensRevisaoIA.length + " produto(s) encontrado(s). Revise antes de confirmar.");
-        guardiaoEsconder(2000);
         renderizarRevisaoIA();
+        concluirTarefaGuardiao("✅ Produtos detectados!", _itensRevisaoIA.length + " produto(s) encontrado(s). Toque para revisar.", {
+            keepOverlayMs: 1800,
+            onReturn: function(){ var m = document.getElementById("modalImportacaoIA"); if (m) m.style.display = "flex"; }
+        });
     } catch(e) {
         document.getElementById("statusImportacaoIA").style.display = "none";
         document.getElementById("btnProcessarIA").style.display = "block";
-        guardiaoMostrar("erro", "Erro ao processar", e.message);
-        guardiaoEsconder(3000);
+        var msgErrImp = (typeof _traduzirErroAmigavelIA === "function") ? _traduzirErroAmigavelIA(e) : (e.message || "Falha ao processar.");
+        falharTarefaGuardiao("Erro ao processar lista", msgErrImp);
         if (e.message === "CHAVE_NAO_CONFIGURADA") {
-            alert("Chave API não configurada. Vá em Configurações para adicionar.");
+            alert("Chave de acesso não configurada. Vá em Configurações para adicionar.");
         } else {
-            alert("Erro ao processar: " + e.message);
+            alert("Erro ao processar: " + msgErrImp);
         }
     }
 }
@@ -10039,7 +10273,7 @@ function confirmarImportacaoIA() {
 function abrirGuiaExecucao() {
     var apiKey = getGoogleGeminiKey() || getApiKey() || "";
     if (!apiKey) {
-        alert("Configure a chave Google Gemini em Configurações para usar esta funcionalidade.");
+        alert("Configure sua chave de acesso nas Configurações para usar esta funcionalidade.");
         return;
     }
     if (!currentClient) { alert("Nenhum cliente selecionado."); return; }
@@ -10252,12 +10486,19 @@ function renderGridFotosAudIA() {
 
 async function analisarAuditoriaIA() {
     var apiKey = getGoogleGeminiKey() || getApiKey() || "";
-    if (!apiKey) { alert("Configure a chave Google Gemini em Configuracoes."); return; }
+    if (!apiKey) { alert("Configure sua chave de acesso em Configurações."); return; }
     if (!_fotosAuditoriaIA.length) { alert("Adicione pelo menos uma foto da loja."); return; }
     document.getElementById("btnAnalisarAudIA").style.display = "none";
     document.getElementById("loadingAudIA").style.display = "block";
     document.getElementById("resultadoAudIA").style.display = "none";
-    guardiaoMostrar("processando", "Auditando PDV (Loja Perfeita)...", "Cruzando fotos HD com perfil, contratos, Guia e Pilulas");
+    iniciarTarefaGuardiao({
+        id: "auditoria_pdv",
+        titulo: "Auditando PDV (Loja Perfeita)...",
+        sub: "Cruzando fotos HD com perfil, contratos, Guia e Pílulas",
+        canBackground: true,
+        totalSteps: 2,
+        pageTarget: "pageAuditoriaIA"
+    });
 
     var compId = currentClient.companyId;
     var dl = lsGetJSON("ls23_dadosloja_" + compId + "_" + currentClient.id, {});
@@ -10313,22 +10554,24 @@ async function analisarAuditoriaIA() {
                 parts.push({ mimeType: compAud.mime, data: compAud.data });
             }
         }
+        atualizarProgressoTarefa("Avaliando execução nas fotos...", "Calculando SOD, SOE e ofensores", 1, 2);
         var resultado = getGoogleGeminiKey()
             ? await chamarGoogleGeminiFlash(prompt, parts, true)
             : await chamarGeminiIA(prompt, parts[0].data, parts[0].mimeType);
         var analise = extrairJsonGemini(resultado);
         var sc = Number(analise.score) || 0;
-        var estado_aud = sc >= 80 ? "confirmacao" : sc >= 60 ? "info" : "erro";
-        var msg_aud = sc >= 80 ? "Loja Perfeita! " + sc + "% (Meta 80%+ atingida)" : "Indice Loja Perfeita: " + sc + "% (Meta 80%)";
-        guardiaoMostrar(estado_aud, msg_aud, "Confira ofensores e oportunidades abaixo");
-        guardiaoEsconder(2400);
+        var msg_aud = sc >= 80 ? "✅ Loja Perfeita! " + sc + "% (Meta 80%+)" : "📋 Índice Loja Perfeita: " + sc + "% (Meta 80%)";
         renderResultadoAudIA(analise);
+        concluirTarefaGuardiao(msg_aud, "Toque para revisar ofensores e oportunidades", {
+            keepOverlayMs: 2200,
+            onReturn: function(){ showPage("pageAuditoriaIA"); }
+        });
     } catch(e) {
         document.getElementById("loadingAudIA").style.display = "none";
         document.getElementById("btnAnalisarAudIA").style.display = "block";
-        guardiaoMostrar("erro", "Erro na analise", e.message);
-        guardiaoEsconder(3000);
-        alert("Erro na análise: " + e.message);
+        var msgErrAud = (typeof _traduzirErroAmigavelIA === "function") ? _traduzirErroAmigavelIA(e) : (e.message || "Falha na análise.");
+        falharTarefaGuardiao("Erro na análise", msgErrAud);
+        alert("Erro na análise: " + msgErrAud);
     }
 }
 
@@ -10985,7 +11228,7 @@ async function adicionarPilulaInput(input, origem) {
         var tituloAuto = tituloUsuario || file.name.replace(/\.[^.]+$/, "");
 
         if (getGoogleGeminiKey()) {
-            setStatus("🤖 Interpretando pílula com Gemini (" + getGeminiModel() + ")...", "#a5b4fc");
+            setStatus("⚙️ Interpretando atualização da pílula...", "#a5b4fc");
             var parts = [];
             for (var i = 0; i < Math.min(imgs.length, 3); i++) {
                 var compImg = await comprimirImagemParaIA(imgs[i].data, imgs[i].mime);
@@ -11004,7 +11247,7 @@ async function adicionarPilulaInput(input, origem) {
                 tags = parsed.tags.map(function(t){ return String(t).toLowerCase().trim(); });
             }
         } else {
-            resumoTexto = "Pílula visual anexada (" + file.name + "). Configure a chave Google Gemini para transcrição automática.";
+            resumoTexto = "Pílula visual anexada (" + file.name + "). Configure sua chave de acesso nas Configurações para leitura automática.";
         }
 
         var imgComprimida = await _reduzirImagemGuiaParaStorage(imgs[0].src || ("data:" + imgs[0].mime + ";base64," + imgs[0].data));
@@ -11091,36 +11334,45 @@ function _parseGuiaResposta(texto) {
 async function reclassificarTagsGuia() {
     var paginas = _lerGuiaPages();
     if (!paginas.length) { alert("Nenhuma página processada para reclassificar."); return; }
-    if (!(getGoogleGeminiKey() || getApiKey())) { alert("Configure a chave Google Gemini em Configurações."); return; }
-    if (!confirm("Isso vai atualizar as tags de " + paginas.length + " página(s) já processadas via Gemini, usando a descrição salva. Continuar?")) return;
+    if (!(getGoogleGeminiKey() || getApiKey())) { alert("Configure sua chave de acesso em Configurações."); return; }
+    if (!confirm("Isso vai atualizar as tags de " + paginas.length + " página(s) já processadas, usando a descrição salva. Continuar?")) return;
 
     var btn = document.getElementById("btnReclassificarTags");
-    if (btn) { btn.disabled = true; btn.textContent = "Reclassificando..."; }
-    guardiaoMostrar("processando", "Atualizando tags (Gemini)...", "Página 1 de " + paginas.length);
+    if (btn) { btn.disabled = true; btn.textContent = "Atualizando..."; }
+    iniciarTarefaGuardiao({
+        id: "reclassificar_guia",
+        titulo: "Atualizando tags do Guia...",
+        sub: "Página 1 de " + paginas.length,
+        canBackground: true,
+        totalSteps: paginas.length,
+        pageTarget: "pageCompany"
+    });
 
     try {
         for (var i = 0; i < paginas.length; i++) {
-            guardiaoMsg("Página " + (i+1) + " de " + paginas.length, "Reclassificando com Gemini...");
-            if (i > 0) await new Promise(function(r){ setTimeout(r, 1200); });
+            atualizarProgressoTarefa("Atualizando tags do Guia...", "Lendo página " + (i+1) + " de " + paginas.length + "...", i, paginas.length);
+            if (i > 0) await new Promise(function(r){ setTimeout(r, 900); });
             var promptTags = "Leia esta descricao de uma pagina de um guia de execucao comercial e classifique com as tags MAIS ESPECIFICAS que se aplicarem. " +
                 "Lista de tags permitidas: " + TAGS_GUIA_PERMITIDAS.join(", ") + ". " +
                 "Responda APENAS um JSON valido: {\"tags\":[\"...\"]}.\n\n" +
                 "DESCRICAO DA PAGINA " + paginas[i].pagina + ":\n" + paginas[i].descricao;
             try {
-                var resp = await _comTimeout(chamarClaudeWorker(promptTags, null, null, "classificar"), 30000, "Tempo esgotado ao reclassificar página " + (i+1));
+                var resp = await _comTimeout(chamarClaudeWorker(promptTags, null, null, "classificar"), 45000, "Tempo esgotado na página " + (i+1));
                 var parsed = _parseGuiaResposta(resp);
                 if (parsed.tags && parsed.tags.length) paginas[i].tags = parsed.tags;
             } catch(errPg) {
                 console.warn("Falha ao reclassificar página " + (i+1) + ":", errPg.message);
             }
+            _salvarGuiaPages(paginas);
         }
-        _salvarGuiaPages(paginas);
-        guardiaoMostrar("confirmacao", "Tags atualizadas!", paginas.length + " página(s) reclassificada(s).");
-        guardiaoEsconder(2500);
+        concluirTarefaGuardiao("✅ Tags do Guia atualizadas!", paginas.length + " página(s) atualizada(s). Toque para revisar.", {
+            keepOverlayMs: 2200,
+            onReturn: function(){ showPage("pageCompany"); }
+        });
     } catch(e) {
-        guardiaoMostrar("erro", "Erro ao reclassificar", e.message);
-        guardiaoEsconder(3000);
-        alert("Erro: " + e.message);
+        var msgErrTag = (typeof _traduzirErroAmigavelIA === "function") ? _traduzirErroAmigavelIA(e) : (e.message || "Falha ao atualizar tags.");
+        falharTarefaGuardiao("Erro ao atualizar tags", msgErrTag);
+        alert("Erro: " + msgErrTag);
     } finally {
         if (btn) { btn.disabled = false; btn.textContent = "🏷️ Atualizar tags das páginas já processadas"; }
     }
@@ -11135,7 +11387,7 @@ function _comTimeout(promise, ms, mensagemErro) {
 
 async function processarGuiaFotos() {
     var apiKey = getGoogleGeminiKey() || getApiKey() || "";
-    if (!apiKey) { alert("Configure a chave Google Gemini em Configurações para usar esta funcionalidade."); return; }
+    if (!apiKey) { alert("Configure sua chave de acesso em Configurações para usar esta funcionalidade."); return; }
     if (!_fotosGuia.length) { alert("Adicione pelo menos uma foto ou PDF do guia."); return; }
 
     var btn = document.getElementById("btnProcessarGuia");
@@ -11144,10 +11396,18 @@ async function processarGuiaFotos() {
     if (stEl) stEl.style.display = "block";
 
     var inicio = _guiaProcessadas;
-    var fim = Math.min(inicio + LOTE_GUIA, _fotosGuia.length);
     var totalGeral = _fotosGuia.length;
+    var cidAtiva = _resolverCompanyIdAtiva() || "geral";
+    var progKey = "ls23_guia_bg_progress_" + cidAtiva;
 
-    guardiaoMostrar("processando", "Indexando Guia (" + getGeminiModel() + ")...", "Paginas " + (inicio+1) + " a " + fim + " de " + totalGeral);
+    iniciarTarefaGuardiao({
+        id: "leitura_guia_" + cidAtiva,
+        titulo: "Lendo Guia de Execução...",
+        sub: "Lendo página " + (inicio + 1) + " de " + totalGeral + "...",
+        canBackground: true,
+        totalSteps: totalGeral,
+        pageTarget: window._currentPage || "pageCompany"
+    });
 
     var prompt = "Voce e um especialista em trade marketing analisando uma pagina de um GUIA DE EXECUCAO COMERCIAL (ex: Guia de Execucao OT). " +
         "A imagem pode conter texto, planogramas, sortimento por perfil (Vizinhanca, Super, Hiper, Atacado), regras de SOD, SOE, FEFO, tiras cross ou auditoria. " +
@@ -11160,13 +11420,18 @@ async function processarGuiaFotos() {
         var paginas = _lerGuiaPages();
         var textoCompleto = "";
         var quotaEstourou = false;
-        for (var fi = inicio; fi < fim; fi++) {
-            guardiaoMostrar("processando", "Pagina " + (fi+1) + " de " + totalGeral, "Lendo pagina com Gemini (" + getGeminiModel() + ")...");
-            if (fi > inicio) await new Promise(function(r){ setTimeout(r, 1500); });
-            var comp = await _comTimeout(comprimirImagemParaIA(_fotosGuia[fi].data, _fotosGuia[fi].mime), 15000, "Tempo esgotado ao comprimir imagem da página " + (fi+1));
-            var resp = await _comTimeout(chamarClaudeWorker(prompt + " (Pagina " + (fi+1) + " de " + totalGeral + ".)", comp.data, comp.mime, "classificar"), 45000, "Tempo esgotado na resposta da IA (página " + (fi+1) + "). Verifique sua conexão.");
+        for (var fi = inicio; fi < totalGeral; fi++) {
+            atualizarProgressoTarefa(
+                "Lendo Guia de Execução...",
+                "Lendo página " + (fi + 1) + " de " + totalGeral + "...",
+                fi,
+                totalGeral
+            );
+            if (fi > inicio) await new Promise(function(r){ setTimeout(r, 900); });
+            var comp = await _comTimeout(comprimirImagemParaIA(_fotosGuia[fi].data, _fotosGuia[fi].mime), 20000, "Tempo esgotado ao preparar página " + (fi+1));
+            var resp = await _comTimeout(chamarClaudeWorker(prompt + " (Pagina " + (fi+1) + " de " + totalGeral + ".)", comp.data, comp.mime, "classificar"), 45000, "Tempo esgotado na leitura da página " + (fi+1) + ". Verifique sua conexão.");
             var parsed = _parseGuiaResposta(resp);
-            var imgStorage = await _comTimeout(_reduzirImagemGuiaParaStorage(_fotosGuia[fi].src || ("data:" + comp.mime + ";base64," + comp.data)), 10000, "Tempo esgotado ao reduzir imagem da página " + (fi+1));
+            var imgStorage = await _comTimeout(_reduzirImagemGuiaParaStorage(_fotosGuia[fi].src || ("data:" + comp.mime + ";base64," + comp.data)), 12000, "Tempo esgotado ao salvar miniatura da página " + (fi+1));
             paginas.push({ pagina: fi+1, descricao: parsed.descricao, tags: parsed.tags, imagemBase64: imgStorage });
             textoCompleto += (textoCompleto ? "\n\n" : "") + "=== PAGINA " + (fi+1) + " ===\n" + parsed.descricao;
             var salvouOk = _salvarGuiaPages(paginas);
@@ -11174,31 +11439,33 @@ async function processarGuiaFotos() {
                 quotaEstourou = true;
                 paginas.pop();
                 _guiaProcessadas = fi;
+                try { localStorage.setItem(progKey, JSON.stringify({ processadas: fi, total: totalGeral, updatedAt: new Date().toISOString() })); } catch(eProg){}
                 break;
             }
-        }
-        if (!quotaEstourou) _guiaProcessadas = fim;
-
-        var textareaEl = document.getElementById("guiaEmpresaTexto");
-        if (textareaEl) {
-            var sep = textareaEl.value ? "\n\n" : ""; textareaEl.value = textareaEl.value + sep + textoCompleto;
-            var cid = _resolverCompanyIdAtiva();
-            if (cid) {
-                try { localStorage.setItem("ls23_guia_empresa_" + cid, textareaEl.value); }
-                catch(e) {}
+            _guiaProcessadas = fi + 1;
+            try {
+                localStorage.setItem(progKey, JSON.stringify({ processadas: _guiaProcessadas, total: totalGeral, updatedAt: new Date().toISOString() }));
+            } catch(eProg2) {}
+            var textareaStep = document.getElementById("guiaEmpresaTexto");
+            if (textareaStep) {
+                var sepStep = textareaStep.value ? "\n\n" : "";
+                textareaStep.value = textareaStep.value + sepStep + "=== PAGINA " + (fi+1) + " ===\n" + parsed.descricao;
+                if (cidAtiva && cidAtiva !== "geral") {
+                    try { localStorage.setItem("ls23_guia_empresa_" + cidAtiva, textareaStep.value); } catch(eTxt){}
+                }
             }
         }
+
         if (document.getElementById("painelGuiaTexto")) switchGuiaTab("texto");
         if (stEl) stEl.style.display = "none";
 
         var restantes = totalGeral - _guiaProcessadas;
         if (quotaEstourou) {
             if (btn) { btn.innerHTML = "&#128229; Processar mais (faltam " + restantes + ")"; btn.style.display = "block"; }
-            guardiaoMostrar("erro", "Armazenamento cheio!", _guiaProcessadas + " de " + totalGeral + " páginas salvas.");
-            guardiaoEsconder(5000);
+            falharTarefaGuardiao("Armazenamento local cheio!", _guiaProcessadas + " de " + totalGeral + " páginas salvas.");
         } else if (restantes > 0) {
             if (btn) { btn.innerHTML = "&#128229; Processar mais (faltam " + restantes + ")"; btn.style.display = "block"; }
-            guardiaoMostrar("confirmacao", "Lote processado!", _guiaProcessadas + " de " + totalGeral + " paginas. Faltam " + restantes + ".");
+            atualizarProgressoTarefa("Lote parcial concluído", _guiaProcessadas + " de " + totalGeral + " páginas salvas.", _guiaProcessadas, totalGeral);
             var btnContinuar = document.getElementById("guardiao-btn-continuar");
             if (btnContinuar) {
                 btnContinuar.textContent = "📥 Processar mais (faltam " + restantes + ")";
@@ -11206,32 +11473,41 @@ async function processarGuiaFotos() {
                 btnContinuar.onclick = function(){ btnContinuar.style.display = "none"; processarGuiaFotos(); };
             }
         } else {
-            if (btn) { btn.innerHTML = "&#128229; Processar Guia (Gemini)"; btn.style.display = "block"; }
+            try { localStorage.removeItem(progKey); } catch(eRm) {}
+            if (btn) { btn.innerHTML = "&#128229; Processar Guia"; btn.style.display = "block"; }
             var btnContinuar2 = document.getElementById("guardiao-btn-continuar");
             if (btnContinuar2) btnContinuar2.style.display = "none";
-            guardiaoMostrar("confirmacao", "Guia Base Indexado!", totalGeral + " pagina(s) prontas no Guardião.");
-            guardiaoEsconder(2500);
             _fotosGuia = []; _guiaProcessadas = 0;
             if (typeof renderGridGuiaFotos === "function") renderGridGuiaFotos();
             if (typeof renderBaseConhecimentoGuardiao === "function") renderBaseConhecimentoGuardiao();
+            concluirTarefaGuardiao("✅ Leitura do Guia concluída! Toque para revisar", totalGeral + " página(s) prontas no Guardião.", {
+                keepOverlayMs: 2400,
+                onReturn: function(){
+                    if (_gchatAberto || window._currentPage !== "pageCompany") {
+                        abrirGuardiaoChat();
+                        switchGuardiaoTab("base");
+                    } else {
+                        showPage("pageCompany");
+                    }
+                }
+            });
         }
     } catch(e) {
         if (stEl) stEl.style.display = "none";
         var temRestante = _fotosGuia.length - _guiaProcessadas;
         if (btn) {
-            btn.innerHTML = (_guiaProcessadas > 0 ? "&#128229; Processar mais (faltam " + temRestante + ")" : "&#128229; Processar Guia (Gemini)");
+            btn.innerHTML = (_guiaProcessadas > 0 ? "&#128229; Processar mais (faltam " + temRestante + ")" : "&#128229; Processar Guia");
             btn.style.display = "block";
         }
-        guardiaoMostrar("erro", "Erro ao processar", e.message);
+        var msgErrGuia = (typeof _traduzirErroAmigavelIA === "function") ? _traduzirErroAmigavelIA(e) : (e.message || "Falha ao ler Guia.");
+        falharTarefaGuardiao("Erro ao ler Guia", msgErrGuia);
         var btnContinuar3 = document.getElementById("guardiao-btn-continuar");
         if (btnContinuar3 && temRestante > 0) {
             btnContinuar3.textContent = "📥 Processar mais (faltam " + temRestante + ")";
             btnContinuar3.style.display = "block";
             btnContinuar3.onclick = function(){ btnContinuar3.style.display = "none"; processarGuiaFotos(); };
-        } else {
-            guardiaoEsconder(3000);
         }
-        alert("Erro ao processar: " + e.message);
+        alert("Erro ao processar: " + msgErrGuia);
     }
 }
 
@@ -11240,7 +11516,7 @@ function salvarGuiaEmpresa() {
     var texto = document.getElementById("guiaEmpresaTexto").value.trim();
 
     if (!texto && _fotosGuia && _fotosGuia.length > 0) {
-        if (confirm("O texto está vazio, mas há " + _fotosGuia.length + " imagem(ns)/PDF carregada(s).\nDeseja processar via Gemini agora antes de salvar?")) {
+        if (confirm("O texto está vazio, mas há " + _fotosGuia.length + " imagem(ns)/PDF carregada(s).\nDeseja ler este Guia agora antes de salvar?")) {
             processarGuiaFotos();
         }
         return;
@@ -11292,6 +11568,269 @@ var _guardiaoIcones = {
 };
 var _guardiaoToastTimer = null;
 
+// ── GERENCIADOR DE TAREFAS EM SEGUNDO PLANO + NOTIFICAÇÃO NATIVA ─────────────
+var LS_BG_TASKS_KEY = "ls23_bg_tasks_state";
+var _bgTaskState = {
+    id: "",
+    titulo: "",
+    sub: "",
+    pct: 0,
+    status: "idle",
+    isBackground: false,
+    canBackground: false,
+    pageTarget: "",
+    onReturn: null,
+    autoHideTimer: null
+};
+
+function solicitarPermissaoNotificacao() {
+    try {
+        if (typeof Notification !== "undefined" && Notification.permission === "default" && typeof Notification.requestPermission === "function") {
+            var res = Notification.requestPermission();
+            if (res && typeof res.catch === "function") res.catch(function(){});
+        }
+    } catch(e) {}
+}
+
+function tocarBeepDiscreto() {
+    try {
+        if (typeof navigator !== "undefined" && typeof navigator.vibrate === "function") {
+            navigator.vibrate([120, 60, 120]);
+        }
+    } catch(e) {}
+    try {
+        var AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return;
+        var ctx = new AudioCtx();
+        var now = ctx.currentTime;
+        var osc = ctx.createOscillator();
+        var gain = ctx.createGain();
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(587.33, now);
+        osc.frequency.setValueAtTime(880, now + 0.11);
+        gain.gain.setValueAtTime(0.06, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.31);
+    } catch(eAudio) {}
+}
+
+function dispararNotificacaoNativa(titulo, corpo, onNavigate) {
+    tocarBeepDiscreto();
+    try {
+        if (typeof Notification !== "undefined" && Notification.permission === "granted") {
+            var n = new Notification(titulo || "LocalShelf", {
+                body: corpo || "Processamento concluído.",
+                icon: "./icon-192.png",
+                tag: "localshelf-bg-" + (_bgTaskState.id || "task")
+            });
+            n.onclick = function() {
+                try { window.focus(); } catch(eF){}
+                try { n.close(); } catch(eC){}
+                if (typeof onNavigate === "function") onNavigate();
+                else if (_bgTaskState.pageTarget && typeof showPage === "function") showPage(_bgTaskState.pageTarget);
+                fecharBgTaskBar();
+            };
+        }
+    } catch(eNotif) {
+        console.warn("Notificacao nativa:", eNotif);
+    }
+}
+
+function _persistirBgTaskState() {
+    try {
+        localStorage.setItem(LS_BG_TASKS_KEY, JSON.stringify({
+            id: _bgTaskState.id,
+            titulo: _bgTaskState.titulo,
+            sub: _bgTaskState.sub,
+            pct: _bgTaskState.pct,
+            status: _bgTaskState.status,
+            isBackground: _bgTaskState.isBackground,
+            pageTarget: _bgTaskState.pageTarget,
+            updatedAt: new Date().toISOString()
+        }));
+    } catch(e) {}
+}
+
+function _renderBgTaskBar() {
+    var bar = document.getElementById("bgTaskBar");
+    if (!bar) return;
+    if (!_bgTaskState.isBackground && _bgTaskState.status !== "done_bg" && _bgTaskState.status !== "err_bg") {
+        bar.classList.remove("ativo", "concluido", "erro");
+        return;
+    }
+    var tit = document.getElementById("bgTaskTitle");
+    var sub = document.getElementById("bgTaskSub");
+    var fill = document.getElementById("bgTaskFill");
+    var pctEl = document.getElementById("bgTaskPct");
+    if (tit) tit.textContent = _bgTaskState.titulo || "Processando...";
+    if (sub) sub.textContent = _bgTaskState.sub || "";
+    if (fill) fill.style.width = Math.max(4, Math.min(100, Number(_bgTaskState.pct) || 0)) + "%";
+    if (pctEl) {
+        pctEl.textContent = _bgTaskState.status === "done_bg" ? "100%" : (_bgTaskState.status === "err_bg" ? "!" : (Math.round(_bgTaskState.pct || 0) + "%"));
+    }
+    bar.classList.remove("concluido", "erro");
+    if (_bgTaskState.status === "done_bg") bar.classList.add("concluido");
+    if (_bgTaskState.status === "err_bg") bar.classList.add("erro");
+    bar.classList.add("ativo");
+}
+
+function fecharBgTaskBar() {
+    if (_bgTaskState.autoHideTimer) { clearTimeout(_bgTaskState.autoHideTimer); _bgTaskState.autoHideTimer = null; }
+    _bgTaskState.isBackground = false;
+    if (_bgTaskState.status !== "running") {
+        _bgTaskState.status = "idle";
+        _persistirBgTaskState();
+    }
+    var bar = document.getElementById("bgTaskBar");
+    if (bar) bar.classList.remove("ativo", "concluido", "erro");
+}
+
+function iniciarTarefaGuardiao(opts) {
+    opts = opts || {};
+    if (_bgTaskState.autoHideTimer) { clearTimeout(_bgTaskState.autoHideTimer); _bgTaskState.autoHideTimer = null; }
+    _bgTaskState = {
+        id: opts.id || ("task_" + Date.now()),
+        titulo: opts.titulo || "Buscando dados...",
+        sub: opts.sub || "",
+        pct: Number(opts.pct) || 5,
+        status: "running",
+        isBackground: false,
+        canBackground: opts.canBackground !== false,
+        pageTarget: opts.pageTarget || window._currentPage || "",
+        onReturn: opts.onReturn || null,
+        autoHideTimer: null
+    };
+    _persistirBgTaskState();
+    _renderBgTaskBar();
+
+    var bgBtn = document.getElementById("guardiao-btn-bg");
+    if (bgBtn) bgBtn.style.display = _bgTaskState.canBackground ? "block" : "none";
+    var contBtn = document.getElementById("guardiao-btn-continuar");
+    if (contBtn) contBtn.style.display = "none";
+
+    var progWrap = document.getElementById("guardiao-progress-wrap");
+    var progBar = document.getElementById("guardiao-progress-bar");
+    var progTxt = document.getElementById("guardiao-progress-txt");
+    if (progWrap) progWrap.classList.toggle("ativo", !!opts.totalSteps || !!opts.showProgress);
+    if (progBar) progBar.style.width = _bgTaskState.pct + "%";
+    if (progTxt) progTxt.textContent = opts.totalSteps ? ("Etapa 1 de " + opts.totalSteps) : "";
+
+    guardiaoMostrar("processando", _bgTaskState.titulo, _bgTaskState.sub);
+    if (_bgTaskState.canBackground) solicitarPermissaoNotificacao();
+}
+
+function atualizarProgressoTarefa(titulo, sub, stepIndex, totalSteps) {
+    var pct = _bgTaskState.pct;
+    if (totalSteps && totalSteps > 0) {
+        pct = Math.max(6, Math.min(96, Math.round(((Number(stepIndex) || 0) / totalSteps) * 100)));
+        if (stepIndex === 0) pct = Math.max(8, Math.round(50 / totalSteps));
+    }
+    _bgTaskState.titulo = titulo || _bgTaskState.titulo;
+    _bgTaskState.sub = sub !== undefined ? sub : _bgTaskState.sub;
+    _bgTaskState.pct = pct;
+    _persistirBgTaskState();
+
+    var progWrap = document.getElementById("guardiao-progress-wrap");
+    var progBar = document.getElementById("guardiao-progress-bar");
+    var progTxt = document.getElementById("guardiao-progress-txt");
+    if (totalSteps && totalSteps > 0 && progWrap) progWrap.classList.add("ativo");
+    if (progBar) progBar.style.width = pct + "%";
+    if (progTxt && totalSteps) progTxt.textContent = Math.min(totalSteps, (Number(stepIndex) || 0) + 1) + " de " + totalSteps + " (" + pct + "%)";
+
+    if (_bgTaskState.isBackground) {
+        _renderBgTaskBar();
+    } else {
+        guardiaoMsg(_bgTaskState.titulo, _bgTaskState.sub);
+    }
+}
+
+function minimizarTarefaParaSegundoPlano() {
+    if (_bgTaskState.status !== "running") return;
+    _bgTaskState.isBackground = true;
+    _persistirBgTaskState();
+    guardiaoEsconder();
+    _renderBgTaskBar();
+    solicitarPermissaoNotificacao();
+}
+
+function restaurarOuRevisarTarefaBg() {
+    if (_bgTaskState.status === "running") {
+        _bgTaskState.isBackground = false;
+        _persistirBgTaskState();
+        _renderBgTaskBar();
+        var bgBtn = document.getElementById("guardiao-btn-bg");
+        if (bgBtn) bgBtn.style.display = _bgTaskState.canBackground ? "block" : "none";
+        guardiaoMostrar("processando", _bgTaskState.titulo, _bgTaskState.sub);
+        return;
+    }
+    var cb = _bgTaskState.onReturn;
+    var target = _bgTaskState.pageTarget;
+    fecharBgTaskBar();
+    if (typeof cb === "function") cb();
+    else if (target && typeof showPage === "function") showPage(target);
+}
+
+function concluirTarefaGuardiao(tituloDone, subDone, opts) {
+    opts = opts || {};
+    var wasBg = !!_bgTaskState.isBackground || (typeof document !== "undefined" && document.hidden);
+    _bgTaskState.titulo = tituloDone || "Concluído!";
+    _bgTaskState.sub = subDone || "";
+    _bgTaskState.pct = 100;
+    _bgTaskState.onReturn = opts.onReturn || _bgTaskState.onReturn;
+    if (opts.pageTarget) _bgTaskState.pageTarget = opts.pageTarget;
+
+    var bgBtn = document.getElementById("guardiao-btn-bg");
+    if (bgBtn) bgBtn.style.display = "none";
+    var progWrap = document.getElementById("guardiao-progress-wrap");
+    if (progWrap) progWrap.classList.remove("ativo");
+
+    if (wasBg) {
+        _bgTaskState.status = "done_bg";
+        _persistirBgTaskState();
+        _renderBgTaskBar();
+        dispararNotificacaoNativa(tituloDone, subDone || "Toque para revisar.", _bgTaskState.onReturn);
+        if (typeof guardiaoToast === "function") {
+            guardiaoToast("confirmacao", tituloDone, subDone || "Toque na barra superior para revisar.", 7000);
+        }
+        _bgTaskState.autoHideTimer = setTimeout(fecharBgTaskBar, 22000);
+    } else {
+        _bgTaskState.status = "done";
+        _bgTaskState.isBackground = false;
+        _persistirBgTaskState();
+        fecharBgTaskBar();
+        guardiaoMostrar("confirmacao", tituloDone, subDone);
+        if (opts.keepOverlayMs !== 0) {
+            guardiaoEsconder(opts.keepOverlayMs || 1800);
+        }
+    }
+}
+
+function falharTarefaGuardiao(tituloErro, msgErro) {
+    var wasBg = !!_bgTaskState.isBackground;
+    _bgTaskState.titulo = tituloErro || "Aviso";
+    _bgTaskState.sub = msgErro || "";
+    var bgBtn = document.getElementById("guardiao-btn-bg");
+    if (bgBtn) bgBtn.style.display = "none";
+    var progWrap = document.getElementById("guardiao-progress-wrap");
+    if (progWrap) progWrap.classList.remove("ativo");
+
+    if (wasBg) {
+        _bgTaskState.status = "err_bg";
+        _persistirBgTaskState();
+        _renderBgTaskBar();
+        dispararNotificacaoNativa(tituloErro, msgErro, _bgTaskState.onReturn);
+        _bgTaskState.autoHideTimer = setTimeout(fecharBgTaskBar, 14000);
+    } else {
+        _bgTaskState.status = "error";
+        _persistirBgTaskState();
+        guardiaoMostrar("erro", tituloErro, msgErro);
+        guardiaoEsconder(2800);
+    }
+}
+
 // MODO TELA CHEIA
 function guardiaoMostrar(estado, msg, sub) {
     var overlay  = document.getElementById("guardiao-overlay");
@@ -11310,7 +11849,6 @@ function guardiaoMostrar(estado, msg, sub) {
     img.src = _guardiaoImgs[estado] || _guardiaoImgs.processando;
     img.className = "guardiao-esfera " + estado;
 
-    // Engrenagem girando na face (só no processando)
     if (faceIcon) {
         faceIcon.textContent = icones[estado] || "⚙️";
         faceIcon.style.color = coresFace[estado] || "#f97316";
@@ -11323,6 +11861,10 @@ function guardiaoMostrar(estado, msg, sub) {
 
     msgEl.textContent = msg || "Processando...";
     if (subEl) subEl.textContent = sub || "";
+    if (estado !== "processando") {
+        var bgBtn = document.getElementById("guardiao-btn-bg");
+        if (bgBtn) bgBtn.style.display = "none";
+    }
     overlay.classList.add("ativo");
 }
 
@@ -12125,7 +12667,7 @@ function renderRelatorioGerencialGuardiao(dias) {
     }
 
     html += "<div style='display:flex;gap:6px;margin-bottom:8px'>" +
-        "<button type='button' onclick='analisarRelatorioComGemini(" + _gchatRelDias + ")' style='flex:1;background:#7c3aed;color:#fff;border:none;border-radius:8px;padding:8px;font-size:11px;font-weight:700;cursor:pointer'>&#129302; Gerar Análise Executiva Gemini</button>" +
+        "<button type='button' onclick='analisarRelatorioComGemini(" + _gchatRelDias + ")' style='flex:1;background:#7c3aed;color:#fff;border:none;border-radius:8px;padding:8px;font-size:11px;font-weight:700;cursor:pointer'>&#129302; Gerar Análise Executiva</button>" +
         "<button type='button' onclick='copiarRelatorioGerencial(" + _gchatRelDias + ")' style='background:#334155;color:#fff;border:none;border-radius:8px;padding:8px 12px;font-size:11px;font-weight:700;cursor:pointer'>&#128203; Copiar</button>" +
         "</div>" +
         "<button type='button' onclick='abrirRelatorioExecutivoPassagem()' style='width:100%;margin-bottom:8px;background:linear-gradient(135deg,#0f766e,#059669);color:#fff;border:none;border-radius:8px;padding:9px;font-size:11px;font-weight:700;cursor:pointer'>&#128203; Relat&oacute;rio Executivo / Passagem de Bast&atilde;o (WhatsApp &amp; PDF)</button>" +
@@ -12138,18 +12680,18 @@ async function analisarRelatorioComGemini(dias) {
     var outEl = document.getElementById("gchatRelGeminiOut");
     if (!outEl) return;
     if (!getGoogleGeminiKey()) {
-        outEl.innerHTML = "<div class='gchat-card' style='color:#fca5a5'>Configure sua chave Google Gemini nas Configurações para gerar a análise executiva.</div>";
+        outEl.innerHTML = "<div class='gchat-card' style='color:#fca5a5'>Configure sua chave de acesso nas Configurações para gerar a análise executiva.</div>";
         return;
     }
     var dados = gerarDadosRelatorioGerencial(dias);
     if (!dados) return;
-    outEl.innerHTML = "<div class='gchat-card' style='color:#a5b4fc'>⚙️ Guardião Gemini gerando resumo executivo de " + dados.dias + " dias...</div>";
+    outEl.innerHTML = "<div class='gchat-card' style='color:#a5b4fc'>⚙️ Guardião gerando resumo executivo de " + dados.dias + " dias...</div>";
     try {
         var prompt = "Voce e o Guardiao LocalShelf. Gere um resumo gerencial executivo direto (maximo 6 topicos curtos) de " + dados.dias + " dias para a loja '" + dados.loja + "' (perfil: " + dados.perfil + "), destacando top SKUs, giro diario, rupturas, trocas, riscos FEFO e evolucao de auditoria.\nDADOS REAIS:\n" + JSON.stringify(dados);
         var resp = await chamarGoogleGeminiFlash(prompt, [], false);
         outEl.innerHTML = "<div class='gchat-card' style='white-space:pre-wrap;line-height:1.45'>" + escHtml(resp.trim()) + "</div>";
     } catch(e) {
-        outEl.innerHTML = "<div class='gchat-card' style='color:#fca5a5'>Erro: " + escHtml(e.message) + "</div>";
+        outEl.innerHTML = "<div class='gchat-card' style='color:#fca5a5'>Erro: " + escHtml((typeof _traduzirErroAmigavelIA === "function") ? _traduzirErroAmigavelIA(e) : e.message) + "</div>";
     }
 }
 
@@ -12216,10 +12758,9 @@ function abrirGuardiaoChat() {
     _gchatAberto = true;
     if (_gchatResetTimer) { clearTimeout(_gchatResetTimer); _gchatResetTimer = null; }
     var cliEl = document.getElementById("gchat-cliente");
-    var modeloG = (typeof getGeminiModel === "function") ? getGeminiModel() : "gemini-3.8-flash";
     if (cliEl) {
         var compNm = currentCompany ? (" • " + currentCompany.name) : "";
-        cliEl.textContent = (currentClient ? (currentClient.name + (currentClient.canal ? " (" + currentClient.canal + ")" : "")) : ("Assistente " + modeloG)) + compNm;
+        cliEl.textContent = (currentClient ? (currentClient.name + (currentClient.canal ? " (" + currentClient.canal + ")" : "")) : "Assistente Inteligente") + compNm;
     }
     if (typeof atualizarAlertaOrbGuardiao === "function") atualizarAlertaOrbGuardiao();
     switchGuardiaoTab(_gchatActiveTab || "chat");
@@ -12228,8 +12769,8 @@ function abrirGuardiaoChat() {
     var body = document.getElementById("gchat-body");
     if (body && body.children.length === 0) {
         var saudacao = currentClient
-            ? "Olá! Sou o Guardião LocalShelf (" + modeloG + "). Já carreguei o perfil de " + currentClient.name + ", contratos, portfólio regional, Giro Real/FEFO e suas Pílulas/Guia. Como posso ajudar?"
-            : "Olá! Sou o Guardião LocalShelf (" + modeloG + "). Selecione um cliente para acessar Giro, FEFO, Relatórios e regras por perfil de loja.";
+            ? "Olá! Sou o Guardião LocalShelf. Já carreguei o perfil de " + currentClient.name + ", contratos, portfólio regional, Giro Real/FEFO e suas Pílulas/Guia. Como posso ajudar?"
+            : "Olá! Sou o Guardião LocalShelf. Selecione um cliente para acessar Giro, FEFO, Relatórios e regras por perfil de loja.";
         adicionarMsgChat("bot", saudacao);
         montarSugestoesGuardiao();
     }
@@ -12522,14 +13063,14 @@ async function enviarGuardiaoChat() {
     var gKey = getGoogleGeminiKey();
     var legadoKey = getApiKey() || "";
     if (!gKey && !legadoKey) {
-        adicionarMsgChat("bot", "Configure sua chave Google Gemini em Configurações para conversar com o Guardião (" + getGeminiModel() + ").");
+        adicionarMsgChat("bot", "Configure sua chave de acesso em Configurações para conversar com o Guardião.");
         return;
     }
 
     input.value = "";
     document.getElementById("gchat-send").disabled = true;
     adicionarMsgChat("user", pergunta);
-    var typing = adicionarMsgChat("typing", "Guardião Gemini está analisando...");
+    var typing = adicionarMsgChat("typing", "Guardião está analisando...");
 
     var contexto = montarContextoLoja(pergunta);
     var kn = buscarConhecimentoHibrido(pergunta);
@@ -14429,6 +14970,135 @@ function onCompanyNameSmartInput() {
     }, 950);
 }
 
+async function buscarEmpresaSupabasePrimeiro(query, ctx) {
+    try {
+        if (typeof isSupabaseConfigurado !== "function" || !isSupabaseConfigurado()) return null;
+        if (typeof navigator !== "undefined" && navigator.onLine === false) return null;
+        var sb = (typeof getSupabaseClient === "function") ? getSupabaseClient() : null;
+        if (!sb) return null;
+
+        var qRaw = String(query || "").trim();
+        var digits = qRaw.replace(/\D/g, "");
+        var rows = [];
+        if (digits.length === 14) {
+            var cnpjFmt = formatarCNPJ(digits);
+            var rCnpj = await sb.from("empresas").select("*").or("cnpj.eq." + cnpjFmt + ",cnpj.ilike.%" + digits + "%").limit(6);
+            if (rCnpj && Array.isArray(rCnpj.data)) rows = rCnpj.data;
+        }
+        if (!rows.length && qRaw.length >= 2) {
+            var termo = qRaw.replace(/[%_,()]/g, " ").trim();
+            var rTxt = await sb.from("empresas").select("*").or("name.ilike.%" + termo + "%,contacts.ilike.%" + termo + "%").limit(10);
+            if (rTxt && Array.isArray(rTxt.data)) rows = rTxt.data;
+        }
+        if (!rows.length) return null;
+
+        var regAlvo = (ctx && ctx.regional) ? normTextAccent(ctx.regional).toLowerCase() : "";
+        rows.sort(function(a, b) {
+            var ra = normTextAccent(a.regional || "").toLowerCase();
+            var rb = normTextAccent(b.regional || "").toLowerCase();
+            var sa = (regAlvo && ra === regAlvo) ? 2 : (ra === "nacional" ? 1 : 0);
+            var sbScore = (regAlvo && rb === regAlvo) ? 2 : (rb === "nacional" ? 1 : 0);
+            return sbScore - sa;
+        });
+
+        var row = rows[0];
+        var p = (row && row.payload && typeof row.payload === "object") ? row.payload : {};
+        var nome = String(p.name || row.name || "").trim();
+        if (!nome) return null;
+
+        var prods = Array.isArray(p.products) ? p.products.slice() : [];
+        if (!prods.length && row.id) {
+            try {
+                var rPr = await sb.from("produtos").select("*").eq("empresa_id", String(row.id)).limit(100);
+                if (rPr && Array.isArray(rPr.data) && rPr.data.length) {
+                    prods = rPr.data.map(function(pr) {
+                        var pp = (pr && pr.payload && typeof pr.payload === "object") ? pr.payload : {};
+                        return {
+                            code: String(pp.code || pr.code || "").trim(),
+                            name: String(pp.name || pr.name || "").trim(),
+                            gramatura: String(pp.gramatura || pr.gramatura || "").trim(),
+                            quantity: parseInt(pp.quantity || pr.quantity) || 1,
+                            priority: !!(pp.priority || (typeof isPriorityProduct === "function" && isPriorityProduct(pp.name || pr.name || ""))),
+                            category: String(pp.category || pr.category || "Geral").trim(),
+                            status: String(pp.status || pr.status || "Ativo").trim(),
+                            activeRegional: (pp.activeRegional !== undefined) ? (pp.activeRegional !== false) : (pr.active_regional !== false),
+                            thumb: String(pp.thumb || "").trim()
+                        };
+                    }).filter(function(it){ return !!it.name; });
+                }
+            } catch(ePr) {}
+        }
+
+        return {
+            source: "Supabase",
+            supabaseValidado: true,
+            empresaId: String(row.id || ""),
+            nomeFantasia: nome,
+            razaoSocial: String(p.razaoSocial || nome).trim(),
+            cnpj: String(p.cnpj || row.cnpj || "").trim(),
+            enderecoCd: String(p.enderecoCD || p.enderecoCd || "").trim(),
+            segmento: String(p.segmento || "").trim(),
+            porte: String(p.porte || "").trim(),
+            brasilApiValidado: !!String(p.cnpj || row.cnpj || "").replace(/\D/g, "").match(/^\d{14}$/),
+            regionalSugerida: String(p.regional || row.regional || (ctx && ctx.regional) || "Nacional").trim(),
+            ufLabel: String(p.ufLabel || (ctx && ctx.uf) || p.regional || row.regional || "BR").trim(),
+            siteDominio: "",
+            contatosResumo: String(p.contacts || row.contacts || "").trim(),
+            logo: String(p.logo || "").trim(),
+            products: prods
+        };
+    } catch(eSbEmp) {
+        console.warn("Supabase empresas fallback:", eSbEmp && eSbEmp.message ? eSbEmp.message : eSbEmp);
+        return null;
+    }
+}
+
+function _renderConfirmCardEmpresaIA(sug) {
+    var cardEl = document.getElementById("smartCompanyConfirmCard");
+    if (!cardEl || !sug) return;
+    var logoHtml = sug.logo
+        ? "<img src='" + sug.logo + "' class='smart-comp-logo' alt='Logo'>"
+        : "<div id='smartCompCardLogoWrap' class='smart-comp-logo' style='display:flex;align-items:center;justify-content:center;font-size:20px'>&#127970;</div>";
+    var seloFonte = sug.source === "Supabase"
+        ? " <span class='smart-res-badge brasilapi' style='margin-left:4px'>Base Compartilhada</span>"
+        : (sug.brasilApiValidado ? " <span class='smart-res-badge brasilapi' style='margin-left:4px'>CNPJ Validado</span>" : "");
+    var skuInfo = (Array.isArray(sug.products) && sug.products.length)
+        ? "<br><b>Portfólio pronto:</b> " + sug.products.length + " SKU(s) na base compartilhada"
+        : "";
+    cardEl.innerHTML =
+        "<div class='smart-comp-head'>" + logoHtml +
+        "<div>" +
+        "<div class='smart-comp-title'>&#10024; Encontramos: " + escHtml(sug.razaoSocial) + " - Regional " + escHtml(sug.ufLabel) + seloFonte + ". Confirmar dados?</div>" +
+        "<div class='smart-comp-meta'>" +
+        (sug.cnpj ? "<b>CNPJ:</b> " + escHtml(sug.cnpj) + " &bull; " : "<b style='color:#b45309'>CNPJ não localizado</b> &bull; ") +
+        (sug.porte ? "<b>Porte:</b> " + escHtml(sug.porte) + " &bull; " : "") +
+        (sug.segmento ? "<b>Segmento:</b> " + escHtml(sug.segmento) : "") +
+        (sug.enderecoCd ? "<br><b>CD/Filial:</b> " + escHtml(sug.enderecoCd) : "") +
+        skuInfo +
+        "</div></div></div>" +
+        "<div class='smart-comp-actions'>" +
+        "<button type='button' onclick='confirmarEmpresaSugeridaIA()' style='flex:1;background:#059669;color:#fff;border:none;border-radius:8px;padding:9px 12px;font-size:12px;font-weight:800;cursor:pointer;margin:0'>&#9989; Confirmar dados</button>" +
+        "<button type='button' onclick='descartarSugestaoEmpresaIA()' class='sec' style='padding:9px 12px;font-size:12px;margin:0'>Ignorar</button>" +
+        "</div>";
+    cardEl.classList.add("ativo");
+}
+
+function _aplicarStatusEmpresaCompletude(stEl, cnpjStr, source) {
+    if (!stEl) return;
+    var cnpjOk = String(cnpjStr || "").replace(/\D/g, "").length === 14;
+    stEl.style.display = "block";
+    stEl.classList.remove("smart-alert-warn", "smart-alert-ok", "smart-alert-err");
+    if (!cnpjOk) {
+        stEl.classList.add("smart-alert-warn");
+        stEl.textContent = "⚠️ Dados básicos localizados, mas o CNPJ completo não foi encontrado automaticamente. Preencha ou confira o CNPJ antes de salvar.";
+    } else {
+        stEl.classList.add("smart-alert-ok");
+        stEl.textContent = (source === "Supabase")
+            ? "⚡ Empresa carregada da base compartilhada! Revise o card abaixo e toque em Confirmar dados."
+            : "✅ Dados completos encontrados! Revise o card abaixo e toque em Confirmar dados.";
+    }
+}
+
 async function buscarEmpresaComIA(manualTrigger) {
     var sqEl = document.getElementById("smartCompanyQuery");
     var nmEl = document.getElementById("companyName");
@@ -14442,14 +15112,11 @@ async function buscarEmpresaComIA(manualTrigger) {
     }
     var digits = query.replace(/\D/g, "");
     var isCnpjDirect = (digits.length === 14 && /^[\d.\-\/\s]+$/.test(query));
-    if (!isCnpjDirect && !getGoogleGeminiKey()) {
-        if (manualTrigger) alert("Configure a chave de acesso nas Configurações para usar a busca automática.");
-        return;
-    }
     _smartCompanyLastAutoQuery = query;
     var ctx = _obterUfContextoDispositivo();
     if (stEl) {
         stEl.style.display = "block";
+        stEl.classList.remove("smart-alert-warn", "smart-alert-ok", "smart-alert-err");
         stEl.style.color = "#1e40af";
         stEl.textContent = isCnpjDirect
             ? ("⏳ Consultando dados do CNPJ " + formatarCNPJ(digits) + "...")
@@ -14458,8 +15125,63 @@ async function buscarEmpresaComIA(manualTrigger) {
     if (cardEl) { cardEl.classList.remove("ativo"); cardEl.innerHTML = ""; }
     if (btn) { btn.disabled = true; btn.textContent = "Buscando..."; }
     if (typeof setCompanySearchLoading === "function") setCompanySearchLoading(true);
+    if (manualTrigger) {
+        iniciarTarefaGuardiao({
+            id: "busca_empresa",
+            titulo: "Buscando empresa...",
+            sub: "Consultando base compartilhada (" + ctx.uf + ")",
+            canBackground: true,
+            totalSteps: 2,
+            pageTarget: "pageCompany"
+        });
+    }
 
     try {
+        // 1. SUPABASE PRIMEIRO (Base Compartilhada instantânea)
+        var sbSug = await buscarEmpresaSupabasePrimeiro(query, ctx);
+        if (sbSug) {
+            _ultimaSugestaoEmpresaIA = sbSug;
+            _renderConfirmCardEmpresaIA(sbSug);
+            _aplicarStatusEmpresaCompletude(stEl, sbSug.cnpj, "Supabase");
+            if (manualTrigger) {
+                concluirTarefaGuardiao("⚡ Empresa encontrada!", sbSug.razaoSocial + " (Base Compartilhada)", {
+                    keepOverlayMs: 1100,
+                    onReturn: function(){ showPage("pageCompany"); }
+                });
+            }
+            if (!sbSug.logo) {
+                _buscarLogoIndustriaAuto(sbSug.nomeFantasia, sbSug.siteDominio, null).then(function(logoAsync) {
+                    if (!logoAsync) return;
+                    sbSug.logo = logoAsync;
+                    var w = document.getElementById("smartCompCardLogoWrap");
+                    if (w && w.parentNode) {
+                        var img = document.createElement("img");
+                        img.src = logoAsync; img.className = "smart-comp-logo"; img.alt = "Logo";
+                        w.parentNode.replaceChild(img, w);
+                    } else if (!pendingCompanyLogo && document.getElementById("companyLogoPreview") && !document.getElementById("companyLogoPreview").innerHTML.trim()) {
+                        pendingCompanyLogo = logoAsync;
+                        document.getElementById("companyLogoPreview").innerHTML = "<img src='" + logoAsync + "' class='lp'>";
+                    }
+                }).catch(function(){});
+            }
+            return;
+        }
+
+        if (!isCnpjDirect && !getGoogleGeminiKey()) {
+            if (manualTrigger) {
+                falharTarefaGuardiao("Chave necessária", "Configure sua chave de acesso nas Configurações para usar a busca automática.");
+            }
+            if (stEl) {
+                stEl.classList.add("smart-alert-warn");
+                stEl.textContent = "Configure a chave de acesso nas Configurações ou informe os 14 dígitos do CNPJ para buscar.";
+            }
+            return;
+        }
+
+        if (manualTrigger) {
+            atualizarProgressoTarefa("Localizando filial e dados...", query + " (" + ctx.uf + ")", 1, 2);
+        }
+
         var bApiDireta = null;
         if (isCnpjDirect && typeof consultarBrasilApiCnpj === "function") {
             bApiDireta = await consultarBrasilApiCnpj(digits);
@@ -14468,23 +15190,11 @@ async function buscarEmpresaComIA(manualTrigger) {
         var obj = {};
         if (getGoogleGeminiKey()) {
             var qRef = bApiDireta ? (bApiDireta.razaoSocial + " (CNPJ " + bApiDireta.cnpj + ")") : query;
-            var prompt = "Você é um especialista em cadastro corporativo e trade marketing no Brasil.\n" +
-                "O usuário digitou a indústria/empresa: \"" + qRef + "\".\n" +
-                "Localização / UF atual do usuário: " + (ctx.cidade ? ctx.cidade + " / " : "") + ctx.uf + " (Regional: " + ctx.regional + ").\n" +
-                "Retorne APENAS um JSON válido com os dados oficiais desta empresa no Brasil e sua filial/CD na UF informada:\n" +
-                "{\n" +
-                "  \"nomeFantasia\": \"Nome comercial curto (ex: PepsiCo)\",\n" +
-                "  \"razaoSocial\": \"Razão social oficial (ex: PepsiCo do Brasil Ltda)\",\n" +
-                "  \"cnpj\": \"CNPJ oficial da matriz ou filial regional no formato 00.000.000/0000-00\",\n" +
-                "  \"enderecoCd\": \"Endereço completo do centro de distribuição ou filial na UF informada\",\n" +
-                "  \"segmento\": \"Segmento principal (ex: Snacks, Alimentos e Bebidas)\",\n" +
-                "  \"porteSugerido\": \"Grande Porte / Médio Porte / etc.\",\n" +
-                "  \"regionalSugerida\": \"Um exato dentre: Nacional | RJ / Leste | SP | MG / ES | Sul | Nordeste | Centro-Oeste | Norte\",\n" +
-                "  \"ufLabel\": \"Sigla UF (ex: RJ)\",\n" +
-                "  \"siteDominio\": \"domínio oficial (ex: pepsico.com.br)\",\n" +
-                "  \"coresBandeira\": [\"#HexPrimaria\", \"#HexSecundaria\"],\n" +
-                "  \"contatosResumo\": \"Site ou SAC oficial\"\n" +
-                "}";
+            var prompt = "Cadastro corporativo Brasil. Indústria: \"" + qRef + "\".\n" +
+                "Localização atual do promotor: " + (ctx.cidade ? ctx.cidade + "/" : "") + ctx.uf + " (Regional: " + ctx.regional + ").\n" +
+                "Se houver filial ou Centro de Distribuição oficial na UF " + ctx.uf + ", PRIORIZE o CNPJ (14 dígitos) e endereço dessa filial/CD.\n" +
+                "Retorne APENAS JSON válido:\n" +
+                "{\"nomeFantasia\":\"\",\"razaoSocial\":\"\",\"cnpj\":\"\",\"enderecoCd\":\"\",\"segmento\":\"\",\"porteSugerido\":\"\",\"regionalSugerida\":\"Nacional|RJ / Leste|SP|MG / ES|Sul|Nordeste|Centro-Oeste|Norte\",\"ufLabel\":\"\",\"siteDominio\":\"\",\"coresBandeira\":[\"#1e3a8a\",\"#2563eb\"],\"contatosResumo\":\"\"}";
             var raw = await chamarGoogleGeminiFlash(prompt, [], true);
             obj = parseGeminiJSON(raw);
             if (Array.isArray(obj)) obj = obj[0] || {};
@@ -14494,12 +15204,11 @@ async function buscarEmpresaComIA(manualTrigger) {
             throw new Error("Não foi possível identificar a empresa.");
         }
 
-        // Cruzamento cadastral com Receita Federal usando o CNPJ encontrado
         var cnpjDigits = bApiDireta ? digits : String(obj.cnpj || "").replace(/\D/g, "");
         var bApiData = bApiDireta || null;
         var brasilApiValidado = !!bApiDireta;
         if (!bApiData && cnpjDigits.length === 14 && typeof consultarBrasilApiCnpj === "function") {
-            if (stEl) stEl.textContent = "⏳ Validando CNPJ " + formatarCNPJ(cnpjDigits) + " e carregando logotipo...";
+            if (stEl) stEl.textContent = "⏳ Validando CNPJ " + formatarCNPJ(cnpjDigits) + "...";
             try {
                 bApiData = await consultarBrasilApiCnpj(cnpjDigits);
                 if (bApiData && bApiData.razaoSocial) brasilApiValidado = true;
@@ -14516,9 +15225,9 @@ async function buscarEmpresaComIA(manualTrigger) {
         var segFinal = String(obj.segmento || (bApiData && bApiData.cnae) || "").trim();
         var endFinal = String(obj.enderecoCd || (bApiData && bApiData.endereco) || "").trim();
         var porteFinal = (bApiData && bApiData.porte) || String(obj.porteSugerido || "").trim();
-        var logoSug = await _buscarLogoIndustriaAuto(nomeSug, obj.siteDominio, obj.coresBandeira);
 
         _ultimaSugestaoEmpresaIA = {
+            source: brasilApiValidado ? "CadastroOficial" : "Sugestao",
             nomeFantasia: nomeSug,
             razaoSocial: razaoFinal,
             cnpj: cnpjFmt,
@@ -14530,46 +15239,47 @@ async function buscarEmpresaComIA(manualTrigger) {
             ufLabel: String((bApiData && bApiData.uf) || obj.ufLabel || ctx.uf || regSug).trim(),
             siteDominio: String(obj.siteDominio || "").trim(),
             contatosResumo: String(obj.contatosResumo || (bApiData && bApiData.telefone) || "").trim(),
-            logo: logoSug || ""
+            logo: ""
         };
 
+        _renderConfirmCardEmpresaIA(_ultimaSugestaoEmpresaIA);
+        _aplicarStatusEmpresaCompletude(stEl, _ultimaSugestaoEmpresaIA.cnpj, _ultimaSugestaoEmpresaIA.source);
+
         var temCnpjCompleto = String(_ultimaSugestaoEmpresaIA.cnpj || "").replace(/\D/g, "").length === 14;
-        if (cardEl) {
-            var logoHtml = _ultimaSugestaoEmpresaIA.logo
-                ? "<img src='" + _ultimaSugestaoEmpresaIA.logo + "' class='smart-comp-logo' alt='Logo'>"
-                : "<div class='smart-comp-logo' style='display:flex;align-items:center;justify-content:center;font-size:20px'>&#127970;</div>";
-            var seloBrasilApi = _ultimaSugestaoEmpresaIA.brasilApiValidado
-                ? " <span class='smart-res-badge brasilapi' style='margin-left:4px'>CNPJ Validado</span>"
-                : "";
-            cardEl.innerHTML =
-                "<div class='smart-comp-head'>" + logoHtml +
-                "<div>" +
-                "<div class='smart-comp-title'>&#10024; Encontramos: " + escHtml(_ultimaSugestaoEmpresaIA.razaoSocial) + " - Regional " + escHtml(_ultimaSugestaoEmpresaIA.ufLabel) + seloBrasilApi + ". Confirmar dados?</div>" +
-                "<div class='smart-comp-meta'>" +
-                (_ultimaSugestaoEmpresaIA.cnpj ? "<b>CNPJ:</b> " + escHtml(_ultimaSugestaoEmpresaIA.cnpj) + " &bull; " : "") +
-                (_ultimaSugestaoEmpresaIA.porte ? "<b>Porte:</b> " + escHtml(_ultimaSugestaoEmpresaIA.porte) + " &bull; " : "") +
-                (_ultimaSugestaoEmpresaIA.segmento ? "<b>Segmento:</b> " + escHtml(_ultimaSugestaoEmpresaIA.segmento) : "") +
-                (_ultimaSugestaoEmpresaIA.enderecoCd ? "<br><b>CD/Filial:</b> " + escHtml(_ultimaSugestaoEmpresaIA.enderecoCd) : "") +
-                "</div></div></div>" +
-                "<div class='smart-comp-actions'>" +
-                "<button type='button' onclick='confirmarEmpresaSugeridaIA()' style='flex:1;background:#059669;color:#fff;border:none;border-radius:8px;padding:9px 12px;font-size:12px;font-weight:800;cursor:pointer;margin:0'>&#9989; Confirmar dados</button>" +
-                "<button type='button' onclick='descartarSugestaoEmpresaIA()' class='sec' style='padding:9px 12px;font-size:12px;margin:0'>Ignorar</button>" +
-                "</div>";
-            cardEl.classList.add("ativo");
+        if (manualTrigger) {
+            concluirTarefaGuardiao(
+                temCnpjCompleto ? "✅ Empresa localizada!" : "⚠️ Empresa localizada (confira CNPJ)",
+                _ultimaSugestaoEmpresaIA.razaoSocial + " (" + _ultimaSugestaoEmpresaIA.ufLabel + ")",
+                { keepOverlayMs: 1200, onReturn: function(){ showPage("pageCompany"); } }
+            );
         }
-        if (stEl) {
-            if (!temCnpjCompleto) {
-                stEl.style.color = "#b45309";
-                stEl.textContent = "Dados básicos preenchidos. Confira ou complete o CNPJ antes de salvar.";
-            } else {
-                stEl.style.color = "#059669";
-                stEl.textContent = "Dados completos encontrados! Revise o card abaixo e toque em Confirmar dados.";
+
+        // Logo carregado de forma assíncrona sem bloquear formulário nem botão Salvar
+        var sugRef = _ultimaSugestaoEmpresaIA;
+        _buscarLogoIndustriaAuto(nomeSug, obj.siteDominio, obj.coresBandeira).then(function(logoAsync) {
+            if (!logoAsync) return;
+            sugRef.logo = logoAsync;
+            var wrapEl = document.getElementById("smartCompCardLogoWrap");
+            if (wrapEl && wrapEl.parentNode) {
+                var img = document.createElement("img");
+                img.src = logoAsync;
+                img.className = "smart-comp-logo";
+                img.alt = "Logo";
+                wrapEl.parentNode.replaceChild(img, wrapEl);
+            } else if (!pendingCompanyLogo && document.getElementById("companyLogoPreview") && !document.getElementById("companyLogoPreview").innerHTML.trim()) {
+                pendingCompanyLogo = logoAsync;
+                document.getElementById("companyLogoPreview").innerHTML = "<img src='" + logoAsync + "' class='lp'>";
             }
-        }
+        }).catch(function(){});
     } catch(err) {
+        var msgAmig = _traduzirErroAmigavelIA(err);
+        if (manualTrigger) {
+            falharTarefaGuardiao("Busca não concluída", msgAmig);
+        }
         if (stEl) {
-            stEl.style.color = "#b91c1c";
-            stEl.textContent = _traduzirErroAmigavelIA(err) + " Preencha os campos manualmente se desejar.";
+            stEl.classList.remove("smart-alert-ok");
+            stEl.classList.add("smart-alert-err");
+            stEl.textContent = msgAmig + " Preencha os campos manualmente se desejar.";
         }
     } finally {
         if (typeof setCompanySearchLoading === "function") setCompanySearchLoading(false);
@@ -14594,17 +15304,28 @@ function confirmarEmpresaSugeridaIA() {
         var prev = document.getElementById("companyLogoPreview");
         if (prev) prev.innerHTML = "<img src='" + sug.logo + "' class='lp'>";
     }
+    if (Array.isArray(sug.products) && sug.products.length && !tempCompanyProducts.length) {
+        tempCompanyProducts = sug.products.map(function(p){ return Object.assign({}, p); });
+        updateCompanyProductsTable();
+        var stPort = document.getElementById("compPortfolioStatus");
+        if (stPort) {
+            stPort.style.display = "block";
+            stPort.style.color = "#059669";
+            stPort.innerHTML = "&#9889; <b>" + tempCompanyProducts.length + "</b> SKU(s) pré-carregados da base compartilhada!";
+        }
+    }
     var cardEl = document.getElementById("smartCompanyConfirmCard");
     if (cardEl) { cardEl.classList.remove("ativo"); cardEl.innerHTML = ""; }
     var stEl = document.getElementById("smartCompanyStatus");
     if (stEl) {
         var cnpjOk = String((document.getElementById("companyCNPJ") || {}).value || "").replace(/\D/g, "").length === 14;
         stEl.style.display = "block";
+        stEl.classList.remove("smart-alert-warn", "smart-alert-ok", "smart-alert-err");
         if (!cnpjOk) {
-            stEl.style.color = "#b45309";
-            stEl.textContent = "Dados básicos preenchidos. Confira ou complete o CNPJ antes de salvar.";
+            stEl.classList.add("smart-alert-warn");
+            stEl.textContent = "⚠️ Dados básicos preenchidos. Confira ou complete o CNPJ antes de salvar.";
         } else {
-            stEl.style.color = "#059669";
+            stEl.classList.add("smart-alert-ok");
             stEl.textContent = "✅ Dados preenchidos: " + (sug.razaoSocial || sug.nomeFantasia) + " (" + sug.ufLabel + ").";
         }
     }
@@ -14672,15 +15393,24 @@ function toggleTodosCatalogoIA(marcar) {
 
 async function _buscarMiniaturasOpenFoodFactsEmLote(lista) {
     var stEl = document.getElementById("catIaModalStatus");
-    var total = lista.length;
-    var concluidos = 0, encontrados = 0;
+    var pendentes = (lista || []).filter(function(it){ return !it.thumb; });
+    var total = (lista || []).length;
+    var jaTem = total - pendentes.length;
+    if (!pendentes.length) {
+        if (stEl) {
+            stEl.style.color = "#059669";
+            stEl.textContent = "✅ Catálogo pronto: " + total + " SKUs carregados com miniaturas. Revise e salve abaixo!";
+        }
+        return;
+    }
+    var concluidos = 0, encontrados = jaTem;
     var concurrency = 3;
     var cursor = 0;
 
     async function worker() {
-        while (cursor < total) {
+        while (cursor < pendentes.length) {
             var i = cursor++;
-            var item = lista[i];
+            var item = pendentes[i];
             try {
                 if (typeof buscarThumbnailOpenFoodFacts === "function") {
                     var thumb = await buscarThumbnailOpenFoodFacts(item);
@@ -14693,31 +15423,101 @@ async function _buscarMiniaturasOpenFoodFactsEmLote(lista) {
             concluidos++;
             if (stEl) {
                 stEl.style.color = "#0f766e";
-                stEl.textContent = "🖼️ Carregando miniaturas dos produtos: " + concluidos + "/" + total + " (" + encontrados + " imagem(ns) encontrada(s))...";
+                stEl.textContent = "🖼️ Carregando miniaturas dos produtos: " + (jaTem + concluidos) + "/" + total + " (" + encontrados + " imagem(ns))...";
             }
-            if (concluidos % 2 === 0 || concluidos === total) renderCatalogoIALista();
+            if (concluidos % 2 === 0 || concluidos === pendentes.length) renderCatalogoIALista();
         }
     }
 
     var workers = [];
-    for (var w = 0; w < Math.min(concurrency, total); w++) workers.push(worker());
+    for (var w = 0; w < Math.min(concurrency, pendentes.length); w++) workers.push(worker());
     await Promise.all(workers);
     if (stEl) {
         stEl.style.color = "#059669";
-        stEl.textContent = "✅ Catálogo pronto: " + total + " SKUs gerados, " + encontrados + " miniatura(s) carregada(s) + selos de gramatura. Revise e salve abaixo!";
+        stEl.textContent = "✅ Catálogo pronto: " + total + " SKUs gerados, " + encontrados + " miniatura(s) carregada(s). Revise e salve abaixo!";
     }
     renderCatalogoIALista();
+}
+
+async function buscarCatalogoSupabasePrimeiro(compName, cnpj) {
+    try {
+        if (typeof isSupabaseConfigurado !== "function" || !isSupabaseConfigurado()) return [];
+        if (typeof navigator !== "undefined" && navigator.onLine === false) return [];
+        var sb = (typeof getSupabaseClient === "function") ? getSupabaseClient() : null;
+        if (!sb) return [];
+
+        var digits = String(cnpj || "").replace(/\D/g, "");
+        var empRows = [];
+        if (digits.length === 14) {
+            var cFmt = formatarCNPJ(digits);
+            var rC = await sb.from("empresas").select("id,name,payload").or("cnpj.eq." + cFmt + ",cnpj.ilike.%" + digits + "%").limit(4);
+            if (rC && Array.isArray(rC.data)) empRows = rC.data;
+        }
+        if (!empRows.length && compName && compName.length >= 2) {
+            var termo = compName.replace(/[%_,()]/g, " ").trim();
+            var rN = await sb.from("empresas").select("id,name,payload").ilike("name", "%" + termo + "%").limit(6);
+            if (rN && Array.isArray(rN.data)) empRows = rN.data;
+        }
+        if (!empRows.length) return [];
+
+        var empIds = empRows.map(function(r){ return String(r.id); }).filter(Boolean);
+        var prods = [];
+        if (empIds.length) {
+            var rPr = await sb.from("produtos").select("*").in("empresa_id", empIds).limit(120);
+            if (rPr && Array.isArray(rPr.data) && rPr.data.length) {
+                prods = rPr.data.map(function(pr) {
+                    var pp = (pr && pr.payload && typeof pr.payload === "object") ? pr.payload : {};
+                    return {
+                        code: String(pp.code || pr.code || "").trim(),
+                        name: String(pp.name || pr.name || "").trim(),
+                        gramatura: String(pp.gramatura || pr.gramatura || "").trim(),
+                        quantity: parseInt(pp.quantity || pr.quantity) || 1,
+                        priority: !!(pp.priority || (typeof isPriorityProduct === "function" && isPriorityProduct(pp.name || pr.name || ""))),
+                        category: String(pp.category || pr.category || "Geral").trim(),
+                        status: String(pp.status || pr.status || "Ativo").trim(),
+                        activeRegional: (pp.activeRegional !== undefined) ? (pp.activeRegional !== false) : (pr.active_regional !== false),
+                        thumb: String(pp.thumb || "").trim(),
+                        _checked: true
+                    };
+                }).filter(function(p){ return !!p.name; });
+            }
+        }
+        if (!prods.length) {
+            for (var ei = 0; ei < empRows.length; ei++) {
+                var pay = empRows[ei] && empRows[ei].payload;
+                if (pay && Array.isArray(pay.products) && pay.products.length) {
+                    prods = pay.products.map(function(pp) {
+                        return {
+                            code: String(pp.code || "").trim(),
+                            name: String(pp.name || "").trim(),
+                            gramatura: String(pp.gramatura || "").trim(),
+                            quantity: parseInt(pp.quantity) || 1,
+                            priority: !!pp.priority,
+                            category: String(pp.category || "Geral").trim(),
+                            status: String(pp.status || "Ativo").trim(),
+                            activeRegional: pp.activeRegional !== false,
+                            thumb: String(pp.thumb || "").trim(),
+                            _checked: true
+                        };
+                    }).filter(function(p){ return !!p.name; });
+                    if (prods.length) break;
+                }
+            }
+        }
+        return prods;
+    } catch(eSbCat) {
+        console.warn("Supabase catalogo fallback:", eSbCat && eSbCat.message ? eSbCat.message : eSbCat);
+        return [];
+    }
 }
 
 async function gerarCatalogoAutomaticoEmpresaIA() {
     var compName = ((document.getElementById("companyName") || {}).value || "").trim() ||
         (_ultimaSugestaoEmpresaIA && _ultimaSugestaoEmpresaIA.razaoSocial) || "";
+    var cnpjVal = ((document.getElementById("companyCNPJ") || {}).value || "").trim() ||
+        (_ultimaSugestaoEmpresaIA && _ultimaSugestaoEmpresaIA.cnpj) || "";
     if (!compName) {
         alert("Informe ou confirme o Nome da Empresa antes de gerar o catálogo automático.");
-        return;
-    }
-    if (!getGoogleGeminiKey()) {
-        alert("Configure sua chave de acesso nas Configurações para gerar o catálogo automático.");
         return;
     }
     var ctx = _obterUfContextoDispositivo();
@@ -14728,29 +15528,48 @@ async function gerarCatalogoAutomaticoEmpresaIA() {
     var stModal = document.getElementById("catIaModalStatus");
     var titleEl = document.getElementById("catIaModalTitle");
     if (titleEl) titleEl.textContent = "✨ Catálogo Regional: " + compName + " (" + ctx.uf + ")";
-    _catalogoIaGerado = [];
-    renderCatalogoIALista();
-    abrirModalCatalogoIA();
-    if (stModal) {
-        stModal.style.color = "#4f46e5";
-        stModal.textContent = "⏳ Gerando linhas e SKUs regionais para " + razao + " (" + ctx.uf + " / " + ctx.regional + ")...";
-    }
+
+    iniciarTarefaGuardiao({
+        id: "catalogo_regional",
+        titulo: "Gerando catálogo regional...",
+        sub: razao + " (" + ctx.uf + ")",
+        canBackground: true,
+        totalSteps: 2,
+        pageTarget: "pageCompany",
+        onReturn: abrirModalCatalogoIA
+    });
 
     try {
-        var prompt = "Você é um especialista sênior em portfólio comercial de varejo e trade marketing no Brasil.\n" +
-            "Indústria: " + razao + " (Nome curto: " + compName + ")" + (segmento ? " | Segmento: " + segmento : "") + "\n" +
-            "Região / UF foco: " + ctx.uf + " (" + ctx.regional + ").\n" +
-            "Gere uma tabela estruturada com as principais linhas e SKUs realmente comercializados por esta indústria nessa região do Brasil " +
-            "(se for PepsiCo do Brasil, inclua principais SKUs de Doritos, Ruffles, Lay's, Cheetos, Fandangos, Cebolitos, Torcida, Toddy, Toddynho, Quaker, Kero Coco, Milharina, etc. de 22 a 35 SKUs variados).\n" +
-            "Para CADA item informe obrigatoriamente:\n" +
-            "- nome: Nome completo do produto e sabor (ex: \"Doritos Queijo Nacho\", \"Toddynho Original\")\n" +
-            "- gramatura: Peso ou volume exato (ex: \"45g\", \"76g\", \"120g\", \"140g\", \"200ml\", \"1L\")\n" +
-            "- quantidade: Quantidade padrão por caixa (un/cx, número inteiro ex: 20, 24, 27, 30)\n" +
-            "- codigo: Código EAN-13 real brasileiro quando conhecido (13 dígitos) ou código SKU padrão\n" +
-            "- categoria: Categoria comercial (ex: \"Salty Snacks\", \"Foods / Achocolatados\", \"Aveias\", \"Bebidas\")\n" +
-            "- status: \"Ativo\"\n\n" +
-            "Retorne APENAS JSON válido no formato:\n" +
-            "{\"produtos\":[{\"nome\":\"...\",\"gramatura\":\"...\",\"quantidade\":24,\"codigo\":\"789...\",\"categoria\":\"...\",\"status\":\"Ativo\"}]}";
+        // 1. SUPABASE PRIMEIRO (Base Compartilhada instantânea)
+        var sbProds = await buscarCatalogoSupabasePrimeiro(compName, cnpjVal);
+        if (sbProds.length) {
+            _catalogoIaGerado = sbProds;
+            renderCatalogoIALista();
+            if (stModal) {
+                stModal.style.color = "#059669";
+                stModal.textContent = "⚡ " + sbProds.length + " SKU(s) carregados da base compartilhada! Revise e toque em Salvar Portfólio.";
+            }
+            var wasBgSb = !!_bgTaskState.isBackground;
+            concluirTarefaGuardiao("⚡ Catálogo carregado!", sbProds.length + " SKU(s) da base compartilhada.", {
+                keepOverlayMs: 1100,
+                onReturn: abrirModalCatalogoIA
+            });
+            if (!wasBgSb) abrirModalCatalogoIA();
+            _buscarMiniaturasOpenFoodFactsEmLote(_catalogoIaGerado);
+            return;
+        }
+
+        if (!getGoogleGeminiKey()) {
+            falharTarefaGuardiao("Chave necessária", "Configure sua chave de acesso nas Configurações para gerar o catálogo.");
+            return;
+        }
+
+        atualizarProgressoTarefa("Montando mix de SKUs (" + ctx.uf + ")...", razao, 1, 2);
+
+        var prompt = "Trade marketing Brasil. Indústria: " + razao + " (" + compName + ")" + (segmento ? " | " + segmento : "") + " | Região: " + ctx.uf + " (" + ctx.regional + ").\n" +
+            "Liste de 20 a 32 principais SKUs comerciais dessa indústria na região.\n" +
+            "Retorne APENAS JSON válido:\n" +
+            "{\"produtos\":[{\"nome\":\"...\",\"gramatura\":\"45g\",\"quantidade\":24,\"codigo\":\"789...\",\"categoria\":\"...\",\"status\":\"Ativo\"}]}";
 
         var raw = await chamarGoogleGeminiFlash(prompt, [], true);
         var obj = extrairJsonGemini(raw);
@@ -14776,11 +15595,24 @@ async function gerarCatalogoAutomaticoEmpresaIA() {
         }).filter(function(p){ return !!p.name; });
 
         renderCatalogoIALista();
+        if (stModal) {
+            stModal.style.color = "#0f766e";
+            stModal.textContent = "🖼️ Catálogo gerado (" + _catalogoIaGerado.length + " SKUs)! Carregando miniaturas em segundo plano...";
+        }
+
+        var wasBgCat = !!_bgTaskState.isBackground;
+        concluirTarefaGuardiao("✅ Catálogo regional pronto!", _catalogoIaGerado.length + " SKU(s) para " + compName + ".", {
+            keepOverlayMs: 1200,
+            onReturn: abrirModalCatalogoIA
+        });
+        if (!wasBgCat) abrirModalCatalogoIA();
         _buscarMiniaturasOpenFoodFactsEmLote(_catalogoIaGerado);
     } catch(err) {
+        var msgErr = _traduzirErroAmigavelIA(err);
+        falharTarefaGuardiao("Erro no catálogo", msgErr);
         if (stModal) {
             stModal.style.color = "#dc2626";
-            stModal.textContent = "Não foi possível gerar o catálogo: " + _traduzirErroAmigavelIA(err);
+            stModal.textContent = "Não foi possível gerar o catálogo: " + msgErr;
         }
     }
 }
@@ -14850,8 +15682,25 @@ function confirmarSalvarCatalogoIA() {
     <div id="guardiao-placa-icone" class="guardiao-placa-icone processando">⚙️</div>
     <div class="guardiao-placa-msg" id="guardiao-msg">Processando...</div>
     <div class="guardiao-placa-sub" id="guardiao-sub"></div>
+    <div class="guardiao-progress-wrap" id="guardiao-progress-wrap">
+      <div class="guardiao-progress-track"><div class="guardiao-progress-bar" id="guardiao-progress-bar"></div></div>
+      <div class="guardiao-progress-txt" id="guardiao-progress-txt"></div>
+    </div>
+    <button id="guardiao-btn-bg" type="button" class="guardiao-btn-bg" onclick="minimizarTarefaParaSegundoPlano()">⏳ Continuar em Segundo Plano</button>
     <button id="guardiao-btn-continuar" style="display:none;margin-top:10px;width:100%;background:#7c3aed;color:#fff;border:none;border-radius:8px;padding:10px;cursor:pointer;font-size:13px;font-weight:700">&#128229; Processar mais</button>
   </div>
+</div>
+
+<!-- BARRA DISCRETA DE PROCESSAMENTO EM SEGUNDO PLANO -->
+<div id="bgTaskBar" onclick="restaurarOuRevisarTarefaBg()" role="status" aria-live="polite">
+  <img class="bg-task-orb" data-lcs-asset="guardiao-sm" alt="Guardião">
+  <div class="bg-task-info">
+    <div class="bg-task-title" id="bgTaskTitle">Processando em segundo plano...</div>
+    <div class="bg-task-sub" id="bgTaskSub">Toque para acompanhar</div>
+    <div class="bg-task-track"><div class="bg-task-fill" id="bgTaskFill"></div></div>
+  </div>
+  <span class="bg-task-pct" id="bgTaskPct">0%</span>
+  <button type="button" class="bg-task-close" onclick="event.stopPropagation();fecharBgTaskBar();" aria-label="Fechar">&#10005;</button>
 </div>
 
 <!-- GUARDIÃO TOAST -->
@@ -14880,7 +15729,7 @@ function confirmarSalvarCatalogoIA() {
     <img data-lcs-asset="guardiao-sm" alt="Guardião LocalShelf" class="gchat-header-img">
     <div class="gchat-header-txt">
       <div class="gchat-header-nome">Guardião LocalShelf</div>
-      <div class="gchat-header-sub" id="gchat-cliente" data-i18n="guardiao_sub">Assistente Gemini 3.8</div>
+      <div class="gchat-header-sub" id="gchat-cliente" data-i18n="guardiao_sub">Assistente Inteligente</div>
     </div>
     <button class="gchat-close" onclick="fecharGuardiaoChat()">&#10005;</button>
   </div>
