@@ -708,6 +708,13 @@ body.dark-mode .cfg-key-toggle{background:#334155!important;color:#e2e8f0!import
 .status-selo.ativo{background:#dcfce7;color:#166534;border:1px solid #86efac}
 .status-selo.lancamento{background:#dbeafe;color:#1d4ed8;border:1px solid #93c5fd}
 .status-selo.descontinuado{background:#fee2e2;color:#b91c1c;border:1px solid #fca5a5}
+.sku-pending-badge{display:inline-flex;align-items:center;gap:3px;padding:1px 6px;border-radius:5px;font-size:10px;font-weight:700;background:#fef3c7;color:#92400e;border:1px solid #fcd34d}
+.sku-launch-guia-badge{display:inline-flex;align-items:center;gap:3px;padding:1px 6px;border-radius:5px;font-size:10px;font-weight:800;background:linear-gradient(135deg,#0d9488,#0284c7);color:#fff;border:1px solid #0f766e}
+.btn-add-manual-sku{width:100%;margin:0 0 8px 0;padding:10px 14px;border-radius:9px;border:1.5px dashed #2563eb;background:#eff6ff;color:#1e40af;font-size:13px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px}
+.manual-photo-row{display:flex;align-items:center;gap:10px;padding:8px 10px;border:1px dashed #cbd5e1;border-radius:8px;background:#f8fafc;margin-bottom:10px;flex-wrap:wrap}
+.guia-launches-banner{margin:8px 0;padding:10px 12px;border-radius:10px;border:1.5px solid #14b8a6;background:#f0fdfa}
+.guia-launches-title{font-size:12px;font-weight:800;color:#0f766e;margin-bottom:4px;display:flex;align-items:center;justify-content:space-between;gap:6px}
+.guia-launch-item{display:flex;align-items:center;gap:8px;padding:5px 7px;border-radius:7px;background:#fff;border:1px solid #ccfbf1;margin-top:5px;font-size:11px;cursor:pointer}
 .mix-switch{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:7px;font-size:10px;font-weight:700;cursor:pointer;border:1px solid;margin:0}
 .mix-switch.on{background:#dcfce7;color:#166534;border-color:#86efac}
 .mix-switch.off{background:#f1f5f9;color:#64748b;border-color:#cbd5e1}
@@ -721,6 +728,12 @@ body.dark-mode .comp-filter-btn.ativo{background:#3b82f6!important;color:#fff!im
 body.dark-mode .sku-thumb-btn{background:#0f172a!important;border-color:#475569!important}
 body.dark-mode .regional-banner{background:#172554!important;border-color:#1d4ed8!important;color:#bfdbfe!important}
 body.dark-mode .mix-switch.off{background:#1e293b!important;color:#94a3b8!important;border-color:#475569!important}
+body.dark-mode .sku-pending-badge{background:#451a03!important;color:#fde68a!important;border-color:#b45309!important}
+body.dark-mode .btn-add-manual-sku{background:#172554!important;color:#93c5fd!important;border-color:#3b82f6!important}
+body.dark-mode .manual-photo-row{background:#0f172a!important;border-color:#334155!important;color:#cbd5e1!important}
+body.dark-mode .guia-launches-banner{background:#042f2e!important;border-color:#0d9488!important}
+body.dark-mode .guia-launches-title{color:#5eead4!important}
+body.dark-mode .guia-launch-item{background:#0f172a!important;border-color:#115e59!important;color:#e2e8f0!important}
 /* ── BLOCO 3: SUPABASE, FOTOS HD, PASSAGEM DE BASTAO & LOGISTICA ─────────── */
 .rota-hoje-badge{display:inline-flex;align-items:center;gap:4px;margin-top:4px;padding:2px 8px;border-radius:6px;background:#fef3c7;color:#92400e;border:1px solid #f59e0b;font-size:10px;font-weight:800}
 .rota-recebida-badge{display:inline-flex;align-items:center;gap:4px;margin-top:4px;padding:2px 8px;border-radius:6px;background:#dcfce7;color:#166534;border:1px solid #4ade80;font-size:10px;font-weight:800}
@@ -1304,9 +1317,10 @@ body.dark-mode .relp-pill.ativo{background:#2563eb!important;color:#fff!importan
     <div id="compPortfolioStatus" style="font-size:11px;margin-top:8px;display:none"></div>
   </div>
 
+  <button type="button" id="btnAddManualSkuTop" class="btn-add-manual-sku" onclick="abrirAdicionarProdutoManual()">+ Adicionar Produto Manualmente</button>
   <div class="tabs">
-    <button class="tab active" onclick="switchTab(event,'pasteComp')">Copiar/Colar</button>
-    <button class="tab" onclick="switchTab(event,'manualComp')">Manual</button>
+    <button class="tab active" id="tabCompPaste" onclick="switchTab(event,'pasteComp')">Copiar/Colar</button>
+    <button class="tab" id="tabCompManual" onclick="switchTab(event,'manualComp')">Manual</button>
   </div>
   <div id="pasteComp" class="tc active">
     <div class="fg"><label>Cole (Produto | Gramatura | Qtd/Cx)</label><textarea id="pasteCompanyProducts" placeholder="Batata Lays | 62G | 26"></textarea></div>
@@ -1316,8 +1330,8 @@ body.dark-mode .relp-pill.ativo{background:#2563eb!important;color:#fff!importan
   <div id="manualComp" class="tc">
     <div class="grid2">
       <div class="fg"><label>Produto *</label><input type="text" id="comp_prod_name" placeholder="Ex: Doritos Nacho"></div>
-      <div class="fg"><label>Gramatura *</label><input type="text" id="comp_prod_gram" placeholder="Ex: 120G"></div>
-      <div class="fg"><label>Qtd/Cx *</label><input type="number" id="comp_prod_qty" placeholder="Ex: 24" min="1"></div>
+      <div class="fg"><label>Gramatura <span style="color:#94a3b8;font-weight:400;font-size:11px">(opcional)</span></label><input type="text" id="comp_prod_gram" placeholder="Ex: 120G"></div>
+      <div class="fg"><label>Qtd/Cx <span style="color:#94a3b8;font-weight:400;font-size:11px">(padr&atilde;o 1)</span></label><input type="number" id="comp_prod_qty" placeholder="Ex: 24" min="1"></div>
       <div class="fg"><label>SKU / EAN <span style="color:#94a3b8;font-weight:400;font-size:11px">(opcional)</span></label><input type="text" id="comp_prod_code" placeholder="Ex: 7892840812345"></div>
       <div class="fg"><label>Categoria <span style="color:#94a3b8;font-weight:400;font-size:11px">(opcional)</span></label><input type="text" id="comp_prod_cat" placeholder="Ex: DORITOS"></div>
       <div class="fg">
@@ -1329,8 +1343,20 @@ body.dark-mode .relp-pill.ativo{background:#2563eb!important;color:#fff!importan
         </select>
       </div>
     </div>
-    <button onclick="addCompanyProduct()">Adicionar</button>
+    <div class="manual-photo-row">
+      <div id="manualProdPhotoPreview" style="width:46px;height:46px;border-radius:8px;border:1px solid #cbd5e1;background:#fff;display:flex;align-items:center;justify-content:center;font-size:18px;overflow:hidden;flex-shrink:0">&#128247;</div>
+      <div style="flex:1;min-width:140px">
+        <div style="font-size:11px;font-weight:700">Foto do Produto (opcional)</div>
+        <div style="font-size:10px;color:#64748b">C&acirc;mera ou galeria; salva sem travar mesmo se faltar foto ou EAN.</div>
+      </div>
+      <input type="file" id="comp_prod_photo" accept="image/*" style="display:none" onchange="selecionarFotoManualCompProd(this)">
+      <button type="button" class="sec" style="padding:6px 10px;font-size:11px;margin:0" onclick="document.getElementById('comp_prod_photo').click()">&#128247; Foto / Galeria</button>
+      <button type="button" id="btnLimparFotoManual" class="sec" style="display:none;padding:6px 8px;font-size:11px;margin:0;color:#dc2626" onclick="limparFotoManualCompProd()">Limpar</button>
+    </div>
+    <button type="button" onclick="addCompanyProduct()">Adicionar Produto ao Portf&oacute;lio</button>
   </div>
+
+  <div id="guiaLaunchesBanner" class="guia-launches-banner" style="display:none"></div>
 
   <div class="comp-filter-bar">
     <div class="comp-filter-pills" id="compFilterPills">
@@ -3708,9 +3734,6 @@ async function chamarGoogleGeminiFlash(prompt, partsArray, jsonMode, _state, opt
         contents: [{ role: "user", parts: parts }],
         generationConfig: genCfg
     };
-    if (state.opts && state.opts.useSearch) {
-        bodyPayload.tools = [{ google_search: {} }];
-    }
     var url = "https://generativelanguage.googleapis.com/v1beta/models/" + encodeURIComponent(modeloAtivo) + ":generateContent?key=" + encodeURIComponent(apiKey);
     var ctrl = (typeof AbortController !== "undefined") ? new AbortController() : null;
     var timeoutMs = (state.opts && Number(state.opts.timeoutMs) > 0) ? Number(state.opts.timeoutMs) : 90000;
@@ -3725,11 +3748,6 @@ async function chamarGoogleGeminiFlash(prompt, partsArray, jsonMode, _state, opt
         if (!resp.ok) {
             var errMsg = "";
             try { var ej = await resp.json(); errMsg = ej.error && ej.error.message ? ej.error.message : ""; } catch(e2) {}
-            if (resp.status === 400 && state.opts && state.opts.useSearch && /search|tool|grounding/i.test(errMsg || "")) {
-                console.warn("LocalShelf AI: pesquisa web nao suportada neste modelo, tentando sem tools.");
-                state.opts.useSearch = false;
-                return await chamarGoogleGeminiFlash(prompt, partsArray, jsonMode, state);
-            }
             var isTransient = (resp.status === 503 || resp.status === 429) ||
                 /high demand|overloaded|resource exhausted|rate limit|quota|too many requests|temporarily unavailable/i.test(errMsg || "");
             var isModelUnavailable = (resp.status === 404) ||
@@ -3950,7 +3968,11 @@ function goToNewCompany() {
     if (typeof _fotosGuia !== "undefined") _fotosGuia = [];
     if (typeof _guiaProcessadas !== "undefined") _guiaProcessadas = 0;
     if (typeof renderGridGuiaFotos === "function") renderGridGuiaFotos();
+    if (typeof _limparDestaquesCamposEmpresa === "function") _limparDestaquesCamposEmpresa();
+    if (typeof _vincularLimpezaCamposEmpresa === "function") _vincularLimpezaCamposEmpresa();
     if (typeof setCompanySearchLoading === "function") setCompanySearchLoading(false);
+    if (typeof limparBannerLancamentosGuia === "function") limparBannerLancamentosGuia();
+    if (typeof limparFotoManualCompProd === "function") limparFotoManualCompProd();
     updateCompanyProductsTable(); showPage("pageCompany");
 }
 
@@ -4718,6 +4740,28 @@ function _normalizarPayloadCnpjWs(d, digits) {
         telefone: tel
     };
 }
+function _calcularCnpjMatrizFromRaiz(raiz8) {
+    var base = String(raiz8 || "").replace(/\D/g, "");
+    if (base.length !== 8) return "";
+    var c12 = base + "0001";
+    var w1 = [5,4,3,2,9,8,7,6,5,4,3,2];
+    var s1 = 0;
+    for (var i = 0; i < 12; i++) s1 += parseInt(c12.charAt(i), 10) * w1[i];
+    var r1 = s1 % 11;
+    var d1 = r1 < 2 ? 0 : 11 - r1;
+    var c13 = c12 + String(d1);
+    var w2 = [6,5,4,3,2,9,8,7,6,5,4,3,2];
+    var s2 = 0;
+    for (var j = 0; j < 13; j++) s2 += parseInt(c13.charAt(j), 10) * w2[j];
+    var r2 = s2 % 11;
+    var d2 = r2 < 2 ? 0 : 11 - r2;
+    return c13 + String(d2);
+}
+function _formatarRaizCnpjPrefixo(raiz8) {
+    var d = String(raiz8 || "").replace(/\D/g, "").slice(0, 8);
+    if (d.length !== 8) return "";
+    return d.slice(0, 2) + "." + d.slice(2, 5) + "." + d.slice(5, 8);
+}
 async function consultarBrasilApiCnpj(cnpjDigits) {
     var digits = String(cnpjDigits || "").replace(/\D/g, "");
     if (digits.length !== 14) throw new Error("CNPJ deve ter 14 dígitos.");
@@ -4785,25 +4829,51 @@ async function consultarBrasilApiCnpj(cnpjDigits) {
 }
 async function buscarOpenStreetMapNominatim(query, ctx) {
     var qTexto = String(query || "").trim();
-    var ufCtx = (ctx && ctx.uf && ctx.uf !== "Brasil") ? ctx.uf : "";
-    var url = "https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&countrycodes=br&limit=8&q=" + encodeURIComponent(qTexto);
-    var resp = await fetch(url, { headers: { "Accept": "application/json", "Accept-Language": "pt-BR" } });
-    if (!resp.ok) throw new Error("Nominatim " + resp.status);
-    var list = await resp.json();
-    if ((!Array.isArray(list) || !list.length) && ufCtx && qTexto.toUpperCase().indexOf(ufCtx.toUpperCase()) < 0) {
-        var urlUf = "https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&countrycodes=br&limit=8&q=" + encodeURIComponent(qTexto + " " + ufCtx);
-        var respUf = await fetch(urlUf, { headers: { "Accept": "application/json", "Accept-Language": "pt-BR" } });
-        if (respUf.ok) list = await respUf.json();
+    if (!qTexto) return [];
+    var ufCtx = (ctx && ctx.uf && ctx.uf !== "Brasil") ? String(ctx.uf).trim() : "";
+    var cidCtx = (ctx && ctx.cidade) ? String(ctx.cidade).trim() : "";
+    var qNorm = normTextAccent(qTexto).toLowerCase();
+    var headers = { "Accept": "application/json", "Accept-Language": "pt-BR" };
+
+    var queries = [];
+    if (ufCtx && qNorm.indexOf(ufCtx.toLowerCase()) < 0) {
+        if (cidCtx && qNorm.indexOf(normTextAccent(cidCtx).toLowerCase()) < 0) {
+            queries.push(qTexto + " " + cidCtx + " " + ufCtx);
+        }
+        queries.push(qTexto + " " + ufCtx);
     }
-    if (!Array.isArray(list)) return [];
-    return list.map(function(item) {
+    queries.push(qTexto);
+
+    var list = [];
+    for (var qi = 0; qi < queries.length; qi++) {
+        var url = "https://nominatim.openstreetmap.org/search?format=jsonv2&addressdetails=1&countrycodes=br&limit=15&q=" + encodeURIComponent(queries[qi]);
+        try {
+            var resp = await fetch(url, { headers: headers });
+            if (resp.ok) {
+                var arr = await resp.json();
+                if (Array.isArray(arr) && arr.length) {
+                    list = list.concat(arr);
+                    if (list.length >= 5) break;
+                }
+            }
+        } catch(eNom) {}
+    }
+    if (!Array.isArray(list) || !list.length) return [];
+
+    var seenPlace = {};
+    var mapped = [];
+    list.forEach(function(item) {
+        var pid = String(item.place_id || item.osm_id || item.display_name || "");
+        if (seenPlace[pid]) return;
+        seenPlace[pid] = true;
         var addr = item.address || {};
-        var nm = item.name || (item.display_name ? item.display_name.split(",")[0] : query);
+        var nm = item.name || (item.display_name ? item.display_name.split(",")[0] : qTexto);
         var rua = [addr.road, addr.house_number].filter(Boolean).join(", ");
-        var municipio = addr.city || addr.town || addr.municipality || "";
-        var estado = addr.state_code ? String(addr.state_code).toUpperCase() : (addr.state || "");
-        var reg = [addr.suburb || addr.neighbourhood, municipio, estado].filter(Boolean).join(" - ");
-        return {
+        var municipio = addr.city || addr.town || addr.municipality || addr.village || "";
+        var isoUf = addr["ISO3166-2-lvl4"] ? String(addr["ISO3166-2-lvl4"]).replace(/^BR-/i, "") : "";
+        var estado = (addr.state_code ? String(addr.state_code) : (isoUf || addr.state || "")).toUpperCase();
+        var reg = [addr.suburb || addr.neighbourhood || addr.city_district, municipio, estado].filter(Boolean).join(" - ");
+        mapped.push({
             source: "OpenStreetMap",
             nome: String(nm || "").trim(),
             razaoSocial: "",
@@ -4815,8 +4885,55 @@ async function buscarOpenStreetMapNominatim(query, ctx) {
             cnae: "",
             porte: "",
             checkoutsEstimado: null
-        };
+        });
     });
+
+    if (ufCtx) {
+        var ufMatches = mapped.filter(function(it) {
+            return String(it.uf || "").toUpperCase() === ufCtx.toUpperCase() ||
+                normTextAccent(it.endereco || "").toLowerCase().indexOf(ufCtx.toLowerCase()) >= 0;
+        });
+        if (ufMatches.length) mapped = ufMatches.concat(mapped.filter(function(it){ return ufMatches.indexOf(it) < 0; }));
+    }
+    return mapped.slice(0, 15);
+}
+function buscarClienteLocalPrimeiro(query, ctx) {
+    try {
+        var qRaw = String(query || "").trim();
+        if (!qRaw || typeof clients !== "object" || !clients) return [];
+        var digits = qRaw.replace(/\D/g, "");
+        var qNorm = normTextAccent(qRaw).toLowerCase();
+        var hits = [];
+        Object.values(clients).forEach(function(c) {
+            if (!c || !c.name) return;
+            var cDigits = String(c.cnpj || "").replace(/\D/g, "");
+            var matchCnpj = (digits.length === 14 && cDigits === digits) || (digits.length === 8 && cDigits.indexOf(digits) === 0);
+            var hay = normTextAccent([c.name, c.razaoSocial, c.endereco].filter(Boolean).join(" ")).toLowerCase();
+            var matchTxt = qNorm.length >= 2 && hay.indexOf(qNorm) >= 0;
+            if (matchCnpj || matchTxt) {
+                hits.push({
+                    source: "Local",
+                    supabaseValidado: true,
+                    nome: String(c.name || "").trim(),
+                    bandeira: String(c.name || "").trim(),
+                    razaoSocial: String(c.razaoSocial || "").trim(),
+                    cnpj: String(c.cnpj || "").trim(),
+                    endereco: String(c.endereco || "").trim(),
+                    cnae: String(c.cnae || "").trim(),
+                    checkoutsEstimado: parseInt(c.checkouts) || null,
+                    canalSugerido: String(c.canal || "").trim(),
+                    perfilSugerido: String(c.perfil || "").trim(),
+                    buyer: String(c.buyer || "").trim(),
+                    buyerPhone: String(c.buyerPhone || "").trim(),
+                    logo: String(c.logo || "").trim(),
+                    uf: ""
+                });
+            }
+        });
+        return hits.slice(0, 10);
+    } catch(eLocCli) {
+        return [];
+    }
 }
 async function buscarClienteSupabasePrimeiro(query, ctx) {
     try {
@@ -4872,23 +4989,26 @@ async function buscarLojasGeminiFlash(query, ctx) {
     if (!key) return [];
     ctx = ctx || _obterUfContextoDispositivo();
     var ufInfo = (ctx.cidade ? ctx.cidade + " / " : "") + (ctx.uf || "Brasil");
-    var prompt = "Pesquisa comercial profunda de lojas e supermercados no Brasil usando busca na web.\n" +
+    var prompt = "Cadastro comercial de lojas e supermercados no Brasil.\n" +
         "Busca: \"" + query + "\". Localização prioritária: " + ufInfo + ".\n" +
-        "Pesquise ativamente na web até 5 unidades reais dessa rede/loja priorizando a UF/região informada, cruzando nome da rede + rua/bairro/cidade para encontrar o CNPJ exato de 14 dígitos de cada filial, Razão Social, CNAE, canal/porte e estimativa de checkouts.\n" +
+        "Sugira até 5 unidades reais dessa rede/loja priorizando a UF/região informada, incluindo endereço completo, canal, porte e estimativa de checkouts.\n" +
+        "Se souber com certeza o CNPJ completo de 14 dígitos da filial, preencha \"cnpj\". Se só souber a raiz (8 primeiros dígitos), preencha \"cnpjRaiz\" e deixe \"cnpj\" vazio (nunca invente os dígitos da filial).\n" +
         "Retorne APENAS JSON array:\n" +
-        "[{\"nome\":\"Nome Unidade/Bairro\",\"razaoSocial\":\"\",\"cnpj\":\"00.000.000/0000-00\",\"endereco\":\"Rua, nº - Bairro, Cidade/UF\",\"municipio\":\"\",\"uf\":\"\",\"cnae\":\"\",\"canalSugerido\":\"Vizinhanca|Super|Hiper|Atacado\",\"porteSugerido\":\"\",\"checkoutsEstimado\":null,\"siteDominio\":\"\"}]\n" +
-        "Só deixe cnpj vazio se realmente não existir registro público na web após pesquisar a filial.";
-    var txt = await chamarGoogleGeminiFlash(prompt, [], true, null, { useSearch: true, timeoutMs: 90000 });
+        "[{\"nome\":\"Nome Unidade/Bairro\",\"razaoSocial\":\"\",\"cnpj\":\"\",\"cnpjRaiz\":\"\",\"endereco\":\"Rua, nº - Bairro, Cidade/UF\",\"municipio\":\"\",\"uf\":\"\",\"cnae\":\"\",\"canalSugerido\":\"Vizinhanca|Super|Hiper|Atacado\",\"porteSugerido\":\"\",\"checkoutsEstimado\":null,\"siteDominio\":\"\"}]";
+    var txt = await chamarGoogleGeminiFlash(prompt, [], true, null, { timeoutMs: 90000 });
     var arr = parseGeminiJSON(txt);
     if (!Array.isArray(arr) && arr && Array.isArray(arr.unidades)) arr = arr.unidades;
     if (!Array.isArray(arr)) return [];
     return arr.map(function(it) {
+        var cDig = String(it.cnpj || "").replace(/\D/g, "");
+        var rDig = String(it.cnpjRaiz || (cDig.length === 8 ? cDig : "")).replace(/\D/g, "").slice(0, 8);
         return {
             source: "Sugestao",
             nome: String(it.nome || query).trim(),
             bandeira: String(it.bandeira || it.nome || "").trim(),
             razaoSocial: String(it.razaoSocial || "").trim(),
-            cnpj: it.cnpj ? (formatarCNPJ(it.cnpj) || String(it.cnpj).trim()) : "",
+            cnpj: cDig.length === 14 ? formatarCNPJ(cDig) : "",
+            cnpjRaiz: rDig.length === 8 ? rDig : "",
             endereco: String(it.endereco || "").trim(),
             municipio: String(it.municipio || "").trim(),
             uf: String(it.uf || "").trim().toUpperCase(),
@@ -4904,40 +5024,67 @@ async function enriquecerDossieLojaCascata(item, ctx) {
     if (!item) return { item: item, cnpjOficialOk: false, buscaIaOk: false };
     ctx = ctx || _obterUfContextoDispositivo();
     var enriched = Object.assign({}, item);
-    if (item.source === "Supabase") {
+    if (item.source === "Local" || item.source === "Supabase") {
         return { item: enriched, cnpjOficialOk: String(enriched.cnpj || "").replace(/\D/g, "").length === 14, buscaIaOk: true, supabaseHit: true };
     }
     var cnpjOficialOk = false;
     var buscaIaOk = false;
 
-    if (getGoogleGeminiKey()) {
+    // Camada 2: Valida CNPJ de 14 digitos primeiro (se ja veio preenchido)
+    var cnpjInit = String(enriched.cnpj || "").replace(/\D/g, "");
+    if (cnpjInit.length === 14) {
+        try {
+            var bInit = await consultarBrasilApiCnpj(cnpjInit);
+            if (bInit && bInit.razaoSocial) {
+                cnpjOficialOk = true;
+                enriched.cnpj = bInit.cnpj;
+                enriched.cnpjRaiz = cnpjInit.slice(0, 8);
+                enriched.razaoSocial = bInit.razaoSocial;
+                if (bInit.nomeFantasia && (!enriched.nome || enriched.source === "CadastroOficial" || enriched.source === "BrasilAPI")) {
+                    enriched.nome = bInit.nomeFantasia;
+                }
+                if (bInit.endereco) enriched.endereco = bInit.endereco;
+                if (bInit.cnae) enriched.cnae = bInit.cnae;
+                if (bInit.porte) enriched.porte = bInit.porte;
+                if (bInit.telefone) enriched.telefone = bInit.telefone;
+            }
+        } catch(eBr0) {}
+    }
+
+    // Camada 3: Gemini padrao (SEM google_search) apenas para cruzar e deduzir campos faltantes
+    var precisaIA = !enriched.razaoSocial || !enriched.checkoutsEstimado || !enriched.canalSugerido || !enriched.cnae || String(enriched.cnpj || "").replace(/\D/g, "").length !== 14;
+    if (precisaIA && getGoogleGeminiKey()) {
         try {
             var ufCtx = (ctx.cidade ? ctx.cidade + " / " : "") + (ctx.uf || "Brasil");
-            var prompt2 = "PESQUISA PROFUNDA OBRIGATÓRIA com busca na web para localizar os dados fiscais exatos desta filial no Brasil:\n" +
+            var prompt2 = "Com base nos dados abaixo, identifique os dados comerciais e fiscais desta loja no Brasil:\n" +
                 "- Nome da loja / rede: \"" + (enriched.nome || "") + "\"\n" +
                 (enriched.endereco ? "- Endereço / rua / bairro / cidade: \"" + enriched.endereco + "\"\n" : "") +
-                (enriched.cnpj ? "- CNPJ conhecido: \"" + enriched.cnpj + "\"\n" : "") +
+                (enriched.cnpj ? "- CNPJ confirmado: \"" + enriched.cnpj + "\"\n" : "") +
+                (enriched.razaoSocial ? "- Razão Social conhecida: \"" + enriched.razaoSocial + "\"\n" : "") +
                 "- UF referência: " + ufCtx + "\n\n" +
-                "Cruze o nome da rede com rua, número, bairro e cidade na web para localizar o CNPJ de 14 dígitos desta filial específica, Razão Social, CNAE, canal/porte e estimativa real de checkouts.\n" +
+                "Deduza CNAE típico, canal/perfil da rede, estimativa de checkouts e domínio oficial. " +
+                "Se souber com certeza o CNPJ completo de 14 dígitos desta filial, informe em \"cnpj\"; se souber apenas a raiz (8 dígitos da rede/matriz), informe \"cnpjRaiz\" e deixe \"cnpj\" vazio (nunca invente o número da filial).\n" +
                 "Retorne APENAS JSON:\n" +
-                "{\"cnpj\":\"\",\"razaoSocial\":\"\",\"nomeFantasia\":\"\",\"enderecoCompleto\":\"\",\"cnae\":\"\",\"canalSugerido\":\"Vizinhanca|Super|Hiper|Atacado\",\"perfilSugerido\":\"Vizinhanca|Mercado|Supermercado|Hipermercado|Atacarejo|Conveniencia\",\"porteSugerido\":\"\",\"checkoutsEstimado\":null,\"siteDominio\":\"\"}";
-            var raw2 = await chamarGoogleGeminiFlash(prompt2, [], true, null, { useSearch: true, timeoutMs: 90000 });
+                "{\"cnpj\":\"\",\"cnpjRaiz\":\"\",\"razaoSocial\":\"\",\"nomeFantasia\":\"\",\"enderecoCompleto\":\"\",\"cnae\":\"\",\"canalSugerido\":\"Vizinhanca|Super|Hiper|Atacado\",\"perfilSugerido\":\"Vizinhanca|Mercado|Supermercado|Hipermercado|Atacarejo|Conveniencia\",\"porteSugerido\":\"\",\"checkoutsEstimado\":null,\"siteDominio\":\"\"}";
+            var raw2 = await chamarGoogleGeminiFlash(prompt2, [], true, null, { timeoutMs: 90000 });
             var d = parseGeminiJSON(raw2);
             if (Array.isArray(d)) d = d[0] || {};
             if (d && typeof d === "object") {
                 buscaIaOk = true;
                 var cnpjDig2 = String(d.cnpj || "").replace(/\D/g, "");
-                if (cnpjDig2.length === 14) enriched.cnpj = formatarCNPJ(cnpjDig2);
-                if (d.razaoSocial) enriched.razaoSocial = String(d.razaoSocial).trim();
-                if (d.nomeFantasia) enriched.nome = String(d.nomeFantasia).trim();
-                if (d.enderecoCompleto && String(d.enderecoCompleto).trim().length >= (enriched.endereco || "").length - 5) {
+                var raiz2 = String(d.cnpjRaiz || (cnpjDig2.length === 8 ? cnpjDig2 : "")).replace(/\D/g, "").slice(0, 8);
+                if (cnpjDig2.length === 14 && !enriched.cnpj) enriched.cnpj = formatarCNPJ(cnpjDig2);
+                if (raiz2.length === 8 && !enriched.cnpjRaiz) enriched.cnpjRaiz = raiz2;
+                if (d.razaoSocial && !enriched.razaoSocial) enriched.razaoSocial = String(d.razaoSocial).trim();
+                if (d.nomeFantasia && !enriched.nome) enriched.nome = String(d.nomeFantasia).trim();
+                if (d.enderecoCompleto && String(d.enderecoCompleto).trim().length > (enriched.endereco || "").length) {
                     enriched.endereco = String(d.enderecoCompleto).trim();
                 }
-                if (d.cnae) enriched.cnae = String(d.cnae).trim();
+                if (d.cnae && !enriched.cnae) enriched.cnae = String(d.cnae).trim();
                 if (d.canalSugerido) enriched.canalSugerido = String(d.canalSugerido).trim();
                 if (d.perfilSugerido) enriched.perfilSugerido = String(d.perfilSugerido).trim();
-                if (d.porteSugerido) enriched.porte = String(d.porteSugerido).trim();
-                if (parseInt(d.checkoutsEstimado) > 0) enriched.checkoutsEstimado = parseInt(d.checkoutsEstimado);
+                if (d.porteSugerido && !enriched.porte) enriched.porte = String(d.porteSugerido).trim();
+                if (parseInt(d.checkoutsEstimado) > 0 && !enriched.checkoutsEstimado) enriched.checkoutsEstimado = parseInt(d.checkoutsEstimado);
                 if (d.siteDominio) enriched.siteDominio = String(d.siteDominio).trim();
             }
         } catch(eGem2) {
@@ -4946,12 +5093,13 @@ async function enriquecerDossieLojaCascata(item, ctx) {
     }
 
     var cnpjDigFinal = String(enriched.cnpj || "").replace(/\D/g, "");
-    if (cnpjDigFinal.length === 14) {
+    if (cnpjDigFinal.length === 14 && !cnpjOficialOk) {
         try {
             var bRes = await consultarBrasilApiCnpj(cnpjDigFinal);
             if (bRes && bRes.razaoSocial) {
                 cnpjOficialOk = true;
                 enriched.cnpj = bRes.cnpj;
+                enriched.cnpjRaiz = cnpjDigFinal.slice(0, 8);
                 enriched.razaoSocial = bRes.razaoSocial;
                 if (bRes.nomeFantasia && (!enriched.nome || enriched.source === "CadastroOficial" || enriched.source === "BrasilAPI")) {
                     enriched.nome = bRes.nomeFantasia;
@@ -4964,9 +5112,22 @@ async function enriquecerDossieLojaCascata(item, ctx) {
         } catch(eBr) {
             console.warn("Validação CNPJ fallback:", eBr && eBr.message ? eBr.message : eBr);
         }
+    } else if (cnpjDigFinal.length !== 14 && enriched.cnpjRaiz && enriched.cnpjRaiz.length === 8) {
+        // Se tem apenas a raiz (8 digitos), consulta a matriz apenas para enriquecer Razao Social / CNAE / Porte, mantendo o endereco real da filial e deixando CNPJ para completar
+        var cnpjMatriz = _calcularCnpjMatrizFromRaiz(enriched.cnpjRaiz);
+        if (cnpjMatriz) {
+            try {
+                var bMat = await consultarBrasilApiCnpj(cnpjMatriz);
+                if (bMat && bMat.razaoSocial) {
+                    if (!enriched.razaoSocial) enriched.razaoSocial = bMat.razaoSocial;
+                    if (!enriched.cnae && bMat.cnae) enriched.cnae = bMat.cnae;
+                    if (!enriched.porte && bMat.porte) enriched.porte = bMat.porte;
+                }
+            } catch(eMat) {}
+        }
     }
 
-    return { item: enriched, cnpjOficialOk: cnpjOficialOk, buscaIaOk: buscaIaOk };
+    return { item: enriched, cnpjOficialOk: cnpjOficialOk, buscaIaOk: buscaIaOk, cnpjRaiz: enriched.cnpjRaiz || "" };
 }
 var _companyLookupBusy = false;
 var _clientLookupBusy = false;
@@ -4995,6 +5156,8 @@ function _limparDestaquesCamposCliente() {
         var el = document.getElementById(id);
         if (el) el.classList.remove("field-missing-warn");
     });
+    var cnpjEl = document.getElementById("clientCNPJ");
+    if (cnpjEl) cnpjEl.placeholder = "Ex: 12.345.678/0001-90";
 }
 function _vincularLimpezaCamposCliente() {
     ["clientName","clientCNPJ","clientEndereco","clientCheckouts","clientCanal","clientPerfil"].forEach(function(id) {
@@ -5033,7 +5196,13 @@ function _avaliarEExibirCompletudeCliente(opts) {
     var canalOk = !!String((canalEl && canalEl.value) || "").trim();
     var perfilOk = !!String((perfilEl && perfilEl.value) || "").trim();
 
-    if (!cnpjOk && cnpjEl) cnpjEl.classList.add("field-missing-warn");
+    if (!cnpjOk && cnpjEl) {
+        cnpjEl.classList.add("field-missing-warn");
+        if (opts.cnpjRaiz) {
+            var raizFmt = _formatarRaizCnpjPrefixo(opts.cnpjRaiz);
+            if (raizFmt) cnpjEl.placeholder = "Raiz " + raizFmt + "/____-__ (complete a filial)";
+        }
+    }
     if (!endOk && endEl) endEl.classList.add("field-missing-warn");
     if (!ckOk && ckEl) ckEl.classList.add("field-missing-warn");
     if (!canalOk && canalEl) canalEl.classList.add("field-missing-warn");
@@ -5045,7 +5214,7 @@ function _avaliarEExibirCompletudeCliente(opts) {
     if (ckOk) encontrados.push("nº de checkouts");
 
     var faltando = [];
-    if (!cnpjOk) faltando.push("CNPJ");
+    if (!cnpjOk) faltando.push("CNPJ da filial");
     if (!ckOk) faltando.push("nº de checkouts");
     if (!endOk) faltando.push("endereço");
     if (!perfilOk) faltando.push("perfil da loja");
@@ -5062,6 +5231,14 @@ function _avaliarEExibirCompletudeCliente(opts) {
         return { complete: true, faltando: [] };
     }
 
+    if (!cnpjOk && endOk && ckOk && perfilOk) {
+        var raizTxt = opts.cnpjRaiz ? (" (raiz " + _formatarRaizCnpjPrefixo(opts.cnpjRaiz) + ")") : "";
+        st.classList.add("smart-alert-warn");
+        st.style.color = "";
+        st.textContent = "⚠️ Demais dados da loja preenchidos! Complete apenas o campo CNPJ destacado" + raizTxt + " com os dígitos desta filial antes de salvar.";
+        return { complete: false, faltando: faltando };
+    }
+
     var prefixo = encontrados.length
         ? (encontrados.join(" e ") + " localizado" + (encontrados.length > 1 ? "s" : "") + ". ")
         : "Dados básicos preenchidos. ";
@@ -5071,7 +5248,7 @@ function _avaliarEExibirCompletudeCliente(opts) {
 
     st.classList.add("smart-alert-warn");
     st.style.color = "";
-    st.textContent = "⚠️ " + prefixo + listaFaltando + " não encontrado(s) automaticamente — preencha ou consulte o CNPJ antes de salvar.";
+    st.textContent = "⚠️ " + prefixo + listaFaltando + " não encontrado(s) automaticamente — preencha os campos destacados antes de salvar.";
     return { complete: false, faltando: faltando };
 }
 async function aplicarDadosLojaNoFormulario(item, skipLogo) {
@@ -5125,13 +5302,13 @@ function renderSmartStoreResults() {
         return;
     }
     box.innerHTML = _smartStoreResults.map(function(r, idx) {
-        var bCls = r.source === "Supabase" ? " brasilapi" : (r.source === "Sugestao" ? " gemini" : (r.source === "CadastroOficial" || r.source === "BrasilAPI" ? " brasilapi" : ""));
-        var badgeLabel = r.source === "Supabase" ? "Base Compartilhada" : (r.source === "CadastroOficial" || r.source === "BrasilAPI" ? "Cadastro Oficial" : (r.source === "OpenStreetMap" ? "Mapa" : "Localizado"));
+        var bCls = (r.source === "Supabase" || r.source === "Local") ? " brasilapi" : (r.source === "Sugestao" ? " gemini" : (r.source === "CadastroOficial" || r.source === "BrasilAPI" ? " brasilapi" : ""));
+        var badgeLabel = r.source === "Local" ? "Salvo Localmente" : (r.source === "Supabase" ? "Base Compartilhada" : (r.source === "CadastroOficial" || r.source === "BrasilAPI" ? "Cadastro Oficial" : (r.source === "OpenStreetMap" ? "Mapa" : "Localizado")));
         return "<div class='smart-res-item' onclick='selecionarResultadoLoja(" + idx + ")'>" +
             "<div class='smart-res-top'><span class='smart-res-nome'>" + escHtml(r.nome) + (r.uf ? " (" + escHtml(r.uf) + ")" : "") + "</span>" +
             "<span class='smart-res-badge" + bCls + "'>" + escHtml(badgeLabel) + "</span></div>" +
             (r.endereco ? "<div class='smart-res-end'>" + escHtml(r.endereco) + "</div>" : "") +
-            "<div class='smart-res-meta'>" + escHtml([r.cnpj ? "CNPJ: " + r.cnpj : "Toque para buscar cadastro", r.razaoSocial].filter(Boolean).join(" | ")) + "</div>" +
+            "<div class='smart-res-meta'>" + escHtml([r.cnpj ? "CNPJ: " + r.cnpj : "Toque para completar cadastro", r.razaoSocial].filter(Boolean).join(" | ")) + "</div>" +
             "</div>";
     }).join("");
     box.classList.add("ativo");
@@ -5150,11 +5327,12 @@ async function selecionarResultadoLoja(idx) {
         st.style.color = "#1e40af";
         st.textContent = "⏳ Buscando dados completos de \"" + item.nome + "\"...";
     }
-    if (item.source !== "Supabase") {
+    var isLocalOuSb = (item.source === "Supabase" || item.source === "Local");
+    if (!isLocalOuSb) {
         iniciarTarefaGuardiao({
             id: "busca_cliente_detalhe",
             titulo: "Buscando dados da loja...",
-            sub: "Localizando CNPJ e cadastro completo",
+            sub: "Localizando cadastro completo e perfil",
             canBackground: true,
             totalSteps: 2,
             pageTarget: "pageClient"
@@ -5164,15 +5342,14 @@ async function selecionarResultadoLoja(idx) {
         var ctx = _obterUfContextoDispositivo();
         var res = await enriquecerDossieLojaCascata(item, ctx);
         await aplicarDadosLojaNoFormulario(res.item, true);
-        var aval = _avaliarEExibirCompletudeCliente();
-        if (item.source !== "Supabase") {
+        var aval = _avaliarEExibirCompletudeCliente({ cnpjRaiz: res.cnpjRaiz || (res.item && res.item.cnpjRaiz) || "" });
+        if (!isLocalOuSb) {
             concluirTarefaGuardiao(
                 aval.complete ? "✅ Cadastro completo!" : "⚠️ Dados parciais preenchidos",
-                aval.complete ? (res.item.nome + " pronta para salvar.") : "Verifique os campos destacados em amarelo.",
+                aval.complete ? (res.item.nome + " pronta para salvar.") : "Complete os campos destacados em amarelo.",
                 { keepOverlayMs: 1400, onReturn: function(){ showPage("pageClient"); } }
             );
         }
-        // Carregar logotipo em segundo plano sem travar o formulário nem o botão Salvar
         if (!res.item.logo && typeof buscarLogoInteligenteAuto === "function") {
             buscarLogoInteligenteAuto(res.item.nome || document.getElementById("clientName").value, {
                 siteDominio: res.item.siteDominio || "",
@@ -5181,7 +5358,7 @@ async function selecionarResultadoLoja(idx) {
         }
     } catch(err2) {
         await aplicarDadosLojaNoFormulario(item, true);
-        _avaliarEExibirCompletudeCliente();
+        _avaliarEExibirCompletudeCliente({ cnpjRaiz: item && item.cnpjRaiz || "" });
         falharTarefaGuardiao("Busca parcial", "Preencha os campos destacados em amarelo antes de salvar.");
     } finally {
         setClientSearchLoading(false);
@@ -5215,19 +5392,27 @@ async function buscarLojaInteligente() {
     iniciarTarefaGuardiao({
         id: "busca_cliente",
         titulo: "Buscando loja...",
-        sub: "Consultando base compartilhada e registros públicos",
+        sub: "Camada 1: verificando dados locais e compartilhados",
         canBackground: true,
-        totalSteps: 2,
+        totalSteps: 3,
         pageTarget: "pageClient"
     });
 
     try {
-        // 1. SEMPRE CONSULTAR SUPABASE PRIMEIRO (Base Compartilhada instantânea)
+        // CAMADA 1: localStorage + Supabase (Instantâneo)
+        var localHits = buscarClienteLocalPrimeiro(q, ctx);
         var sbHits = await buscarClienteSupabasePrimeiro(q, ctx);
-        if (sbHits.length && digits.length === 14) {
-            await aplicarDadosLojaNoFormulario(sbHits[0], true);
-            var avalSb = _avaliarEExibirCompletudeCliente();
-            concluirTarefaGuardiao("✅ Loja encontrada na base!", sbHits[0].nome + " carregada instantaneamente.", {
+        var layer1Hits = [];
+        var seen1 = {};
+        localHits.concat(sbHits).forEach(function(it) {
+            var k = normProdKey(it.nome) + "|" + String(it.cnpj || "").replace(/\D/g, "");
+            if (!seen1[k]) { seen1[k] = true; layer1Hits.push(it); }
+        });
+
+        if (layer1Hits.length && digits.length === 14) {
+            await aplicarDadosLojaNoFormulario(layer1Hits[0], true);
+            _avaliarEExibirCompletudeCliente();
+            concluirTarefaGuardiao("✅ Loja encontrada na base!", layer1Hits[0].nome + " carregada instantaneamente.", {
                 keepOverlayMs: 1200,
                 onReturn: function(){ showPage("pageClient"); }
             });
@@ -5236,80 +5421,91 @@ async function buscarLojaInteligente() {
 
         if (digits.length === 14 && /^[\d.\-\/\s]+$/.test(q)) {
             if (st) st.textContent = "Consultando CNPJ " + formatarCNPJ(digits) + "...";
-            atualizarProgressoTarefa("Consultando CNPJ...", formatarCNPJ(digits), 1, 2);
+            atualizarProgressoTarefa("Camada 2: consultando cadastro oficial...", formatarCNPJ(digits), 1, 3);
             var cnpjRes = await consultarBrasilApiCnpj(digits);
             if (getGoogleGeminiKey()) {
+                atualizarProgressoTarefa("Camada 3: completando canal e perfil...", cnpjRes.nome, 2, 3);
                 var cascCnpj = await enriquecerDossieLojaCascata(cnpjRes, ctx);
                 await aplicarDadosLojaNoFormulario(cascCnpj.item, true);
-                var avalCnpj = _avaliarEExibirCompletudeCliente();
+                var avalCnpj = _avaliarEExibirCompletudeCliente({ cnpjRaiz: cascCnpj.cnpjRaiz || digits.slice(0, 8) });
                 concluirTarefaGuardiao(avalCnpj.complete ? "✅ Dados completos!" : "⚠️ CNPJ validado (complete o perfil)", cascCnpj.item.nome, { keepOverlayMs: 1400, onReturn: function(){ showPage("pageClient"); } });
                 if (!cascCnpj.item.logo && typeof buscarLogoInteligenteAuto === "function") {
                     buscarLogoInteligenteAuto(cascCnpj.item.nome, { siteDominio: cascCnpj.item.siteDominio || "" }).catch(function(){});
                 }
             } else {
                 await aplicarDadosLojaNoFormulario(cnpjRes, true);
-                var avalSimp = _avaliarEExibirCompletudeCliente();
+                _avaliarEExibirCompletudeCliente({ cnpjRaiz: digits.slice(0, 8) });
                 concluirTarefaGuardiao("📋 Dados do CNPJ carregados", cnpjRes.nome, { keepOverlayMs: 1400, onReturn: function(){ showPage("pageClient"); } });
                 if (typeof buscarLogoInteligenteAuto === "function") {
                     buscarLogoInteligenteAuto(cnpjRes.nome, {}).catch(function(){});
                 }
             }
-        } else if (sbHits.length) {
-            _smartStoreResults = sbHits;
+            return;
+        }
+
+        if (layer1Hits.length) {
+            _smartStoreResults = layer1Hits;
             renderSmartStoreResults();
             if (st) {
                 st.classList.add("smart-alert-ok");
-                st.textContent = "⚡ " + sbHits.length + " loja(s) encontrada(s) na base compartilhada. Toque para preencher instantaneamente.";
+                st.textContent = "⚡ " + layer1Hits.length + " loja(s) encontrada(s) na base salva/compartilhada. Toque para preencher instantaneamente.";
             }
-            concluirTarefaGuardiao("⚡ Lojas encontradas!", sbHits.length + " registro(s) na base compartilhada.", { keepOverlayMs: 1000, onReturn: function(){ showPage("pageClient"); } });
+            concluirTarefaGuardiao("⚡ Lojas encontradas!", layer1Hits.length + " registro(s) instantâneo(s).", { keepOverlayMs: 1000, onReturn: function(){ showPage("pageClient"); } });
+            return;
+        }
+
+        // CAMADA 2: APIs Públicas Abertas (Nominatim/OpenStreetMap filtrando por UF/Cidade)
+        var ufTag = (ctx && ctx.uf && ctx.uf !== "Brasil") ? (" (" + ctx.uf + ")") : "";
+        if (st) st.textContent = "Buscando endereços e unidades próximas" + ufTag + "...";
+        atualizarProgressoTarefa("Camada 2: localizando unidades próximas" + ufTag + "...", "Consultando mapas públicos", 1, 3);
+        var nomHits = [];
+        try {
+            nomHits = await buscarOpenStreetMapNominatim(q, ctx);
+        } catch(eNom2) {}
+
+        // CAMADA 3: Só chama Gemini padrão se a Camada 2 não trouxe unidades suficientes
+        var gemHits = [];
+        if (!nomHits.length && getGoogleGeminiKey()) {
+            atualizarProgressoTarefa("Camada 3: buscando sugestões inteligentes...", q + ufTag, 2, 3);
+            try {
+                gemHits = await buscarLojasGeminiFlash(q, ctx);
+            } catch(eGemList) {}
+        }
+
+        var merged = [];
+        var seen = {};
+        nomHits.concat(gemHits).forEach(function(it) {
+            var k = normProdKey(it.nome) + "|" + normProdKey((it.endereco || "").substring(0, 30));
+            if (!seen[k]) { seen[k] = true; merged.push(it); }
+        });
+        var ufAlvo = (ctx && ctx.uf && ctx.uf !== "Brasil") ? ctx.uf.toUpperCase() : "";
+        var cidAlvo = (ctx && ctx.cidade) ? normTextAccent(ctx.cidade).toLowerCase() : "";
+        merged.sort(function(a, b) {
+            function scoreItem(it) {
+                var s = 0;
+                var endNorm = normTextAccent(it.endereco || "").toLowerCase();
+                var ufIt = String(it.uf || "").toUpperCase();
+                if (ufAlvo && (ufIt === ufAlvo || endNorm.indexOf(ufAlvo.toLowerCase()) >= 0)) s += 4;
+                if (cidAlvo && endNorm.indexOf(cidAlvo) >= 0) s += 3;
+                if (it.source === "OpenStreetMap") s += 1;
+                return s;
+            }
+            return scoreItem(b) - scoreItem(a);
+        });
+        _smartStoreResults = merged;
+        renderSmartStoreResults();
+        if (merged.length) {
+            if (st) {
+                st.style.color = "#1e40af";
+                st.textContent = merged.length + " unidade(s) encontrada(s)" + ufTag + ". Toque em uma unidade para completar os dados.";
+            }
+            concluirTarefaGuardiao("✅ " + merged.length + " unidade(s) encontrada(s)", "Toque em uma unidade da lista para preencher.", { keepOverlayMs: 1100, onReturn: function(){ showPage("pageClient"); } });
         } else {
-            var temBuscaExterna = !!getGoogleGeminiKey();
-            var ufTag = (ctx && ctx.uf && ctx.uf !== "Brasil") ? (" (" + ctx.uf + ")") : "";
-            if (st) st.textContent = "Buscando unidades próximas" + ufTag + "...";
-            atualizarProgressoTarefa("Buscando unidades próximas" + ufTag + "...", "Consultando mapas e cadastro comercial", 1, 2);
-            var results = await Promise.allSettled([
-                buscarOpenStreetMapNominatim(q, ctx),
-                temBuscaExterna ? buscarLojasGeminiFlash(q, ctx) : Promise.resolve([])
-            ]);
-            var merged = [];
-            var seen = {};
-            results.forEach(function(r) {
-                if (r.status === "fulfilled" && Array.isArray(r.value)) {
-                    r.value.forEach(function(it) {
-                        var k = normProdKey(it.nome) + "|" + normProdKey((it.endereco || "").substring(0, 30));
-                        if (!seen[k]) { seen[k] = true; merged.push(it); }
-                    });
-                }
-            });
-            var ufAlvo = (ctx && ctx.uf && ctx.uf !== "Brasil") ? ctx.uf.toUpperCase() : "";
-            var cidAlvo = (ctx && ctx.cidade) ? normTextAccent(ctx.cidade).toLowerCase() : "";
-            merged.sort(function(a, b) {
-                function scoreItem(it) {
-                    var s = 0;
-                    var endNorm = normTextAccent(it.endereco || "").toLowerCase();
-                    var ufIt = String(it.uf || "").toUpperCase();
-                    if (ufAlvo && (ufIt === ufAlvo || endNorm.indexOf(ufAlvo.toLowerCase()) >= 0)) s += 4;
-                    if (cidAlvo && endNorm.indexOf(cidAlvo) >= 0) s += 3;
-                    if (it.source === "Sugestao") s += 1;
-                    return s;
-                }
-                return scoreItem(b) - scoreItem(a);
-            });
-            _smartStoreResults = merged;
-            renderSmartStoreResults();
-            if (merged.length) {
-                if (st) {
-                    st.style.color = "#1e40af";
-                    st.textContent = merged.length + " unidade(s) encontrada(s)" + ufTag + ". Toque em uma unidade para completar e validar os dados.";
-                }
-                concluirTarefaGuardiao("✅ " + merged.length + " unidade(s) encontrada(s)", "Toque em uma unidade da lista para preencher.", { keepOverlayMs: 1100, onReturn: function(){ showPage("pageClient"); } });
-            } else {
-                if (st) {
-                    st.classList.add("smart-alert-warn");
-                    st.textContent = "Nenhuma loja encontrada automaticamente para \"" + q + "\". Você pode preencher os campos manualmente.";
-                }
-                falharTarefaGuardiao("Nenhuma unidade encontrada", "Preencha os campos manualmente se desejar.");
+            if (st) {
+                st.classList.add("smart-alert-warn");
+                st.textContent = "Nenhuma loja encontrada automaticamente para \"" + q + "\". Você pode preencher os campos manualmente.";
             }
+            falharTarefaGuardiao("Nenhuma unidade encontrada", "Preencha os campos manualmente se desejar.");
         }
     } catch(err) {
         var msgErrCli = _traduzirErroAmigavelIA(err) + " Preencha os campos manualmente se desejar.";
@@ -5512,6 +5708,67 @@ function setCompProdFilter(filter) {
     });
     updateCompanyProductsTable();
 }
+var _pendingManualProdThumb = "";
+var _editCompProdThumb = "";
+
+function isSkuPendenteDados(p) {
+    if (!p) return false;
+    var hasThumb = !!String(p.thumb || "").trim();
+    var hasCode = !!String(p.code || "").trim();
+    var hasGram = !!String(p.gramatura || "").trim();
+    return !hasThumb || !hasCode || !hasGram;
+}
+
+function _persistirTempCompanySeSalva() {
+    if (currentCompany && currentCompany.id && companies[currentCompany.id]) {
+        companies[currentCompany.id].products = tempCompanyProducts.slice();
+        currentCompany.products = tempCompanyProducts.slice();
+        lsSetJSON("ls23_companies", companies);
+        if (typeof syncEmpresaProdutosSupabase === "function") syncEmpresaProdutosSupabase(companies[currentCompany.id]);
+    }
+}
+
+function abrirAdicionarProdutoManual() {
+    var tabPaste = document.getElementById("tabCompPaste");
+    var tabManual = document.getElementById("tabCompManual");
+    var boxPaste = document.getElementById("pasteComp");
+    var boxManual = document.getElementById("manualComp");
+    if (tabPaste) tabPaste.classList.remove("active");
+    if (boxPaste) boxPaste.classList.remove("active");
+    if (tabManual) tabManual.classList.add("active");
+    if (boxManual) {
+        boxManual.classList.add("active");
+        if (typeof boxManual.scrollIntoView === "function") boxManual.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+    var inpNome = document.getElementById("comp_prod_name");
+    if (inpNome && typeof inpNome.focus === "function") setTimeout(function(){ inpNome.focus(); }, 180);
+}
+
+async function selecionarFotoManualCompProd(input) {
+    var file = input && input.files && input.files[0];
+    if (!file) return;
+    try {
+        var thumbUrl = await comprimirSkuThumbFile120(file);
+        _pendingManualProdThumb = thumbUrl || "";
+        var prev = document.getElementById("manualProdPhotoPreview");
+        var btnClr = document.getElementById("btnLimparFotoManual");
+        if (prev && _pendingManualProdThumb) prev.innerHTML = "<img src='" + _pendingManualProdThumb + "' style='width:100%;height:100%;object-fit:contain'>";
+        if (btnClr && _pendingManualProdThumb) btnClr.style.display = "inline-block";
+    } catch(e) {
+        alert("Não foi possível processar a imagem selecionada.");
+    } finally {
+        input.value = "";
+    }
+}
+
+function limparFotoManualCompProd() {
+    _pendingManualProdThumb = "";
+    var prev = document.getElementById("manualProdPhotoPreview");
+    var btnClr = document.getElementById("btnLimparFotoManual");
+    if (prev) prev.innerHTML = "&#128247;";
+    if (btnClr) btnClr.style.display = "none";
+}
+
 function processCompanyProducts() {
     var text = document.getElementById("pasteCompanyProducts").value.trim();
     if (!text) { alert("Cole a lista"); return; }
@@ -5519,20 +5776,22 @@ function processCompanyProducts() {
     text.split("\n").forEach(function(line){
         line = line.trim(); if (!line) return;
         var parts = smartSplit(line);
-        if (parts.length >= 3) {
+        if (!parts.length && line) parts = [line];
+        if (parts.length >= 1 && parts[0]) {
             var mk = extrairMarcadorPrioridade(parts[0]);
             novos.push({
                 name: mk.name,
-                gramatura: parts[1],
+                gramatura: parts[1] ? String(parts[1]).trim() : "",
                 quantity: parseInt(parts[2])||1,
                 priority: mk.priority||isPriorityProduct(mk.name),
                 category: inferirCategoriaSKU(mk.name, parts[3] || ""),
                 status: parts[4] || "Ativo",
-                activeRegional: true
+                activeRegional: (parts[4] || "Ativo") !== "Descontinuado",
+                thumb: ""
             });
         }
     });
-    if (!novos.length) { alert("Nenhum produto processado. Use | entre campos."); return; }
+    if (!novos.length) { alert("Nenhum produto processado."); return; }
     if (tempCompanyProducts.length > 0) {
         var adicionar = confirm("Ja existem " + tempCompanyProducts.length + " produto(s) na empresa.\n\nOK = Adicionar sem duplicar\nCancelar = Substituir lista inteira");
         if (!adicionar) tempCompanyProducts = [];
@@ -5542,32 +5801,38 @@ function processCompanyProducts() {
         var res = mergeCompanySmartProduct(tempCompanyProducts, p, { allowGramaturaUpdate: false, incomingList: novos });
         if (res.added) addCount++; else if (res.updated) updCount++;
     });
+    _persistirTempCompanySeSalva();
     updateCompanyProductsTable();
     document.getElementById("pasteCompanyProducts").value = "";
     showMsg("msgCompany", addCount + " adicionado(s)" + (updCount ? ", " + updCount + " atualizado(s)" : "") + " (" + tempCompanyProducts.length + " total).");
 }
 
 function addCompanyProduct() {
-    var name=document.getElementById("comp_prod_name").value.trim(), gram=document.getElementById("comp_prod_gram").value.trim(), qty=document.getElementById("comp_prod_qty").value.trim();
+    var name=document.getElementById("comp_prod_name").value.trim();
+    var gram=document.getElementById("comp_prod_gram").value.trim();
+    var qty=document.getElementById("comp_prod_qty").value.trim();
     var code=(document.getElementById("comp_prod_code")||{}).value||"";
     var cat=(document.getElementById("comp_prod_cat")||{}).value||"";
     var status=(document.getElementById("comp_prod_status")||{}).value||"Ativo";
-    if (!name||!gram||!qty) { alert("Preencha Produto, Gramatura e Qtd/Cx"); return; }
+    if (!name) { alert("Preencha o nome do produto."); return; }
     var mkC = extrairMarcadorPrioridade(name);
     var res = mergeCompanySmartProduct(tempCompanyProducts, {
         code: code.trim(),
         name: mkC.name,
         gramatura: gram,
-        quantity: parseInt(qty)||1,
+        quantity: parseInt(qty) || 1,
         priority: mkC.priority||isPriorityProduct(mkC.name),
         category: inferirCategoriaSKU(mkC.name, cat),
         status: status,
-        activeRegional: status !== "Descontinuado"
+        activeRegional: status !== "Descontinuado",
+        thumb: _pendingManualProdThumb || ""
     }, { allowGramaturaUpdate: false });
     document.getElementById("comp_prod_name").value=""; document.getElementById("comp_prod_gram").value=""; document.getElementById("comp_prod_qty").value="";
     if (document.getElementById("comp_prod_code")) document.getElementById("comp_prod_code").value="";
     if (document.getElementById("comp_prod_cat")) document.getElementById("comp_prod_cat").value="";
     if (document.getElementById("comp_prod_status")) document.getElementById("comp_prod_status").value="Ativo";
+    limparFotoManualCompProd();
+    _persistirTempCompanySeSalva();
     updateCompanyProductsTable();
     showMsg("msgCompany", res.updated ? "Produto existente atualizado!" : "Produto adicionado!");
 }
@@ -5596,7 +5861,34 @@ function toggleCompanyMixRegional(i) {
     var p = tempCompanyProducts[i];
     if (!p) return;
     p.activeRegional = (p.activeRegional === false) ? true : false;
+    _persistirTempCompanySeSalva();
     updateCompanyProductsTable();
+}
+function _renderEditCompProdThumbPreview() {
+    var prev = document.getElementById("editCompProdThumbPreview");
+    var btnRem = document.getElementById("btnRemoverEditCompThumb");
+    if (prev) {
+        prev.innerHTML = _editCompProdThumb
+            ? "<img src='" + _editCompProdThumb + "' style='width:100%;height:100%;object-fit:contain'>"
+            : "&#128247;";
+    }
+    if (btnRem) btnRem.style.display = _editCompProdThumb ? "inline-block" : "none";
+}
+async function selecionarFotoEditCompProd(input) {
+    var file = input && input.files && input.files[0];
+    if (!file) return;
+    try {
+        _editCompProdThumb = await comprimirSkuThumbFile120(file);
+        _renderEditCompProdThumbPreview();
+    } catch(e) {
+        alert("Não foi possível carregar a foto selecionada.");
+    } finally {
+        input.value = "";
+    }
+}
+function removerFotoEditCompProd() {
+    _editCompProdThumb = "";
+    _renderEditCompProdThumbPreview();
 }
 function abrirEditCompProd(i) {
     var p = tempCompanyProducts[i];
@@ -5609,6 +5901,8 @@ function abrirEditCompProd(i) {
     document.getElementById("editCompProdCat").value = p.category || inferirCategoriaSKU(p.name, "");
     document.getElementById("editCompProdStatus").value = p.status || "Ativo";
     document.getElementById("editCompProdRegional").checked = (p.activeRegional !== false);
+    _editCompProdThumb = String(p.thumb || "");
+    _renderEditCompProdThumbPreview();
     document.getElementById("modalEditCompProd").style.display = "flex";
     if (typeof _pushAppHistoryState === "function") _pushAppHistoryState("modal_edit_comp_prod");
 }
@@ -5628,6 +5922,8 @@ function salvarEditCompProd() {
     p.category = document.getElementById("editCompProdCat").value.trim() || inferirCategoriaSKU(nome, "");
     p.status = document.getElementById("editCompProdStatus").value || "Ativo";
     p.activeRegional = !!document.getElementById("editCompProdRegional").checked;
+    p.thumb = _editCompProdThumb || "";
+    _persistirTempCompanySeSalva();
     fecharEditCompProd();
     updateCompanyProductsTable();
 }
@@ -5647,6 +5943,7 @@ function selecionarTodosEmpresa(estado) {
     tempCompanyProducts.forEach(function(p) {
         if (_produtoPassaFiltroEmpresa(p)) p.activeRegional = val;
     });
+    _persistirTempCompanySeSalva();
     updateCompanyProductsTable();
 }
 function inverterSelecaoEmpresa() {
@@ -5655,13 +5952,15 @@ function inverterSelecaoEmpresa() {
             p.activeRegional = (p.activeRegional === false);
         }
     });
+    _persistirTempCompanySeSalva();
     updateCompanyProductsTable();
 }
 function updateCompanyProductsTable() {
     var t = document.getElementById("companyProductsBody");
     var ativosCount = tempCompanyProducts.filter(function(p){ return p.activeRegional !== false && String(p.status||"").toLowerCase() !== "descontinuado"; }).length;
+    var pendCount = tempCompanyProducts.filter(function(p){ return isSkuPendenteDados(p); }).length;
     var cntEl = document.getElementById("compMixCounter");
-    if (cntEl) cntEl.textContent = ativosCount + " de " + tempCompanyProducts.length + " ativos no mix";
+    if (cntEl) cntEl.textContent = ativosCount + " de " + tempCompanyProducts.length + " ativos no mix" + (pendCount ? (" • " + pendCount + " pendente(s)") : "");
 
     var rows = [];
     tempCompanyProducts.forEach(function(p, i) {
@@ -5675,6 +5974,12 @@ function updateCompanyProductsTable() {
         var bg = !mixOn ? "opacity:0.58;background:#f8fafc" : (isPrio ? "background:#fffbeb" : "");
         var stCls = stLow.indexOf("desc") >= 0 ? "descontinuado" : (stLow.indexOf("lanc") >= 0 ? "lancamento" : "ativo");
         var cat = p.category || inferirCategoriaSKU(p.name, "");
+        var pendenteBadge = isSkuPendenteDados(p)
+            ? "<span class='sku-pending-badge'>&#9203; Pendente (aguardando Guia)</span>"
+            : "";
+        var statusBadge = p.lancamentoViaGuia
+            ? "<span class='sku-launch-guia-badge'>&#127381; Lan&ccedil;amento (via Guia)</span>"
+            : "<span class='status-selo " + stCls + "'>" + escHtml(st) + "</span>";
 
         rows.push(
             "<tr style='" + bg + "'>" +
@@ -5685,14 +5990,15 @@ function updateCompanyProductsTable() {
             "<div class='sku-meta-row'>" +
             (p.code ? "<span style='font-size:10px;color:#64748b;font-family:monospace'>" + escHtml(p.code) + "</span>" : "") +
             "<span style='font-size:10px;color:#475569;font-weight:600'>" + escHtml(cat) + "</span>" +
-            "<span class='status-selo " + stCls + "'>" + escHtml(st) + "</span>" +
+            statusBadge +
+            pendenteBadge +
             "<span style='font-size:10px;color:#64748b'>Cx:" + (p.quantity || 1) + "</span>" +
             "</div></div></div></td>" +
             "<td>" + renderGramaturaSeloHtml(p.gramatura) + "</td>" +
             "<td style='text-align:center'><button type='button' class='mix-switch " + (p.activeRegional !== false ? "on" : "off") + "' onclick='toggleCompanyMixRegional(" + i + ")'>" + (p.activeRegional !== false ? "&#9989; No Mix" : "&#128683; Oculto") + "</button></td>" +
             "<td style='white-space:nowrap'>" +
-            "<button type='button' class='sec' style='padding:4px 7px;font-size:11px;margin:0 3px 0 0' onclick='abrirEditCompProd(" + i + ")' title='Editar SKU'>&#9998;</button>" +
-            "<button type='button' class='red' onclick='removeCompanyProduct(" + i + ")'>X</button></td>" +
+            "<button type='button' class='sec' style='padding:4px 7px;font-size:11px;margin:0 3px 0 0' onclick='abrirEditCompProd(" + i + ")' title='Editar SKU'>&#9998; Editar</button>" +
+            "<button type='button' class='red' style='padding:4px 7px;font-size:11px' onclick='removeCompanyProduct(" + i + ")' title='Excluir SKU'>Excluir</button></td>" +
             "</tr>"
         );
     });
@@ -5702,11 +6008,12 @@ function updateCompanyProductsTable() {
 function toggleCompanyPriority(i) {
     if (tempCompanyProducts[i]) {
         tempCompanyProducts[i].priority = !tempCompanyProducts[i].priority;
+        _persistirTempCompanySeSalva();
         updateCompanyProductsTable();
     }
 }
 
-function removeCompanyProduct(i) { tempCompanyProducts.splice(i,1); updateCompanyProductsTable(); }
+function removeCompanyProduct(i) { tempCompanyProducts.splice(i,1); _persistirTempCompanySeSalva(); updateCompanyProductsTable(); }
 
 // ── PASSO 3: IMPORTADOR INTELIGENTE DE PORTFOLIO & MINIATURAS ────────────
 function parseTabelaLocalFallback(texto) {
@@ -5888,10 +6195,13 @@ async function importarPortfolioInteligente(input) {
     }
 }
 async function buscarThumbnailOpenFoodFacts(prod) {
-    var codeDigits = String(prod.code || "").replace(/\D/g, "");
+    if (prod && prod._offImageUrl) {
+        try { return await carregarImagemComoJpeg120(prod._offImageUrl, 5000); } catch(ePre) {}
+    }
+    var codeDigits = String((prod && prod.code) || "").replace(/\D/g, "");
     try {
         if (codeDigits.length >= 8 && codeDigits.length <= 14) {
-            var rEan = await fetch("https://world.openfoodfacts.org/api/v2/product/" + codeDigits + ".json?fields=product_name,image_front_small_url,image_front_url,image_thumb_url");
+            var rEan = await fetch("https://br.openfoodfacts.org/api/v2/product/" + codeDigits + ".json?fields=product_name,image_front_small_url,image_front_url,image_thumb_url");
             if (rEan.ok) {
                 var dEan = await rEan.json();
                 var pEan = dEan && dEan.product;
@@ -5899,9 +6209,9 @@ async function buscarThumbnailOpenFoodFacts(prod) {
                 if (imgUrl) return await carregarImagemComoJpeg120(imgUrl, 6000);
             }
         }
-        var termo = String(prod.name || "").trim() + (prod.gramatura ? " " + prod.gramatura : "");
+        var termo = String((prod && prod.name) || "").trim() + (prod && prod.gramatura ? " " + prod.gramatura : "");
         if (!termo) return "";
-        var rSearch = await fetch("https://world.openfoodfacts.org/cgi/search.pl?search_terms=" + encodeURIComponent(termo) + "&search_simple=1&action=process&json=1&page_size=4&fields=product_name,image_front_small_url,image_front_url,image_thumb_url");
+        var rSearch = await fetch("https://br.openfoodfacts.org/cgi/search.pl?search_terms=" + encodeURIComponent(termo) + "&search_simple=1&action=process&json=1&page_size=4&fields=product_name,image_front_small_url,image_front_url,image_thumb_url");
         if (rSearch.ok) {
             var dSearch = await rSearch.json();
             var prods = (dSearch && dSearch.products) || [];
@@ -5914,6 +6224,60 @@ async function buscarThumbnailOpenFoodFacts(prod) {
     } catch(e) {}
     return "";
 }
+async function buscarCatalogoOpenFoodFactsBr(compName, segmento) {
+    var termo = String(compName || "").trim();
+    if (!termo || termo.length < 2) return [];
+    var ctrl = (typeof AbortController !== "undefined") ? new AbortController() : null;
+    var timer = ctrl ? setTimeout(function(){ ctrl.abort(); }, 18000) : null;
+    try {
+        var url = "https://br.openfoodfacts.org/cgi/search.pl?search_terms=" + encodeURIComponent(termo) +
+            "&search_simple=1&action=process&json=1&page_size=50&fields=code,product_name,brands,quantity,categories,image_front_small_url,image_front_url,image_thumb_url";
+        var resp = await fetch(url, { signal: ctrl ? ctrl.signal : undefined });
+        if (!resp.ok) return [];
+        var data = await resp.json();
+        var rawProds = (data && Array.isArray(data.products)) ? data.products : [];
+        var compTokens = normTextAccent(termo).toLowerCase().split(/\s+/).filter(function(w){ return w.length >= 3; });
+        var out = [];
+        var seenKey = {};
+        rawProds.forEach(function(it) {
+            var nomeRaw = String(it.product_name || "").trim();
+            if (!nomeRaw || nomeRaw.length < 3) return;
+            var brandsTxt = normTextAccent(String(it.brands || "") + " " + nomeRaw).toLowerCase();
+            if (compTokens.length && !compTokens.some(function(tk){ return brandsTxt.indexOf(tk) >= 0; })) return;
+            var ean = String(it.code || "").replace(/\D/g, "");
+            var gram = String(it.quantity || "").trim();
+            if (!gram) {
+                var gm = nomeRaw.match(/\b(\d+(?:[.,]\d+)?\s*(?:g|gr|kg|ml|l))\b/i);
+                if (gm) gram = gm[1].replace(/\s+/g, "").toUpperCase();
+            }
+            var dedup = ean || normProdKey(nomeRaw + " " + gram);
+            if (!dedup || seenKey[dedup]) return;
+            seenKey[dedup] = true;
+            var catRaw = String(it.categories || "").split(",")[0].replace(/^[a-z]{2}:/i, "").trim();
+            var cat = catRaw || inferirCategoriaSKU(nomeRaw, segmento || "");
+            var imgUrl = it.image_front_small_url || it.image_thumb_url || it.image_front_url || "";
+            out.push({
+                code: ean,
+                name: nomeRaw,
+                gramatura: gram,
+                quantity: 1,
+                priority: isPriorityProduct(nomeRaw),
+                category: cat || "Geral",
+                status: "Ativo",
+                activeRegional: true,
+                thumb: "",
+                _offImageUrl: imgUrl,
+                _checked: true
+            });
+        });
+        return out.slice(0, 32);
+    } catch(eOff) {
+        console.warn("Catalogo publico fallback:", eOff && eOff.message ? eOff.message : eOff);
+        return [];
+    } finally {
+        if (timer) clearTimeout(timer);
+    }
+}
 async function buscarMiniaturasPortfolioAuto() {
     if (!tempCompanyProducts.length) { alert("Adicione produtos ao portfólio da empresa primeiro."); return; }
     var stEl = document.getElementById("compPortfolioStatus");
@@ -5923,6 +6287,14 @@ async function buscarMiniaturasPortfolioAuto() {
         return;
     }
     if (stEl) { stEl.style.display = "block"; stEl.style.color = "#0f766e"; stEl.textContent = "⏳ Buscando miniaturas para " + pendentes.length + " SKU(s)..."; }
+    iniciarTarefaGuardiao({
+        id: "miniaturas_portfolio",
+        titulo: "Buscando miniaturas dos produtos...",
+        sub: pendentes.length + " SKU(s) para atualizar",
+        canBackground: true,
+        totalSteps: pendentes.length,
+        pageTarget: "pageCompany"
+    });
 
     var achadosGuia = 0, achadosOff = 0;
     try {
@@ -5967,9 +6339,10 @@ async function buscarMiniaturasPortfolioAuto() {
             }
         }
 
-        // 2. Fallback para base publica de produtos nos SKUs restantes sem miniatura
+        // 2. Base publica de produtos (Brasil) nos SKUs restantes sem miniatura
         var restantes = tempCompanyProducts.filter(function(p){ return !p.thumb; });
         for (var ri = 0; ri < restantes.length; ri++) {
+            atualizarProgressoTarefa("Buscando miniaturas...", restantes[ri].name, ri, Math.max(1, restantes.length));
             if (stEl) stEl.textContent = "🖼️ Buscando miniaturas (" + (ri + 1) + "/" + restantes.length + "): " + restantes[ri].name + "...";
             var thumbOff = await buscarThumbnailOpenFoodFacts(restantes[ri]);
             if (thumbOff) { restantes[ri].thumb = thumbOff; achadosOff++; }
@@ -5986,8 +6359,14 @@ async function buscarMiniaturasPortfolioAuto() {
             stEl.innerHTML = "&#9989; Miniaturas atualizadas: <b>" + (achadosGuia + achadosOff) + "</b> miniatura(s) carregada(s). " +
                 (totalSem ? "Os " + totalSem + " restante(s) usam selo colorido de gramatura (ou toque para fotografar na gôndola)." : "Portfólio 100% com foto!");
         }
+        concluirTarefaGuardiao("✅ Miniaturas atualizadas!", (achadosGuia + achadosOff) + " imagem(ns) vinculada(s).", {
+            keepOverlayMs: 1200,
+            onReturn: function(){ showPage("pageCompany"); }
+        });
     } catch(err) {
-        if (stEl) { stEl.style.color = "#dc2626"; stEl.textContent = "Erro ao buscar miniaturas: " + (err && err.message ? err.message : err); }
+        var msgMinErr = _traduzirErroAmigavelIA(err);
+        falharTarefaGuardiao("Erro ao buscar miniaturas", msgMinErr);
+        if (stEl) { stEl.style.color = "#dc2626"; stEl.textContent = "Erro ao buscar miniaturas: " + msgMinErr; }
     }
 }
 
@@ -9354,7 +9733,11 @@ function goToEditEmpresa() {
         b.classList.toggle("ativo", b.getAttribute("data-cf") === "todos");
     });
     document.getElementById("pageClientTitle") && (document.getElementById("pageClientTitle").textContent = "");
+    if (typeof _limparDestaquesCamposEmpresa === "function") _limparDestaquesCamposEmpresa();
+    if (typeof _vincularLimpezaCamposEmpresa === "function") _vincularLimpezaCamposEmpresa();
     if (typeof setCompanySearchLoading === "function") setCompanySearchLoading(false);
+    if (typeof limparBannerLancamentosGuia === "function") limparBannerLancamentosGuia();
+    if (typeof limparFotoManualCompProd === "function") limparFotoManualCompProd();
     loadCompanySelectForClient && loadCompanySelectForClient();
     updateCompanyProductsTable();
     showPage("pageCompany");
@@ -12008,6 +12391,9 @@ async function processarGuiaFotos() {
                     }
                 }
             });
+            if (typeof retroalimentarCatalogoPeloGuia === "function") {
+                setTimeout(function(){ retroalimentarCatalogoPeloGuia({ origem: "leitura_guia" }); }, 200);
+            }
         }
     } catch(e) {
         if (stEl) stEl.style.display = "none";
@@ -12047,7 +12433,361 @@ function salvarGuiaEmpresa() {
     localStorage.setItem("ls23_guia_empresa_" + currentCompany.id, texto);
     var el = document.getElementById("msgGuiaEmpresa");
     el.style.color = "#16a34a";
-    el.textContent = "Guia salvo! (" + texto.length + " caracteres) ✓";
+    el.textContent = "Guia salvo! (" + texto.length + " caracteres) ✓ — cruzando com portfólio em segundo plano...";
+    if (typeof retroalimentarCatalogoPeloGuia === "function") {
+        setTimeout(function(){ retroalimentarCatalogoPeloGuia({ origem: "salvar_guia", compId: currentCompany.id }); }, 150);
+    }
+}
+
+var _guiaSugestoesLancamentos = [];
+var _retroGuiaEmAndamento = false;
+
+function limparBannerLancamentosGuia() {
+    _guiaSugestoesLancamentos = [];
+    var ban = document.getElementById("guiaLaunchesBanner");
+    if (ban) { ban.style.display = "none"; ban.innerHTML = ""; }
+}
+
+function dispensarLancamentosGuia() {
+    limparBannerLancamentosGuia();
+}
+
+function toggleLancamentoGuiaItem(idx) {
+    if (_guiaSugestoesLancamentos[idx]) {
+        _guiaSugestoesLancamentos[idx]._checked = (_guiaSugestoesLancamentos[idx]._checked === false);
+    }
+}
+
+function renderBannerLancamentosGuia() {
+    var ban = document.getElementById("guiaLaunchesBanner");
+    if (!ban) return;
+    if (!_guiaSugestoesLancamentos.length) {
+        ban.style.display = "none";
+        ban.innerHTML = "";
+        return;
+    }
+    var itensHtml = _guiaSugestoesLancamentos.map(function(it, idx) {
+        var chk = it._checked !== false;
+        return "<label class='guia-launch-item'>" +
+            "<input type='checkbox' " + (chk ? "checked " : "") + "onchange='toggleLancamentoGuiaItem(" + idx + ")' style='width:16px;height:16px;margin:0;accent-color:#0d9488;flex-shrink:0'>" +
+            "<div style='flex:1;min-width:0'>" +
+            "<div style='font-weight:700'>" + escHtml(it.name) + " " + renderGramaturaSeloHtml(it.gramatura) + "</div>" +
+            "<div style='font-size:10px;color:#64748b'>" +
+            (it.code ? "EAN: " + escHtml(it.code) + " • " : "") +
+            "Cat: " + escHtml(it.category || "Geral") +
+            (it.motivo ? " • " + escHtml(it.motivo) : "") +
+            "</div></div></label>";
+    }).join("");
+
+    ban.innerHTML = "<div class='guia-launches-title'>" +
+        "<span>&#127381; " + _guiaSugestoesLancamentos.length + " lan&ccedil;amento(s)/sazonal(is) encontrado(s) no Guia</span>" +
+        "<button type='button' class='sec' style='padding:3px 8px;font-size:10px;margin:0' onclick='dispensarLancamentosGuia()'>Dispensar</button>" +
+        "</div>" +
+        "<div style='font-size:11px;color:#0f766e;margin-bottom:4px'>Confirme com 1 clique para incluir no portf&oacute;lio com selo <b>&#127381; Lan&ccedil;amento (via Guia)</b>:</div>" +
+        itensHtml +
+        "<div style='display:flex;gap:6px;margin-top:8px'>" +
+        "<button type='button' onclick='incluirLancamentosDoGuiaSelecionados()' style='flex:1;margin:0;padding:8px 10px;border:none;border-radius:8px;background:linear-gradient(135deg,#0d9488,#0284c7);color:#fff;font-size:12px;font-weight:800;cursor:pointer'>&#9989; Incluir Selecionados (1 Clique)</button>" +
+        "</div>";
+    ban.style.display = "block";
+}
+
+function incluirLancamentosDoGuiaSelecionados() {
+    var selecionados = _guiaSugestoesLancamentos.filter(function(it){ return it._checked !== false; });
+    if (!selecionados.length) {
+        alert("Marque pelo menos 1 lançamento para incluir.");
+        return;
+    }
+    var addCount = 0;
+    selecionados.forEach(function(it) {
+        var nomeLimpo = String(it.name || "").trim();
+        if (!nomeLimpo) return;
+        var normTarget = normProdKey(nomeLimpo);
+        var existing = null;
+        for (var ei = 0; ei < tempCompanyProducts.length; ei++) {
+            if (normProdKey(tempCompanyProducts[ei].name) === normTarget) { existing = tempCompanyProducts[ei]; break; }
+        }
+        if (existing) {
+            existing.status = "Lancamento";
+            existing.lancamentoViaGuia = true;
+            existing.viaGuia = true;
+            existing.activeRegional = true;
+            if (!existing.gramatura && it.gramatura) existing.gramatura = it.gramatura;
+            if (!existing.code && it.code) existing.code = it.code;
+            if (!existing.thumb && it.thumb) existing.thumb = it.thumb;
+        } else {
+            tempCompanyProducts.push({
+                code: String(it.code || "").trim(),
+                name: nomeLimpo,
+                gramatura: String(it.gramatura || "").trim(),
+                quantity: parseInt(it.quantity) || 1,
+                priority: isPriorityProduct(nomeLimpo),
+                category: inferirCategoriaSKU(nomeLimpo, it.category || ""),
+                status: "Lancamento",
+                lancamentoViaGuia: true,
+                viaGuia: true,
+                activeRegional: true,
+                thumb: String(it.thumb || "")
+            });
+            addCount++;
+        }
+    });
+    _persistirTempCompanySeSalva();
+    limparBannerLancamentosGuia();
+    updateCompanyProductsTable();
+    showMsg("msgCompany", (addCount || selecionados.length) + " lançamento(s) incluído(s) via Guia ✓");
+}
+
+function _retroalimentarLocalPeloGuia(prods, guiaTexto, pages) {
+    var camposPreenchidos = 0;
+    var lancamentos = [];
+    var vistosLanc = {};
+    var existentesMap = {};
+    (prods || []).forEach(function(p) {
+        if (p && p.name) existentesMap[normProdKey(p.name)] = true;
+    });
+
+    var blocos = [];
+    if (guiaTexto) blocos.push({ texto: guiaTexto, pagina: null });
+    (pages || []).forEach(function(pg) {
+        var combined = [pg.descricao || "", pg.pdfText || ""].filter(Boolean).join("\n");
+        if (combined) blocos.push({ texto: combined, pagina: pg.pagina });
+    });
+    var linhas = [];
+    blocos.forEach(function(bl) {
+        String(bl.texto || "").split(/\r?\n/).forEach(function(ln) {
+            var s = ln.trim();
+            if (s.length >= 4) linhas.push({ raw: s, norm: normTextAccent(s).toLowerCase(), pagina: bl.pagina });
+        });
+    });
+
+    (prods || []).forEach(function(p) {
+        if (!p || !p.name) return;
+        var pTokens = normTextAccent(p.name).toLowerCase().split(/\s+/).filter(function(w){ return w.length >= 3; });
+        if (!pTokens.length) return;
+        var needCode = !String(p.code || "").trim();
+        var needGram = !String(p.gramatura || "").trim();
+        if (!needCode && !needGram) return;
+
+        for (var li = 0; li < linhas.length; li++) {
+            var ln = linhas[li];
+            var hits = 0;
+            pTokens.forEach(function(tk){ if (ln.norm.indexOf(tk) >= 0) hits++; });
+            if (hits < Math.min(2, pTokens.length)) continue;
+
+            if (needCode) {
+                var eanM = ln.raw.match(/\b(789\d{9,11}|\d{8,14})\b/);
+                if (eanM) {
+                    p.code = eanM[1];
+                    needCode = false;
+                    camposPreenchidos++;
+                }
+            }
+            if (needGram) {
+                var grM = ln.raw.match(/\b(\d+(?:[.,]\d+)?\s*(?:g|gr|kg|ml|l))\b/i);
+                if (grM) {
+                    p.gramatura = grM[1].replace(/\s+/g, "").toUpperCase();
+                    needGram = false;
+                    camposPreenchidos++;
+                }
+            }
+            if (!needCode && !needGram) break;
+        }
+    });
+
+    linhas.forEach(function(ln) {
+        var matchL = ln.raw.match(/(?:lan[çc]amento|sazonal|novo sabor|novidade|edi[çc][aã]o limitada)\s*[:-]\s*([^\n;+]{4,55})/i);
+        if (!matchL || !matchL[1]) return;
+        var trecho = matchL[1].replace(/\.$/, "").trim();
+        if (/\b(planograma|execu[çc][aã]o|p[aá]g|pagina|ean)\b/i.test(trecho)) return;
+        var grL = "";
+        var gmL = trecho.match(/\b(\d+(?:[.,]\d+)?\s*(?:g|gr|kg|ml|l))\b/i);
+        if (gmL) { grL = gmL[1].replace(/\s+/g, "").toUpperCase(); }
+        var nomeBase = trecho
+            .replace(/\b(789\d{9,11}|\d{8,14})\b/g, "")
+            .replace(/\b\d+(?:[.,]\d+)?\s*(?:g|gr|kg|ml|l)\b/ig, "")
+            .replace(/\s{2,}/g, " ")
+            .trim();
+        var key = normProdKey(nomeBase);
+        if (!key || key.length < 4 || existentesMap[key] || vistosLanc[key]) return;
+        var jaExisteSimilar = (prods || []).some(function(ep) {
+            var ek = normProdKey(ep && ep.name);
+            return ek && (ek.indexOf(key) >= 0 || key.indexOf(ek) >= 0);
+        });
+        if (jaExisteSimilar) return;
+        vistosLanc[key] = true;
+        var eanL = (ln.raw.match(/\b(789\d{9,11}|\d{8,14})\b/) || [])[1] || "";
+        lancamentos.push({
+            name: nomeBase,
+            gramatura: grL,
+            code: eanL,
+            category: inferirCategoriaSKU(nomeBase, ""),
+            quantity: 1,
+            motivo: ln.pagina ? ("Pág. " + ln.pagina + " do Guia") : "Texto do Guia",
+            _checked: true
+        });
+    });
+
+    return { camposPreenchidos: camposPreenchidos, lancamentos: lancamentos };
+}
+
+async function retroalimentarCatalogoPeloGuia(opts) {
+    if (_retroGuiaEmAndamento) return null;
+    opts = opts || {};
+    var compId = _resolverCompanyIdAtiva(opts.compId);
+    var prods = (Array.isArray(tempCompanyProducts) && tempCompanyProducts.length)
+        ? tempCompanyProducts
+        : (compId && companies[compId] && Array.isArray(companies[compId].products) ? companies[compId].products : []);
+    if (!prods.length) return null;
+
+    var guiaTexto = compId ? (localStorage.getItem("ls23_guia_empresa_" + compId) || "") : "";
+    if (!guiaTexto) {
+        var elTxt = document.getElementById("guiaEmpresaTexto");
+        if (elTxt && elTxt.value) guiaTexto = elTxt.value.trim();
+    }
+    var pages = _lerGuiaPages(compId);
+    if (!guiaTexto && (!pages || !pages.length)) return null;
+
+    _retroGuiaEmAndamento = true;
+    try {
+        var camposAtualizados = 0;
+        var fotosExtraidas = 0;
+        var localRes = _retroalimentarLocalPeloGuia(prods, guiaTexto, pages);
+        camposAtualizados += localRes.camposPreenchidos;
+
+        var lancMap = {};
+        localRes.lancamentos.forEach(function(l){ lancMap[normProdKey(l.name)] = l; });
+
+        var pendentes = [];
+        prods.forEach(function(p, idx) {
+            if (isSkuPendenteDados(p)) {
+                pendentes.push({
+                    idx: idx,
+                    nome: p.name,
+                    precisaFoto: !String(p.thumb || "").trim(),
+                    precisaEan: !String(p.code || "").trim(),
+                    precisaGram: !String(p.gramatura || "").trim()
+                });
+            }
+        });
+
+        var paginasPorNum = {};
+        var paginasComImg = [];
+        (pages || []).forEach(function(pg) {
+            if (pg && pg.pagina) paginasPorNum[pg.pagina] = pg;
+            if (pg && pg.imagemBase64) paginasComImg.push(pg);
+        });
+
+        if (getGoogleGeminiKey() && (pendentes.length > 0 || pages.length > 0 || guiaTexto.length > 40)) {
+            var catalogoExistente = prods.slice(0, 60).map(function(p){ return p.name + (p.gramatura ? " " + p.gramatura : ""); });
+            var resumoPaginas = (pages || []).slice(0, 12).map(function(pg) {
+                var txtP = String(pg.descricao || pg.pdfText || "").substring(0, 1400);
+                return "[PAGINA " + pg.pagina + "] " + txtP;
+            }).join("\n\n");
+            var textoBasePrompt = resumoPaginas || guiaTexto.substring(0, 16000);
+
+            var selImgPages = paginasComImg.filter(function(pg) {
+                var low = normTextAccent((pg.descricao || "") + " " + (pg.pdfText || "")).toLowerCase();
+                return /planograma|portfolio|portfólio|sku|embalag|lancamento|lançamento|mix|ean/.test(low);
+            }).slice(0, 5);
+            if (!selImgPages.length) selImgPages = paginasComImg.slice(0, 4);
+
+            var imageParts = [];
+            selImgPages.forEach(function(pg) {
+                var b64 = String(pg.imagemBase64 || "");
+                var commaIdx = b64.indexOf(",");
+                if (commaIdx >= 0) {
+                    imageParts.push({ mimeType: "image/jpeg", data: b64.substring(commaIdx + 1) });
+                }
+            });
+
+            var promptRetro = "Cruze o Guia de Execução abaixo com o catálogo da empresa.\n" +
+                "1) Para os SKUs PENDENTES listados abaixo (informando seu idx), preencha EAN/código, gramatura faltante e, se a embalagem aparecer nas imagens das páginas anexadas (páginas: " +
+                selImgPages.map(function(p){ return p.pagina; }).join(", ") + "), informe pagina e box_embalagem: [ymin, xmin, ymax, xmax] de 0 a 1000.\n" +
+                "2) Identifique eventuais LANÇAMENTOS ou SAZONAIS mencionados no Guia que NÃO estão no catálogo atual.\n" +
+                "Retorne APENAS JSON válido:\n" +
+                "{\"atualizacoes\":[{\"idx\":0,\"ean\":\"\",\"gramatura\":\"\",\"pagina\":1,\"box_embalagem\":null}],\"lancamentos\":[{\"nome\":\"\",\"gramatura\":\"\",\"ean\":\"\",\"categoria\":\"\",\"quantidade\":1,\"motivo\":\"\"}]}\n\n" +
+                "SKUS PENDENTES:\n" + JSON.stringify(pendentes.slice(0, 40)) + "\n\n" +
+                "CATALOGO ATUAL (para evitar duplicar lançamentos):\n" + JSON.stringify(catalogoExistente) + "\n\n" +
+                "CONTEUDO DO GUIA:\n" + textoBasePrompt;
+
+            try {
+                var raw = await chamarGoogleGeminiFlash(promptRetro, imageParts, true, null, { timeoutMs: 75000 });
+                var parsed = extrairJsonGemini(raw);
+                var atts = (parsed && Array.isArray(parsed.atualizacoes)) ? parsed.atualizacoes : [];
+                for (var ai = 0; ai < atts.length; ai++) {
+                    var u = atts[ai];
+                    var tgt = prods[parseInt(u.idx, 10)];
+                    if (!tgt) continue;
+                    if (!String(tgt.code || "").trim() && u.ean) {
+                        var eanLimpo = String(u.ean).trim();
+                        if (eanLimpo.length >= 5) { tgt.code = eanLimpo; camposAtualizados++; }
+                    }
+                    if (!String(tgt.gramatura || "").trim() && u.gramatura) {
+                        tgt.gramatura = String(u.gramatura).trim().toUpperCase();
+                        camposAtualizados++;
+                    }
+                    if (!String(tgt.thumb || "").trim() && Array.isArray(u.box_embalagem) && u.box_embalagem.length >= 4) {
+                        var pgAlvo = paginasPorNum[parseInt(u.pagina, 10)] || selImgPages[0];
+                        if (pgAlvo && pgAlvo.imagemBase64) {
+                            var cropped = await cropThumbFromPageSrc(pgAlvo.imagemBase64, u.box_embalagem);
+                            if (cropped) {
+                                tgt.thumb = cropped;
+                                fotosExtraidas++;
+                                camposAtualizados++;
+                            }
+                        }
+                    }
+                }
+                var existentesSet = {};
+                prods.forEach(function(p){ if (p && p.name) existentesSet[normProdKey(p.name)] = true; });
+                var lancs = (parsed && Array.isArray(parsed.lancamentos)) ? parsed.lancamentos : [];
+                if (parsed && Array.isArray(parsed.lancamentos)) lancMap = {};
+                lancs.forEach(function(lc) {
+                    var nm = String((lc && (lc.nome || lc.name)) || "").trim();
+                    if (!nm || nm.length < 3) return;
+                    var k = normProdKey(nm);
+                    if (existentesSet[k] || lancMap[k]) return;
+                    lancMap[k] = {
+                        name: nm,
+                        gramatura: String(lc.gramatura || "").trim().toUpperCase(),
+                        code: String(lc.ean || lc.codigo || "").trim(),
+                        category: String(lc.categoria || "").trim() || inferirCategoriaSKU(nm, ""),
+                        quantity: parseInt(lc.quantidade) || 1,
+                        motivo: String(lc.motivo || "Detectado no Guia").trim(),
+                        _checked: true
+                    };
+                });
+            } catch(eRetroIA) {
+                console.warn("Retroalimentação IA opcional ignorada:", eRetroIA && eRetroIA.message ? eRetroIA.message : eRetroIA);
+            }
+        }
+
+        if (camposAtualizados > 0) {
+            if (Array.isArray(tempCompanyProducts) && prods === tempCompanyProducts) {
+                _persistirTempCompanySeSalva();
+            } else if (compId && companies[compId]) {
+                lsSetJSON("ls23_companies", companies);
+                if (typeof syncEmpresaProdutosSupabase === "function") syncEmpresaProdutosSupabase(companies[compId]);
+            }
+            if (typeof updateCompanyProductsTable === "function") updateCompanyProductsTable();
+        }
+
+        _guiaSugestoesLancamentos = Object.keys(lancMap).map(function(k){ return lancMap[k]; });
+        renderBannerLancamentosGuia();
+
+        if (camposAtualizados > 0 || _guiaSugestoesLancamentos.length > 0) {
+            var partesMsg = [];
+            if (camposAtualizados > 0) partesMsg.push(camposAtualizados + " dado(s)/foto(s) preenchido(s) no catálogo");
+            if (fotosExtraidas > 0) partesMsg.push(fotosExtraidas + " miniatura(s) recortada(s)");
+            if (_guiaSugestoesLancamentos.length > 0) partesMsg.push(_guiaSugestoesLancamentos.length + " lançamento(s) sugerido(s) em 1 clique");
+            if (typeof guardiaoToast === "function") {
+                guardiaoToast("confirmacao", "✨ Guia cruzado com o Portfólio", partesMsg.join(" • "), 6500);
+            }
+        }
+        return { camposAtualizados: camposAtualizados, fotosExtraidas: fotosExtraidas, lancamentos: _guiaSugestoesLancamentos.length };
+    } finally {
+        _retroGuiaEmAndamento = false;
+    }
 }
 
 function verGuiaSalvo() {
@@ -12318,6 +13058,11 @@ function concluirTarefaGuardiao(tituloDone, subDone, opts) {
         _bgTaskState.isBackground = false;
         _persistirBgTaskState();
         fecharBgTaskBar();
+        try {
+            if (typeof navigator !== "undefined" && typeof navigator.vibrate === "function") {
+                navigator.vibrate([80, 40, 80]);
+            }
+        } catch(eVib) {}
         guardiaoMostrar("confirmacao", tituloDone, subDone);
         if (opts.keepOverlayMs !== 0) {
             guardiaoEsconder(opts.keepOverlayMs || 1800);
@@ -16052,6 +16797,53 @@ function onCompanyNameSmartInput() {
     }, 950);
 }
 
+function buscarEmpresaLocalPrimeiro(query, ctx) {
+    try {
+        var qRaw = String(query || "").trim();
+        if (!qRaw || typeof companies !== "object" || !companies) return null;
+        var digits = qRaw.replace(/\D/g, "");
+        var qNorm = normTextAccent(qRaw).toLowerCase();
+        var regAlvo = (ctx && ctx.regional) ? normTextAccent(ctx.regional).toLowerCase() : "";
+        var matches = Object.values(companies).filter(function(c) {
+            if (!c || !c.name) return false;
+            var cDigits = String(c.cnpj || "").replace(/\D/g, "");
+            if (digits.length === 14 && cDigits === digits) return true;
+            if (digits.length === 8 && cDigits.indexOf(digits) === 0) return true;
+            var hay = normTextAccent([c.name, c.razaoSocial].filter(Boolean).join(" ")).toLowerCase();
+            return qNorm.length >= 2 && hay.indexOf(qNorm) >= 0;
+        });
+        if (!matches.length) return null;
+        matches.sort(function(a, b) {
+            var ra = normTextAccent(a.regional || "").toLowerCase();
+            var rb = normTextAccent(b.regional || "").toLowerCase();
+            var sa = (regAlvo && ra === regAlvo) ? 2 : (ra === "nacional" ? 1 : 0);
+            var sbScore = (regAlvo && rb === regAlvo) ? 2 : (rb === "nacional" ? 1 : 0);
+            return sbScore - sa;
+        });
+        var c = matches[0];
+        return {
+            source: "Local",
+            supabaseValidado: true,
+            empresaId: String(c.id || ""),
+            nomeFantasia: String(c.name || "").trim(),
+            razaoSocial: String(c.razaoSocial || c.name || "").trim(),
+            cnpj: String(c.cnpj || "").trim(),
+            cnpjRaiz: String(c.cnpj || "").replace(/\D/g, "").slice(0, 8),
+            enderecoCd: String(c.enderecoCd || "").trim(),
+            segmento: String(c.segmento || "").trim(),
+            porte: String(c.porte || "").trim(),
+            brasilApiValidado: /^\d{14}$/.test(String(c.cnpj || "").replace(/\D/g, "")),
+            regionalSugerida: String(c.regional || (ctx && ctx.regional) || "Nacional").trim(),
+            ufLabel: String((ctx && ctx.uf) || c.regional || "BR").trim(),
+            siteDominio: "",
+            contatosResumo: String(c.contacts || "").trim(),
+            logo: String(c.logo || "").trim(),
+            products: Array.isArray(c.products) ? c.products.map(function(p){ return Object.assign({}, p); }) : []
+        };
+    } catch(eLocEmp) {
+        return null;
+    }
+}
 async function buscarEmpresaSupabasePrimeiro(query, ctx) {
     try {
         if (typeof isSupabaseConfigurado !== "function" || !isSupabaseConfigurado()) return null;
@@ -16118,6 +16910,7 @@ async function buscarEmpresaSupabasePrimeiro(query, ctx) {
             nomeFantasia: nome,
             razaoSocial: String(p.razaoSocial || nome).trim(),
             cnpj: String(p.cnpj || row.cnpj || "").trim(),
+            cnpjRaiz: String(p.cnpj || row.cnpj || "").replace(/\D/g, "").slice(0, 8),
             enderecoCd: String(p.enderecoCD || p.enderecoCd || "").trim(),
             segmento: String(p.segmento || "").trim(),
             porte: String(p.porte || "").trim(),
@@ -16135,24 +16928,49 @@ async function buscarEmpresaSupabasePrimeiro(query, ctx) {
     }
 }
 
+function _limparDestaquesCamposEmpresa() {
+    var cnpjEl = document.getElementById("companyCNPJ");
+    if (cnpjEl) {
+        cnpjEl.classList.remove("field-missing-warn");
+        cnpjEl.placeholder = "Ex: 12.345.678/0001-90";
+    }
+}
+function _vincularLimpezaCamposEmpresa() {
+    var cnpjEl = document.getElementById("companyCNPJ");
+    if (!cnpjEl || cnpjEl._warnBoundEmp) return;
+    cnpjEl._warnBoundEmp = true;
+    var clearFn = function() {
+        if (String(cnpjEl.value || "").replace(/\D/g, "").length === 14) {
+            cnpjEl.classList.remove("field-missing-warn");
+        }
+    };
+    cnpjEl.addEventListener("input", clearFn);
+    cnpjEl.addEventListener("change", clearFn);
+}
+
 function _renderConfirmCardEmpresaIA(sug) {
     var cardEl = document.getElementById("smartCompanyConfirmCard");
     if (!cardEl || !sug) return;
     var logoHtml = sug.logo
         ? "<img src='" + sug.logo + "' class='smart-comp-logo' alt='Logo'>"
         : "<div id='smartCompCardLogoWrap' class='smart-comp-logo' style='display:flex;align-items:center;justify-content:center;font-size:20px'>&#127970;</div>";
-    var seloFonte = sug.source === "Supabase"
-        ? " <span class='smart-res-badge brasilapi' style='margin-left:4px'>Base Compartilhada</span>"
-        : (sug.brasilApiValidado ? " <span class='smart-res-badge brasilapi' style='margin-left:4px'>CNPJ Validado</span>" : "");
+    var seloFonte = sug.source === "Local"
+        ? " <span class='smart-res-badge brasilapi' style='margin-left:4px'>Salvo Localmente</span>"
+        : (sug.source === "Supabase"
+            ? " <span class='smart-res-badge brasilapi' style='margin-left:4px'>Base Compartilhada</span>"
+            : (sug.brasilApiValidado ? " <span class='smart-res-badge brasilapi' style='margin-left:4px'>CNPJ Validado</span>" : ""));
     var skuInfo = (Array.isArray(sug.products) && sug.products.length)
-        ? "<br><b>Portfólio pronto:</b> " + sug.products.length + " SKU(s) na base compartilhada"
+        ? "<br><b>Portfólio pronto:</b> " + sug.products.length + " SKU(s) disponíveis"
         : "";
+    var cnpjLabel = sug.cnpj
+        ? ("<b>CNPJ:</b> " + escHtml(sug.cnpj) + " &bull; ")
+        : (sug.cnpjRaiz ? ("<b style='color:#b45309'>Raiz " + escHtml(_formatarRaizCnpjPrefixo(sug.cnpjRaiz)) + " (complete a filial)</b> &bull; ") : "<b style='color:#b45309'>CNPJ da filial a preencher</b> &bull; ");
     cardEl.innerHTML =
         "<div class='smart-comp-head'>" + logoHtml +
         "<div>" +
         "<div class='smart-comp-title'>&#10024; Encontramos: " + escHtml(sug.razaoSocial) + " - Regional " + escHtml(sug.ufLabel) + seloFonte + ". Confirmar dados?</div>" +
         "<div class='smart-comp-meta'>" +
-        (sug.cnpj ? "<b>CNPJ:</b> " + escHtml(sug.cnpj) + " &bull; " : "<b style='color:#b45309'>CNPJ não localizado</b> &bull; ") +
+        cnpjLabel +
         (sug.porte ? "<b>Porte:</b> " + escHtml(sug.porte) + " &bull; " : "") +
         (sug.segmento ? "<b>Segmento:</b> " + escHtml(sug.segmento) : "") +
         (sug.enderecoCd ? "<br><b>CD/Filial:</b> " + escHtml(sug.enderecoCd) : "") +
@@ -16165,18 +16983,19 @@ function _renderConfirmCardEmpresaIA(sug) {
     cardEl.classList.add("ativo");
 }
 
-function _aplicarStatusEmpresaCompletude(stEl, cnpjStr, source) {
+function _aplicarStatusEmpresaCompletude(stEl, cnpjStr, source, cnpjRaiz) {
     if (!stEl) return;
     var cnpjOk = String(cnpjStr || "").replace(/\D/g, "").length === 14;
     stEl.style.display = "block";
     stEl.classList.remove("smart-alert-warn", "smart-alert-ok", "smart-alert-err");
     if (!cnpjOk) {
+        var raizTxt = cnpjRaiz ? (" (raiz " + _formatarRaizCnpjPrefixo(cnpjRaiz) + ")") : "";
         stEl.classList.add("smart-alert-warn");
-        stEl.textContent = "⚠️ Dados básicos localizados, mas o CNPJ completo não foi encontrado automaticamente. Preencha ou confira o CNPJ antes de salvar.";
+        stEl.textContent = "⚠️ Demais dados localizados! Após confirmar, preencha apenas o campo CNPJ" + raizTxt + " com os dígitos da filial regional.";
     } else {
         stEl.classList.add("smart-alert-ok");
-        stEl.textContent = (source === "Supabase")
-            ? "⚡ Empresa carregada da base compartilhada! Revise o card abaixo e toque em Confirmar dados."
+        stEl.textContent = (source === "Supabase" || source === "Local")
+            ? "⚡ Empresa carregada da base salva! Revise o card abaixo e toque em Confirmar dados."
             : "✅ Dados completos encontrados! Revise o card abaixo e toque em Confirmar dados.";
     }
 }
@@ -16211,30 +17030,32 @@ async function buscarEmpresaComIA(manualTrigger) {
         iniciarTarefaGuardiao({
             id: "busca_empresa",
             titulo: "Buscando empresa...",
-            sub: "Consultando base compartilhada (" + ctx.uf + ")",
+            sub: "Camada 1: verificando base local e compartilhada (" + ctx.uf + ")",
             canBackground: true,
-            totalSteps: 2,
+            totalSteps: 3,
             pageTarget: "pageCompany"
         });
     }
 
     try {
-        // 1. SUPABASE PRIMEIRO (Base Compartilhada instantânea)
+        // CAMADA 1: localStorage + Supabase (Instantâneo)
+        var localSug = buscarEmpresaLocalPrimeiro(query, ctx);
         var sbSug = await buscarEmpresaSupabasePrimeiro(query, ctx);
-        if (sbSug) {
-            _ultimaSugestaoEmpresaIA = sbSug;
-            _renderConfirmCardEmpresaIA(sbSug);
-            _aplicarStatusEmpresaCompletude(stEl, sbSug.cnpj, "Supabase");
+        var layer1Sug = (sbSug && (!localSug || (Array.isArray(sbSug.products) && sbSug.products.length >= (localSug.products || []).length))) ? sbSug : localSug;
+        if (layer1Sug) {
+            _ultimaSugestaoEmpresaIA = layer1Sug;
+            _renderConfirmCardEmpresaIA(layer1Sug);
+            _aplicarStatusEmpresaCompletude(stEl, layer1Sug.cnpj, layer1Sug.source, layer1Sug.cnpjRaiz);
             if (manualTrigger) {
-                concluirTarefaGuardiao("⚡ Empresa encontrada!", sbSug.razaoSocial + " (Base Compartilhada)", {
+                concluirTarefaGuardiao("⚡ Empresa encontrada!", layer1Sug.razaoSocial + " (" + (layer1Sug.source === "Local" ? "Salva Localmente" : "Base Compartilhada") + ")", {
                     keepOverlayMs: 1100,
                     onReturn: function(){ showPage("pageCompany"); }
                 });
             }
-            if (!sbSug.logo) {
-                _buscarLogoIndustriaAuto(sbSug.nomeFantasia, sbSug.siteDominio, null).then(function(logoAsync) {
+            if (!layer1Sug.logo) {
+                _buscarLogoIndustriaAuto(layer1Sug.nomeFantasia, layer1Sug.siteDominio, null).then(function(logoAsync) {
                     if (!logoAsync) return;
-                    sbSug.logo = logoAsync;
+                    layer1Sug.logo = logoAsync;
                     var w = document.getElementById("smartCompCardLogoWrap");
                     if (w && w.parentNode) {
                         var img = document.createElement("img");
@@ -16249,9 +17070,27 @@ async function buscarEmpresaComIA(manualTrigger) {
             return;
         }
 
-        if (!isCnpjDirect && !getGoogleGeminiKey()) {
+        // CAMADA 2: APIs Públicas Abertas (CNPJ oficial + OpenStreetMap/Nominatim regional)
+        if (manualTrigger) {
+            atualizarProgressoTarefa("Camada 2: consultando registros públicos...", query + " (" + ctx.uf + ")", 1, 3);
+        }
+        var bApiDireta = null;
+        if (isCnpjDirect && typeof consultarBrasilApiCnpj === "function") {
+            bApiDireta = await consultarBrasilApiCnpj(digits);
+        }
+        var nomEndHint = "";
+        if (!isCnpjDirect && typeof buscarOpenStreetMapNominatim === "function") {
+            try {
+                var nomList = await buscarOpenStreetMapNominatim(query, ctx);
+                if (Array.isArray(nomList) && nomList.length && nomList[0].endereco) {
+                    nomEndHint = nomList[0].endereco;
+                }
+            } catch(eNomEmp) {}
+        }
+
+        if (!isCnpjDirect && !getGoogleGeminiKey() && !nomEndHint) {
             if (manualTrigger) {
-                falharTarefaGuardiao("Chave necessária", "Configure sua chave de acesso nas Configurações para usar a busca automática.");
+                falharTarefaGuardiao("Chave necessária", "Configure sua chave de acesso nas Configurações ou informe os 14 dígitos do CNPJ.");
             }
             if (stEl) {
                 stEl.classList.add("smart-alert-warn");
@@ -16260,33 +17099,31 @@ async function buscarEmpresaComIA(manualTrigger) {
             return;
         }
 
-        if (manualTrigger) {
-            atualizarProgressoTarefa("Localizando filial e dados...", query + " (" + ctx.uf + ")", 1, 2);
-        }
-
-        var bApiDireta = null;
-        if (isCnpjDirect && typeof consultarBrasilApiCnpj === "function") {
-            bApiDireta = await consultarBrasilApiCnpj(digits);
-        }
-
+        // CAMADA 3: Gemini Padrão (SEM google_search) para cruzar Razão Social, Segmento, CD e Raiz CNPJ
         var obj = {};
         if (getGoogleGeminiKey()) {
+            if (manualTrigger) {
+                atualizarProgressoTarefa("Camada 3: completando perfil da indústria...", query + " (" + ctx.uf + ")", 2, 3);
+            }
             var qRef = bApiDireta ? (bApiDireta.razaoSocial + " (CNPJ " + bApiDireta.cnpj + ")") : query;
-            var prompt = "Pesquisa corporativa profunda no Brasil com busca na web. Indústria: \"" + qRef + "\".\n" +
+            var prompt = "Cadastro corporativo de indústria/fornecedor de varejo no Brasil. Indústria: \"" + qRef + "\".\n" +
                 "Localização atual do promotor: " + (ctx.cidade ? ctx.cidade + "/" : "") + ctx.uf + " (Regional: " + ctx.regional + ").\n" +
-                "Pesquise ativamente na web a Razão Social, o CNPJ de 14 dígitos da matriz ou da filial/Centro de Distribuição oficial na UF " + ctx.uf + ", endereço do CD/filial, CNAE/segmento e site oficial.\n" +
+                (nomEndHint ? "Endereço localizado na região: \"" + nomEndHint + "\".\n" : "") +
+                "Informe Razão Social oficial, segmento, endereço provável do Centro de Distribuição/filial regional e site oficial. " +
+                "Se souber com certeza o CNPJ completo de 14 dígitos da matriz/filial regional, preencha \"cnpj\"; se souber apenas a raiz (8 primeiros dígitos), preencha \"cnpjRaiz\" e deixe \"cnpj\" vazio (nunca invente o sufixo de filial).\n" +
                 "Retorne APENAS JSON válido:\n" +
-                "{\"nomeFantasia\":\"\",\"razaoSocial\":\"\",\"cnpj\":\"\",\"enderecoCd\":\"\",\"segmento\":\"\",\"porteSugerido\":\"\",\"regionalSugerida\":\"Nacional|RJ / Leste|SP|MG / ES|Sul|Nordeste|Centro-Oeste|Norte\",\"ufLabel\":\"\",\"siteDominio\":\"\",\"coresBandeira\":[\"#1e3a8a\",\"#2563eb\"],\"contatosResumo\":\"\"}";
-            var raw = await chamarGoogleGeminiFlash(prompt, [], true, null, { useSearch: true, timeoutMs: 90000 });
+                "{\"nomeFantasia\":\"\",\"razaoSocial\":\"\",\"cnpj\":\"\",\"cnpjRaiz\":\"\",\"enderecoCd\":\"\",\"segmento\":\"\",\"porteSugerido\":\"\",\"regionalSugerida\":\"Nacional|RJ / Leste|SP|MG / ES|Sul|Nordeste|Centro-Oeste|Norte\",\"ufLabel\":\"\",\"siteDominio\":\"\",\"coresBandeira\":[\"#1e3a8a\",\"#2563eb\"],\"contatosResumo\":\"\"}";
+            var raw = await chamarGoogleGeminiFlash(prompt, [], true, null, { timeoutMs: 90000 });
             obj = parseGeminiJSON(raw);
             if (Array.isArray(obj)) obj = obj[0] || {};
         }
 
-        if (!bApiDireta && (!obj || (!obj.razaoSocial && !obj.nomeFantasia))) {
+        if (!bApiDireta && (!obj || (!obj.razaoSocial && !obj.nomeFantasia)) && !nomEndHint) {
             throw new Error("Não foi possível identificar a empresa.");
         }
 
         var cnpjDigits = bApiDireta ? digits : String(obj.cnpj || "").replace(/\D/g, "");
+        var cnpjRaiz = String(obj.cnpjRaiz || (cnpjDigits.length >= 8 ? cnpjDigits.slice(0, 8) : "")).replace(/\D/g, "").slice(0, 8);
         var bApiData = bApiDireta || null;
         var brasilApiValidado = !!bApiDireta;
         if (!bApiData && cnpjDigits.length === 14 && typeof consultarBrasilApiCnpj === "function") {
@@ -16299,20 +17136,30 @@ async function buscarEmpresaComIA(manualTrigger) {
             }
         }
 
-        var cnpjFmt = (bApiData && bApiData.cnpj) ? bApiData.cnpj : (obj.cnpj ? (formatarCNPJ(obj.cnpj) || String(obj.cnpj).trim()) : "");
-        var razaoFinal = (bApiData && bApiData.razaoSocial) ? bApiData.razaoSocial : String(obj.razaoSocial || obj.nomeFantasia || query).trim();
-        var nomeSug = String(obj.nomeFantasia || (bApiData && bApiData.nomeFantasia) || razaoFinal || query).trim();
+        // Se só temos a raiz de 8 dígitos, consulta a matriz apenas para enriquecer Razão Social / CNAE / Porte
+        var bMatriz = null;
+        if (!bApiData && cnpjDigits.length !== 14 && cnpjRaiz.length === 8) {
+            var mat14 = _calcularCnpjMatrizFromRaiz(cnpjRaiz);
+            if (mat14 && typeof consultarBrasilApiCnpj === "function") {
+                try { bMatriz = await consultarBrasilApiCnpj(mat14); } catch(eMatEmp) {}
+            }
+        }
+
+        var cnpjFmt = (bApiData && bApiData.cnpj) ? bApiData.cnpj : (cnpjDigits.length === 14 ? formatarCNPJ(cnpjDigits) : "");
+        var razaoFinal = (bApiData && bApiData.razaoSocial) ? bApiData.razaoSocial : String(obj.razaoSocial || (bMatriz && bMatriz.razaoSocial) || obj.nomeFantasia || query).trim();
+        var nomeSug = String(obj.nomeFantasia || (bApiData && bApiData.nomeFantasia) || (bMatriz && bMatriz.nomeFantasia) || razaoFinal || query).trim();
         var regOpts = ["Nacional","RJ / Leste","SP","MG / ES","Sul","Nordeste","Centro-Oeste","Norte"];
         var regSug = regOpts.indexOf(obj.regionalSugerida) >= 0 ? obj.regionalSugerida : ctx.regional;
-        var segFinal = String(obj.segmento || (bApiData && bApiData.cnae) || "").trim();
-        var endFinal = String(obj.enderecoCd || (bApiData && bApiData.endereco) || "").trim();
-        var porteFinal = (bApiData && bApiData.porte) || String(obj.porteSugerido || "").trim();
+        var segFinal = String(obj.segmento || (bApiData && bApiData.cnae) || (bMatriz && bMatriz.cnae) || "").trim();
+        var endFinal = String(obj.enderecoCd || nomEndHint || (bApiData && bApiData.endereco) || "").trim();
+        var porteFinal = (bApiData && bApiData.porte) || (bMatriz && bMatriz.porte) || String(obj.porteSugerido || "").trim();
 
         _ultimaSugestaoEmpresaIA = {
             source: brasilApiValidado ? "CadastroOficial" : "Sugestao",
             nomeFantasia: nomeSug,
             razaoSocial: razaoFinal,
             cnpj: cnpjFmt,
+            cnpjRaiz: cnpjRaiz,
             enderecoCd: endFinal,
             segmento: segFinal,
             porte: porteFinal,
@@ -16325,12 +17172,12 @@ async function buscarEmpresaComIA(manualTrigger) {
         };
 
         _renderConfirmCardEmpresaIA(_ultimaSugestaoEmpresaIA);
-        _aplicarStatusEmpresaCompletude(stEl, _ultimaSugestaoEmpresaIA.cnpj, _ultimaSugestaoEmpresaIA.source);
+        _aplicarStatusEmpresaCompletude(stEl, _ultimaSugestaoEmpresaIA.cnpj, _ultimaSugestaoEmpresaIA.source, _ultimaSugestaoEmpresaIA.cnpjRaiz);
 
         var temCnpjCompleto = String(_ultimaSugestaoEmpresaIA.cnpj || "").replace(/\D/g, "").length === 14;
         if (manualTrigger) {
             concluirTarefaGuardiao(
-                temCnpjCompleto ? "✅ Empresa localizada!" : "⚠️ Empresa localizada (confira CNPJ)",
+                temCnpjCompleto ? "✅ Empresa localizada!" : "⚠️ Dados preenchidos (complete o CNPJ)",
                 _ultimaSugestaoEmpresaIA.razaoSocial + " (" + _ultimaSugestaoEmpresaIA.ufLabel + ")",
                 { keepOverlayMs: 1200, onReturn: function(){ showPage("pageCompany"); } }
             );
@@ -16372,8 +17219,11 @@ async function buscarEmpresaComIA(manualTrigger) {
 function confirmarEmpresaSugeridaIA() {
     var sug = _ultimaSugestaoEmpresaIA;
     if (!sug) return;
+    _limparDestaquesCamposEmpresa();
+    _vincularLimpezaCamposEmpresa();
     if (document.getElementById("companyName")) document.getElementById("companyName").value = sug.nomeFantasia || sug.razaoSocial;
-    if (document.getElementById("companyCNPJ") && sug.cnpj) document.getElementById("companyCNPJ").value = sug.cnpj;
+    var cnpjEl = document.getElementById("companyCNPJ");
+    if (cnpjEl) cnpjEl.value = sug.cnpj || "";
     if (document.getElementById("companyRegional") && sug.regionalSugerida) document.getElementById("companyRegional").value = sug.regionalSugerida;
     if (document.getElementById("companyRazaoSocial")) document.getElementById("companyRazaoSocial").value = sug.razaoSocial || "";
     if (document.getElementById("companySegmento")) document.getElementById("companySegmento").value = sug.segmento || "";
@@ -16393,19 +17243,27 @@ function confirmarEmpresaSugeridaIA() {
         if (stPort) {
             stPort.style.display = "block";
             stPort.style.color = "#059669";
-            stPort.innerHTML = "&#9889; <b>" + tempCompanyProducts.length + "</b> SKU(s) pré-carregados da base compartilhada!";
+            stPort.innerHTML = "&#9889; <b>" + tempCompanyProducts.length + "</b> SKU(s) pré-carregados da base!";
         }
     }
     var cardEl = document.getElementById("smartCompanyConfirmCard");
     if (cardEl) { cardEl.classList.remove("ativo"); cardEl.innerHTML = ""; }
     var stEl = document.getElementById("smartCompanyStatus");
+    var cnpjOk = String((cnpjEl && cnpjEl.value) || "").replace(/\D/g, "").length === 14;
+    if (!cnpjOk && cnpjEl) {
+        cnpjEl.classList.add("field-missing-warn");
+        if (sug.cnpjRaiz) {
+            var rf = _formatarRaizCnpjPrefixo(sug.cnpjRaiz);
+            if (rf) cnpjEl.placeholder = "Raiz " + rf + "/____-__ (complete a filial)";
+        }
+    }
     if (stEl) {
-        var cnpjOk = String((document.getElementById("companyCNPJ") || {}).value || "").replace(/\D/g, "").length === 14;
         stEl.style.display = "block";
         stEl.classList.remove("smart-alert-warn", "smart-alert-ok", "smart-alert-err");
         if (!cnpjOk) {
+            var raizInfo = sug.cnpjRaiz ? (" (raiz " + _formatarRaizCnpjPrefixo(sug.cnpjRaiz) + ")") : "";
             stEl.classList.add("smart-alert-warn");
-            stEl.textContent = "⚠️ Dados básicos preenchidos. Confira ou complete o CNPJ antes de salvar.";
+            stEl.textContent = "⚠️ Todos os outros campos foram preenchidos! Complete apenas o campo CNPJ destacado" + raizInfo + " com a filial regional antes de salvar.";
         } else {
             stEl.classList.add("smart-alert-ok");
             stEl.textContent = "✅ Dados preenchidos: " + (sug.razaoSocial || sug.nomeFantasia) + " (" + sug.ufLabel + ").";
@@ -16446,6 +17304,9 @@ function renderCatalogoIALista() {
         var thumbHtml = it.thumb
             ? "<img src='" + it.thumb + "' class='cat-ia-thumb' alt='SKU'>"
             : "<div class='cat-ia-thumb'>&#128230;</div>";
+        var pendHtml = (typeof isSkuPendenteDados === "function" && isSkuPendenteDados(it))
+            ? "<span class='sku-pending-badge'>&#9203; Pendente (aguardando Guia)</span>"
+            : "";
         return "<div class='cat-ia-row" + (chk ? " checked" : "") + "' onclick='toggleCatalogoIAItem(" + idx + ")'>" +
             "<input type='checkbox' " + (chk ? "checked" : "") + " onclick='event.stopPropagation();toggleCatalogoIAItem(" + idx + ")' style='width:18px;height:18px;margin:0;accent-color:#7c3aed;flex-shrink:0'>" +
             thumbHtml +
@@ -16458,6 +17319,7 @@ function renderCatalogoIALista() {
             (it.code ? "<span style='font-family:monospace'><b>EAN/SKU:</b> " + escHtml(it.code) + "</span>" : "") +
             "<span><b>Cat:</b> " + escHtml(it.category || "Geral") + "</span>" +
             "<span class='status-selo ativo'>" + escHtml(it.status || "Ativo") + "</span>" +
+            pendHtml +
             "</div></div></div>";
     }).join("");
 }
@@ -16516,9 +17378,41 @@ async function _buscarMiniaturasOpenFoodFactsEmLote(lista) {
     await Promise.all(workers);
     if (stEl) {
         stEl.style.color = "#059669";
-        stEl.textContent = "✅ Catálogo pronto: " + total + " SKUs gerados, " + encontrados + " miniatura(s) carregada(s). Revise e salve abaixo!";
+        stEl.textContent = "✅ Catálogo pronto: " + total + " SKUs carregados, " + encontrados + " miniatura(s) obtida(s). Revise e salve abaixo!";
     }
     renderCatalogoIALista();
+}
+
+function buscarCatalogoLocalPrimeiro(compName, cnpj) {
+    try {
+        if (typeof companies !== "object" || !companies) return [];
+        var digits = String(cnpj || "").replace(/\D/g, "");
+        var qNorm = normTextAccent(compName || "").toLowerCase();
+        var match = Object.values(companies).find(function(c) {
+            if (!c || !Array.isArray(c.products) || !c.products.length) return false;
+            var cd = String(c.cnpj || "").replace(/\D/g, "");
+            if (digits.length === 14 && cd === digits) return true;
+            var cn = normTextAccent([c.name, c.razaoSocial].filter(Boolean).join(" ")).toLowerCase();
+            return qNorm.length >= 2 && cn.indexOf(qNorm) >= 0;
+        });
+        if (!match) return [];
+        return match.products.map(function(pp) {
+            return {
+                code: String(pp.code || "").trim(),
+                name: String(pp.name || "").trim(),
+                gramatura: String(pp.gramatura || "").trim(),
+                quantity: parseInt(pp.quantity) || 1,
+                priority: !!pp.priority,
+                category: String(pp.category || "Geral").trim(),
+                status: String(pp.status || "Ativo").trim(),
+                activeRegional: pp.activeRegional !== false,
+                thumb: String(pp.thumb || "").trim(),
+                _checked: true
+            };
+        }).filter(function(p){ return !!p.name; });
+    } catch(eLocCat) {
+        return [];
+    }
 }
 
 async function buscarCatalogoSupabasePrimeiro(compName, cnpj) {
@@ -16614,25 +17508,27 @@ async function gerarCatalogoAutomaticoEmpresaIA() {
     iniciarTarefaGuardiao({
         id: "catalogo_regional",
         titulo: "Gerando catálogo regional...",
-        sub: razao + " (" + ctx.uf + ")",
+        sub: "Camada 1: verificando portfólio salvo (" + ctx.uf + ")",
         canBackground: true,
-        totalSteps: 2,
+        totalSteps: 3,
         pageTarget: "pageCompany",
         onReturn: abrirModalCatalogoIA
     });
 
     try {
-        // 1. SUPABASE PRIMEIRO (Base Compartilhada instantânea)
+        // CAMADA 1: localStorage + Supabase (Instantâneo)
         var sbProds = await buscarCatalogoSupabasePrimeiro(compName, cnpjVal);
-        if (sbProds.length) {
-            _catalogoIaGerado = sbProds;
+        var localProds = sbProds.length ? [] : buscarCatalogoLocalPrimeiro(compName, cnpjVal);
+        var layer1Prods = sbProds.length ? sbProds : localProds;
+        if (layer1Prods.length) {
+            _catalogoIaGerado = layer1Prods;
             renderCatalogoIALista();
             if (stModal) {
                 stModal.style.color = "#059669";
-                stModal.textContent = "⚡ " + sbProds.length + " SKU(s) carregados da base compartilhada! Revise e toque em Salvar Portfólio.";
+                stModal.textContent = "⚡ " + layer1Prods.length + " SKU(s) carregados da base! Revise e toque em Salvar Portfólio.";
             }
             var wasBgSb = !!_bgTaskState.isBackground;
-            concluirTarefaGuardiao("⚡ Catálogo carregado!", sbProds.length + " SKU(s) da base compartilhada.", {
+            concluirTarefaGuardiao("⚡ Catálogo carregado!", layer1Prods.length + " SKU(s) da base existente.", {
                 keepOverlayMs: 1100,
                 onReturn: abrirModalCatalogoIA
             });
@@ -16641,41 +17537,59 @@ async function gerarCatalogoAutomaticoEmpresaIA() {
             return;
         }
 
-        if (!getGoogleGeminiKey()) {
+        // CAMADA 2: Catálogo Público Brasileiro (Open Food Facts BR, page_size=50)
+        atualizarProgressoTarefa("Camada 2: buscando catálogo e EANs públicos...", razao, 1, 3);
+        var offProds = (typeof buscarCatalogoOpenFoodFactsBr === "function")
+            ? await buscarCatalogoOpenFoodFactsBr(compName, segmento)
+            : [];
+
+        var finalList = offProds.slice();
+        // CAMADA 3: Gemini padrão (SEM google_search) para complementar ou gerar quando a base pública tiver poucos itens
+        if (finalList.length < 10 && getGoogleGeminiKey()) {
+            atualizarProgressoTarefa("Camada 3: montando mix regional (" + ctx.uf + ")...", razao, 2, 3);
+            try {
+                var prompt = "Trade marketing Brasil. Indústria: " + razao + " (" + compName + ")" + (segmento ? " | " + segmento : "") + " | Região: " + ctx.uf + " (" + ctx.regional + ").\n" +
+                    "Liste de 20 a 32 principais SKUs comerciais dessa indústria na região com EAN/código quando conhecido.\n" +
+                    "Retorne APENAS JSON válido:\n" +
+                    "{\"produtos\":[{\"nome\":\"...\",\"gramatura\":\"45g\",\"quantidade\":24,\"codigo\":\"789...\",\"categoria\":\"...\",\"status\":\"Ativo\"}]}";
+                var raw = await chamarGoogleGeminiFlash(prompt, [], true);
+                var obj = extrairJsonGemini(raw);
+                var arr = Array.isArray(obj) ? obj : (obj && Array.isArray(obj.produtos) ? obj.produtos : []);
+                var seenKeys = {};
+                finalList.forEach(function(it){ seenKeys[it.code || normProdKey(it.name + " " + it.gramatura)] = true; });
+                arr.forEach(function(it) {
+                    var mk = (typeof extrairMarcadorPrioridade === "function") ? extrairMarcadorPrioridade(it.nome || it.name || "") : { name: String(it.nome || it.name || "").trim(), priority: false };
+                    if (!mk.name) return;
+                    var gram = String(it.gramatura || "").trim();
+                    var code = String(it.codigo || it.ean || it.code || "").trim();
+                    var key = code || normProdKey(mk.name + " " + gram);
+                    if (seenKeys[key]) return;
+                    seenKeys[key] = true;
+                    var cat = String(it.categoria || it.category || "").trim() || inferirCategoriaSKU(mk.name, segmento);
+                    finalList.push({
+                        code: code,
+                        name: mk.name,
+                        gramatura: gram,
+                        quantity: parseInt(it.quantidade || it.quantity) || 1,
+                        priority: mk.priority || isPriorityProduct(mk.name),
+                        category: cat,
+                        status: "Ativo",
+                        activeRegional: true,
+                        thumb: "",
+                        _checked: true
+                    });
+                });
+            } catch(eGemCat) {
+                if (!finalList.length) throw eGemCat;
+            }
+        } else if (!finalList.length && !getGoogleGeminiKey()) {
             falharTarefaGuardiao("Chave necessária", "Configure sua chave de acesso nas Configurações para gerar o catálogo.");
             return;
         }
 
-        atualizarProgressoTarefa("Montando mix de SKUs (" + ctx.uf + ")...", razao, 1, 2);
+        if (!finalList.length) throw new Error("Não foi possível estruturar os itens do catálogo.");
 
-        var prompt = "Trade marketing Brasil. Indústria: " + razao + " (" + compName + ")" + (segmento ? " | " + segmento : "") + " | Região: " + ctx.uf + " (" + ctx.regional + ").\n" +
-            "Liste de 20 a 32 principais SKUs comerciais dessa indústria na região.\n" +
-            "Retorne APENAS JSON válido:\n" +
-            "{\"produtos\":[{\"nome\":\"...\",\"gramatura\":\"45g\",\"quantidade\":24,\"codigo\":\"789...\",\"categoria\":\"...\",\"status\":\"Ativo\"}]}";
-
-        var raw = await chamarGoogleGeminiFlash(prompt, [], true);
-        var obj = extrairJsonGemini(raw);
-        var arr = Array.isArray(obj) ? obj : (obj && Array.isArray(obj.produtos) ? obj.produtos : []);
-        if (!arr.length) throw new Error("Não foi possível estruturar os itens do catálogo.");
-
-        _catalogoIaGerado = arr.map(function(it) {
-            var mk = (typeof extrairMarcadorPrioridade === "function") ? extrairMarcadorPrioridade(it.nome || it.name || "") : { name: String(it.nome || it.name || "").trim(), priority: false };
-            var gram = String(it.gramatura || "").trim();
-            var cat = String(it.categoria || it.category || "").trim() || inferirCategoriaSKU(mk.name, "");
-            return {
-                code: String(it.codigo || it.ean || it.code || "").trim(),
-                name: mk.name,
-                gramatura: gram,
-                quantity: parseInt(it.quantidade || it.quantity) || 1,
-                priority: mk.priority || isPriorityProduct(mk.name),
-                category: cat,
-                status: "Ativo",
-                activeRegional: true,
-                thumb: "",
-                _checked: true
-            };
-        }).filter(function(p){ return !!p.name; });
-
+        _catalogoIaGerado = finalList;
         renderCatalogoIALista();
         if (stModal) {
             stModal.style.color = "#0f766e";
@@ -16881,9 +17795,20 @@ function confirmarSalvarCatalogoIA() {
 </div>
 <!-- Modal Editar Produto da Empresa -->
 <div id="modalEditCompProd" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:99999;align-items:center;justify-content:center;padding:12px">
-  <div style="background:#1e293b;border-radius:16px;padding:18px;width:92%;max-width:380px;border:1px solid rgba(99,102,241,0.35)">
+  <div style="background:#1e293b;border-radius:16px;padding:18px;width:92%;max-width:380px;max-height:92vh;overflow-y:auto;border:1px solid rgba(99,102,241,0.35)">
     <div style="color:#fff;font-size:15px;font-weight:700;margin-bottom:12px">&#9999;&#65039; Editar SKU da Empresa</div>
     <input type="hidden" id="editCompProdIdx">
+    <div style="display:flex;align-items:center;gap:10px;padding:8px;border-radius:10px;background:#0f172a;border:1px solid #334155;margin-bottom:10px">
+      <div id="editCompProdThumbPreview" style="width:48px;height:48px;border-radius:8px;background:#1e293b;border:1px solid #475569;display:flex;align-items:center;justify-content:center;font-size:20px;overflow:hidden;flex-shrink:0">&#128247;</div>
+      <div style="flex:1;min-width:0">
+        <div style="color:#e2e8f0;font-size:11px;font-weight:700;margin-bottom:4px">Foto do Produto</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <input type="file" id="editCompProdPhotoInput" accept="image/*" style="display:none" onchange="selecionarFotoEditCompProd(this)">
+          <button type="button" onclick="document.getElementById('editCompProdPhotoInput').click()" style="padding:5px 9px;border-radius:6px;border:none;background:#4f46e5;color:#fff;font-size:11px;font-weight:700;cursor:pointer;margin:0">&#128247; C&acirc;mera / Galeria</button>
+          <button type="button" id="btnRemoverEditCompThumb" onclick="removerFotoEditCompProd()" style="display:none;padding:5px 8px;border-radius:6px;border:1px solid #475569;background:#334155;color:#fca5a5;font-size:11px;cursor:pointer;margin:0">Remover</button>
+        </div>
+      </div>
+    </div>
     <div style="margin-bottom:8px">
       <label style="color:#94a3b8;font-size:12px">SKU / EAN</label>
       <input id="editCompProdCode" type="text" placeholder="Ex: 7892840812345" style="width:100%;padding:8px;border-radius:8px;border:1px solid #334155;background:#0f172a;color:#fff;font-size:13px;margin-top:3px">
