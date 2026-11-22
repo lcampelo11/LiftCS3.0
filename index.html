@@ -151,10 +151,12 @@ tr.prod-del td{text-decoration:line-through;opacity:.5}
 .mb .mi{font-size:26px}
 .mb .md{font-size:11px;color:#64748b;font-weight:400;margin-top:2px}
 /* TOPBAR LOCALSHELF */
-.topbar{position:sticky;top:0;z-index:40;background:#041326;display:flex;align-items:center;justify-content:space-between;padding:0 10px;height:44px;box-shadow:0 2px 8px rgba(0,0,0,0.2)}
+.topbar{position:sticky;top:0;z-index:40;background:#041326;display:flex;align-items:center;justify-content:space-between;padding:0 10px;height:44px;box-shadow:0 2px 8px rgba(0,0,0,0.2);gap:6px}
 .topbar-logo{height:40px;object-fit:contain}
-.topbar-back{background:rgba(255,255,255,0.14);border:1px solid rgba(255,255,255,0.28);color:#fff;font-size:12px;font-weight:700;padding:5px 10px;border-radius:7px;cursor:pointer;margin:0 8px 0 0;white-space:nowrap;flex-shrink:0}
-.topbar-hb{background:none;border:none;color:#fff;font-size:22px;cursor:pointer;padding:2px 6px;line-height:1}
+.topbar-back{background:rgba(255,255,255,0.14);border:1px solid rgba(255,255,255,0.28);color:#fff;font-size:12px;font-weight:700;padding:5px 10px;border-radius:7px;cursor:pointer;margin:0;white-space:nowrap;flex-shrink:0}
+.topbar-uf-pill{display:inline-flex;align-items:center;gap:4px;background:rgba(37,99,235,0.28);border:1px solid rgba(96,165,250,0.65);color:#e0f2fe;font-size:11px;font-weight:800;padding:4px 9px;border-radius:999px;cursor:pointer;margin:0;white-space:nowrap;flex-shrink:0;line-height:1.2}
+.topbar-uf-pill.unset{background:rgba(217,119,6,0.35);border-color:rgba(251,191,36,0.8);color:#fef3c7}
+.topbar-hb{background:none;border:none;color:#fff;font-size:22px;cursor:pointer;padding:2px 6px;line-height:1;flex-shrink:0}
 /* HEADER FAIXA */
 .ph-faixa{position:relative;overflow:hidden;min-height:88px;display:flex;align-items:stretch;margin-bottom:12px;background:transparent}
 .ph-faixa-bg{position:absolute;top:0;left:0;width:72%;height:100%;min-height:88px;background:linear-gradient(135deg,#1e3a8a 60%,#3b82f6 100%);clip-path:polygon(0 0,90% 0,100% 100%,0 100%)}
@@ -780,12 +782,19 @@ body.dark-mode .aud-foto-meta{background:#0f172a!important;color:#cbd5e1!importa
 .onb-loc-status{font-size:11px;color:#166534;margin-top:8px;line-height:1.4;font-weight:600}
 .onb-btn-loc{width:100%;background:linear-gradient(135deg,#059669,#10b981);color:#fff;border:none;border-radius:10px;padding:11px 14px;font-size:13px;font-weight:700;cursor:pointer;margin:0}
 .onb-btn-skip{background:transparent;color:#64748b;border:none;font-size:12px;font-weight:600;cursor:pointer;padding:8px 12px;text-decoration:underline;margin-top:4px}
+.onb-uf-select{width:100%;padding:10px 12px;border:1.5px solid #2563eb;border-radius:10px;font-size:14px;font-weight:700;color:#0f172a;background:#fff;margin-bottom:8px;box-sizing:border-box}
+.uf-grid-chips{display:grid;grid-template-columns:repeat(6,1fr);gap:5px;margin:8px 0 12px}
+.uf-chip-btn{background:#f1f5f9;color:#1e293b;border:1.5px solid #cbd5e1;border-radius:8px;padding:7px 2px;font-size:12px;font-weight:800;cursor:pointer;margin:0;text-align:center}
+.uf-chip-btn.ativo{background:#1d4ed8;color:#fff;border-color:#1e40af;box-shadow:0 2px 6px rgba(29,78,216,0.3)}
 .lang-pills-row{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px}
 .lang-pill-btn{background:#f8fafc;color:#1e293b;border:1.5px solid #cbd5e1;border-radius:8px;padding:8px 6px;font-size:12px;font-weight:700;cursor:pointer;margin:0;text-align:center}
 .lang-pill-btn.ativo{background:#1e40af;color:#fff;border-color:#1e40af}
 body.dark-mode .onb-box{background:#1e293b!important;color:#f1f5f9!important;border-color:#334155!important}
 body.dark-mode .onb-title,body.dark-mode .onb-sec-lbl{color:#93c5fd!important}
 body.dark-mode .onb-sub,body.dark-mode .onb-btn-skip{color:#cbd5e1!important}
+body.dark-mode .onb-uf-select{background:#0f172a!important;color:#f1f5f9!important;border-color:#3b82f6!important}
+body.dark-mode .uf-chip-btn{background:#0f172a!important;color:#e2e8f0!important;border-color:#334155!important}
+body.dark-mode .uf-chip-btn.ativo{background:#2563eb!important;color:#fff!important;border-color:#60a5fa!important}
 body.dark-mode .onb-lang-btn,body.dark-mode .lang-pill-btn{background:#0f172a!important;color:#e2e8f0!important;border-color:#334155!important}
 body.dark-mode .onb-lang-btn.ativo,body.dark-mode .lang-pill-btn.ativo{background:#1d4ed8!important;color:#fff!important;border-color:#60a5fa!important}
 body.dark-mode .onb-loc-card{background:#064e3b!important;border-color:#10b981!important}
@@ -942,8 +951,10 @@ body.dark-mode .relp-pill.ativo{background:#2563eb!important;color:#fff!importan
 <div class="page active" id="pageClients">
   <!-- Topbar LocalShelf -->
   <div class="topbar">
-    <img data-lcs-asset="logo-header" alt="LocalShelf" style="height:36px;max-width:58%;object-fit:contain;margin-right:auto">
-    <button type="button" onclick="voltarParaSplash()" title="Trocar Perfil / Empresa" data-i18n="btn_switch_profile" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.22);color:#cbd5e1;font-size:10px;font-weight:600;padding:5px 8px;border-radius:7px;cursor:pointer;margin:0 8px 0 0;white-space:nowrap">&#128257; Trocar Perfil / Empresa</button>
+    <img data-lcs-asset="logo-header" alt="LocalShelf" style="height:36px;max-width:44%;object-fit:contain">
+    <button type="button" class="topbar-uf-pill unset" onclick="abrirSeletorUfModal(false)" title="Alterar UF de atuação">&#128205; Definir UF</button>
+    <div style="flex:1"></div>
+    <button type="button" onclick="voltarParaSplash()" title="Trocar Perfil / Empresa" data-i18n="btn_switch_profile" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.22);color:#cbd5e1;font-size:10px;font-weight:600;padding:5px 8px;border-radius:7px;cursor:pointer;margin:0;white-space:nowrap">&#128257; Trocar Perfil / Empresa</button>
     <button class="topbar-hb" onclick="openHamburger()">&#9776;</button>
   </div>
   <!-- Faixa empresa -->
@@ -1226,7 +1237,10 @@ body.dark-mode .relp-pill.ativo{background:#2563eb!important;color:#fff!importan
   <div class="fg"><label>Equipe</label><input type="text" id="userEquipe" placeholder="Ex: Zona Norte"></div>
   <div class="fg"><label>Gerente</label><input type="text" id="userGerente" placeholder="Ex: Ana Souza"></div>
   <div class="fg"><label>Supervisor(a)</label><input type="text" id="userSupervisor" placeholder="Ex: Carlos Silva"></div>
-  <div class="fg"><label>Regiao Atual</label><input type="text" id="userRegiao" placeholder="Ex: Olaria, Penha, Caxias"></div>
+  <div class="grid2">
+    <div class="fg"><label>UF de Atua&ccedil;&atilde;o</label><select id="userUf"><option value="">-- Selecione --</option></select></div>
+    <div class="fg"><label>Regiao Atual</label><input type="text" id="userRegiao" placeholder="Ex: Olaria, Penha, Caxias"></div>
+  </div>
   <div class="fg">
     <label>Assinatura Digital <span style="color:#94a3b8;font-weight:400;font-size:11px">(opcional)</span></label>
     <div id="userSigPreview" style="margin-bottom:6px"></div>
@@ -1260,6 +1274,7 @@ body.dark-mode .relp-pill.ativo{background:#2563eb!important;color:#fff!importan
       <button type="button" id="btnSmartCompanySearch" onclick="buscarEmpresaComIA(true)">Buscar Empresa</button>
     </div>
     <div class="smart-status" id="smartCompanyStatus"></div>
+    <div class="smart-results" id="smartCompanyUnitsList"></div>
     <div id="smartCompanyConfirmCard" class="smart-comp-confirm"></div>
     <div id="postConfirmCatalogBanner" class="post-confirm-cat-banner">
       <div style="font-size:12px;font-weight:800;color:#4c1d95;margin-bottom:6px">&#128640; Empresa confirmada! Gere o portf&oacute;lio regional com 1 clique:</div>
@@ -1466,6 +1481,11 @@ body.dark-mode .relp-pill.ativo{background:#2563eb!important;color:#fff!importan
     <div class="fg"><label>CNAE Principal <span style="color:#94a3b8;font-weight:400;font-size:11px">(opcional)</span></label><input type="text" id="clientCNAE" placeholder="Ex: 4711-3/02 - Supermercados" oninput="autoClassificarTipologia(false)"></div>
   </div>
   <div class="fg"><label>Endere&ccedil;o Completo <span style="color:#94a3b8;font-weight:400;font-size:11px">(opcional)</span></label><input type="text" id="clientEndereco" placeholder="Rua, n&uacute;mero, bairro, cidade/UF"></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr 110px;gap:8px">
+    <div class="fg"><label>Bairro</label><input type="text" id="clientBairro" placeholder="Ex: Fonseca"></div>
+    <div class="fg"><label>Cidade / UF</label><input type="text" id="clientCidadeUf" placeholder="Ex: Niter&oacute;i / RJ"></div>
+    <div class="fg"><label>CEP</label><input type="text" id="clientCEP" placeholder="00000-000"></div>
+  </div>
 
   <div class="grid2">
     <div class="fg"><label>N&ordm; de Checkouts *</label><input type="number" id="clientCheckouts" placeholder="Ex: 8" min="1" style="width:100%" oninput="autoClassificarTipologia(false)"></div>
@@ -2016,6 +2036,10 @@ body.dark-mode .relp-pill.ativo{background:#2563eb!important;color:#fff!importan
         <div style="font-size:12px;font-weight:700;color:#1e3a8a" data-i18n="cfg_loc_title">&#128205; Localiza&ccedil;&atilde;o &amp; Regional</div>
         <span id="cfgLocationBadge" class="sync-pill" style="background:#e2e8f0;color:#475569">N&atilde;o ativada</span>
       </div>
+      <div class="fg" style="margin-bottom:8px">
+        <label style="font-size:11px;color:#1e3a8a">UF Ativa (Filtro Geogr&aacute;fico Obrigat&oacute;rio)</label>
+        <select id="cfgUfSelect" onchange="if(this.value) setUfAtiva(this.value, {source:'config'})" style="width:100%;padding:8px;border:1px solid #93c5fd;border-radius:8px;font-size:13px;font-weight:700"><option value="">-- Selecione sua UF --</option></select>
+      </div>
       <div id="cfgLocationInfo" style="font-size:11px;color:#475569;margin-bottom:8px;line-height:1.45">Permita a localiza&ccedil;&atilde;o para preencher sua Regional automaticamente e preparar check-ins futuros nas lojas.</div>
       <div style="display:flex;gap:6px;flex-wrap:wrap">
         <button type="button" onclick="solicitarLocalizacaoUsuario('cfg')" data-i18n="cfg_btn_allow_loc" style="background:#059669;color:#fff;border:none;border-radius:8px;padding:9px 13px;cursor:pointer;font-size:12px;font-weight:700;margin:0">&#128205; Permitir / Atualizar Localiza&ccedil;&atilde;o</button>
@@ -2346,6 +2370,19 @@ function _hydratarAssetsLCS() {
 var LS_LANG_KEY = "ls23_lang";
 var LS_ONBOARDING_KEY = "ls23_onboarding_done";
 var LS_LOCATION_KEY = "ls23_user_location";
+var LS_ACTIVE_UF_KEY = "ls23_active_uf";
+
+var BR_UFS = [
+    { uf: "AC", nome: "Acre" }, { uf: "AL", nome: "Alagoas" }, { uf: "AP", nome: "Amapá" },
+    { uf: "AM", nome: "Amazonas" }, { uf: "BA", nome: "Bahia" }, { uf: "CE", nome: "Ceará" },
+    { uf: "DF", nome: "Distrito Federal" }, { uf: "ES", nome: "Espírito Santo" }, { uf: "GO", nome: "Goiás" },
+    { uf: "MA", nome: "Maranhão" }, { uf: "MT", nome: "Mato Grosso" }, { uf: "MS", nome: "Mato Grosso do Sul" },
+    { uf: "MG", nome: "Minas Gerais" }, { uf: "PA", nome: "Pará" }, { uf: "PB", nome: "Paraíba" },
+    { uf: "PR", nome: "Paraná" }, { uf: "PE", nome: "Pernambuco" }, { uf: "PI", nome: "Piauí" },
+    { uf: "RJ", nome: "Rio de Janeiro" }, { uf: "RN", nome: "Rio Grande do Norte" }, { uf: "RS", nome: "Rio Grande do Sul" },
+    { uf: "RO", nome: "Rondônia" }, { uf: "RR", nome: "Roraima" }, { uf: "SC", nome: "Santa Catarina" },
+    { uf: "SP", nome: "São Paulo" }, { uf: "SE", nome: "Sergipe" }, { uf: "TO", nome: "Tocantins" }
+];
 
 var LS_I18N = {
     "pt-BR": {
@@ -2473,12 +2510,14 @@ var LS_I18N = {
         log_btn_copy_wpp: "📋 Copiar WhatsApp",
         offline_banner: "🔌 Modo Offline — dados salvos localmente",
         onb_welcome_title: "Bem-vindo ao LocalShelf",
-        onb_welcome_sub: "Configure seu idioma e a localização inicial para preencher sua Regional automaticamente.",
+        onb_welcome_sub: "Configure seu idioma e a sua UF de atuação para filtrar buscas no seu estado.",
         onb_lang_lbl: "1. Escolha o Idioma",
         onb_loc_lbl: "2. Localização & Regional",
-        onb_loc_desc: "Detectamos sua cidade/UF para configurar sua Regional e preparar futuros check-ins nas lojas.",
-        onb_btn_allow_loc: "📍 Permitir Localização durante o uso",
-        onb_btn_skip_loc: "Continuar sem localização",
+        onb_uf_lbl: "2. Qual é a sua UF de atuação?",
+        onb_loc_desc: "Selecione seu estado ou use o GPS. Todas as buscas de CDs, lojas e mix serão filtradas por esta UF.",
+        onb_btn_allow_loc: "📍 Detectar UF via GPS",
+        onb_btn_confirm_uf: "Confirmar UF e Continuar",
+        onb_btn_skip_loc: "Definir depois",
         loc_badge_off: "Não ativada",
         loc_badge_on: "Ativada",
         loc_badge_skip: "Sem localização",
@@ -2614,12 +2653,14 @@ var LS_I18N = {
         log_btn_copy_wpp: "📋 Copy WhatsApp",
         offline_banner: "🔌 Offline Mode — data saved locally",
         onb_welcome_title: "Welcome to LocalShelf",
-        onb_welcome_sub: "Choose your language and initial location to auto-fill your Region.",
+        onb_welcome_sub: "Choose your language and active state (UF) to filter all searches.",
         onb_lang_lbl: "1. Choose Language",
         onb_loc_lbl: "2. Location & Region",
-        onb_loc_desc: "We detect your city/state to set your Region and prepare future store check-ins.",
-        onb_btn_allow_loc: "📍 Allow Location While Using",
-        onb_btn_skip_loc: "Continue without location",
+        onb_uf_lbl: "2. What is your active State (UF)?",
+        onb_loc_desc: "Select your state or use GPS. All distribution bases, stores and product mix searches will filter by this state.",
+        onb_btn_allow_loc: "📍 Detect State via GPS",
+        onb_btn_confirm_uf: "Confirm State & Continue",
+        onb_btn_skip_loc: "Set later",
         loc_badge_off: "Not enabled",
         loc_badge_on: "Enabled",
         loc_badge_skip: "Location skipped",
@@ -2755,12 +2796,14 @@ var LS_I18N = {
         log_btn_copy_wpp: "📋 Copiar WhatsApp",
         offline_banner: "🔌 Modo Sin Conexión — datos guardados localmente",
         onb_welcome_title: "Bienvenido a LocalShelf",
-        onb_welcome_sub: "Configura tu idioma y ubicación inicial para completar tu Regional automáticamente.",
+        onb_welcome_sub: "Configura tu idioma y tu estado (UF) de actuación para filtrar búsquedas.",
         onb_lang_lbl: "1. Elige el Idioma",
         onb_loc_lbl: "2. Ubicación y Regional",
-        onb_loc_desc: "Detectamos tu ciudad/estado para configurar tu Regional y preparar futuros check-ins en tiendas.",
-        onb_btn_allow_loc: "📍 Permitir Ubicación durante el uso",
-        onb_btn_skip_loc: "Continuar sin ubicación",
+        onb_uf_lbl: "2. ¿Cuál es tu Estado (UF) de actuación?",
+        onb_loc_desc: "Selecciona tu estado o usa GPS. Todas las búsquedas de CDs, tiendas y mix se filtrarán por esta UF.",
+        onb_btn_allow_loc: "📍 Detectar UF vía GPS",
+        onb_btn_confirm_uf: "Confirmar UF y Continuar",
+        onb_btn_skip_loc: "Definir después",
         loc_badge_off: "No activada",
         loc_badge_on: "Activada",
         loc_badge_skip: "Sin ubicación",
@@ -3876,6 +3919,11 @@ function _tentarAutoLoginSessao() {
         if (window.history && typeof window.history.replaceState === "function") {
             try { window.history.replaceState({ page: "pageClients" }, "", ""); } catch(e2) {}
         }
+        setTimeout(function() {
+            if (typeof getUfAtiva === "function" && !getUfAtiva() && !_isElVisibleModal("modalOnboarding")) {
+                if (typeof abrirSeletorUfModal === "function") abrirSeletorUfModal(true);
+            }
+        }, 250);
         return true;
     }
     return false;
@@ -3938,6 +3986,9 @@ function enterApp() {
     document.getElementById("splash").style.display = "none";
     document.getElementById("app").style.display = "block";
     showClientsPage();
+    if (typeof getUfAtiva === "function" && !getUfAtiva() && !_isElVisibleModal("modalOnboarding")) {
+        if (typeof abrirSeletorUfModal === "function") abrirSeletorUfModal(true);
+    }
 }
 
 function goToUserFromSplash() {
@@ -3955,9 +4006,17 @@ function goToNewCompany() {
     tempCompanyProducts = []; pendingCompanyLogo = null;
     _compProdFilter = "todos";
     ["companyName","companyCNPJ","companyContacts","companyRazaoSocial","companySegmento","companyEnderecoCD","smartCompanyQuery"].forEach(function(id){ var el=document.getElementById(id); if(el) el.value = ""; });
+    var _ufAtv = (typeof getUfAtiva === "function") ? getUfAtiva() : "";
     var _locUser = (typeof getUserLocationPrefs === "function") ? getUserLocationPrefs() : null;
-    var regEl = document.getElementById("companyRegional"); if (regEl) regEl.value = (_locUser && _locUser.regional) ? _locUser.regional : "Nacional";
+    var regEl = document.getElementById("companyRegional");
+    if (regEl) {
+        regEl.value = _ufAtv
+            ? _mapearUfParaRegional(_ufAtv, "")
+            : ((_locUser && _locUser.regional) ? _locUser.regional : "Nacional");
+    }
     var scSt = document.getElementById("smartCompanyStatus"); if (scSt) { scSt.style.display = "none"; scSt.textContent = ""; }
+    var scUnits = document.getElementById("smartCompanyUnitsList"); if (scUnits) { scUnits.innerHTML = ""; scUnits.classList.remove("ativo"); }
+    if (typeof _smartCompanyUnits !== "undefined") _smartCompanyUnits = [];
     var scCard = document.getElementById("smartCompanyConfirmCard"); if (scCard) { scCard.classList.remove("ativo"); scCard.innerHTML = ""; }
     var postBan = document.getElementById("postConfirmCatalogBanner"); if (postBan) postBan.classList.remove("ativo");
     if (typeof _ultimaSugestaoEmpresaIA !== "undefined") _ultimaSugestaoEmpresaIA = null;
@@ -3996,6 +4055,11 @@ function _fecharModalAtivoNoVoltar() {
     var iosM = document.getElementById("pwaIosModal");
     if (iosM && iosM.classList.contains("ativo")) { fecharPwaIosModal(); return true; }
     if (_isElVisibleModal("modalCatalogoIA")) { fecharModalCatalogoIA(); return true; }
+    if (_isElVisibleModal("modalUfSeletor")) {
+        if (window._ufModalObrigatorio) return true;
+        fecharSeletorUfModal();
+        return true;
+    }
     if (_isElVisibleModal("modalOnboarding")) { fecharModalOnboarding(); return true; }
     var gc = document.getElementById("guardiao-chat");
     if (gc && gc.classList.contains("ativo")) { fecharGuardiaoChat(); return true; }
@@ -4019,9 +4083,10 @@ function _fecharModalAtivoNoVoltar() {
     return false;
 }
 function _garantirTopbarVoltar(pageEl) {
-    if (!pageEl || pageEl.id === "pageClients") return;
+    if (!pageEl) return;
     var tb = pageEl.querySelector(".topbar");
     if (!tb) {
+        if (pageEl.id === "pageClients") return;
         tb = document.createElement("div");
         tb.className = "topbar";
         var logoSrc = (window._LCS_ASSETS && window._LCS_ASSETS["logo-lcs"]) || "";
@@ -4030,7 +4095,7 @@ function _garantirTopbarVoltar(pageEl) {
             "<button class='topbar-hb' onclick='openHamburger()'>&#9776;</button>";
         pageEl.insertBefore(tb, pageEl.firstChild);
     }
-    if (!tb.querySelector(".topbar-back")) {
+    if (pageEl.id !== "pageClients" && !tb.querySelector(".topbar-back")) {
         var btnBack = document.createElement("button");
         btnBack.type = "button";
         btnBack.className = "topbar-back";
@@ -4038,6 +4103,18 @@ function _garantirTopbarVoltar(pageEl) {
         btnBack.onclick = function() { voltarCabecalhoApp(); };
         tb.insertBefore(btnBack, tb.firstChild);
     }
+    if (!tb.querySelector(".topbar-uf-pill")) {
+        var pill = document.createElement("button");
+        pill.type = "button";
+        pill.className = "topbar-uf-pill unset";
+        pill.title = "Alterar UF de atuação";
+        pill.innerHTML = "&#128205; Definir UF";
+        pill.onclick = function() { if (typeof abrirSeletorUfModal === "function") abrirSeletorUfModal(false); };
+        var hbBtn = tb.querySelector(".topbar-hb");
+        if (hbBtn) tb.insertBefore(pill, hbBtn);
+        else tb.appendChild(pill);
+    }
+    if (typeof _sincronizarTopbarUfPills === "function") _sincronizarTopbarUfPills();
 }
 function voltarCabecalhoApp() {
     if (typeof _fecharModalAtivoNoVoltar === "function" && _fecharModalAtivoNoVoltar()) return;
@@ -4174,13 +4251,104 @@ function goToMenu() {
     showPage("pageMenu");
 }
 
+var _clientManualEditedFields = {};
+function _vincularEdicaoManualCliente() {
+    ["clientName","clientCNPJ","clientRazaoSocial","clientCNAE","clientEndereco","clientBairro","clientCidadeUf","clientCEP","clientCheckouts","clientCanal","clientPerfil"].forEach(function(id) {
+        var el = document.getElementById(id);
+        if (!el || el._manualTrackBound) return;
+        el._manualTrackBound = true;
+        var markEdited = function(ev) {
+            if (!ev || ev.isTrusted !== false) {
+                _clientManualEditedFields[id] = true;
+            }
+        };
+        el.addEventListener("input", markEdited);
+        el.addEventListener("change", markEdited);
+    });
+}
+function _formatarCepBR(cepRaw) {
+    var d = String(cepRaw || "").replace(/\D/g, "");
+    if (d.length === 8) return d.slice(0, 5) + "-" + d.slice(5);
+    return String(cepRaw || "").replace(/^CEP\s*/i, "").trim();
+}
+function _formatarCidadeUf(municipio, uf) {
+    var m = String(municipio || "").trim();
+    var u = String(uf || "").trim().toUpperCase();
+    if (m && u) return m + " / " + u;
+    return m || u || "";
+}
+function _extrairPartesEnderecoTexto(endStr, ufFallback) {
+    var txt = String(endStr || "").trim();
+    var out = { bairro: "", municipio: "", uf: "", cidadeUf: "", cep: "" };
+    if (!txt) {
+        if (ufFallback && ufFallback !== "Brasil") out.uf = String(ufFallback).trim().toUpperCase();
+        return out;
+    }
+    var cepMatch = txt.match(/(\d{5})[-\s]?(\d{3})/);
+    if (cepMatch) out.cep = cepMatch[1] + "-" + cepMatch[2];
+
+    var semCep = txt.replace(/\|?\s*CEP[:\s]*\d{5}[-\s]?\d{3}\s*/ig, "").trim();
+    var ufMatch = semCep.match(/(?:^|[\s,\-\/\|])([A-Z]{2})(?:\s*$|\s*\|)/i);
+    if (ufMatch && typeof _isValidBrUf === "function" && _isValidBrUf(ufMatch[1].toUpperCase())) {
+        out.uf = ufMatch[1].toUpperCase();
+    } else if (ufFallback && ufFallback !== "Brasil" && typeof _isValidBrUf === "function" && _isValidBrUf(ufFallback)) {
+        out.uf = String(ufFallback).trim().toUpperCase();
+    }
+
+    var pipes = semCep.split("|").map(function(s){ return s.trim(); }).filter(Boolean);
+    if (pipes.length >= 2) {
+        var regPart = pipes[1];
+        var segs = regPart.split(/\s+-\s+/).map(function(s){ return s.trim(); }).filter(Boolean);
+        if (segs.length >= 2) {
+            out.bairro = segs[0];
+            var cidRaw = segs.slice(1).join(" - ");
+            var cidUfM = cidRaw.match(/^(.+?)\s*[\/\-]\s*([A-Za-z]{2})$/);
+            if (cidUfM) {
+                out.municipio = cidUfM[1].trim();
+                if (!out.uf && typeof _isValidBrUf === "function" && _isValidBrUf(cidUfM[2].toUpperCase())) out.uf = cidUfM[2].toUpperCase();
+            } else {
+                out.municipio = cidRaw;
+            }
+        } else {
+            var cidUfS = regPart.match(/^(.+?)\s*[\/]\s*([A-Za-z]{2})$/);
+            if (cidUfS) {
+                out.municipio = cidUfS[1].trim();
+                if (!out.uf && typeof _isValidBrUf === "function" && _isValidBrUf(cidUfS[2].toUpperCase())) out.uf = cidUfS[2].toUpperCase();
+            } else {
+                out.bairro = regPart;
+            }
+        }
+    } else {
+        var hifenSegs = semCep.split(/\s+-\s+/).map(function(s){ return s.trim(); }).filter(Boolean);
+        if (hifenSegs.length >= 2) {
+            var lastSeg = hifenSegs[hifenSegs.length - 1];
+            var lastComma = lastSeg.split(",").map(function(s){ return s.trim(); }).filter(Boolean);
+            if (lastComma.length >= 2) {
+                out.bairro = lastComma[0];
+                var cidUfC = lastComma[1].match(/^(.+?)\s*[\/\-]\s*([A-Za-z]{2})$/);
+                if (cidUfC) {
+                    out.municipio = cidUfC[1].trim();
+                    if (!out.uf && typeof _isValidBrUf === "function" && _isValidBrUf(cidUfC[2].toUpperCase())) out.uf = cidUfC[2].toUpperCase();
+                } else {
+                    out.municipio = lastComma[1];
+                }
+            } else {
+                out.bairro = hifenSegs[1] || "";
+            }
+        }
+    }
+    out.cidadeUf = _formatarCidadeUf(out.municipio, out.uf);
+    return out;
+}
+
 function goToNewClient() {
     editingClientId = null;
     tempClientProducts = []; pendingClientLogo = null;
     _pendingClientLogoSource = "";
     _canalManualOverride = false;
     _smartStoreResults = [];
-    ["clientName","clientCNPJ","clientCodigoInterno","clientRazaoSocial","clientCNAE","clientEndereco","clientBuyer","clientBuyerPhone","clientManager","clientManagerPhone","smartStoreQuery"].forEach(function(id){
+    _clientManualEditedFields = {};
+    ["clientName","clientCNPJ","clientCodigoInterno","clientRazaoSocial","clientCNAE","clientEndereco","clientBairro","clientCidadeUf","clientCEP","clientBuyer","clientBuyerPhone","clientManager","clientManagerPhone","smartStoreQuery"].forEach(function(id){
         var el = document.getElementById(id); if (el) el.value = "";
     });
     renderClientLogoStudio(null, "");
@@ -4194,6 +4362,7 @@ function goToNewClient() {
     document.getElementById("pageClientTitle").textContent = "Cadastro de Cliente";
     if (typeof _limparDestaquesCamposCliente === "function") _limparDestaquesCamposCliente();
     if (typeof _vincularLimpezaCamposCliente === "function") _vincularLimpezaCamposCliente();
+    _vincularEdicaoManualCliente();
     if (typeof setClientSearchLoading === "function") setClientSearchLoading(false);
     loadCompanySelectForClient();
     carregarMixDaEmpresaNoCliente(false);
@@ -4209,6 +4378,7 @@ function editClient(clientId) {
     _pendingClientLogoSource = c.logoSource || "";
     _canalManualOverride = !!c.canal;
     _smartStoreResults = [];
+    _clientManualEditedFields = {};
     var compObj = companies[c.companyId];
     tempClientProducts = (c.products||[]).map(function(p){
         var cpMatch = compObj ? getCompanyCatalogMatch(p, compObj) : null;
@@ -4233,6 +4403,10 @@ function editClient(clientId) {
     if (document.getElementById("clientRazaoSocial")) document.getElementById("clientRazaoSocial").value = c.razaoSocial||"";
     if (document.getElementById("clientCNAE")) document.getElementById("clientCNAE").value = c.cnae||"";
     if (document.getElementById("clientEndereco")) document.getElementById("clientEndereco").value = c.endereco||"";
+    var partesEnd = _extrairPartesEnderecoTexto(c.endereco || "", c.uf || "");
+    if (document.getElementById("clientBairro")) document.getElementById("clientBairro").value = c.bairro || partesEnd.bairro || "";
+    if (document.getElementById("clientCidadeUf")) document.getElementById("clientCidadeUf").value = c.cidadeUf || _formatarCidadeUf(c.municipio, c.uf) || partesEnd.cidadeUf || "";
+    if (document.getElementById("clientCEP")) document.getElementById("clientCEP").value = _formatarCepBR(c.cep || partesEnd.cep || "");
     document.getElementById("clientBuyer").value = c.buyer||"";
     document.getElementById("clientBuyerPhone").value = c.buyerPhone||"";
     document.getElementById("clientManager").value = c.manager||"";
@@ -4252,6 +4426,7 @@ function editClient(clientId) {
     document.getElementById("pageClientTitle").textContent = "Editar Cliente";
     if (typeof _limparDestaquesCamposCliente === "function") _limparDestaquesCamposCliente();
     if (typeof _vincularLimpezaCamposCliente === "function") _vincularLimpezaCamposCliente();
+    _vincularEdicaoManualCliente();
     if (typeof setClientSearchLoading === "function") setClientSearchLoading(false);
     autoClassificarTipologia(false);
     carregarMixDaEmpresaNoCliente(true);
@@ -4762,13 +4937,15 @@ function _formatarRaizCnpjPrefixo(raiz8) {
     if (d.length !== 8) return "";
     return d.slice(0, 2) + "." + d.slice(2, 5) + "." + d.slice(5, 8);
 }
-async function consultarBrasilApiCnpj(cnpjDigits) {
+async function consultarBrasilApiCnpj(cnpjDigits, opts) {
     var digits = String(cnpjDigits || "").replace(/\D/g, "");
     if (digits.length !== 14) throw new Error("CNPJ deve ter 14 dígitos.");
+    opts = opts || {};
+    var timeoutMs = (Number(opts.timeoutMs) > 0) ? Number(opts.timeoutMs) : 8000;
     var lastErr = null;
     // 1. Consulta cadastral primaria
     var ctrl = (typeof AbortController !== "undefined") ? new AbortController() : null;
-    var timer = ctrl ? setTimeout(function(){ ctrl.abort(); }, 25000) : null;
+    var timer = ctrl ? setTimeout(function(){ ctrl.abort(); }, timeoutMs) : null;
     try {
         var resp = await fetch("https://brasilapi.com.br/api/cnpj/v1/" + digits, {
             signal: ctrl ? ctrl.signal : undefined
@@ -4808,7 +4985,7 @@ async function consultarBrasilApiCnpj(cnpjDigits) {
 
     // 2. Backup automatico via publica.cnpj.ws
     var ctrl2 = (typeof AbortController !== "undefined") ? new AbortController() : null;
-    var timer2 = ctrl2 ? setTimeout(function(){ ctrl2.abort(); }, 25000) : null;
+    var timer2 = ctrl2 ? setTimeout(function(){ ctrl2.abort(); }, timeoutMs) : null;
     try {
         var resp2 = await fetch("https://publica.cnpj.ws/cnpj/" + digits, {
             signal: ctrl2 ? ctrl2.signal : undefined
@@ -4830,33 +5007,43 @@ async function consultarBrasilApiCnpj(cnpjDigits) {
 async function buscarOpenStreetMapNominatim(query, ctx) {
     var qTexto = String(query || "").trim();
     if (!qTexto) return [];
-    var ufCtx = (ctx && ctx.uf && ctx.uf !== "Brasil") ? String(ctx.uf).trim() : "";
+    var ufCtx = (ctx && ctx.uf && ctx.uf !== "Brasil" && _isValidBrUf(ctx.uf)) ? String(ctx.uf).trim().toUpperCase() : "";
     var cidCtx = (ctx && ctx.cidade) ? String(ctx.cidade).trim() : "";
+    var stateCtx = (ctx && ctx.stateName) ? String(ctx.stateName).trim() : ((ufCtx && _getUfInfoObj(ufCtx)) ? _getUfInfoObj(ufCtx).nome : "");
     var qNorm = normTextAccent(qTexto).toLowerCase();
     var headers = { "Accept": "application/json", "Accept-Language": "pt-BR" };
 
     var queries = [];
-    if (ufCtx && qNorm.indexOf(ufCtx.toLowerCase()) < 0) {
+    if (ufCtx) {
         if (cidCtx && qNorm.indexOf(normTextAccent(cidCtx).toLowerCase()) < 0) {
-            queries.push(qTexto + " " + cidCtx + " " + ufCtx);
+            queries.push(qTexto + ", " + cidCtx + ", " + ufCtx + ", Brasil");
         }
-        queries.push(qTexto + " " + ufCtx);
+        queries.push(qTexto + ", " + (stateCtx || ufCtx) + ", Brasil");
+        if (qNorm.indexOf(ufCtx.toLowerCase()) < 0) {
+            queries.push(qTexto + " " + ufCtx);
+        }
+    } else {
+        queries.push(qTexto + " Brasil");
     }
-    queries.push(qTexto);
 
     var list = [];
     for (var qi = 0; qi < queries.length; qi++) {
         var url = "https://nominatim.openstreetmap.org/search?format=jsonv2&addressdetails=1&countrycodes=br&limit=15&q=" + encodeURIComponent(queries[qi]);
+        var ctrlN = (typeof AbortController !== "undefined") ? new AbortController() : null;
+        var timerN = ctrlN ? setTimeout(function(){ ctrlN.abort(); }, 6000) : null;
         try {
-            var resp = await fetch(url, { headers: headers });
+            var resp = await fetch(url, { headers: headers, signal: ctrlN ? ctrlN.signal : undefined });
             if (resp.ok) {
                 var arr = await resp.json();
                 if (Array.isArray(arr) && arr.length) {
                     list = list.concat(arr);
-                    if (list.length >= 5) break;
+                    if (list.length >= 6) break;
                 }
             }
-        } catch(eNom) {}
+        } catch(eNom) {
+        } finally {
+            if (timerN) clearTimeout(timerN);
+        }
     }
     if (!Array.isArray(list) || !list.length) return [];
 
@@ -4869,19 +5056,27 @@ async function buscarOpenStreetMapNominatim(query, ctx) {
         var addr = item.address || {};
         var nm = item.name || (item.display_name ? item.display_name.split(",")[0] : qTexto);
         var rua = [addr.road, addr.house_number].filter(Boolean).join(", ");
-        var municipio = addr.city || addr.town || addr.municipality || addr.village || "";
+        var bairro = String(addr.suburb || addr.neighbourhood || addr.city_district || addr.quarter || "").trim();
+        var municipio = String(addr.city || addr.town || addr.municipality || addr.village || "").trim();
         var isoUf = addr["ISO3166-2-lvl4"] ? String(addr["ISO3166-2-lvl4"]).replace(/^BR-/i, "") : "";
-        var estado = (addr.state_code ? String(addr.state_code) : (isoUf || addr.state || "")).toUpperCase();
-        var reg = [addr.suburb || addr.neighbourhood || addr.city_district, municipio, estado].filter(Boolean).join(" - ");
+        var rawSt = String(addr.state_code || isoUf || addr.state || "").toUpperCase().trim();
+        var estado = _isValidBrUf(rawSt) ? rawSt : "";
+        if (!estado && addr.state) {
+            var stUfs = _extrairUfsDeTexto(addr.state);
+            if (stUfs.length === 1) estado = stUfs[0];
+        }
+        var reg = [bairro, municipio, estado].filter(Boolean).join(" - ");
         mapped.push({
             source: "OpenStreetMap",
             nome: String(nm || "").trim(),
+            bandeira: String(nm || "").trim(),
             razaoSocial: "",
             cnpj: "",
             endereco: [rua, reg, addr.postcode ? ("CEP " + addr.postcode) : ""].filter(Boolean).join(" | ") || item.display_name || "",
+            bairro: bairro,
             municipio: municipio,
             uf: estado,
-            cep: addr.postcode || "",
+            cep: String(addr.postcode || "").trim(),
             cnae: "",
             porte: "",
             checkoutsEstimado: null
@@ -4889,29 +5084,65 @@ async function buscarOpenStreetMapNominatim(query, ctx) {
     });
 
     if (ufCtx) {
-        var ufMatches = mapped.filter(function(it) {
-            return String(it.uf || "").toUpperCase() === ufCtx.toUpperCase() ||
-                normTextAccent(it.endereco || "").toLowerCase().indexOf(ufCtx.toLowerCase()) >= 0;
+        mapped = mapped.filter(function(it) {
+            return _itemPertenceUf(it, ufCtx, { strictExternal: true });
         });
-        if (ufMatches.length) mapped = ufMatches.concat(mapped.filter(function(it){ return ufMatches.indexOf(it) < 0; }));
     }
     return mapped.slice(0, 15);
 }
+function _parseBuscaLojaComRegiao(query) {
+    var raw = String(query || "").trim();
+    if (!raw) return { raw: "", redeHint: "", localHint: "", tokens: [] };
+    var redeHint = raw;
+    var localHint = "";
+
+    var sepSplit = raw.split(/\s*[\-\/,]\s+/);
+    if (sepSplit.length >= 2) {
+        redeHint = sepSplit[0].trim();
+        localHint = sepSplit.slice(1).join(" ").trim();
+    } else {
+        var prepMatch = raw.match(/^(.+?)\s+(?:do|da|dos|das|no|na|nos|nas|em)\s+(.+)$/i);
+        if (prepMatch && prepMatch[1].trim().length >= 3 && prepMatch[2].trim().length >= 2) {
+            redeHint = prepMatch[1].trim();
+            localHint = prepMatch[2].trim();
+        } else {
+            var parts = raw.split(/\s+/).filter(Boolean);
+            var brandStop = /^(supermarket|supermercado|supermercados|mercado|mercados|hipermercado|atacado|atacadao|atacarejo|box|megabox|mega|rede|economia|padrao|multi|market|guanabara|mundial|prezunic|assai|extra|carrefour|dom|royal|campeao|real|norte|sul|loja|unidade|filial)$/i;
+            if (parts.length >= 2 && !brandStop.test(normTextAccent(parts[parts.length - 1]).toLowerCase())) {
+                localHint = parts[parts.length - 1];
+                redeHint = parts.slice(0, -1).join(" ");
+            }
+        }
+    }
+    var stop = { do:1, da:1, dos:1, das:1, de:1, no:1, na:1, nos:1, nas:1, em:1, e:1 };
+    var tokens = normTextAccent(raw).toLowerCase().split(/[\s\-\/,]+/).filter(function(w){
+        return w.length >= 2 && !stop[w];
+    });
+    return { raw: raw, redeHint: redeHint, localHint: localHint, tokens: tokens };
+}
+
 function buscarClienteLocalPrimeiro(query, ctx) {
     try {
         var qRaw = String(query || "").trim();
         if (!qRaw || typeof clients !== "object" || !clients) return [];
+        var parsed = _parseBuscaLojaComRegiao(qRaw);
         var digits = qRaw.replace(/\D/g, "");
         var qNorm = normTextAccent(qRaw).toLowerCase();
+        var redeNorm = normTextAccent(parsed.redeHint || "").toLowerCase();
+        var localNorm = normTextAccent(parsed.localHint || "").toLowerCase();
+        var ufAlvo = (ctx && ctx.uf && ctx.uf !== "Brasil") ? String(ctx.uf).trim().toUpperCase() : "";
         var hits = [];
         Object.values(clients).forEach(function(c) {
             if (!c || !c.name) return;
             var cDigits = String(c.cnpj || "").replace(/\D/g, "");
             var matchCnpj = (digits.length === 14 && cDigits === digits) || (digits.length === 8 && cDigits.indexOf(digits) === 0);
-            var hay = normTextAccent([c.name, c.razaoSocial, c.endereco].filter(Boolean).join(" ")).toLowerCase();
-            var matchTxt = qNorm.length >= 2 && hay.indexOf(qNorm) >= 0;
-            if (matchCnpj || matchTxt) {
-                hits.push({
+            var hay = normTextAccent([c.name, c.razaoSocial, c.endereco, c.bairro, c.cidadeUf].filter(Boolean).join(" ")).toLowerCase();
+            var matchFull = qNorm.length >= 2 && hay.indexOf(qNorm) >= 0;
+            var matchDual = parsed.tokens.length >= 2 && parsed.tokens.every(function(tk){ return hay.indexOf(tk) >= 0; });
+            var matchRedeLocal = (redeNorm.length >= 2 && localNorm.length >= 2) && (hay.indexOf(redeNorm) >= 0 && hay.indexOf(localNorm) >= 0);
+            if (matchCnpj || matchFull || matchDual || matchRedeLocal) {
+                var partes = _extrairPartesEnderecoTexto(c.endereco || "", c.uf || "");
+                var item = {
                     source: "Local",
                     supabaseValidado: true,
                     nome: String(c.name || "").trim(),
@@ -4919,15 +5150,22 @@ function buscarClienteLocalPrimeiro(query, ctx) {
                     razaoSocial: String(c.razaoSocial || "").trim(),
                     cnpj: String(c.cnpj || "").trim(),
                     endereco: String(c.endereco || "").trim(),
+                    bairro: String(c.bairro || partes.bairro || "").trim(),
+                    municipio: String(c.municipio || partes.municipio || "").trim(),
+                    uf: String(c.uf || partes.uf || "").trim().toUpperCase(),
+                    cidadeUf: String(c.cidadeUf || _formatarCidadeUf(c.municipio || partes.municipio, c.uf || partes.uf) || "").trim(),
+                    cep: _formatarCepBR(c.cep || partes.cep || ""),
                     cnae: String(c.cnae || "").trim(),
                     checkoutsEstimado: parseInt(c.checkouts) || null,
                     canalSugerido: String(c.canal || "").trim(),
                     perfilSugerido: String(c.perfil || "").trim(),
                     buyer: String(c.buyer || "").trim(),
                     buyerPhone: String(c.buyerPhone || "").trim(),
-                    logo: String(c.logo || "").trim(),
-                    uf: ""
-                });
+                    logo: String(c.logo || "").trim()
+                };
+                if (!ufAlvo || _itemPertenceUf(item, ufAlvo, { strictExternal: false })) {
+                    hits.push(item);
+                }
             }
         });
         return hits.slice(0, 10);
@@ -4935,6 +5173,7 @@ function buscarClienteLocalPrimeiro(query, ctx) {
         return [];
     }
 }
+
 async function buscarClienteSupabasePrimeiro(query, ctx) {
     try {
         if (typeof isSupabaseConfigurado !== "function" || !isSupabaseConfigurado()) return [];
@@ -4943,7 +5182,9 @@ async function buscarClienteSupabasePrimeiro(query, ctx) {
         if (!sb) return [];
 
         var qRaw = String(query || "").trim();
+        var parsed = _parseBuscaLojaComRegiao(qRaw);
         var digits = qRaw.replace(/\D/g, "");
+        var ufAlvo = (ctx && ctx.uf && ctx.uf !== "Brasil") ? String(ctx.uf).trim().toUpperCase() : "";
         var rows = [];
         if (digits.length === 14) {
             var cnpjFmt = formatarCNPJ(digits);
@@ -4951,16 +5192,26 @@ async function buscarClienteSupabasePrimeiro(query, ctx) {
             if (rCnpj && Array.isArray(rCnpj.data)) rows = rCnpj.data;
         }
         if (!rows.length && qRaw.length >= 2) {
-            var termo = qRaw.replace(/[%_,()]/g, " ").trim();
-            var rTxt = await sb.from("clientes").select("*").or("name.ilike.%" + termo + "%,razao_social.ilike.%" + termo + "%").limit(12);
+            var termo1 = (parsed.redeHint || qRaw).replace(/[%_,()]/g, " ").trim();
+            var termo2 = qRaw.replace(/[%_,()]/g, " ").trim();
+            var orExpr = "name.ilike.%" + termo2 + "%,razao_social.ilike.%" + termo2 + "%,endereco.ilike.%" + termo2 + "%";
+            if (termo1 && termo1 !== termo2 && termo1.length >= 2) {
+                orExpr += ",name.ilike.%" + termo1 + "%,razao_social.ilike.%" + termo1 + "%";
+            }
+            var rTxt = await sb.from("clientes").select("*").or(orExpr).limit(18);
             if (rTxt && Array.isArray(rTxt.data)) rows = rTxt.data;
         }
         if (!rows.length) return [];
 
-        return rows.map(function(row) {
+        var mapped = rows.map(function(row) {
             var p = (row && row.payload && typeof row.payload === "object") ? row.payload : {};
             var nome = String(p.name || row.name || "").trim();
             if (!nome) return null;
+            var end = String(p.endereco || row.endereco || "").trim();
+            var ufRaw = String(p.uf || row.uf || "").trim().toUpperCase();
+            var partes = _extrairPartesEnderecoTexto(end, ufRaw);
+            var mun = String(p.municipio || partes.municipio || "").trim();
+            var uf = String(ufRaw || partes.uf || "").trim().toUpperCase();
             return {
                 source: "Supabase",
                 supabaseValidado: true,
@@ -4968,61 +5219,125 @@ async function buscarClienteSupabasePrimeiro(query, ctx) {
                 bandeira: nome,
                 razaoSocial: String(p.razaoSocial || row.razao_social || "").trim(),
                 cnpj: String(p.cnpj || row.cnpj || "").trim(),
-                endereco: String(p.endereco || row.endereco || "").trim(),
+                endereco: end,
+                bairro: String(p.bairro || partes.bairro || "").trim(),
+                municipio: mun,
+                uf: uf,
+                cidadeUf: String(p.cidadeUf || _formatarCidadeUf(mun, uf) || partes.cidadeUf || "").trim(),
+                cep: _formatarCepBR(p.cep || partes.cep || ""),
                 cnae: String(p.cnae || row.cnae || "").trim(),
                 checkoutsEstimado: parseInt(p.checkouts || row.checkouts) || null,
                 canalSugerido: String(p.canal || row.canal || "").trim(),
                 perfilSugerido: String(p.perfil || row.perfil || "").trim(),
                 buyer: String(p.buyer || "").trim(),
                 buyerPhone: String(p.buyerPhone || "").trim(),
-                logo: String(p.logo || "").trim(),
-                uf: ""
+                logo: String(p.logo || "").trim()
             };
         }).filter(Boolean);
+
+        if (ufAlvo) {
+            mapped = mapped.filter(function(it){
+                return _itemPertenceUf(it, ufAlvo, { strictExternal: false });
+            });
+        }
+        if (parsed.localHint && mapped.length > 1) {
+            var lNorm = normTextAccent(parsed.localHint).toLowerCase();
+            mapped.sort(function(a, b) {
+                var aHay = normTextAccent([a.nome, a.razaoSocial, a.endereco, a.bairro].join(" ")).toLowerCase();
+                var bHay = normTextAccent([b.nome, b.razaoSocial, b.endereco, b.bairro].join(" ")).toLowerCase();
+                return (bHay.indexOf(lNorm) >= 0 ? 1 : 0) - (aHay.indexOf(lNorm) >= 0 ? 1 : 0);
+            });
+        }
+        return mapped.slice(0, 12);
     } catch(eSbCli) {
         console.warn("Supabase clientes fallback:", eSbCli && eSbCli.message ? eSbCli.message : eSbCli);
         return [];
     }
 }
+
 async function buscarLojasGeminiFlash(query, ctx) {
     var key = getGoogleGeminiKey();
     if (!key) return [];
     ctx = ctx || _obterUfContextoDispositivo();
-    var ufInfo = (ctx.cidade ? ctx.cidade + " / " : "") + (ctx.uf || "Brasil");
-    var prompt = "Cadastro comercial de lojas e supermercados no Brasil.\n" +
-        "Busca: \"" + query + "\". Localização prioritária: " + ufInfo + ".\n" +
-        "Sugira até 5 unidades reais dessa rede/loja priorizando a UF/região informada, incluindo endereço completo, canal, porte e estimativa de checkouts.\n" +
-        "Se souber com certeza o CNPJ completo de 14 dígitos da filial, preencha \"cnpj\". Se só souber a raiz (8 primeiros dígitos), preencha \"cnpjRaiz\" e deixe \"cnpj\" vazio (nunca invente os dígitos da filial).\n" +
+    var ufAlvo = (ctx && ctx.uf && ctx.uf !== "Brasil" && _isValidBrUf(ctx.uf)) ? String(ctx.uf).trim().toUpperCase() : "";
+    var ufNome = (ctx && ctx.stateName) ? ctx.stateName : (ufAlvo && _getUfInfoObj(ufAlvo) ? _getUfInfoObj(ufAlvo).nome : ufAlvo);
+    var parsed = _parseBuscaLojaComRegiao(query);
+
+    var filtroGeo = ufAlvo
+        ? ("FILTRO GEOGRÁFICO OBRIGATÓRIO: Retorne APENAS unidades localizadas no estado " + ufAlvo + " (" + ufNome + ")" + (ctx.cidade ? " — priorizando região de " + ctx.cidade : "") + ". É ESTRITAMENTE PROIBIDO incluir lojas de outros estados.")
+        : "Localização prioritária: Brasil.";
+
+    var prompt = "Você é um especialista em varejo e cadastro comercial brasileiro (trade marketing).\n" +
+        "O promotor pesquisou: \"" + query + "\".\n" +
+        (parsed.redeHint ? ("Rede/Bandeira/Razão provável: \"" + parsed.redeHint + "\"\n") : "") +
+        (parsed.localHint ? ("Bairro/Cidade/Região citada: \"" + parsed.localHint + "\"\n") : "") +
+        filtroGeo + "\n\n" +
+        "REGRAS DE BUSCA DUPLA:\n" +
+        "1. Pesquise SIMULTANEAMENTE pela BANDEIRA / NOME FANTASIA e pela RAZÃO SOCIAL da empresa operadora (no varejo brasileiro muitas lojas usam bandeira de rede como Supermarket, Rede Economia, Multi Market, Assaí etc. com razão social própria da loja/associado).\n" +
+        "2. Liste até 6 unidades reais correspondentes DENTRO DA UF " + (ufAlvo || "informada") + ", separando claramente endereço, bairro, cidade, UF e CEP.\n" +
+        "3. Só informe \"cnpj\" (14 dígitos) se tiver certeza absoluta da filial; se souber apenas a raiz (8 dígitos), preencha \"cnpjRaiz\" e deixe \"cnpj\" vazio.\n" +
         "Retorne APENAS JSON array:\n" +
-        "[{\"nome\":\"Nome Unidade/Bairro\",\"razaoSocial\":\"\",\"cnpj\":\"\",\"cnpjRaiz\":\"\",\"endereco\":\"Rua, nº - Bairro, Cidade/UF\",\"municipio\":\"\",\"uf\":\"\",\"cnae\":\"\",\"canalSugerido\":\"Vizinhanca|Super|Hiper|Atacado\",\"porteSugerido\":\"\",\"checkoutsEstimado\":null,\"siteDominio\":\"\"}]";
-    var txt = await chamarGoogleGeminiFlash(prompt, [], true, null, { timeoutMs: 90000 });
+        "[{\"bandeira\":\"Nome Fantasia / Bandeira\",\"nome\":\"Nome da Loja / Unidade\",\"razaoSocial\":\"Razão Social se conhecida\",\"cnpj\":\"\",\"cnpjRaiz\":\"\",\"endereco\":\"Rua/Av, nº\",\"bairro\":\"Bairro\",\"municipio\":\"Cidade\",\"uf\":\"" + (ufAlvo || "") + "\",\"cep\":\"00000-000\",\"cnae\":\"\",\"canalSugerido\":\"Vizinhanca|Super|Hiper|Atacado\",\"perfilSugerido\":\"Vizinhanca|Mercado|Supermercado|Hipermercado|Atacarejo|Conveniencia\",\"porteSugerido\":\"\",\"checkoutsEstimado\":null,\"siteDominio\":\"\"}]";
+
+    var txt = await chamarGoogleGeminiFlash(prompt, [], true, null, { timeoutMs: 15000 });
     var arr = parseGeminiJSON(txt);
     if (!Array.isArray(arr) && arr && Array.isArray(arr.unidades)) arr = arr.unidades;
     if (!Array.isArray(arr)) return [];
-    return arr.map(function(it) {
+
+    var mapped = arr.map(function(it) {
         var cDig = String(it.cnpj || "").replace(/\D/g, "");
         var rDig = String(it.cnpjRaiz || (cDig.length === 8 ? cDig : "")).replace(/\D/g, "").slice(0, 8);
+        var bairro = String(it.bairro || "").trim();
+        var mun = String(it.municipio || "").trim();
+        var ufItem = String(it.uf || ufAlvo || "").trim().toUpperCase();
+        var cepFmt = _formatarCepBR(it.cep || "");
+        var endBase = String(it.endereco || "").trim();
+        var regTxt = [bairro, _formatarCidadeUf(mun, ufItem)].filter(Boolean).join(" - ");
+        var endFull = endBase;
+        if (endFull && regTxt && normTextAccent(endFull).toLowerCase().indexOf(normTextAccent(bairro || mun || ufItem).toLowerCase()) < 0) {
+            endFull = [endBase, regTxt, cepFmt ? ("CEP " + cepFmt) : ""].filter(Boolean).join(" | ");
+        } else if (!endFull && regTxt) {
+            endFull = [regTxt, cepFmt ? ("CEP " + cepFmt) : ""].filter(Boolean).join(" | ");
+        }
+        var bandeira = String(it.bandeira || it.nome || query).trim();
+        var nome = String(it.nome || bandeira || query).trim();
         return {
             source: "Sugestao",
-            nome: String(it.nome || query).trim(),
-            bandeira: String(it.bandeira || it.nome || "").trim(),
+            nome: nome,
+            bandeira: bandeira,
             razaoSocial: String(it.razaoSocial || "").trim(),
             cnpj: cDig.length === 14 ? formatarCNPJ(cDig) : "",
             cnpjRaiz: rDig.length === 8 ? rDig : "",
-            endereco: String(it.endereco || "").trim(),
-            municipio: String(it.municipio || "").trim(),
-            uf: String(it.uf || "").trim().toUpperCase(),
+            endereco: endFull,
+            bairro: bairro,
+            municipio: mun,
+            uf: ufItem,
+            cidadeUf: _formatarCidadeUf(mun, ufItem),
+            cep: cepFmt,
             cnae: String(it.cnae || "").trim(),
             canalSugerido: String(it.canalSugerido || "").trim(),
+            perfilSugerido: String(it.perfilSugerido || "").trim(),
             porte: String(it.porteSugerido || it.porte || "").trim(),
             checkoutsEstimado: parseInt(it.checkoutsEstimado) || null,
             siteDominio: String(it.siteDominio || "").trim()
         };
     });
+
+    if (ufAlvo) {
+        mapped = mapped.filter(function(it){
+            return _itemPertenceUf(it, ufAlvo, { strictExternal: true });
+        });
+    }
+    return mapped;
 }
-async function enriquecerDossieLojaCascata(item, ctx) {
+
+async function enriquecerDossieLojaCascata(item, ctx, opts) {
     if (!item) return { item: item, cnpjOficialOk: false, buscaIaOk: false };
+    opts = opts || {};
+    var fastTimeoutMs = (Number(opts.fastTimeoutMs) > 0) ? Number(opts.fastTimeoutMs) : 4000;
+    var geminiTimeoutMs = (Number(opts.geminiTimeoutMs) > 0) ? Number(opts.geminiTimeoutMs) : 15000;
     ctx = ctx || _obterUfContextoDispositivo();
+    var ufCtx = (ctx && ctx.uf && ctx.uf !== "Brasil" && _isValidBrUf(ctx.uf)) ? String(ctx.uf).trim().toUpperCase() : "";
     var enriched = Object.assign({}, item);
     if (item.source === "Local" || item.source === "Supabase") {
         return { item: enriched, cnpjOficialOk: String(enriched.cnpj || "").replace(/\D/g, "").length === 14, buscaIaOk: true, supabaseHit: true };
@@ -5030,62 +5345,81 @@ async function enriquecerDossieLojaCascata(item, ctx) {
     var cnpjOficialOk = false;
     var buscaIaOk = false;
 
-    // Camada 2: Valida CNPJ de 14 digitos primeiro (se ja veio preenchido)
+    // Camada 2 rápida: Valida CNPJ de 14 dígitos primeiro (se já veio preenchido)
     var cnpjInit = String(enriched.cnpj || "").replace(/\D/g, "");
     if (cnpjInit.length === 14) {
         try {
-            var bInit = await consultarBrasilApiCnpj(cnpjInit);
+            var bInit = await consultarBrasilApiCnpj(cnpjInit, { timeoutMs: fastTimeoutMs });
             if (bInit && bInit.razaoSocial) {
+                var mesmoEstadoInit = !ufCtx || !bInit.uf || bInit.uf === ufCtx;
                 cnpjOficialOk = true;
                 enriched.cnpj = bInit.cnpj;
                 enriched.cnpjRaiz = cnpjInit.slice(0, 8);
-                enriched.razaoSocial = bInit.razaoSocial;
+                if (!enriched.razaoSocial || mesmoEstadoInit) enriched.razaoSocial = bInit.razaoSocial;
                 if (bInit.nomeFantasia && (!enriched.nome || enriched.source === "CadastroOficial" || enriched.source === "BrasilAPI")) {
                     enriched.nome = bInit.nomeFantasia;
                 }
-                if (bInit.endereco) enriched.endereco = bInit.endereco;
-                if (bInit.cnae) enriched.cnae = bInit.cnae;
-                if (bInit.porte) enriched.porte = bInit.porte;
-                if (bInit.telefone) enriched.telefone = bInit.telefone;
+                if (mesmoEstadoInit) {
+                    if (bInit.endereco && !enriched.endereco) enriched.endereco = bInit.endereco;
+                    if (bInit.bairro && !enriched.bairro) enriched.bairro = bInit.bairro;
+                    if (bInit.municipio && !enriched.municipio) enriched.municipio = bInit.municipio;
+                    if (bInit.uf && !enriched.uf) enriched.uf = bInit.uf;
+                    if (bInit.cep && !enriched.cep) enriched.cep = _formatarCepBR(bInit.cep);
+                    if (!enriched.cidadeUf) enriched.cidadeUf = _formatarCidadeUf(enriched.municipio, enriched.uf);
+                }
+                if (bInit.cnae && !enriched.cnae) enriched.cnae = bInit.cnae;
+                if (bInit.porte && !enriched.porte) enriched.porte = bInit.porte;
+                if (bInit.telefone && !enriched.telefone) enriched.telefone = bInit.telefone;
             }
         } catch(eBr0) {}
     }
 
-    // Camada 3: Gemini padrao (SEM google_search) apenas para cruzar e deduzir campos faltantes
-    var precisaIA = !enriched.razaoSocial || !enriched.checkoutsEstimado || !enriched.canalSugerido || !enriched.cnae || String(enriched.cnpj || "").replace(/\D/g, "").length !== 14;
+    // Camada 3: Gemini padrão (SEM google_search, timeout máx 15s) para complementar dados faltantes
+    var precisaIA = !enriched.razaoSocial || !enriched.checkoutsEstimado || !enriched.canalSugerido || !enriched.cnae || !enriched.bairro || !enriched.cep || String(enriched.cnpj || "").replace(/\D/g, "").length !== 14;
     if (precisaIA && getGoogleGeminiKey()) {
         try {
-            var ufCtx = (ctx.cidade ? ctx.cidade + " / " : "") + (ctx.uf || "Brasil");
+            var ufDesc = (ctx.cidade ? ctx.cidade + " / " : "") + (ufCtx || "Brasil");
             var prompt2 = "Com base nos dados abaixo, identifique os dados comerciais e fiscais desta loja no Brasil:\n" +
-                "- Nome da loja / rede: \"" + (enriched.nome || "") + "\"\n" +
-                (enriched.endereco ? "- Endereço / rua / bairro / cidade: \"" + enriched.endereco + "\"\n" : "") +
+                "- Nome da loja / bandeira: \"" + (enriched.bandeira || enriched.nome || "") + "\"\n" +
+                (enriched.endereco ? "- Endereço: \"" + enriched.endereco + "\"\n" : "") +
+                (enriched.bairro ? "- Bairro: \"" + enriched.bairro + "\"\n" : "") +
+                (enriched.municipio ? "- Cidade: \"" + enriched.municipio + "\"\n" : "") +
                 (enriched.cnpj ? "- CNPJ confirmado: \"" + enriched.cnpj + "\"\n" : "") +
                 (enriched.razaoSocial ? "- Razão Social conhecida: \"" + enriched.razaoSocial + "\"\n" : "") +
-                "- UF referência: " + ufCtx + "\n\n" +
-                "Deduza CNAE típico, canal/perfil da rede, estimativa de checkouts e domínio oficial. " +
-                "Se souber com certeza o CNPJ completo de 14 dígitos desta filial, informe em \"cnpj\"; se souber apenas a raiz (8 dígitos da rede/matriz), informe \"cnpjRaiz\" e deixe \"cnpj\" vazio (nunca invente o número da filial).\n" +
+                "- UF obrigatória de referência: " + ufDesc + "\n\n" +
+                "Complete Razão Social, Bairro, Cidade, UF, CEP, CNAE típico, canal/perfil da rede, estimativa de checkouts e domínio oficial. " +
+                "Só informe \"cnpj\" (14 dígitos) se tiver certeza absoluta desta filial na UF informada; se souber apenas a raiz (8 dígitos), informe em \"cnpjRaiz\".\n" +
                 "Retorne APENAS JSON:\n" +
-                "{\"cnpj\":\"\",\"cnpjRaiz\":\"\",\"razaoSocial\":\"\",\"nomeFantasia\":\"\",\"enderecoCompleto\":\"\",\"cnae\":\"\",\"canalSugerido\":\"Vizinhanca|Super|Hiper|Atacado\",\"perfilSugerido\":\"Vizinhanca|Mercado|Supermercado|Hipermercado|Atacarejo|Conveniencia\",\"porteSugerido\":\"\",\"checkoutsEstimado\":null,\"siteDominio\":\"\"}";
-            var raw2 = await chamarGoogleGeminiFlash(prompt2, [], true, null, { timeoutMs: 90000 });
+                "{\"cnpj\":\"\",\"cnpjRaiz\":\"\",\"razaoSocial\":\"\",\"nomeFantasia\":\"\",\"enderecoCompleto\":\"\",\"bairro\":\"\",\"municipio\":\"\",\"uf\":\"" + (ufCtx || "") + "\",\"cep\":\"\",\"cnae\":\"\",\"canalSugerido\":\"Vizinhanca|Super|Hiper|Atacado\",\"perfilSugerido\":\"Vizinhanca|Mercado|Supermercado|Hipermercado|Atacarejo|Conveniencia\",\"porteSugerido\":\"\",\"checkoutsEstimado\":null,\"siteDominio\":\"\"}";
+            var raw2 = await chamarGoogleGeminiFlash(prompt2, [], true, null, { timeoutMs: geminiTimeoutMs });
             var d = parseGeminiJSON(raw2);
             if (Array.isArray(d)) d = d[0] || {};
             if (d && typeof d === "object") {
-                buscaIaOk = true;
-                var cnpjDig2 = String(d.cnpj || "").replace(/\D/g, "");
-                var raiz2 = String(d.cnpjRaiz || (cnpjDig2.length === 8 ? cnpjDig2 : "")).replace(/\D/g, "").slice(0, 8);
-                if (cnpjDig2.length === 14 && !enriched.cnpj) enriched.cnpj = formatarCNPJ(cnpjDig2);
-                if (raiz2.length === 8 && !enriched.cnpjRaiz) enriched.cnpjRaiz = raiz2;
-                if (d.razaoSocial && !enriched.razaoSocial) enriched.razaoSocial = String(d.razaoSocial).trim();
-                if (d.nomeFantasia && !enriched.nome) enriched.nome = String(d.nomeFantasia).trim();
-                if (d.enderecoCompleto && String(d.enderecoCompleto).trim().length > (enriched.endereco || "").length) {
-                    enriched.endereco = String(d.enderecoCompleto).trim();
+                var dUf = String(d.uf || "").trim().toUpperCase();
+                var ufCompativel = !ufCtx || !dUf || dUf === ufCtx;
+                if (ufCompativel) {
+                    buscaIaOk = true;
+                    var cnpjDig2 = String(d.cnpj || "").replace(/\D/g, "");
+                    var raiz2 = String(d.cnpjRaiz || (cnpjDig2.length === 8 ? cnpjDig2 : "")).replace(/\D/g, "").slice(0, 8);
+                    if (cnpjDig2.length === 14 && !enriched.cnpj) enriched.cnpj = formatarCNPJ(cnpjDig2);
+                    if (raiz2.length === 8 && !enriched.cnpjRaiz) enriched.cnpjRaiz = raiz2;
+                    if (d.razaoSocial && !enriched.razaoSocial) enriched.razaoSocial = String(d.razaoSocial).trim();
+                    if (d.nomeFantasia && !enriched.nome) enriched.nome = String(d.nomeFantasia).trim();
+                    if (d.bairro && !enriched.bairro) enriched.bairro = String(d.bairro).trim();
+                    if (d.municipio && !enriched.municipio) enriched.municipio = String(d.municipio).trim();
+                    if (dUf && !enriched.uf) enriched.uf = dUf;
+                    if (d.cep && !enriched.cep) enriched.cep = _formatarCepBR(d.cep);
+                    if (!enriched.cidadeUf) enriched.cidadeUf = _formatarCidadeUf(enriched.municipio, enriched.uf);
+                    if (d.enderecoCompleto && (!enriched.endereco || String(d.enderecoCompleto).trim().length > (enriched.endereco || "").length)) {
+                        enriched.endereco = String(d.enderecoCompleto).trim();
+                    }
+                    if (d.cnae && !enriched.cnae) enriched.cnae = String(d.cnae).trim();
+                    if (d.canalSugerido && !enriched.canalSugerido) enriched.canalSugerido = String(d.canalSugerido).trim();
+                    if (d.perfilSugerido && !enriched.perfilSugerido) enriched.perfilSugerido = String(d.perfilSugerido).trim();
+                    if (d.porteSugerido && !enriched.porte) enriched.porte = String(d.porteSugerido).trim();
+                    if (parseInt(d.checkoutsEstimado) > 0 && !enriched.checkoutsEstimado) enriched.checkoutsEstimado = parseInt(d.checkoutsEstimado);
+                    if (d.siteDominio && !enriched.siteDominio) enriched.siteDominio = String(d.siteDominio).trim();
                 }
-                if (d.cnae && !enriched.cnae) enriched.cnae = String(d.cnae).trim();
-                if (d.canalSugerido) enriched.canalSugerido = String(d.canalSugerido).trim();
-                if (d.perfilSugerido) enriched.perfilSugerido = String(d.perfilSugerido).trim();
-                if (d.porteSugerido && !enriched.porte) enriched.porte = String(d.porteSugerido).trim();
-                if (parseInt(d.checkoutsEstimado) > 0 && !enriched.checkoutsEstimado) enriched.checkoutsEstimado = parseInt(d.checkoutsEstimado);
-                if (d.siteDominio) enriched.siteDominio = String(d.siteDominio).trim();
             }
         } catch(eGem2) {
             console.warn("Enriquecimento loja:", eGem2 && eGem2.message ? eGem2.message : eGem2);
@@ -5095,29 +5429,38 @@ async function enriquecerDossieLojaCascata(item, ctx) {
     var cnpjDigFinal = String(enriched.cnpj || "").replace(/\D/g, "");
     if (cnpjDigFinal.length === 14 && !cnpjOficialOk) {
         try {
-            var bRes = await consultarBrasilApiCnpj(cnpjDigFinal);
+            var bRes = await consultarBrasilApiCnpj(cnpjDigFinal, { timeoutMs: fastTimeoutMs });
             if (bRes && bRes.razaoSocial) {
-                cnpjOficialOk = true;
-                enriched.cnpj = bRes.cnpj;
-                enriched.cnpjRaiz = cnpjDigFinal.slice(0, 8);
-                enriched.razaoSocial = bRes.razaoSocial;
-                if (bRes.nomeFantasia && (!enriched.nome || enriched.source === "CadastroOficial" || enriched.source === "BrasilAPI")) {
-                    enriched.nome = bRes.nomeFantasia;
+                var mesmoEstadoFin = !ufCtx || !bRes.uf || bRes.uf === ufCtx;
+                if (mesmoEstadoFin) {
+                    cnpjOficialOk = true;
+                    enriched.cnpj = bRes.cnpj;
+                    enriched.cnpjRaiz = cnpjDigFinal.slice(0, 8);
+                    if (!enriched.razaoSocial) enriched.razaoSocial = bRes.razaoSocial;
+                    if (bRes.nomeFantasia && (!enriched.nome || enriched.source === "CadastroOficial" || enriched.source === "BrasilAPI")) {
+                        enriched.nome = bRes.nomeFantasia;
+                    }
+                    if (bRes.endereco && !enriched.endereco) enriched.endereco = bRes.endereco;
+                    if (bRes.bairro && !enriched.bairro) enriched.bairro = bRes.bairro;
+                    if (bRes.municipio && !enriched.municipio) enriched.municipio = bRes.municipio;
+                    if (bRes.uf && !enriched.uf) enriched.uf = bRes.uf;
+                    if (bRes.cep && !enriched.cep) enriched.cep = _formatarCepBR(bRes.cep);
+                    if (!enriched.cidadeUf) enriched.cidadeUf = _formatarCidadeUf(enriched.municipio, enriched.uf);
+                    if (bRes.cnae && !enriched.cnae) enriched.cnae = bRes.cnae;
+                    if (bRes.porte && !enriched.porte) enriched.porte = bRes.porte;
+                    if (bRes.telefone && !enriched.telefone) enriched.telefone = bRes.telefone;
+                } else {
+                    enriched.cnpj = "";
                 }
-                if (bRes.endereco) enriched.endereco = bRes.endereco;
-                if (bRes.cnae) enriched.cnae = bRes.cnae;
-                if (bRes.porte) enriched.porte = bRes.porte;
-                if (bRes.telefone) enriched.telefone = bRes.telefone;
             }
         } catch(eBr) {
             console.warn("Validação CNPJ fallback:", eBr && eBr.message ? eBr.message : eBr);
         }
     } else if (cnpjDigFinal.length !== 14 && enriched.cnpjRaiz && enriched.cnpjRaiz.length === 8) {
-        // Se tem apenas a raiz (8 digitos), consulta a matriz apenas para enriquecer Razao Social / CNAE / Porte, mantendo o endereco real da filial e deixando CNPJ para completar
         var cnpjMatriz = _calcularCnpjMatrizFromRaiz(enriched.cnpjRaiz);
         if (cnpjMatriz) {
             try {
-                var bMat = await consultarBrasilApiCnpj(cnpjMatriz);
+                var bMat = await consultarBrasilApiCnpj(cnpjMatriz, { timeoutMs: fastTimeoutMs });
                 if (bMat && bMat.razaoSocial) {
                     if (!enriched.razaoSocial) enriched.razaoSocial = bMat.razaoSocial;
                     if (!enriched.cnae && bMat.cnae) enriched.cnae = bMat.cnae;
@@ -5131,6 +5474,7 @@ async function enriquecerDossieLojaCascata(item, ctx) {
 }
 var _companyLookupBusy = false;
 var _clientLookupBusy = false;
+var _activeClientSelectionToken = 0;
 function setCompanySearchLoading(active) {
     _companyLookupBusy = !!active;
     var banner = document.getElementById("companyLoadingBanner");
@@ -5251,41 +5595,61 @@ function _avaliarEExibirCompletudeCliente(opts) {
     st.textContent = "⚠️ " + prefixo + listaFaltando + " não encontrado(s) automaticamente — preencha os campos destacados antes de salvar.";
     return { complete: false, faltando: faltando };
 }
-async function aplicarDadosLojaNoFormulario(item, skipLogo) {
+
+function _setClientFieldSafe(id, value, onlyEmpty) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    var valStr = String(value === undefined || value === null ? "" : value).trim();
+    if (!valStr) return;
+    if (_clientManualEditedFields && _clientManualEditedFields[id]) return;
+    if (onlyEmpty && String(el.value || "").trim() !== "") return;
+    el.value = valStr;
+}
+
+async function aplicarDadosLojaNoFormulario(item, skipLogo, opts) {
     if (!item) return null;
-    _ultimoPorteLojaSugerido = item.porte || item.porteSugerido || "";
-    if (item.nome) document.getElementById("clientName").value = item.nome;
-    if (item.cnpj) document.getElementById("clientCNPJ").value = item.cnpj;
-    if (document.getElementById("clientRazaoSocial")) document.getElementById("clientRazaoSocial").value = item.razaoSocial || "";
-    if (document.getElementById("clientEndereco")) document.getElementById("clientEndereco").value = item.endereco || "";
-    if (document.getElementById("clientCNAE")) document.getElementById("clientCNAE").value = item.cnae || "";
-    if ((item.buyer || item.contato) && document.getElementById("clientBuyer") && !document.getElementById("clientBuyer").value) {
-        document.getElementById("clientBuyer").value = item.buyer || item.contato;
+    opts = opts || {};
+    var onlyEmpty = !!opts.onlyEmpty;
+    if (!onlyEmpty || !_ultimoPorteLojaSugerido) {
+        _ultimoPorteLojaSugerido = item.porte || item.porteSugerido || _ultimoPorteLojaSugerido || "";
     }
-    var tel = item.buyerPhone || item.telefone || "";
-    if (tel && document.getElementById("clientBuyerPhone") && !document.getElementById("clientBuyerPhone").value) {
-        document.getElementById("clientBuyerPhone").value = tel;
-    }
-    if (item.checkoutsEstimado && !document.getElementById("clientCheckouts").value) {
+    var partes = _extrairPartesEnderecoTexto(item.endereco || "", item.uf || "");
+    var bairroFinal = String(item.bairro || partes.bairro || "").trim();
+    var ufFinal = String(item.uf || partes.uf || "").trim().toUpperCase();
+    var munFinal = String(item.municipio || partes.municipio || "").trim();
+    var cidadeUfFinal = String(item.cidadeUf || _formatarCidadeUf(munFinal, ufFinal) || partes.cidadeUf || "").trim();
+    var cepFinal = _formatarCepBR(item.cep || partes.cep || "");
+
+    _setClientFieldSafe("clientName", item.bandeira || item.nome, onlyEmpty);
+    _setClientFieldSafe("clientCNPJ", item.cnpj, onlyEmpty);
+    _setClientFieldSafe("clientRazaoSocial", item.razaoSocial, onlyEmpty);
+    _setClientFieldSafe("clientEndereco", item.endereco, onlyEmpty);
+    _setClientFieldSafe("clientBairro", bairroFinal, onlyEmpty);
+    _setClientFieldSafe("clientCidadeUf", cidadeUfFinal, onlyEmpty);
+    _setClientFieldSafe("clientCEP", cepFinal, onlyEmpty);
+    _setClientFieldSafe("clientCNAE", item.cnae, onlyEmpty);
+    _setClientFieldSafe("clientBuyer", item.buyer || item.contato, true);
+    _setClientFieldSafe("clientBuyerPhone", item.buyerPhone || item.telefone, true);
+    if (item.checkoutsEstimado && !_clientManualEditedFields.clientCheckouts && !String((document.getElementById("clientCheckouts") || {}).value || "").trim()) {
         document.getElementById("clientCheckouts").value = item.checkoutsEstimado;
     }
-    if (item.logo && typeof renderClientLogoStudio === "function") {
+    if (item.logo && typeof renderClientLogoStudio === "function" && !pendingClientLogo) {
         pendingClientLogo = item.logo;
         renderClientLogoStudio(item.logo, "Base compartilhada");
     }
-    var sug = autoClassificarTipologia(true);
-    if (!sug && item.canalSugerido && document.getElementById("clientCanal")) {
+    var sug = autoClassificarTipologia(!onlyEmpty);
+    if (!sug && item.canalSugerido && document.getElementById("clientCanal") && !_clientManualEditedFields.clientCanal && !String(document.getElementById("clientCanal").value || "").trim()) {
         document.getElementById("clientCanal").value = item.canalSugerido;
         onClientCanalChange(true);
     }
-    if (item.perfilSugerido && document.getElementById("clientPerfil") && (!document.getElementById("clientPerfil").value || document.getElementById("clientPerfil").value !== "Personalizado")) {
+    if (item.perfilSugerido && document.getElementById("clientPerfil") && !_clientManualEditedFields.clientPerfil && (!document.getElementById("clientPerfil").value || document.getElementById("clientPerfil").value !== "Personalizado")) {
         var validPerfis = ["Vizinhanca","Mercado","Supermercado","Hipermercado","Atacarejo","Conveniencia"];
-        if (validPerfis.indexOf(item.perfilSugerido) >= 0) {
+        if (validPerfis.indexOf(item.perfilSugerido) >= 0 && (!onlyEmpty || !document.getElementById("clientPerfil").value)) {
             document.getElementById("clientPerfil").value = item.perfilSugerido;
             onClientPerfilChange();
         }
     }
-    if (!skipLogo && !item.logo) {
+    if (!skipLogo && !item.logo && !pendingClientLogo) {
         return await buscarLogoInteligenteAuto(item.nome || document.getElementById("clientName").value, {
             siteDominio: item.siteDominio || "",
             coresBandeira: item.coresBandeira || null
@@ -5293,6 +5657,7 @@ async function aplicarDadosLojaNoFormulario(item, skipLogo) {
     }
     return item.logo || null;
 }
+
 function renderSmartStoreResults() {
     var box = document.getElementById("smartStoreResults");
     if (!box) return;
@@ -5304,66 +5669,76 @@ function renderSmartStoreResults() {
     box.innerHTML = _smartStoreResults.map(function(r, idx) {
         var bCls = (r.source === "Supabase" || r.source === "Local") ? " brasilapi" : (r.source === "Sugestao" ? " gemini" : (r.source === "CadastroOficial" || r.source === "BrasilAPI" ? " brasilapi" : ""));
         var badgeLabel = r.source === "Local" ? "Salvo Localmente" : (r.source === "Supabase" ? "Base Compartilhada" : (r.source === "CadastroOficial" || r.source === "BrasilAPI" ? "Cadastro Oficial" : (r.source === "OpenStreetMap" ? "Mapa" : "Localizado")));
+        var tituloBandeira = r.bandeira || r.nome || "Loja";
+        var razaoPart = r.razaoSocial ? r.razaoSocial : "";
+        var endBairro = [r.endereco, (r.bairro && String(r.endereco || "").toLowerCase().indexOf(r.bairro.toLowerCase()) < 0) ? r.bairro : ""].filter(Boolean).join(" — ");
+        var linhaPrincipal = [tituloBandeira, razaoPart, endBairro].filter(Boolean).join(" — ");
+        var metaSub = [
+            r.cidadeUf || _formatarCidadeUf(r.municipio, r.uf),
+            r.cep ? ("CEP " + _formatarCepBR(r.cep)) : "",
+            r.cnpj ? ("CNPJ: " + r.cnpj) : "Toque para preencher imediatamente"
+        ].filter(Boolean).join(" • ");
         return "<div class='smart-res-item' onclick='selecionarResultadoLoja(" + idx + ")'>" +
-            "<div class='smart-res-top'><span class='smart-res-nome'>" + escHtml(r.nome) + (r.uf ? " (" + escHtml(r.uf) + ")" : "") + "</span>" +
+            "<div class='smart-res-top'><span class='smart-res-nome'>" + escHtml(linhaPrincipal) + "</span>" +
             "<span class='smart-res-badge" + bCls + "'>" + escHtml(badgeLabel) + "</span></div>" +
-            (r.endereco ? "<div class='smart-res-end'>" + escHtml(r.endereco) + "</div>" : "") +
-            "<div class='smart-res-meta'>" + escHtml([r.cnpj ? "CNPJ: " + r.cnpj : "Toque para completar cadastro", r.razaoSocial].filter(Boolean).join(" | ")) + "</div>" +
+            "<div class='smart-res-meta'>" + escHtml(metaSub) + "</div>" +
             "</div>";
     }).join("");
     box.classList.add("ativo");
 }
+
 async function selecionarResultadoLoja(idx) {
     var item = _smartStoreResults[idx];
     if (!item) return;
+    var token = ++_activeClientSelectionToken;
     var box = document.getElementById("smartStoreResults");
     if (box) { box.innerHTML = ""; box.classList.remove("ativo"); }
-    setClientSearchLoading(true);
-    aplicarDadosLojaNoFormulario(item, true);
+
+    // 1. Preenchimento imediato e desbloqueado (Nome, Razão Social, Endereço, Bairro, Cidade/UF, CEP)
+    setClientSearchLoading(false);
+    await aplicarDadosLojaNoFormulario(item, true, { onlyEmpty: false });
+
     var st = document.getElementById("smartStoreStatus");
+    var isLocalOuSb = (item.source === "Supabase" || item.source === "Local");
+    if (isLocalOuSb) {
+        _avaliarEExibirCompletudeCliente({ cnpjRaiz: item.cnpjRaiz || "" });
+        if (!item.logo && typeof buscarLogoInteligenteAuto === "function") {
+            buscarLogoInteligenteAuto(item.nome || document.getElementById("clientName").value, {
+                siteDominio: item.siteDominio || "",
+                coresBandeira: item.coresBandeira || null
+            }).catch(function(){});
+        }
+        return;
+    }
+
     if (st) {
         st.style.display = "block";
         st.classList.remove("smart-alert-warn", "smart-alert-ok", "smart-alert-err");
         st.style.color = "#1e40af";
-        st.textContent = "⏳ Buscando dados completos de \"" + item.nome + "\"...";
+        st.textContent = "✅ Dados iniciais de \"" + (item.bandeira || item.nome) + "\" preenchidos! Você já pode editar ou salvar — validando CNPJ e perfil em segundo plano...";
     }
-    var isLocalOuSb = (item.source === "Supabase" || item.source === "Local");
-    if (!isLocalOuSb) {
-        iniciarTarefaGuardiao({
-            id: "busca_cliente_detalhe",
-            titulo: "Buscando dados da loja...",
-            sub: "Localizando cadastro completo e perfil",
-            canBackground: true,
-            totalSteps: 2,
-            pageTarget: "pageClient"
-        });
-    }
-    try {
-        var ctx = _obterUfContextoDispositivo();
-        var res = await enriquecerDossieLojaCascata(item, ctx);
-        await aplicarDadosLojaNoFormulario(res.item, true);
-        var aval = _avaliarEExibirCompletudeCliente({ cnpjRaiz: res.cnpjRaiz || (res.item && res.item.cnpjRaiz) || "" });
-        if (!isLocalOuSb) {
-            concluirTarefaGuardiao(
-                aval.complete ? "✅ Cadastro completo!" : "⚠️ Dados parciais preenchidos",
-                aval.complete ? (res.item.nome + " pronta para salvar.") : "Complete os campos destacados em amarelo.",
-                { keepOverlayMs: 1400, onReturn: function(){ showPage("pageClient"); } }
-            );
+
+    // 2. Validação e enriquecimento em segundo plano NÃO-BLOQUEANTE (não apaga nem sobrescreve o que já foi preenchido)
+    (async function() {
+        try {
+            var ctx = _obterUfContextoDispositivo();
+            var res = await enriquecerDossieLojaCascata(item, ctx, { fastTimeoutMs: 4000, geminiTimeoutMs: 15000 });
+            if (token !== _activeClientSelectionToken) return;
+            await aplicarDadosLojaNoFormulario(res.item, true, { onlyEmpty: true });
+            _avaliarEExibirCompletudeCliente({ cnpjRaiz: res.cnpjRaiz || (res.item && res.item.cnpjRaiz) || "" });
+            if (!res.item.logo && typeof buscarLogoInteligenteAuto === "function") {
+                buscarLogoInteligenteAuto(res.item.nome || document.getElementById("clientName").value, {
+                    siteDominio: res.item.siteDominio || "",
+                    coresBandeira: res.item.coresBandeira || null
+                }).catch(function(){});
+            }
+        } catch(errBg) {
+            if (token !== _activeClientSelectionToken) return;
+            _avaliarEExibirCompletudeCliente({ cnpjRaiz: item && item.cnpjRaiz || "" });
         }
-        if (!res.item.logo && typeof buscarLogoInteligenteAuto === "function") {
-            buscarLogoInteligenteAuto(res.item.nome || document.getElementById("clientName").value, {
-                siteDominio: res.item.siteDominio || "",
-                coresBandeira: res.item.coresBandeira || null
-            }).catch(function(){});
-        }
-    } catch(err2) {
-        await aplicarDadosLojaNoFormulario(item, true);
-        _avaliarEExibirCompletudeCliente({ cnpjRaiz: item && item.cnpjRaiz || "" });
-        falharTarefaGuardiao("Busca parcial", "Preencha os campos destacados em amarelo antes de salvar.");
-    } finally {
-        setClientSearchLoading(false);
-    }
+    })();
 }
+
 async function consultarCnpjDireto() {
     var cnpjVal = (document.getElementById("clientCNPJ") || {}).value || "";
     var digits = cnpjVal.replace(/\D/g, "");
@@ -5372,14 +5747,25 @@ async function consultarCnpjDireto() {
     if (sq) sq.value = cnpjVal;
     await buscarLojaInteligente();
 }
+
 async function buscarLojaInteligente() {
     var qEl = document.getElementById("smartStoreQuery");
     var st = document.getElementById("smartStoreStatus");
     var btn = document.getElementById("btnSmartStoreSearch");
     var q = qEl ? qEl.value.trim() : "";
-    if (!q) { alert("Digite o nome da loja + região ou os 14 dígitos do CNPJ."); return; }
+    if (!q) { alert("Digite o nome/bandeira, razão social + região ou os 14 dígitos do CNPJ."); return; }
     var digits = q.replace(/\D/g, "");
+    var isCnpjDireto = (digits.length === 14 && /^[\d.\-\/\s]+$/.test(q));
+    if (!isCnpjDireto && typeof getUfAtiva === "function" && !getUfAtiva()) {
+        if (typeof abrirSeletorUfModal === "function") abrirSeletorUfModal(true);
+        return;
+    }
+
     var ctx = _obterUfContextoDispositivo();
+    var parsed = _parseBuscaLojaComRegiao(q);
+    var ufAlvo = (ctx && ctx.uf && ctx.uf !== "Brasil") ? ctx.uf.toUpperCase() : "";
+    var ufTag = ufAlvo ? (" (" + ufAlvo + ")") : "";
+
     if (st) {
         st.style.display = "block";
         st.classList.remove("smart-alert-warn", "smart-alert-ok", "smart-alert-err");
@@ -5391,15 +5777,15 @@ async function buscarLojaInteligente() {
     renderSmartStoreResults();
     iniciarTarefaGuardiao({
         id: "busca_cliente",
-        titulo: "Buscando loja...",
-        sub: "Camada 1: verificando dados locais e compartilhados",
+        titulo: "Buscando loja" + ufTag + "...",
+        sub: "Camada 1: verificando base local e compartilhada",
         canBackground: true,
         totalSteps: 3,
         pageTarget: "pageClient"
     });
 
     try {
-        // CAMADA 1: localStorage + Supabase (Instantâneo)
+        // CAMADA 1: localStorage + Supabase (filtrados estritamente pela UF ativa)
         var localHits = buscarClienteLocalPrimeiro(q, ctx);
         var sbHits = await buscarClienteSupabasePrimeiro(q, ctx);
         var layer1Hits = [];
@@ -5410,32 +5796,32 @@ async function buscarLojaInteligente() {
         });
 
         if (layer1Hits.length && digits.length === 14) {
-            await aplicarDadosLojaNoFormulario(layer1Hits[0], true);
+            await aplicarDadosLojaNoFormulario(layer1Hits[0], true, { onlyEmpty: false });
             _avaliarEExibirCompletudeCliente();
             concluirTarefaGuardiao("✅ Loja encontrada na base!", layer1Hits[0].nome + " carregada instantaneamente.", {
-                keepOverlayMs: 1200,
+                keepOverlayMs: 1100,
                 onReturn: function(){ showPage("pageClient"); }
             });
             return;
         }
 
-        if (digits.length === 14 && /^[\d.\-\/\s]+$/.test(q)) {
+        if (isCnpjDireto) {
             if (st) st.textContent = "Consultando CNPJ " + formatarCNPJ(digits) + "...";
             atualizarProgressoTarefa("Camada 2: consultando cadastro oficial...", formatarCNPJ(digits), 1, 3);
-            var cnpjRes = await consultarBrasilApiCnpj(digits);
+            var cnpjRes = await consultarBrasilApiCnpj(digits, { timeoutMs: 6000 });
             if (getGoogleGeminiKey()) {
                 atualizarProgressoTarefa("Camada 3: completando canal e perfil...", cnpjRes.nome, 2, 3);
-                var cascCnpj = await enriquecerDossieLojaCascata(cnpjRes, ctx);
-                await aplicarDadosLojaNoFormulario(cascCnpj.item, true);
+                var cascCnpj = await enriquecerDossieLojaCascata(cnpjRes, ctx, { fastTimeoutMs: 4000, geminiTimeoutMs: 15000 });
+                await aplicarDadosLojaNoFormulario(cascCnpj.item, true, { onlyEmpty: false });
                 var avalCnpj = _avaliarEExibirCompletudeCliente({ cnpjRaiz: cascCnpj.cnpjRaiz || digits.slice(0, 8) });
-                concluirTarefaGuardiao(avalCnpj.complete ? "✅ Dados completos!" : "⚠️ CNPJ validado (complete o perfil)", cascCnpj.item.nome, { keepOverlayMs: 1400, onReturn: function(){ showPage("pageClient"); } });
+                concluirTarefaGuardiao(avalCnpj.complete ? "✅ Dados completos!" : "⚠️ CNPJ validado (complete o perfil)", cascCnpj.item.nome, { keepOverlayMs: 1200, onReturn: function(){ showPage("pageClient"); } });
                 if (!cascCnpj.item.logo && typeof buscarLogoInteligenteAuto === "function") {
                     buscarLogoInteligenteAuto(cascCnpj.item.nome, { siteDominio: cascCnpj.item.siteDominio || "" }).catch(function(){});
                 }
             } else {
-                await aplicarDadosLojaNoFormulario(cnpjRes, true);
+                await aplicarDadosLojaNoFormulario(cnpjRes, true, { onlyEmpty: false });
                 _avaliarEExibirCompletudeCliente({ cnpjRaiz: digits.slice(0, 8) });
-                concluirTarefaGuardiao("📋 Dados do CNPJ carregados", cnpjRes.nome, { keepOverlayMs: 1400, onReturn: function(){ showPage("pageClient"); } });
+                concluirTarefaGuardiao("📋 Dados do CNPJ carregados", cnpjRes.nome, { keepOverlayMs: 1200, onReturn: function(){ showPage("pageClient"); } });
                 if (typeof buscarLogoInteligenteAuto === "function") {
                     buscarLogoInteligenteAuto(cnpjRes.nome, {}).catch(function(){});
                 }
@@ -5448,64 +5834,69 @@ async function buscarLojaInteligente() {
             renderSmartStoreResults();
             if (st) {
                 st.classList.add("smart-alert-ok");
-                st.textContent = "⚡ " + layer1Hits.length + " loja(s) encontrada(s) na base salva/compartilhada. Toque para preencher instantaneamente.";
+                st.textContent = "⚡ " + layer1Hits.length + " loja(s) encontrada(s)" + ufTag + " na base salva/compartilhada. Toque para preencher.";
             }
-            concluirTarefaGuardiao("⚡ Lojas encontradas!", layer1Hits.length + " registro(s) instantâneo(s).", { keepOverlayMs: 1000, onReturn: function(){ showPage("pageClient"); } });
+            concluirTarefaGuardiao("⚡ Lojas encontradas!", layer1Hits.length + " registro(s)" + ufTag + ".", { keepOverlayMs: 900, onReturn: function(){ showPage("pageClient"); } });
             return;
         }
 
-        // CAMADA 2: APIs Públicas Abertas (Nominatim/OpenStreetMap filtrando por UF/Cidade)
-        var ufTag = (ctx && ctx.uf && ctx.uf !== "Brasil") ? (" (" + ctx.uf + ")") : "";
-        if (st) st.textContent = "Buscando endereços e unidades próximas" + ufTag + "...";
-        atualizarProgressoTarefa("Camada 2: localizando unidades próximas" + ufTag + "...", "Consultando mapas públicos", 1, 3);
-        var nomHits = [];
-        try {
-            nomHits = await buscarOpenStreetMapNominatim(q, ctx);
-        } catch(eNom2) {}
+        // CAMADA 2 & 3 EM PARALELO: Mapa OSM na UF + Busca Dupla (Bandeira + Razão Social via Gemini máx 15s)
+        if (st) st.textContent = "Buscando por Bandeira e Razão Social em " + (ufAlvo || "sua região") + "...";
+        atualizarProgressoTarefa("Camada 2 & 3: busca dupla em " + (ufAlvo || "Brasil") + "...", "Bandeira / Fantasia + Razão Social", 2, 3);
 
-        // CAMADA 3: Só chama Gemini padrão se a Camada 2 não trouxe unidades suficientes
-        var gemHits = [];
-        if (!nomHits.length && getGoogleGeminiKey()) {
-            atualizarProgressoTarefa("Camada 3: buscando sugestões inteligentes...", q + ufTag, 2, 3);
-            try {
-                gemHits = await buscarLojasGeminiFlash(q, ctx);
-            } catch(eGemList) {}
-        }
+        var queryOsm = parsed.localHint && parsed.redeHint ? (parsed.redeHint + " " + parsed.localHint) : q;
+        var pNom = buscarOpenStreetMapNominatim(queryOsm, ctx).catch(function(){ return []; });
+        var pGem = getGoogleGeminiKey() ? buscarLojasGeminiFlash(q, ctx).catch(function(){ return []; }) : Promise.resolve([]);
+        var pair = await Promise.all([pNom, pGem]);
+        var nomHits = Array.isArray(pair[0]) ? pair[0] : [];
+        var gemHits = Array.isArray(pair[1]) ? pair[1] : [];
 
         var merged = [];
         var seen = {};
-        nomHits.concat(gemHits).forEach(function(it) {
-            var k = normProdKey(it.nome) + "|" + normProdKey((it.endereco || "").substring(0, 30));
-            if (!seen[k]) { seen[k] = true; merged.push(it); }
+        // Prioriza itens com Razão Social e mantém diversidade geográfica da UF
+        gemHits.concat(nomHits).forEach(function(it) {
+            if (ufAlvo && !_itemPertenceUf(it, ufAlvo, { strictExternal: true })) return;
+            var k = normProdKey(it.bandeira || it.nome) + "|" + normProdKey((it.bairro || it.endereco || "").substring(0, 28));
+            if (!seen[k]) {
+                seen[k] = true;
+                merged.push(it);
+            }
         });
-        var ufAlvo = (ctx && ctx.uf && ctx.uf !== "Brasil") ? ctx.uf.toUpperCase() : "";
+
         var cidAlvo = (ctx && ctx.cidade) ? normTextAccent(ctx.cidade).toLowerCase() : "";
+        var localHintNorm = parsed.localHint ? normTextAccent(parsed.localHint).toLowerCase() : "";
+        var redeHintNorm = parsed.redeHint ? normTextAccent(parsed.redeHint).toLowerCase() : "";
         merged.sort(function(a, b) {
             function scoreItem(it) {
                 var s = 0;
-                var endNorm = normTextAccent(it.endereco || "").toLowerCase();
+                var endNorm = normTextAccent([it.endereco, it.bairro, it.municipio, it.cidadeUf].join(" ")).toLowerCase();
+                var nomNorm = normTextAccent([it.bandeira, it.nome, it.razaoSocial].join(" ")).toLowerCase();
                 var ufIt = String(it.uf || "").toUpperCase();
-                if (ufAlvo && (ufIt === ufAlvo || endNorm.indexOf(ufAlvo.toLowerCase()) >= 0)) s += 4;
-                if (cidAlvo && endNorm.indexOf(cidAlvo) >= 0) s += 3;
-                if (it.source === "OpenStreetMap") s += 1;
+                if (ufAlvo && ufIt === ufAlvo) s += 5;
+                if (localHintNorm && endNorm.indexOf(localHintNorm) >= 0) s += 4;
+                if (redeHintNorm && nomNorm.indexOf(redeHintNorm) >= 0) s += 3;
+                if (cidAlvo && endNorm.indexOf(cidAlvo) >= 0) s += 2;
+                if (it.razaoSocial) s += 2;
+                if (it.bairro) s += 1;
                 return s;
             }
             return scoreItem(b) - scoreItem(a);
         });
+
         _smartStoreResults = merged;
         renderSmartStoreResults();
         if (merged.length) {
             if (st) {
                 st.style.color = "#1e40af";
-                st.textContent = merged.length + " unidade(s) encontrada(s)" + ufTag + ". Toque em uma unidade para completar os dados.";
+                st.textContent = merged.length + " unidade(s) encontrada(s)" + ufTag + ". Toque para preencher imediatamente (sem travar o formulário).";
             }
-            concluirTarefaGuardiao("✅ " + merged.length + " unidade(s) encontrada(s)", "Toque em uma unidade da lista para preencher.", { keepOverlayMs: 1100, onReturn: function(){ showPage("pageClient"); } });
+            concluirTarefaGuardiao("✅ " + merged.length + " unidade(s) encontrada(s)" + ufTag, "Toque em uma unidade da lista para preencher.", { keepOverlayMs: 900, onReturn: function(){ showPage("pageClient"); } });
         } else {
             if (st) {
                 st.classList.add("smart-alert-warn");
-                st.textContent = "Nenhuma loja encontrada automaticamente para \"" + q + "\". Você pode preencher os campos manualmente.";
+                st.textContent = "Nenhuma loja encontrada em " + (ufAlvo || "sua UF") + " para \"" + q + "\". Você pode preencher os campos manualmente.";
             }
-            falharTarefaGuardiao("Nenhuma unidade encontrada", "Preencha os campos manualmente se desejar.");
+            falharTarefaGuardiao("Nenhuma unidade encontrada" + ufTag, "Preencha os campos manualmente se desejar.");
         }
     } catch(err) {
         var msgErrCli = _traduzirErroAmigavelIA(err) + " Preencha os campos manualmente se desejar.";
@@ -6386,6 +6777,7 @@ function backFromUser() {
 }
 
 function goToUser() {
+    if (typeof popularSelectsUf === "function") popularSelectsUf();
     var rawU = localStorage.getItem("ls23_user") || "{}";
     var u = {};
     try { u = JSON.parse(rawU); if (typeof u === "string") { u = {nome: u}; } } catch(e) { u = {nome: rawU}; }
@@ -6397,6 +6789,8 @@ function goToUser() {
     document.getElementById("userEquipe").value = u.equipe || "";
     document.getElementById("userGerente").value = u.gerente || "";
     document.getElementById("userSupervisor").value = u.supervisor || "";
+    var userUfEl = document.getElementById("userUf");
+    if (userUfEl) userUfEl.value = u.uf || (typeof getUfAtiva === "function" ? getUfAtiva() : "") || "";
     document.getElementById("userRegiao").value = u.regiao || "";
     window._userRoteiro = (u.roteiro || []).slice();
     renderUserRoteiro();
@@ -6491,6 +6885,7 @@ function saveUserSignature(input) {
 function saveUser() {
     var nome = document.getElementById("userName").value.trim();
     if (!nome) { showMsg("msgUser", "Informe seu nome"); return; }
+    var ufSel = ((document.getElementById("userUf") || {}).value || "").toUpperCase().trim();
     var u = {
         nome: nome,
         matricula: document.getElementById("userMatricula").value.trim(),
@@ -6500,6 +6895,7 @@ function saveUser() {
         equipe: document.getElementById("userEquipe").value.trim(),
         gerente: document.getElementById("userGerente").value.trim(),
         supervisor: document.getElementById("userSupervisor").value.trim(),
+        uf: ufSel,
         regiao: document.getElementById("userRegiao").value.trim(),
         roteiro: (function(){ flushUserRoteiro(); return (window._userRoteiro || []).filter(function(r){ return r.nome; }); })()
     };
@@ -6507,6 +6903,7 @@ function saveUser() {
         alert("Erro ao salvar perfil. Armazenamento cheio. Exporte um backup em Configuracoes.");
         return;
     }
+    if (ufSel && typeof setUfAtiva === "function") setUfAtiva(ufSel, { source: "profile" });
     currentUser = nome;
     showMsg("msgUser", "Dados salvos!");
     setTimeout(function(){
@@ -6915,6 +7312,12 @@ function saveClient() {
     var razaoSocial=((document.getElementById("clientRazaoSocial")||{}).value||"").trim();
     var cnae=((document.getElementById("clientCNAE")||{}).value||"").trim();
     var endereco=((document.getElementById("clientEndereco")||{}).value||"").trim();
+    var bairro=((document.getElementById("clientBairro")||{}).value||"").trim();
+    var cidadeUf=((document.getElementById("clientCidadeUf")||{}).value||"").trim();
+    var cep=_formatarCepBR(((document.getElementById("clientCEP")||{}).value||"").trim());
+    if (!endereco && (bairro || cidadeUf || cep)) {
+        endereco = [bairro, cidadeUf, cep ? ("CEP " + cep) : ""].filter(Boolean).join(" | ");
+    }
     var codigoCliente=((document.getElementById("clientCodigoInterno")||{}).value||"").trim();
     if (!name||!cnpj||!buyer||!buyerPhone||!companyId) { alert("Preencha os campos obrigatorios (*)"); return; }
     if (!perfil) { alert("Selecione o Perfil da Loja (campo obrigatorio)"); return; }
@@ -6938,9 +7341,15 @@ function saveClient() {
         logoFinal = gerarAvatarLojaJpeg200(name) || null;
         if (logoFinal && !_pendingClientLogoSource) _pendingClientLogoSource = "avatar";
     }
+    var ufCidadeMatch = cidadeUf.match(/([A-Za-z]{2})\s*$/);
+    var ufCliente = (ufCidadeMatch && typeof _isValidBrUf === "function" && _isValidBrUf(ufCidadeMatch[1].toUpperCase()))
+        ? ufCidadeMatch[1].toUpperCase()
+        : ((typeof getUfAtiva === "function" && getUfAtiva()) || "");
     currentClient = {
         id:id, companyId:companyId, name:name, cnpj:cnpj, codigoCliente:codigoCliente,
-        razaoSocial:razaoSocial, cnae:cnae, endereco:endereco, canal:canal,
+        razaoSocial:razaoSocial, cnae:cnae, endereco:endereco,
+        bairro:bairro, cidadeUf:cidadeUf, cep:cep, uf:ufCliente,
+        canal:canal,
         buyer:buyer, buyerPhone:buyerPhone, manager:manager, managerPhone:managerPhone,
         perfil:perfil, perfilCustom:perfilCustom, checkouts:parseInt(checkouts)||0,
         logo:logoFinal, logoSource:_pendingClientLogoSource || (prevClient ? (prevClient.logoSource||"") : ""),
@@ -6967,9 +7376,10 @@ function saveClient() {
         return;
     }
     if (typeof syncClienteSupabase === "function") syncClienteSupabase(currentClient);
-    ["clientName","clientCNPJ","clientCodigoInterno","clientRazaoSocial","clientCNAE","clientEndereco","clientBuyer","clientBuyerPhone","clientManager","clientManagerPhone","smartStoreQuery"].forEach(function(x){
+    ["clientName","clientCNPJ","clientCodigoInterno","clientRazaoSocial","clientCNAE","clientEndereco","clientBairro","clientCidadeUf","clientCEP","clientBuyer","clientBuyerPhone","clientManager","clientManagerPhone","smartStoreQuery"].forEach(function(x){
         var el = document.getElementById(x); if (el) el.value = "";
     });
+    _clientManualEditedFields = {};
     document.getElementById("clientPerfil").value=""; document.getElementById("clientCheckouts").value=""; document.getElementById("clientPerfilCustomWrap").style.display="none";
     if (document.getElementById("clientCanal")) document.getElementById("clientCanal").value = "";
     renderClientLogoStudio(null, ""); pendingClientLogo=null; _pendingClientLogoSource=""; _canalManualOverride=false; tempClientProducts=[]; editingClientId=null;
@@ -9511,7 +9921,9 @@ document.addEventListener("DOMContentLoaded", function() {
             voltarParaSplash();
         }
     });
+    if (typeof popularSelectsUf === "function") popularSelectsUf();
     document.querySelectorAll(".page").forEach(function(p) { _garantirTopbarVoltar(p); });
+    if (typeof _sincronizarTopbarUfPills === "function") _sincronizarTopbarUfPills();
     var inp = document.getElementById("confImagem");
     if (inp) {
         inp.addEventListener("change", function() {
@@ -16514,6 +16926,7 @@ function aplicarIdiomaUI(lang) {
         gfBalao.textContent = t("guardiao_ask");
     }
     if (typeof carregarConfigIdiomaLocalizacao === "function") carregarConfigIdiomaLocalizacao();
+    if (typeof _sincronizarTopbarUfPills === "function") _sincronizarTopbarUfPills();
     if (window._currentPage === "pageClients" && typeof renderClientsList === "function") renderClientsList();
     if (window._currentPage === "pageMenu" && currentClient && typeof goToMenu === "function") {
         var rotaEl = document.getElementById("menuRotaBadge");
@@ -16550,6 +16963,229 @@ function getUserLocationPrefs() {
     try { return JSON.parse(raw); } catch(e) { return null; }
 }
 
+function _isValidBrUf(uf) {
+    var u = String(uf || "").toUpperCase().trim();
+    if (!u || u.length !== 2) return false;
+    return BR_UFS.some(function(x) { return x.uf === u; });
+}
+
+function _getUfInfoObj(uf) {
+    var u = String(uf || "").toUpperCase().trim();
+    for (var i = 0; i < BR_UFS.length; i++) {
+        if (BR_UFS[i].uf === u) return BR_UFS[i];
+    }
+    return null;
+}
+
+function getUfAtiva() {
+    try {
+        var direct = (localStorage.getItem(LS_ACTIVE_UF_KEY) || "").toUpperCase().trim();
+        if (_isValidBrUf(direct)) return direct;
+    } catch(e) {}
+    var loc = getUserLocationPrefs();
+    if (loc && _isValidBrUf(loc.uf)) return String(loc.uf).toUpperCase().trim();
+    try {
+        var rawU = localStorage.getItem("ls23_user") || "";
+        if (rawU && rawU.charAt(0) === "{") {
+            var uObj = JSON.parse(rawU);
+            if (uObj && _isValidBrUf(uObj.uf)) return String(uObj.uf).toUpperCase().trim();
+        }
+    } catch(e2) {}
+    return "";
+}
+
+function _sincronizarTopbarUfPills() {
+    var uf = getUfAtiva();
+    document.querySelectorAll(".topbar-uf-pill").forEach(function(btn) {
+        if (uf) {
+            btn.classList.remove("unset");
+            btn.innerHTML = "&#128205; " + escHtml(uf);
+            btn.title = "UF ativa: " + uf + " (toque para alterar)";
+        } else {
+            btn.classList.add("unset");
+            btn.innerHTML = "&#128205; Definir UF";
+            btn.title = "Definir UF de atuação";
+        }
+    });
+}
+
+function popularSelectsUf() {
+    var ufAtiva = getUfAtiva();
+    var optsHtml = BR_UFS.map(function(item) {
+        return "<option value='" + item.uf + "'>" + item.uf + " — " + escHtml(item.nome) + "</option>";
+    }).join("");
+    ["onbUfSelect", "modalUfSelect", "cfgUfSelect", "userUf"].forEach(function(id) {
+        var sel = document.getElementById(id);
+        if (!sel) return;
+        var placeholder = (id === "onbUfSelect")
+            ? "-- Selecione seu Estado (UF) --"
+            : ((id === "modalUfSelect") ? "-- Escolha na lista de Estados --" : "-- Selecione --");
+        var prev = sel.value;
+        sel.innerHTML = "<option value=''>" + placeholder + "</option>" + optsHtml;
+        var target = _isValidBrUf(prev) ? prev : ufAtiva;
+        if (target) sel.value = target;
+    });
+    var grid = document.getElementById("modalUfChipsGrid");
+    if (grid) {
+        grid.innerHTML = BR_UFS.map(function(item) {
+            var cls = (item.uf === ufAtiva) ? "uf-chip-btn ativo" : "uf-chip-btn";
+            return "<button type='button' class='" + cls + "' onclick=\"confirmarSelecaoUfModal('" + item.uf + "')\">" + item.uf + "</button>";
+        }).join("");
+    }
+}
+
+function setUfAtiva(uf, opts) {
+    var info = _getUfInfoObj(uf);
+    if (!info) return false;
+    var u = info.uf;
+    opts = opts || {};
+    try { localStorage.setItem(LS_ACTIVE_UF_KEY, u); } catch(e) {}
+    var regional = _mapearUfParaRegional(u, info.nome);
+    var prevLoc = getUserLocationPrefs() || {};
+    var locObj = {
+        status: (prevLoc.status === "granted") ? "granted" : "manual",
+        lat: prevLoc.lat || null,
+        lng: prevLoc.lng || null,
+        city: (opts.source === "gps" && opts.city !== undefined) ? opts.city : (prevLoc.city || ""),
+        uf: u,
+        state: info.nome,
+        regional: regional,
+        updatedAt: new Date().toISOString()
+    };
+    try { localStorage.setItem(LS_LOCATION_KEY, JSON.stringify(locObj)); } catch(e2) {}
+    try {
+        var rawU = localStorage.getItem("ls23_user") || "";
+        if (rawU) {
+            var uObj = (rawU.charAt(0) === "{") ? JSON.parse(rawU) : { nome: rawU };
+            if (uObj && typeof uObj === "object" && !Array.isArray(uObj)) {
+                uObj.uf = u;
+                localStorage.setItem("ls23_user", JSON.stringify(uObj));
+            }
+        }
+    } catch(e3) {}
+    ["onbUfSelect", "modalUfSelect", "cfgUfSelect", "userUf"].forEach(function(id) {
+        var el = document.getElementById(id);
+        if (el) el.value = u;
+    });
+    var regEl = document.getElementById("companyRegional");
+    if (regEl && (!regEl.value || regEl.value === "Nacional" || opts.source === "modal" || opts.source === "config" || opts.source === "onboarding")) {
+        regEl.value = regional;
+    }
+    popularSelectsUf();
+    _sincronizarTopbarUfPills();
+    if (typeof carregarConfigIdiomaLocalizacao === "function") carregarConfigIdiomaLocalizacao();
+    return true;
+}
+
+function selecionarUfOnboarding(uf) {
+    if (!uf) return;
+    setUfAtiva(uf, { source: "onboarding" });
+    var st = document.getElementById("onbLocationStatus");
+    if (st) {
+        var info = _getUfInfoObj(uf);
+        st.textContent = "✅ UF selecionada: " + (info ? (info.uf + " (" + info.nome + ")") : uf);
+    }
+}
+
+function confirmarUfOnboarding() {
+    var sel = document.getElementById("onbUfSelect");
+    var uf = (sel && sel.value) || getUfAtiva();
+    if (!_isValidBrUf(uf)) {
+        var st = document.getElementById("onbLocationStatus");
+        if (st) st.textContent = "⚠️ Selecione seu Estado (UF) na lista ou detecte pelo GPS antes de continuar.";
+        if (sel) sel.focus();
+        return;
+    }
+    setUfAtiva(uf, { source: "onboarding" });
+    try {
+        if (!localStorage.getItem(LS_LANG_KEY)) localStorage.setItem(LS_LANG_KEY, getAppLanguage());
+        localStorage.setItem(LS_ONBOARDING_KEY, "1");
+    } catch(e) {}
+    fecharModalOnboarding();
+}
+
+function abrirSeletorUfModal(obrigatorio) {
+    var modal = document.getElementById("modalUfSeletor");
+    if (!modal) return;
+    window._ufModalObrigatorio = !!obrigatorio;
+    popularSelectsUf();
+    var closeBtn = document.getElementById("btnCloseUfSeletor");
+    if (closeBtn) closeBtn.style.display = window._ufModalObrigatorio ? "none" : "inline-flex";
+    var st = document.getElementById("modalUfStatus");
+    if (st) {
+        var cur = getUfAtiva();
+        st.textContent = cur ? ("UF atual: " + cur + " — toque em outro estado para trocar.") : "Escolha sua UF de atuação para continuar.";
+    }
+    modal.style.display = "flex";
+    if (!window._ufModalObrigatorio && typeof _pushAppHistoryState === "function") {
+        _pushAppHistoryState("modal_uf_seletor");
+    }
+}
+
+function fecharSeletorUfModal() {
+    var modal = document.getElementById("modalUfSeletor");
+    if (modal) modal.style.display = "none";
+    window._ufModalObrigatorio = false;
+}
+
+function confirmarSelecaoUfModal(uf) {
+    if (!setUfAtiva(uf, { source: "modal" })) return;
+    var info = _getUfInfoObj(uf);
+    var st = document.getElementById("modalUfStatus");
+    if (st) st.textContent = "✅ UF definida: " + (info ? (info.uf + " (" + info.nome + ")") : uf);
+    fecharSeletorUfModal();
+    if (typeof showMsg === "function") {
+        if (window._currentPage === "pageClients") showMsg("msgClients", "📍 UF ativa: " + info.uf);
+        else if (window._currentPage === "pageConfigGeral") showMsg("msgConfigGeral", "📍 UF ativa: " + info.uf);
+    }
+}
+
+function _extrairUfsDeTexto(txt) {
+    var s = String(txt || "");
+    if (!s) return [];
+    var found = {};
+    var validMap = {};
+    BR_UFS.forEach(function(x){ validMap[x.uf] = true; });
+    var reSep = /(?:^|[\s,\/\-\(\|])([A-Z]{2})(?=$|[\s,\.\-\)\/\|\;])/g;
+    var m;
+    while ((m = reSep.exec(s)) !== null) {
+        var cand = m[1];
+        if (validMap[cand]) found[cand] = true;
+    }
+    var sLow = normTextAccent(s).toLowerCase();
+    BR_UFS.forEach(function(x) {
+        var nomeNorm = normTextAccent(x.nome).toLowerCase();
+        if (nomeNorm.length >= 4) {
+            var reNm = new RegExp("(?:^|[\\s,\\/\\-\\(])" + nomeNorm.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "(?=$|[\\s,\\.\\-\\)\\/])");
+            if (reNm.test(sLow)) found[x.uf] = true;
+        }
+    });
+    return Object.keys(found);
+}
+
+function _itemPertenceUf(item, ufAlvo, opts) {
+    var u = String(ufAlvo || "").toUpperCase().trim();
+    if (!u || !_isValidBrUf(u)) return true;
+    opts = opts || {};
+    var itemUf = String((item && (item.uf || item.estado || item.ufLabel)) || "").toUpperCase().trim();
+    var textPool = [
+        item && item.endereco,
+        item && item.enderecoCd,
+        item && item.cidadeUf,
+        item && item.municipio,
+        item && item.regional
+    ].filter(Boolean).join(" | ");
+    var textUfs = _extrairUfsDeTexto(textPool);
+    if (_isValidBrUf(itemUf)) {
+        if (itemUf === u) return true;
+        if (textUfs.indexOf(u) >= 0) return true;
+        return false;
+    }
+    if (textUfs.indexOf(u) >= 0) return true;
+    if (textUfs.length > 0) return false;
+    return !opts.strictExternal;
+}
+
 function registrarCheckinLocalizacaoLoja(cliId) {
     var loc = getUserLocationPrefs();
     if (!loc || loc.status !== "granted" || !cliId || !clients[cliId]) return null;
@@ -16580,12 +17216,15 @@ function _aplicarRegionalNaInterface(locObj) {
 async function solicitarLocalizacaoUsuario(origem) {
     var statusOnb = document.getElementById("onbLocationStatus");
     var statusCfg = document.getElementById("cfgLocationInfo");
+    var statusMod = document.getElementById("modalUfStatus");
     if (statusOnb) statusOnb.textContent = t("loc_detecting");
     if (statusCfg) statusCfg.textContent = t("loc_detecting");
+    if (statusMod) statusMod.textContent = t("loc_detecting");
 
     if (typeof navigator === "undefined" || !navigator.geolocation || typeof navigator.geolocation.getCurrentPosition !== "function") {
         if (statusOnb) statusOnb.textContent = t("loc_not_supported");
         if (statusCfg) statusCfg.textContent = t("loc_not_supported");
+        if (statusMod) statusMod.textContent = t("loc_not_supported");
         return false;
     }
 
@@ -16628,21 +17267,29 @@ async function solicitarLocalizacaoUsuario(origem) {
             localStorage.setItem(LS_LOCATION_KEY, JSON.stringify(locObj));
             localStorage.setItem(LS_ONBOARDING_KEY, "1");
             if (!localStorage.getItem(LS_LANG_KEY)) localStorage.setItem(LS_LANG_KEY, getAppLanguage());
+            if (_isValidBrUf(uf)) {
+                setUfAtiva(uf, { source: "gps", city: city });
+            }
             _aplicarRegionalNaInterface(locObj);
             carregarConfigIdiomaLocalizacao();
+            _sincronizarTopbarUfPills();
 
             var resumo = city
                 ? t("loc_detected", { city: city, uf: uf || stateName || "-", reg: regional })
                 : t("loc_saved_coords", { lat: lat, lng: lng, reg: regional });
             if (statusOnb) statusOnb.textContent = resumo;
+            if (statusMod) statusMod.textContent = resumo;
             if (origem === "onb") {
                 setTimeout(fecharModalOnboarding, 650);
+            } else if (origem === "modal" && _isValidBrUf(uf)) {
+                setTimeout(fecharSeletorUfModal, 650);
             }
             resolve(true);
         }, function(err) {
             console.warn("Geolocation error:", err);
             if (statusOnb) statusOnb.textContent = t("loc_denied");
             if (statusCfg) statusCfg.textContent = t("loc_denied");
+            if (statusMod) statusMod.textContent = "Não foi possível obter via GPS. Escolha sua UF na grade ou lista acima.";
             carregarConfigIdiomaLocalizacao();
             resolve(false);
         }, { enableHighAccuracy: false, timeout: 8000, maximumAge: 300000 });
@@ -16650,24 +17297,34 @@ async function solicitarLocalizacaoUsuario(origem) {
 }
 
 function continuarSemLocalizacaoOnboarding() {
-    var existing = getUserLocationPrefs();
-    if (!existing || existing.status !== "granted") {
-        localStorage.setItem(LS_LOCATION_KEY, JSON.stringify({
-            status: "skipped",
-            regional: "Nacional",
-            updatedAt: new Date().toISOString()
-        }));
+    var selUf = ((document.getElementById("onbUfSelect") || {}).value || "").toUpperCase().trim();
+    if (_isValidBrUf(selUf)) {
+        setUfAtiva(selUf, { source: "onboarding" });
+    } else {
+        var existing = getUserLocationPrefs();
+        if (!existing || (existing.status !== "granted" && existing.status !== "manual")) {
+            localStorage.setItem(LS_LOCATION_KEY, JSON.stringify({
+                status: "skipped",
+                regional: "Nacional",
+                updatedAt: new Date().toISOString()
+            }));
+        }
     }
     if (!localStorage.getItem(LS_LANG_KEY)) localStorage.setItem(LS_LANG_KEY, getAppLanguage());
     localStorage.setItem(LS_ONBOARDING_KEY, "1");
     carregarConfigIdiomaLocalizacao();
+    _sincronizarTopbarUfPills();
     fecharModalOnboarding();
 }
 
 function desativarLocalizacaoUsuario() {
+    var ufAtiva = getUfAtiva();
+    var info = _getUfInfoObj(ufAtiva);
     localStorage.setItem(LS_LOCATION_KEY, JSON.stringify({
-        status: "disabled",
-        regional: "Nacional",
+        status: ufAtiva ? "manual" : "disabled",
+        uf: ufAtiva || "",
+        state: info ? info.nome : "",
+        regional: ufAtiva ? _mapearUfParaRegional(ufAtiva, info ? info.nome : "") : "Nacional",
         updatedAt: new Date().toISOString()
     }));
     carregarConfigIdiomaLocalizacao();
@@ -16678,7 +17335,9 @@ function carregarConfigIdiomaLocalizacao() {
     document.querySelectorAll("[data-lang-opt]").forEach(function(btn) {
         btn.classList.toggle("ativo", btn.getAttribute("data-lang-opt") === lang);
     });
+    popularSelectsUf();
     var loc = getUserLocationPrefs();
+    var ufAtiva = getUfAtiva();
     var badge = document.getElementById("cfgLocationBadge");
     var info = document.getElementById("cfgLocationInfo");
     var btnDis = document.getElementById("cfgBtnDisableLoc");
@@ -16692,6 +17351,12 @@ function carregarConfigIdiomaLocalizacao() {
         if (info) info.textContent = msg;
         if (onbSt) onbSt.textContent = msg;
         if (btnDis) btnDis.style.display = "inline-block";
+    } else if (ufAtiva) {
+        var ufObj = _getUfInfoObj(ufAtiva);
+        var regUf = _mapearUfParaRegional(ufAtiva, ufObj ? ufObj.nome : "");
+        if (badge) { badge.textContent = "UF: " + ufAtiva; badge.style.background = "#dbeafe"; badge.style.color = "#1e40af"; }
+        if (info) info.textContent = "Trava geográfica ativa em " + ufAtiva + (ufObj ? (" (" + ufObj.nome + ")") : "") + " • Regional: " + regUf + ".";
+        if (btnDis) btnDis.style.display = "none";
     } else if (loc && loc.status === "skipped") {
         if (badge) { badge.textContent = t("loc_badge_skip"); badge.style.background = "#fef3c7"; badge.style.color = "#92400e"; }
         if (info) info.textContent = t("onb_loc_desc");
@@ -16707,6 +17372,7 @@ function abrirModalOnboarding(force) {
     var modal = document.getElementById("modalOnboarding");
     if (!modal) return;
     if (!force && (localStorage.getItem(LS_ONBOARDING_KEY) === "1" || localStorage.getItem(LS_LANG_KEY))) return;
+    popularSelectsUf();
     aplicarIdiomaUI(getAppLanguage());
     modal.style.display = "flex";
 }
@@ -16719,9 +17385,11 @@ function fecharModalOnboarding() {
 function initI18nOnboarding() {
     var savedLang = localStorage.getItem(LS_LANG_KEY);
     var hasOnb = localStorage.getItem(LS_ONBOARDING_KEY) === "1";
+    popularSelectsUf();
     aplicarIdiomaUI(savedLang || "pt-BR");
+    _sincronizarTopbarUfPills();
     var loc = getUserLocationPrefs();
-    if (loc && loc.status === "granted") _aplicarRegionalNaInterface(loc);
+    if (loc && (loc.status === "granted" || loc.status === "manual")) _aplicarRegionalNaInterface(loc);
     if (!hasOnb && !savedLang) {
         abrirModalOnboarding(true);
     }
@@ -16733,22 +17401,26 @@ function initI18nOnboarding() {
 var _smartCompanyTimer = null;
 var _smartCompanyLastAutoQuery = "";
 var _ultimaSugestaoEmpresaIA = null;
+var _smartCompanyUnits = [];
 var _catalogoIaGerado = [];
 
 function _obterUfContextoDispositivo() {
     var loc = (typeof getUserLocationPrefs === "function") ? getUserLocationPrefs() : null;
     var regSel = (document.getElementById("companyRegional") || {}).value || "";
-    var uf = (loc && loc.uf) ? String(loc.uf).toUpperCase() : "";
+    var ufAtiva = getUfAtiva();
+    var uf = ufAtiva || ((loc && loc.uf) ? String(loc.uf).toUpperCase() : "");
     var cidade = (loc && loc.city) ? loc.city : "";
-    var regional = regSel && regSel !== "Nacional" ? regSel : ((loc && loc.regional) ? loc.regional : "Nacional");
-    if (!uf && regional) {
-        if (regional.indexOf("RJ") === 0) uf = "RJ";
-        else if (regional === "SP") uf = "SP";
-        else if (regional.indexOf("MG") === 0) uf = "MG";
-        else if (regional === "Sul") uf = "RS/PR/SC";
-        else if (regional === "Nordeste") uf = "BA/PE/CE";
-    }
-    return { uf: uf || "Brasil", cidade: cidade, regional: regional || "Nacional" };
+    var ufInfo = uf ? _getUfInfoObj(uf) : null;
+    var regional = regSel && regSel !== "Nacional"
+        ? regSel
+        : (uf ? _mapearUfParaRegional(uf, ufInfo ? ufInfo.nome : "") : ((loc && loc.regional) ? loc.regional : "Nacional"));
+    return {
+        uf: uf || "Brasil",
+        ufLocked: !!ufAtiva,
+        stateName: ufInfo ? ufInfo.nome : "",
+        cidade: cidade,
+        regional: regional || "Nacional"
+    };
 }
 
 async function _buscarLogoIndustriaAuto(nome, siteDominio, coresBandeira) {
@@ -16804,13 +17476,18 @@ function buscarEmpresaLocalPrimeiro(query, ctx) {
         var digits = qRaw.replace(/\D/g, "");
         var qNorm = normTextAccent(qRaw).toLowerCase();
         var regAlvo = (ctx && ctx.regional) ? normTextAccent(ctx.regional).toLowerCase() : "";
+        var ufAlvo = (ctx && ctx.uf && _isValidBrUf(ctx.uf)) ? ctx.uf.toUpperCase() : "";
         var matches = Object.values(companies).filter(function(c) {
             if (!c || !c.name) return false;
             var cDigits = String(c.cnpj || "").replace(/\D/g, "");
             if (digits.length === 14 && cDigits === digits) return true;
             if (digits.length === 8 && cDigits.indexOf(digits) === 0) return true;
             var hay = normTextAccent([c.name, c.razaoSocial].filter(Boolean).join(" ")).toLowerCase();
-            return qNorm.length >= 2 && hay.indexOf(qNorm) >= 0;
+            if (!(qNorm.length >= 2 && hay.indexOf(qNorm) >= 0)) return false;
+            if (ufAlvo) {
+                return _itemPertenceUf({ enderecoCd: c.enderecoCd, regional: c.regional }, ufAlvo, { strictExternal: false });
+            }
+            return true;
         });
         if (!matches.length) return null;
         matches.sort(function(a, b) {
@@ -16825,6 +17502,7 @@ function buscarEmpresaLocalPrimeiro(query, ctx) {
             source: "Local",
             supabaseValidado: true,
             empresaId: String(c.id || ""),
+            nomeBase: c.enderecoCd ? "Base Salva Localmente" : "Cadastro Salvo",
             nomeFantasia: String(c.name || "").trim(),
             razaoSocial: String(c.razaoSocial || c.name || "").trim(),
             cnpj: String(c.cnpj || "").trim(),
@@ -16834,7 +17512,8 @@ function buscarEmpresaLocalPrimeiro(query, ctx) {
             porte: String(c.porte || "").trim(),
             brasilApiValidado: /^\d{14}$/.test(String(c.cnpj || "").replace(/\D/g, "")),
             regionalSugerida: String(c.regional || (ctx && ctx.regional) || "Nacional").trim(),
-            ufLabel: String((ctx && ctx.uf) || c.regional || "BR").trim(),
+            ufLabel: String(ufAlvo || (ctx && ctx.uf) || c.regional || "BR").trim(),
+            uf: ufAlvo || "",
             siteDominio: "",
             contatosResumo: String(c.contacts || "").trim(),
             logo: String(c.logo || "").trim(),
@@ -16865,6 +17544,19 @@ async function buscarEmpresaSupabasePrimeiro(query, ctx) {
             if (rTxt && Array.isArray(rTxt.data)) rows = rTxt.data;
         }
         if (!rows.length) return null;
+
+        var ufAlvo = (ctx && ctx.uf && _isValidBrUf(ctx.uf)) ? ctx.uf.toUpperCase() : "";
+        if (ufAlvo && digits.length !== 14) {
+            rows = rows.filter(function(rw) {
+                var pp = (rw && rw.payload && typeof rw.payload === "object") ? rw.payload : {};
+                return _itemPertenceUf({
+                    uf: pp.ufLabel || "",
+                    enderecoCd: pp.enderecoCD || pp.enderecoCd || "",
+                    regional: pp.regional || rw.regional || ""
+                }, ufAlvo, { strictExternal: false });
+            });
+            if (!rows.length) return null;
+        }
 
         var regAlvo = (ctx && ctx.regional) ? normTextAccent(ctx.regional).toLowerCase() : "";
         rows.sort(function(a, b) {
@@ -16907,6 +17599,7 @@ async function buscarEmpresaSupabasePrimeiro(query, ctx) {
             source: "Supabase",
             supabaseValidado: true,
             empresaId: String(row.id || ""),
+            nomeBase: (p.enderecoCD || p.enderecoCd) ? "Base Compartilhada" : "Cadastro Compartilhado",
             nomeFantasia: nome,
             razaoSocial: String(p.razaoSocial || nome).trim(),
             cnpj: String(p.cnpj || row.cnpj || "").trim(),
@@ -16916,7 +17609,8 @@ async function buscarEmpresaSupabasePrimeiro(query, ctx) {
             porte: String(p.porte || "").trim(),
             brasilApiValidado: !!String(p.cnpj || row.cnpj || "").replace(/\D/g, "").match(/^\d{14}$/),
             regionalSugerida: String(p.regional || row.regional || (ctx && ctx.regional) || "Nacional").trim(),
-            ufLabel: String(p.ufLabel || (ctx && ctx.uf) || p.regional || row.regional || "BR").trim(),
+            ufLabel: String(p.ufLabel || ufAlvo || (ctx && ctx.uf) || p.regional || row.regional || "BR").trim(),
+            uf: ufAlvo || "",
             siteDominio: "",
             contatosResumo: String(p.contacts || row.contacts || "").trim(),
             logo: String(p.logo || "").trim(),
@@ -16991,13 +17685,148 @@ function _aplicarStatusEmpresaCompletude(stEl, cnpjStr, source, cnpjRaiz) {
     if (!cnpjOk) {
         var raizTxt = cnpjRaiz ? (" (raiz " + _formatarRaizCnpjPrefixo(cnpjRaiz) + ")") : "";
         stEl.classList.add("smart-alert-warn");
-        stEl.textContent = "⚠️ Demais dados localizados! Após confirmar, preencha apenas o campo CNPJ" + raizTxt + " com os dígitos da filial regional.";
+        stEl.textContent = "⚠️ Demais dados preenchidos! Complete apenas o CNPJ" + raizTxt + " com os dígitos desta filial/CD se necessário.";
     } else {
         stEl.classList.add("smart-alert-ok");
         stEl.textContent = (source === "Supabase" || source === "Local")
-            ? "⚡ Empresa carregada da base salva! Revise o card abaixo e toque em Confirmar dados."
-            : "✅ Dados completos encontrados! Revise o card abaixo e toque em Confirmar dados.";
+            ? "⚡ Unidade carregada da base salva! Confira os dados abaixo."
+            : "✅ Unidade aplicada! Confira o cadastro ou gere o catálogo abaixo.";
     }
+}
+
+function renderSmartCompanyUnitsList(ufLabel) {
+    var box = document.getElementById("smartCompanyUnitsList");
+    if (!box) return;
+    if (!Array.isArray(_smartCompanyUnits) || !_smartCompanyUnits.length) {
+        box.innerHTML = "";
+        box.classList.remove("ativo");
+        return;
+    }
+    var ufTxt = (ufLabel && ufLabel !== "Brasil") ? ufLabel : "";
+    box.innerHTML = _smartCompanyUnits.map(function(u, idx) {
+        var bCls = (u.source === "Supabase" || u.source === "Local" || u.brasilApiValidado) ? " brasilapi" : (u.source === "Sugestao" ? " gemini" : "");
+        var badgeLabel = u.source === "Local"
+            ? "Salvo Local"
+            : (u.source === "Supabase"
+                ? "Base Compartilhada"
+                : (u.brasilApiValidado ? "CNPJ Oficial" : (u.source === "OpenStreetMap" ? "Mapa" : "CD / Filial" + (ufTxt ? " • " + ufTxt : ""))));
+        var titulo = u.nomeBase
+            ? (u.nomeFantasia + " — " + u.nomeBase)
+            : (u.nomeFantasia || u.razaoSocial || "Unidade");
+        var linhaMeta = [
+            u.razaoSocial && normProdKey(u.razaoSocial) !== normProdKey(u.nomeFantasia) ? u.razaoSocial : "",
+            u.cnpj ? ("CNPJ: " + u.cnpj) : (u.cnpjRaiz ? ("Raiz: " + _formatarRaizCnpjPrefixo(u.cnpjRaiz)) : ""),
+            u.segmento || ""
+        ].filter(Boolean).join(" • ");
+        return "<div class='smart-res-item' onclick='selecionarUnidadeEmpresa(" + idx + ")'>" +
+            "<div class='smart-res-top'><span class='smart-res-nome'>" + escHtml(titulo) + "</span>" +
+            "<span class='smart-res-badge" + bCls + "'>" + escHtml(badgeLabel) + "</span></div>" +
+            (u.enderecoCd ? "<div class='smart-res-end'>&#128205; " + escHtml(u.enderecoCd) + "</div>" : "") +
+            "<div class='smart-res-meta'>" + escHtml(linhaMeta || "Toque para aplicar esta base/CD no formulário") + "</div>" +
+            "</div>";
+    }).join("");
+    box.classList.add("ativo");
+}
+
+async function validarCnpjEmpresaEmSegundoPlano(unit) {
+    if (!unit || typeof consultarBrasilApiCnpj !== "function") return;
+    var cnpjDig = String(unit.cnpj || "").replace(/\D/g, "");
+    var target14 = (cnpjDig.length === 14) ? cnpjDig : ((unit.cnpjRaiz && unit.cnpjRaiz.length === 8) ? _calcularCnpjMatrizFromRaiz(unit.cnpjRaiz) : "");
+    if (!target14) return;
+    try {
+        var bData = await consultarBrasilApiCnpj(target14, { timeoutMs: 4000 });
+        if (!bData || !bData.razaoSocial) return;
+        var nmAtual = String((document.getElementById("companyName") || {}).value || "").trim();
+        if (nmAtual && normProdKey(nmAtual) !== normProdKey(unit.nomeFantasia || unit.razaoSocial || "")) return;
+        var rzEl = document.getElementById("companyRazaoSocial");
+        if (rzEl && !rzEl.value.trim()) rzEl.value = bData.razaoSocial;
+        var segEl = document.getElementById("companySegmento");
+        if (segEl && !segEl.value.trim() && bData.cnae) segEl.value = bData.cnae;
+        var ctEl = document.getElementById("companyContacts");
+        if (ctEl && !ctEl.value.trim() && bData.telefone) ctEl.value = bData.telefone;
+        var endEl = document.getElementById("companyEnderecoCD");
+        if (endEl && !endEl.value.trim() && cnpjDig.length === 14 && bData.endereco) endEl.value = bData.endereco;
+        if (cnpjDig.length === 14) {
+            unit.brasilApiValidado = true;
+            var cEl = document.getElementById("companyCNPJ");
+            if (cEl && cEl.value.replace(/\D/g, "") === cnpjDig) cEl.classList.remove("field-missing-warn");
+        }
+    } catch(eBgCnpj) {
+        // Silencioso e nao-bloqueante: mantem os dados preenchidos
+    }
+}
+
+function selecionarUnidadeEmpresa(idx) {
+    var unit = _smartCompanyUnits[idx];
+    if (!unit) return;
+    _ultimaSugestaoEmpresaIA = Object.assign({}, unit);
+    var box = document.getElementById("smartCompanyUnitsList");
+    if (box) { box.innerHTML = ""; box.classList.remove("ativo"); }
+    confirmarEmpresaSugeridaIA();
+    if (!unit.logo && typeof _buscarLogoIndustriaAuto === "function") {
+        _buscarLogoIndustriaAuto(unit.nomeFantasia || unit.razaoSocial, unit.siteDominio, unit.coresBandeira).then(function(logoAsync) {
+            if (!logoAsync) return;
+            unit.logo = logoAsync;
+            if (!pendingCompanyLogo && document.getElementById("companyLogoPreview") && !document.getElementById("companyLogoPreview").innerHTML.trim()) {
+                pendingCompanyLogo = logoAsync;
+                document.getElementById("companyLogoPreview").innerHTML = "<img src='" + logoAsync + "' class='lp'>";
+            }
+        }).catch(function(){});
+    }
+    validarCnpjEmpresaEmSegundoPlano(unit);
+}
+
+async function buscarBasesEmpresaGemini(query, ctx) {
+    if (!getGoogleGeminiKey()) return [];
+    var ufInfo = (ctx && ctx.uf && ctx.uf !== "Brasil") ? (ctx.uf + (ctx.stateName ? " (" + ctx.stateName + ")" : "")) : "Brasil";
+    var cidHint = (ctx && ctx.cidade) ? (" | Cidade atual: " + ctx.cidade) : "";
+    var prompt = "Cadastro comercial de indústria/fornecedor de varejo no Brasil.\n" +
+        "Empresa pesquisada: \"" + query + "\".\n" +
+        "FILTRO GEOGRÁFICO OBRIGATÓRIO: Retorne APENAS filiais, Centros de Distribuição (CDs) ou bases de atendimento situados EXCLUSIVAMENTE no estado " + ufInfo + cidHint + ". Nunca inclua unidades de outros estados.\n" +
+        "Liste até 6 bases/CDs/polos de distribuição reais da empresa no estado " + ufInfo + " (ex: CD metropolitano, bases regionais como Niterói, Duque de Caxias, Região Serrana, Região dos Lagos, etc. conforme o estado).\n" +
+        "Se souber com certeza o CNPJ de 14 dígitos da filial/CD, preencha \"cnpj\"; senão preencha apenas \"cnpjRaiz\" (8 dígitos) e deixe \"cnpj\" vazio.\n" +
+        "Retorne APENAS JSON válido:\n" +
+        "{\"nomeFantasia\":\"\",\"razaoSocial\":\"\",\"segmento\":\"\",\"porteSugerido\":\"\",\"cnpjRaiz\":\"\",\"siteDominio\":\"\",\"coresBandeira\":[\"#1e3a8a\",\"#2563eb\"],\"contatosResumo\":\"\",\"unidades\":[{\"nomeBase\":\"CD / Filial ...\",\"cidade\":\"\",\"uf\":\"" + (ctx && ctx.uf !== "Brasil" ? ctx.uf : "") + "\",\"enderecoCd\":\"Rodovia/Rua, Bairro, Cidade - UF\",\"cnpj\":\"\",\"regionalSugerida\":\"RJ / Leste\"}]}";
+    var raw = await chamarGoogleGeminiFlash(prompt, [], true, null, { timeoutMs: 15000 });
+    var obj = parseGeminiJSON(raw);
+    if (Array.isArray(obj)) obj = { unidades: obj };
+    if (!obj || typeof obj !== "object") return [];
+    var unidades = Array.isArray(obj.unidades) && obj.unidades.length ? obj.unidades : [obj];
+    var ufCtx = (ctx && ctx.uf && _isValidBrUf(ctx.uf)) ? ctx.uf.toUpperCase() : "";
+    var regOpts = ["Nacional","RJ / Leste","SP","MG / ES","Sul","Nordeste","Centro-Oeste","Norte"];
+    var list = unidades.map(function(u) {
+        var cDig = String(u.cnpj || obj.cnpj || "").replace(/\D/g, "");
+        var rDig = String(u.cnpjRaiz || obj.cnpjRaiz || (cDig.length >= 8 ? cDig.slice(0, 8) : "")).replace(/\D/g, "").slice(0, 8);
+        var uUf = String(u.uf || obj.ufLabel || ufCtx || "").toUpperCase().trim();
+        var regU = regOpts.indexOf(u.regionalSugerida) >= 0 ? u.regionalSugerida : (ufCtx ? _mapearUfParaRegional(ufCtx, "") : ctx.regional);
+        var endCd = String(u.enderecoCd || obj.enderecoCd || [u.cidade, uUf].filter(Boolean).join(" - ")).trim();
+        return {
+            source: "Sugestao",
+            nomeFantasia: String(u.nomeFantasia || obj.nomeFantasia || query).trim(),
+            nomeBase: String(u.nomeBase || u.cidade || ("Base " + (uUf || ufCtx || ""))).trim(),
+            razaoSocial: String(u.razaoSocial || obj.razaoSocial || obj.nomeFantasia || query).trim(),
+            cnpj: cDig.length === 14 ? formatarCNPJ(cDig) : "",
+            cnpjRaiz: rDig,
+            enderecoCd: endCd,
+            cidade: String(u.cidade || "").trim(),
+            uf: uUf,
+            ufLabel: uUf || ufCtx || "BR",
+            segmento: String(u.segmento || obj.segmento || "").trim(),
+            porte: String(u.porteSugerido || obj.porteSugerido || "").trim(),
+            brasilApiValidado: false,
+            regionalSugerida: regU,
+            siteDominio: String(obj.siteDominio || "").trim(),
+            coresBandeira: obj.coresBandeira || null,
+            contatosResumo: String(obj.contatosResumo || "").trim(),
+            logo: ""
+        };
+    });
+    if (ufCtx) {
+        list = list.filter(function(it) {
+            return _itemPertenceUf(it, ufCtx, { strictExternal: true });
+        });
+    }
+    return list;
 }
 
 async function buscarEmpresaComIA(manualTrigger) {
@@ -17005,23 +17834,33 @@ async function buscarEmpresaComIA(manualTrigger) {
     var nmEl = document.getElementById("companyName");
     var stEl = document.getElementById("smartCompanyStatus");
     var cardEl = document.getElementById("smartCompanyConfirmCard");
+    var unitsBox = document.getElementById("smartCompanyUnitsList");
     var btn = document.getElementById("btnSmartCompanySearch");
     var query = (sqEl && sqEl.value.trim()) || (nmEl && nmEl.value.trim()) || "";
     if (!query || query.length < 2) {
         if (manualTrigger) alert("Digite o nome da empresa (ex: PepsiCo) ou CNPJ para buscar.");
         return;
     }
+    var ufAtiva = getUfAtiva();
+    if (manualTrigger && !ufAtiva) {
+        if (typeof abrirSeletorUfModal === "function") abrirSeletorUfModal(true);
+        return;
+    }
     var digits = query.replace(/\D/g, "");
     var isCnpjDirect = (digits.length === 14 && /^[\d.\-\/\s]+$/.test(query));
     _smartCompanyLastAutoQuery = query;
+    _smartCompanyUnits = [];
+    if (unitsBox) { unitsBox.innerHTML = ""; unitsBox.classList.remove("ativo"); }
     var ctx = _obterUfContextoDispositivo();
+    var ufTag = (ctx.uf && ctx.uf !== "Brasil") ? ctx.uf : "Brasil";
+
     if (stEl) {
         stEl.style.display = "block";
         stEl.classList.remove("smart-alert-warn", "smart-alert-ok", "smart-alert-err");
         stEl.style.color = "#1e40af";
         stEl.textContent = isCnpjDirect
             ? ("⏳ Consultando dados do CNPJ " + formatarCNPJ(digits) + "...")
-            : ("⏳ Buscando dados completos para \"" + query + "\" (" + ctx.uf + ")...");
+            : ("⏳ Buscando filiais/CDs de \"" + query + "\" em " + ufTag + "...");
     }
     if (cardEl) { cardEl.classList.remove("ativo"); cardEl.innerHTML = ""; }
     if (btn) { btn.disabled = true; btn.textContent = "Buscando..."; }
@@ -17029,8 +17868,8 @@ async function buscarEmpresaComIA(manualTrigger) {
     if (manualTrigger) {
         iniciarTarefaGuardiao({
             id: "busca_empresa",
-            titulo: "Buscando empresa...",
-            sub: "Camada 1: verificando base local e compartilhada (" + ctx.uf + ")",
+            titulo: "Buscando empresa (" + ufTag + ")...",
+            sub: "Localizando filiais e CDs ativos em " + ufTag,
             canBackground: true,
             totalSteps: 3,
             pageTarget: "pageCompany"
@@ -17038,173 +17877,126 @@ async function buscarEmpresaComIA(manualTrigger) {
     }
 
     try {
-        // CAMADA 1: localStorage + Supabase (Instantâneo)
+        // CAMADA 1: localStorage + Supabase (Instantâneo e filtrado por UF)
         var localSug = buscarEmpresaLocalPrimeiro(query, ctx);
         var sbSug = await buscarEmpresaSupabasePrimeiro(query, ctx);
         var layer1Sug = (sbSug && (!localSug || (Array.isArray(sbSug.products) && sbSug.products.length >= (localSug.products || []).length))) ? sbSug : localSug;
-        if (layer1Sug) {
+
+        if (isCnpjDirect && layer1Sug) {
+            _smartCompanyUnits = [layer1Sug];
             _ultimaSugestaoEmpresaIA = layer1Sug;
-            _renderConfirmCardEmpresaIA(layer1Sug);
+            renderSmartCompanyUnitsList(ufTag);
             _aplicarStatusEmpresaCompletude(stEl, layer1Sug.cnpj, layer1Sug.source, layer1Sug.cnpjRaiz);
             if (manualTrigger) {
-                concluirTarefaGuardiao("⚡ Empresa encontrada!", layer1Sug.razaoSocial + " (" + (layer1Sug.source === "Local" ? "Salva Localmente" : "Base Compartilhada") + ")", {
-                    keepOverlayMs: 1100,
-                    onReturn: function(){ showPage("pageCompany"); }
-                });
-            }
-            if (!layer1Sug.logo) {
-                _buscarLogoIndustriaAuto(layer1Sug.nomeFantasia, layer1Sug.siteDominio, null).then(function(logoAsync) {
-                    if (!logoAsync) return;
-                    layer1Sug.logo = logoAsync;
-                    var w = document.getElementById("smartCompCardLogoWrap");
-                    if (w && w.parentNode) {
-                        var img = document.createElement("img");
-                        img.src = logoAsync; img.className = "smart-comp-logo"; img.alt = "Logo";
-                        w.parentNode.replaceChild(img, w);
-                    } else if (!pendingCompanyLogo && document.getElementById("companyLogoPreview") && !document.getElementById("companyLogoPreview").innerHTML.trim()) {
-                        pendingCompanyLogo = logoAsync;
-                        document.getElementById("companyLogoPreview").innerHTML = "<img src='" + logoAsync + "' class='lp'>";
-                    }
-                }).catch(function(){});
+                concluirTarefaGuardiao("⚡ Empresa encontrada!", layer1Sug.razaoSocial, { keepOverlayMs: 900, onReturn: function(){ showPage("pageCompany"); } });
             }
             return;
         }
 
-        // CAMADA 2: APIs Públicas Abertas (CNPJ oficial + OpenStreetMap/Nominatim regional)
-        if (manualTrigger) {
-            atualizarProgressoTarefa("Camada 2: consultando registros públicos...", query + " (" + ctx.uf + ")", 1, 3);
-        }
-        var bApiDireta = null;
-        if (isCnpjDirect && typeof consultarBrasilApiCnpj === "function") {
-            bApiDireta = await consultarBrasilApiCnpj(digits);
-        }
-        var nomEndHint = "";
-        if (!isCnpjDirect && typeof buscarOpenStreetMapNominatim === "function") {
-            try {
-                var nomList = await buscarOpenStreetMapNominatim(query, ctx);
-                if (Array.isArray(nomList) && nomList.length && nomList[0].endereco) {
-                    nomEndHint = nomList[0].endereco;
+        if (isCnpjDirect) {
+            if (manualTrigger) atualizarProgressoTarefa("Consultando CNPJ oficial...", formatarCNPJ(digits), 1, 3);
+            var bApiDireta = await consultarBrasilApiCnpj(digits, { timeoutMs: 8000 });
+            if (bApiDireta) {
+                var regCnpj = _mapearUfParaRegional(bApiDireta.uf || ctx.uf, "");
+                var unitCnpj = {
+                    source: "CadastroOficial",
+                    nomeFantasia: bApiDireta.nomeFantasia || bApiDireta.razaoSocial,
+                    nomeBase: [bApiDireta.municipio, bApiDireta.uf].filter(Boolean).join(" / ") || "CNPJ Direto",
+                    razaoSocial: bApiDireta.razaoSocial,
+                    cnpj: bApiDireta.cnpj,
+                    cnpjRaiz: digits.slice(0, 8),
+                    enderecoCd: bApiDireta.endereco || "",
+                    segmento: bApiDireta.cnae || "",
+                    porte: bApiDireta.porte || "",
+                    brasilApiValidado: true,
+                    regionalSugerida: regCnpj,
+                    uf: bApiDireta.uf || ctx.uf,
+                    ufLabel: bApiDireta.uf || ctx.uf,
+                    siteDominio: "",
+                    contatosResumo: bApiDireta.telefone || "",
+                    logo: ""
+                };
+                _smartCompanyUnits = [unitCnpj];
+                selecionarUnidadeEmpresa(0);
+                if (manualTrigger) {
+                    concluirTarefaGuardiao("✅ CNPJ localizado!", unitCnpj.razaoSocial + " (" + unitCnpj.ufLabel + ")", { keepOverlayMs: 900, onReturn: function(){ showPage("pageCompany"); } });
                 }
-            } catch(eNomEmp) {}
+                return;
+            }
         }
 
-        if (!isCnpjDirect && !getGoogleGeminiKey() && !nomEndHint) {
+        // CAMADA 2 & 3 EM PARALELO (Mapa OSM na UF + Bases/CDs na UF via Gemini 15s sem google_search)
+        if (manualTrigger) {
+            atualizarProgressoTarefa("Buscando bases e CDs em " + ufTag + "...", query, 1, 3);
+        }
+        var promNom = (typeof buscarOpenStreetMapNominatim === "function")
+            ? buscarOpenStreetMapNominatim(query, ctx).catch(function(){ return []; })
+            : Promise.resolve([]);
+        var promGem = getGoogleGeminiKey()
+            ? buscarBasesEmpresaGemini(query, ctx).catch(function(){ return []; })
+            : Promise.resolve([]);
+
+        var resPair = await Promise.all([promNom, promGem]);
+        var nomList = Array.isArray(resPair[0]) ? resPair[0] : [];
+        var gemUnits = Array.isArray(resPair[1]) ? resPair[1] : [];
+
+        var mergedUnits = [];
+        var seenU = {};
+        function _pushUnit(u) {
+            if (!u) return;
+            var k = normProdKey((u.nomeBase || "") + "|" + (u.enderecoCd || "").slice(0, 28) + "|" + (u.cnpj || ""));
+            if (!k) k = String(mergedUnits.length);
+            if (!seenU[k]) { seenU[k] = true; mergedUnits.push(u); }
+        }
+        if (layer1Sug) _pushUnit(layer1Sug);
+        gemUnits.forEach(_pushUnit);
+        nomList.forEach(function(nm) {
+            _pushUnit({
+                source: "OpenStreetMap",
+                nomeFantasia: nm.nome || query,
+                nomeBase: [nm.bairro || nm.municipio || "Unidade", nm.uf || ufTag].filter(Boolean).join(" / "),
+                razaoSocial: (gemUnits[0] && gemUnits[0].razaoSocial) || nm.nome || query,
+                cnpj: "",
+                cnpjRaiz: (gemUnits[0] && gemUnits[0].cnpjRaiz) || "",
+                enderecoCd: nm.endereco || "",
+                uf: nm.uf || ufTag,
+                ufLabel: nm.uf || ufTag,
+                segmento: (gemUnits[0] && gemUnits[0].segmento) || "",
+                porte: "",
+                brasilApiValidado: false,
+                regionalSugerida: ctx.regional,
+                siteDominio: (gemUnits[0] && gemUnits[0].siteDominio) || "",
+                contatosResumo: "",
+                logo: ""
+            });
+        });
+
+        _smartCompanyUnits = mergedUnits;
+        if (mergedUnits.length) {
+            renderSmartCompanyUnitsList(ufTag);
+            if (stEl) {
+                stEl.style.display = "block";
+                stEl.classList.remove("smart-alert-warn", "smart-alert-err");
+                stEl.classList.add("smart-alert-ok");
+                stEl.textContent = "📍 " + mergedUnits.length + " filial(is)/CD(s) encontrada(s) em " + ufTag + ". Toque na sua base de atendimento abaixo para preencher.";
+            }
             if (manualTrigger) {
-                falharTarefaGuardiao("Chave necessária", "Configure sua chave de acesso nas Configurações ou informe os 14 dígitos do CNPJ.");
+                concluirTarefaGuardiao("📍 " + mergedUnits.length + " unidade(s) em " + ufTag, "Toque na filial/CD desejada na lista.", { keepOverlayMs: 900, onReturn: function(){ showPage("pageCompany"); } });
+            }
+        } else {
+            if (manualTrigger) {
+                falharTarefaGuardiao("Nenhuma unidade em " + ufTag, "Você pode preencher os dados manualmente normalmente.");
             }
             if (stEl) {
                 stEl.classList.add("smart-alert-warn");
-                stEl.textContent = "Configure a chave de acesso nas Configurações ou informe os 14 dígitos do CNPJ para buscar.";
-            }
-            return;
-        }
-
-        // CAMADA 3: Gemini Padrão (SEM google_search) para cruzar Razão Social, Segmento, CD e Raiz CNPJ
-        var obj = {};
-        if (getGoogleGeminiKey()) {
-            if (manualTrigger) {
-                atualizarProgressoTarefa("Camada 3: completando perfil da indústria...", query + " (" + ctx.uf + ")", 2, 3);
-            }
-            var qRef = bApiDireta ? (bApiDireta.razaoSocial + " (CNPJ " + bApiDireta.cnpj + ")") : query;
-            var prompt = "Cadastro corporativo de indústria/fornecedor de varejo no Brasil. Indústria: \"" + qRef + "\".\n" +
-                "Localização atual do promotor: " + (ctx.cidade ? ctx.cidade + "/" : "") + ctx.uf + " (Regional: " + ctx.regional + ").\n" +
-                (nomEndHint ? "Endereço localizado na região: \"" + nomEndHint + "\".\n" : "") +
-                "Informe Razão Social oficial, segmento, endereço provável do Centro de Distribuição/filial regional e site oficial. " +
-                "Se souber com certeza o CNPJ completo de 14 dígitos da matriz/filial regional, preencha \"cnpj\"; se souber apenas a raiz (8 primeiros dígitos), preencha \"cnpjRaiz\" e deixe \"cnpj\" vazio (nunca invente o sufixo de filial).\n" +
-                "Retorne APENAS JSON válido:\n" +
-                "{\"nomeFantasia\":\"\",\"razaoSocial\":\"\",\"cnpj\":\"\",\"cnpjRaiz\":\"\",\"enderecoCd\":\"\",\"segmento\":\"\",\"porteSugerido\":\"\",\"regionalSugerida\":\"Nacional|RJ / Leste|SP|MG / ES|Sul|Nordeste|Centro-Oeste|Norte\",\"ufLabel\":\"\",\"siteDominio\":\"\",\"coresBandeira\":[\"#1e3a8a\",\"#2563eb\"],\"contatosResumo\":\"\"}";
-            var raw = await chamarGoogleGeminiFlash(prompt, [], true, null, { timeoutMs: 90000 });
-            obj = parseGeminiJSON(raw);
-            if (Array.isArray(obj)) obj = obj[0] || {};
-        }
-
-        if (!bApiDireta && (!obj || (!obj.razaoSocial && !obj.nomeFantasia)) && !nomEndHint) {
-            throw new Error("Não foi possível identificar a empresa.");
-        }
-
-        var cnpjDigits = bApiDireta ? digits : String(obj.cnpj || "").replace(/\D/g, "");
-        var cnpjRaiz = String(obj.cnpjRaiz || (cnpjDigits.length >= 8 ? cnpjDigits.slice(0, 8) : "")).replace(/\D/g, "").slice(0, 8);
-        var bApiData = bApiDireta || null;
-        var brasilApiValidado = !!bApiDireta;
-        if (!bApiData && cnpjDigits.length === 14 && typeof consultarBrasilApiCnpj === "function") {
-            if (stEl) stEl.textContent = "⏳ Validando CNPJ " + formatarCNPJ(cnpjDigits) + "...";
-            try {
-                bApiData = await consultarBrasilApiCnpj(cnpjDigits);
-                if (bApiData && bApiData.razaoSocial) brasilApiValidado = true;
-            } catch(eBrEmp) {
-                console.warn("Cadastro CNPJ fallback:", eBrEmp && eBrEmp.message ? eBrEmp.message : eBrEmp);
+                stEl.textContent = !getGoogleGeminiKey()
+                    ? "Nenhuma unidade encontrada para \"" + query + "\" em " + ufTag + ". Configure a chave Gemini ou preencha manualmente."
+                    : "Nenhuma filial localizada automaticamente em " + ufTag + ". Preencha os campos manualmente.";
             }
         }
-
-        // Se só temos a raiz de 8 dígitos, consulta a matriz apenas para enriquecer Razão Social / CNAE / Porte
-        var bMatriz = null;
-        if (!bApiData && cnpjDigits.length !== 14 && cnpjRaiz.length === 8) {
-            var mat14 = _calcularCnpjMatrizFromRaiz(cnpjRaiz);
-            if (mat14 && typeof consultarBrasilApiCnpj === "function") {
-                try { bMatriz = await consultarBrasilApiCnpj(mat14); } catch(eMatEmp) {}
-            }
-        }
-
-        var cnpjFmt = (bApiData && bApiData.cnpj) ? bApiData.cnpj : (cnpjDigits.length === 14 ? formatarCNPJ(cnpjDigits) : "");
-        var razaoFinal = (bApiData && bApiData.razaoSocial) ? bApiData.razaoSocial : String(obj.razaoSocial || (bMatriz && bMatriz.razaoSocial) || obj.nomeFantasia || query).trim();
-        var nomeSug = String(obj.nomeFantasia || (bApiData && bApiData.nomeFantasia) || (bMatriz && bMatriz.nomeFantasia) || razaoFinal || query).trim();
-        var regOpts = ["Nacional","RJ / Leste","SP","MG / ES","Sul","Nordeste","Centro-Oeste","Norte"];
-        var regSug = regOpts.indexOf(obj.regionalSugerida) >= 0 ? obj.regionalSugerida : ctx.regional;
-        var segFinal = String(obj.segmento || (bApiData && bApiData.cnae) || (bMatriz && bMatriz.cnae) || "").trim();
-        var endFinal = String(obj.enderecoCd || nomEndHint || (bApiData && bApiData.endereco) || "").trim();
-        var porteFinal = (bApiData && bApiData.porte) || (bMatriz && bMatriz.porte) || String(obj.porteSugerido || "").trim();
-
-        _ultimaSugestaoEmpresaIA = {
-            source: brasilApiValidado ? "CadastroOficial" : "Sugestao",
-            nomeFantasia: nomeSug,
-            razaoSocial: razaoFinal,
-            cnpj: cnpjFmt,
-            cnpjRaiz: cnpjRaiz,
-            enderecoCd: endFinal,
-            segmento: segFinal,
-            porte: porteFinal,
-            brasilApiValidado: brasilApiValidado,
-            regionalSugerida: regSug,
-            ufLabel: String((bApiData && bApiData.uf) || obj.ufLabel || ctx.uf || regSug).trim(),
-            siteDominio: String(obj.siteDominio || "").trim(),
-            contatosResumo: String(obj.contatosResumo || (bApiData && bApiData.telefone) || "").trim(),
-            logo: ""
-        };
-
-        _renderConfirmCardEmpresaIA(_ultimaSugestaoEmpresaIA);
-        _aplicarStatusEmpresaCompletude(stEl, _ultimaSugestaoEmpresaIA.cnpj, _ultimaSugestaoEmpresaIA.source, _ultimaSugestaoEmpresaIA.cnpjRaiz);
-
-        var temCnpjCompleto = String(_ultimaSugestaoEmpresaIA.cnpj || "").replace(/\D/g, "").length === 14;
-        if (manualTrigger) {
-            concluirTarefaGuardiao(
-                temCnpjCompleto ? "✅ Empresa localizada!" : "⚠️ Dados preenchidos (complete o CNPJ)",
-                _ultimaSugestaoEmpresaIA.razaoSocial + " (" + _ultimaSugestaoEmpresaIA.ufLabel + ")",
-                { keepOverlayMs: 1200, onReturn: function(){ showPage("pageCompany"); } }
-            );
-        }
-
-        // Logo carregado de forma assíncrona sem bloquear formulário nem botão Salvar
-        var sugRef = _ultimaSugestaoEmpresaIA;
-        _buscarLogoIndustriaAuto(nomeSug, obj.siteDominio, obj.coresBandeira).then(function(logoAsync) {
-            if (!logoAsync) return;
-            sugRef.logo = logoAsync;
-            var wrapEl = document.getElementById("smartCompCardLogoWrap");
-            if (wrapEl && wrapEl.parentNode) {
-                var img = document.createElement("img");
-                img.src = logoAsync;
-                img.className = "smart-comp-logo";
-                img.alt = "Logo";
-                wrapEl.parentNode.replaceChild(img, wrapEl);
-            } else if (!pendingCompanyLogo && document.getElementById("companyLogoPreview") && !document.getElementById("companyLogoPreview").innerHTML.trim()) {
-                pendingCompanyLogo = logoAsync;
-                document.getElementById("companyLogoPreview").innerHTML = "<img src='" + logoAsync + "' class='lp'>";
-            }
-        }).catch(function(){});
     } catch(err) {
         var msgAmig = _traduzirErroAmigavelIA(err);
-        if (manualTrigger) {
-            falharTarefaGuardiao("Busca não concluída", msgAmig);
-        }
+        if (manualTrigger) falharTarefaGuardiao("Busca não concluída", msgAmig);
         if (stEl) {
             stEl.classList.remove("smart-alert-ok");
             stEl.classList.add("smart-alert-err");
@@ -17552,7 +18344,7 @@ async function gerarCatalogoAutomaticoEmpresaIA() {
                     "Liste de 20 a 32 principais SKUs comerciais dessa indústria na região com EAN/código quando conhecido.\n" +
                     "Retorne APENAS JSON válido:\n" +
                     "{\"produtos\":[{\"nome\":\"...\",\"gramatura\":\"45g\",\"quantidade\":24,\"codigo\":\"789...\",\"categoria\":\"...\",\"status\":\"Ativo\"}]}";
-                var raw = await chamarGoogleGeminiFlash(prompt, [], true);
+                var raw = await chamarGoogleGeminiFlash(prompt, [], true, null, { timeoutMs: 15000 });
                 var obj = extrairJsonGemini(raw);
                 var arr = Array.isArray(obj) ? obj : (obj && Array.isArray(obj.produtos) ? obj.produtos : []);
                 var seenKeys = {};
@@ -17965,12 +18757,12 @@ function confirmarSalvarCatalogoIA() {
   </div>
 </div>
 
-<!-- MODAL ONBOARDING INICIAL (IDIOMA & LOCALIZACAO) -->
+<!-- MODAL ONBOARDING INICIAL (IDIOMA & UF DE ATUACAO) -->
 <div id="modalOnboarding" class="onb-overlay">
   <div class="onb-box">
     <img data-lcs-asset="logo-lcs" class="onb-logo" alt="LocalShelf">
     <div class="onb-title" data-i18n="onb_welcome_title">Bem-vindo ao LocalShelf</div>
-    <div class="onb-sub" data-i18n="onb_welcome_sub">Configure seu idioma e a localiza&ccedil;&atilde;o inicial para preencher sua Regional automaticamente.</div>
+    <div class="onb-sub" data-i18n="onb_welcome_sub">Configure seu idioma e a sua UF de atua&ccedil;&atilde;o para filtrar buscas no seu estado.</div>
 
     <div class="onb-sec-lbl" data-i18n="onb_lang_lbl">1. Escolha o Idioma</div>
     <div class="onb-lang-grid">
@@ -17979,14 +18771,35 @@ function confirmarSalvarCatalogoIA() {
       <button type="button" class="onb-lang-btn" data-lang-opt="es" onclick="setAppLanguage('es', false)"><span>&#127466;&#127480;</span><span>Espa&ntilde;ol</span></button>
     </div>
 
-    <div class="onb-sec-lbl" data-i18n="onb_loc_lbl">2. Localiza&ccedil;&atilde;o &amp; Regional</div>
+    <div class="onb-sec-lbl" data-i18n="onb_uf_lbl">2. Qual &eacute; a sua UF de atua&ccedil;&atilde;o?</div>
     <div class="onb-loc-card">
-      <div style="font-size:11px;color:#065f46;line-height:1.45;margin-bottom:8px" data-i18n="onb_loc_desc">Detectamos sua cidade/UF para configurar sua Regional e preparar futuros check-ins nas lojas.</div>
-      <button type="button" class="onb-btn-loc" onclick="solicitarLocalizacaoUsuario('onb')" data-i18n="onb_btn_allow_loc">&#128205; Permitir Localiza&ccedil;&atilde;o durante o uso</button>
+      <div style="font-size:11px;color:#065f46;line-height:1.45;margin-bottom:8px" data-i18n="onb_loc_desc">Selecione seu estado ou use o GPS. Todas as buscas de CDs, lojas e mix ser&atilde;o filtradas por esta UF.</div>
+      <select id="onbUfSelect" class="onb-uf-select" onchange="selecionarUfOnboarding(this.value)">
+        <option value="">-- Selecione seu Estado (UF) --</option>
+      </select>
+      <button type="button" class="onb-btn-loc" onclick="solicitarLocalizacaoUsuario('onb')" data-i18n="onb_btn_allow_loc">&#128205; Detectar UF via GPS</button>
       <div class="onb-loc-status" id="onbLocationStatus"></div>
     </div>
 
-    <button type="button" class="onb-btn-skip" onclick="continuarSemLocalizacaoOnboarding()" data-i18n="onb_btn_skip_loc">Continuar sem localiza&ccedil;&atilde;o</button>
+    <button type="button" id="btnConfirmarOnbUf" onclick="confirmarUfOnboarding()" style="width:100%;background:linear-gradient(135deg,#1d4ed8,#2563eb);color:#fff;border:none;border-radius:10px;padding:11px 14px;font-size:13px;font-weight:800;cursor:pointer;margin:0 0 6px" data-i18n="onb_btn_confirm_uf">Confirmar UF e Continuar</button>
+    <button type="button" class="onb-btn-skip" onclick="continuarSemLocalizacaoOnboarding()" data-i18n="onb_btn_skip_loc">Definir depois</button>
+  </div>
+</div>
+
+<!-- MODAL SELETOR GLOBAL DE UF (TRAVA GEOGRAFICA) -->
+<div id="modalUfSeletor" class="onb-overlay" onclick="if(event.target===this && !window._ufModalObrigatorio) fecharSeletorUfModal()">
+  <div class="onb-box">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px">
+      <div class="onb-title" style="margin:0;font-size:17px;text-align:left">&#128205; Qual &eacute; a sua UF de atua&ccedil;&atilde;o?</div>
+      <button type="button" id="btnCloseUfSeletor" onclick="fecharSeletorUfModal()" style="background:#e2e8f0;color:#1e293b;border:none;border-radius:50%;width:28px;height:28px;cursor:pointer;margin:0;flex-shrink:0">&#10005;</button>
+    </div>
+    <div class="onb-sub" style="text-align:left;margin-bottom:10px">Todas as buscas de empresas, CDs e lojas s&atilde;o restritas ao estado selecionado.</div>
+    <div id="modalUfChipsGrid" class="uf-grid-chips"></div>
+    <select id="modalUfSelect" class="onb-uf-select" onchange="if(this.value) confirmarSelecaoUfModal(this.value)">
+      <option value="">-- Escolha na lista de Estados --</option>
+    </select>
+    <button type="button" class="onb-btn-loc" onclick="solicitarLocalizacaoUsuario('modal')" style="margin-bottom:6px">&#128205; Detectar UF pelo GPS</button>
+    <div class="onb-loc-status" id="modalUfStatus" style="margin-top:4px;text-align:left"></div>
   </div>
 </div>
 
