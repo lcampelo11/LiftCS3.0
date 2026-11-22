@@ -151,8 +151,9 @@ tr.prod-del td{text-decoration:line-through;opacity:.5}
 .mb .mi{font-size:26px}
 .mb .md{font-size:11px;color:#64748b;font-weight:400;margin-top:2px}
 /* TOPBAR LOCALSHELF */
-.topbar{background:#041326;display:flex;align-items:center;justify-content:space-between;padding:0 10px;height:44px}
+.topbar{position:sticky;top:0;z-index:40;background:#041326;display:flex;align-items:center;justify-content:space-between;padding:0 10px;height:44px;box-shadow:0 2px 8px rgba(0,0,0,0.2)}
 .topbar-logo{height:40px;object-fit:contain}
+.topbar-back{background:rgba(255,255,255,0.14);border:1px solid rgba(255,255,255,0.28);color:#fff;font-size:12px;font-weight:700;padding:5px 10px;border-radius:7px;cursor:pointer;margin:0 8px 0 0;white-space:nowrap;flex-shrink:0}
 .topbar-hb{background:none;border:none;color:#fff;font-size:22px;cursor:pointer;padding:2px 6px;line-height:1}
 /* HEADER FAIXA */
 .ph-faixa{position:relative;overflow:hidden;min-height:88px;display:flex;align-items:stretch;margin-bottom:12px;background:transparent}
@@ -808,6 +809,37 @@ body.dark-mode .cat-ia-row.checked{background:#2e1065!important;border-color:#a8
 body.dark-mode .gemini-models-list{background:#0f172a!important;border-color:#334155!important}
 body.dark-mode .gemini-model-chip{background:#1e293b!important;color:#93c5fd!important;border-color:#334155!important}
 body.dark-mode .gemini-model-chip.ativo{background:#2563eb!important;color:#fff!important;border-color:#60a5fa!important}
+/* Mix da Loja, Batch Portfolio, Guardiao Desambiguacao & Relatorios por Periodo */
+.comp-batch-bar{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:6px 0 8px}
+.comp-batch-btn{background:#eff6ff;color:#1e40af;border:1px solid #bfdbfe;border-radius:7px;padding:5px 9px;font-size:11px;font-weight:700;cursor:pointer;margin:0}
+.mix-loja-card{border:1.5px solid #93c5fd;background:#f8fafc;border-radius:12px;padding:12px;margin:12px 0}
+.mix-loja-head{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;margin-bottom:6px}
+.mix-loja-title{font-size:13px;font-weight:800;color:#1e3a8a}
+.mix-loja-list{max-height:240px;overflow-y:auto;border:1px solid #e2e8f0;border-radius:8px;background:#fff;padding:4px}
+.mix-loja-row{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:7px 8px;border-bottom:1px solid #f1f5f9;font-size:12px}
+.mix-loja-row:last-child{border-bottom:none}
+.mix-pill-btn{border-radius:7px;padding:4px 9px;font-size:11px;font-weight:800;cursor:pointer;border:1px solid;margin:0;white-space:nowrap;flex-shrink:0}
+.mix-pill-btn.on{background:#dcfce7;color:#166534;border-color:#86efac}
+.mix-pill-btn.off{background:#fee2e2;color:#b91c1c;border-color:#fca5a5}
+.reg-banner-row{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.reg-toggle-lbl{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:700;cursor:pointer;color:#1e40af;white-space:nowrap}
+.relp-pills{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 10px}
+.relp-pill{background:#f1f5f9;color:#334155;border:1px solid #cbd5e1;border-radius:8px;padding:7px 11px;font-size:12px;font-weight:700;cursor:pointer;margin:0}
+.relp-pill.ativo{background:#1e40af;color:#fff;border-color:#1e40af}
+.relp-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:12px}
+.relp-kpi{background:#f8fafc;border:1px solid #cbd5e1;border-radius:10px;padding:10px}
+.relp-kpi-lbl{font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase}
+.relp-kpi-val{font-size:18px;font-weight:800;color:#1e3a8a;margin-top:2px}
+.relp-sec{background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:10px 12px;margin-bottom:10px;font-size:12px}
+.relp-sec h4{margin:0 0 6px;font-size:13px;color:#1e3a8a}
+.gchat-disambig-wrap{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.gchat-disambig-btn{background:rgba(16,185,129,0.22);color:#a7f3d0;border:1px solid rgba(52,211,153,0.6);border-radius:8px;padding:5px 9px;font-size:11px;font-weight:700;cursor:pointer;margin:0}
+body.dark-mode .comp-batch-btn{background:#1e293b!important;color:#93c5fd!important;border-color:#334155!important}
+body.dark-mode .mix-loja-card{background:#1e293b!important;border-color:#334155!important}
+body.dark-mode .mix-loja-title,body.dark-mode .relp-kpi-val,body.dark-mode .relp-sec h4{color:#93c5fd!important}
+body.dark-mode .mix-loja-list,body.dark-mode .relp-sec,body.dark-mode .relp-kpi{background:#0f172a!important;border-color:#334155!important;color:#e2e8f0!important}
+body.dark-mode .relp-pill{background:#1e293b!important;color:#cbd5e1!important;border-color:#334155!important}
+body.dark-mode .relp-pill.ativo{background:#2563eb!important;color:#fff!important;border-color:#60a5fa!important}
 </style>
 </head>
 <body>
@@ -859,6 +891,9 @@ body.dark-mode .gemini-model-chip.ativo{background:#2563eb!important;color:#fff!
     </button>
     <button class="hb-item" onclick="closeHamburger();goToLogistica()">
       <span class="hb-icon">&#128666;</span> <span data-i18n="hb_logistics">Entregas do Dia (Log&iacute;stica)</span>
+    </button>
+    <button class="hb-item" onclick="closeHamburger();abrirRelatoriosPeriodo()">
+      <span class="hb-icon">&#128202;</span> <span>Relat&oacute;rios por Per&iacute;odo</span>
     </button>
     <div class="hb-sep"></div>
     <button class="hb-item" onclick="toggleDarkMode(!document.body.classList.contains('dark-mode'))" id="hbDarkBtn">
@@ -944,6 +979,7 @@ body.dark-mode .gemini-model-chip.ativo{background:#2563eb!important;color:#fff!
     <button class="mb" onclick="abrirAuditoriaIA()" style="border-left:3px solid #7c3aed;background:linear-gradient(135deg,#faf5ff,#f3e8ff)"><span class="mi">&#128247;</span><div><div style="color:#7c3aed;font-weight:700" data-i18n="menu_ai_audit">Auditoria por Imagem IA</div><div class="md" data-i18n="menu_ai_audit_sub">Analise execu&ccedil;&atilde;o com fotos</div></div></button>
     <button class="mb" onclick="goToTrocas()"><span class="mi">&#128260;</span><div><div data-i18n="menu_exchanges">Hist&oacute;rico de Trocas</div><div class="md" data-i18n="menu_exchanges_sub">Registro de produtos trocados</div></div></button>
     <button class="mb" onclick="goToRelatorios()"><span class="mi">&#128196;</span><div><div data-i18n="menu_reports">Relat&oacute;rios</div><div class="md" data-i18n="menu_reports_sub">PDFs e exporta&ccedil;&otilde;es</div></div></button>
+    <button class="mb" onclick="abrirRelatoriosPeriodo()" style="border-left:3px solid #2563eb;background:linear-gradient(135deg,#eff6ff,#f8fafc)"><span class="mi">&#128202;</span><div><div style="color:#1e40af;font-weight:700">Relat&oacute;rios por Per&iacute;odo</div><div class="md">Consolidado di&aacute;rio, semanal, quinzenal, mensal ou datas</div></div></button>
     <button class="mb" onclick="goToConfig()"><span class="mi">&#9881;</span><div><div data-i18n="menu_settings">Configura&ccedil;&otilde;es</div><div class="md" data-i18n="menu_settings_sub">Armazenamento e dados</div></div></button>
     <div style="margin:8px 0 4px;padding:6px 10px;background:#f1f5f9;border-radius:8px;font-size:11px;font-weight:700;color:#64748b;letter-spacing:0.5px;text-align:center" data-i18n="menu_internal_header">&#128274; DADOS PARA CONTROLE INTERNO</div>
     <button class="mb" onclick="goToPrecos()" style="border-color:#16a34a"><span class="mi">&#128178;</span><div><div style="color:#16a34a" data-i18n="menu_prices">Tabela de Pre&ccedil;os</div><div class="md" data-i18n="menu_prices_sub">Pre&ccedil;os por produto (privado)</div></div></button>
@@ -1306,31 +1342,37 @@ body.dark-mode .gemini-model-chip.ativo{background:#2563eb!important;color:#fff!
     </div>
     <span id="compMixCounter" style="font-size:11px;color:#475569;font-weight:600"></span>
   </div>
+  <div class="comp-batch-bar">
+    <button type="button" class="comp-batch-btn" onclick="selecionarTodosEmpresa(true)">&#9989; Selecionar Todos</button>
+    <button type="button" class="comp-batch-btn" onclick="selecionarTodosEmpresa(false)">&#10060; Desmarcar Todos</button>
+    <button type="button" class="comp-batch-btn" onclick="inverterSelecaoEmpresa()">&#128260; Inverter Sele&ccedil;&atilde;o</button>
+  </div>
 
-  <div style="max-height:360px;overflow-y:auto;border:1px solid #e2e8f0;border-radius:8px"><table><thead><tr><th>&#11088;</th><th>SKU / Produto</th><th>Gram.</th><th>Mix Regional</th><th>A&ccedil;&atilde;o</th></tr></thead><tbody id="companyProductsBody"><tr><td colspan="5" style="text-align:center;color:#999">Nenhum produto</td></tr></tbody></table></div>
+  <div style="max-height:360px;overflow-y:auto;border:1px solid #e2e8f0;border-radius:8px"><table><thead><tr><th style="width:28px;text-align:center">&#10003;</th><th>&#11088;</th><th>SKU / Produto</th><th>Gram.</th><th>Mix Regional</th><th>A&ccedil;&atilde;o</th></tr></thead><tbody id="companyProductsBody"><tr><td colspan="6" style="text-align:center;color:#999">Nenhum produto</td></tr></tbody></table></div>
   <!-- GUIA DE EXECUÇÃO DA EMPRESA -->
-  <div style="margin-top:16px;border:2px solid #f97316;border-radius:10px;padding:14px;background:#faf5ff;box-shadow:0 0 16px rgba(249,115,22,0.35)">
-    <div style="font-weight:700;color:#7c3aed;font-size:14px;margin-bottom:6px">&#129302; Guia de Execucao da Empresa</div>
-    <div style="font-size:11px;color:#7c3aed;margin-bottom:10px">Cole o texto do guia de loja perfeita ou tire foto/PDF. A IA usara esse guia para auditar as lojas.</div>
+  <div style="margin-top:16px;border:2px solid #f97316;border-radius:10px;padding:14px;background:#faf5ff;box-shadow:0 0 16px rgba(249,115,22,0.22)">
+    <div style="font-weight:700;color:#7c3aed;font-size:14px;margin-bottom:4px">&#129302; Guia de Execu&ccedil;&atilde;o da Empresa</div>
+    <div style="font-size:11px;color:#6d28d9;margin-bottom:10px">Siga as 3 etapas: <b>1. Enviar Arquivo/Texto</b> &#8594; <b>2. Ler Guia Completo</b> &#8594; <b>3. Salvar Guia</b>.</div>
+    <div style="font-size:11px;font-weight:800;color:#4c1d95;margin-bottom:5px;text-transform:uppercase">1. Enviar Arquivo/Texto</div>
     <div style="display:flex;gap:6px;margin-bottom:8px">
-      <button onclick="switchGuiaTab('texto')" id="tabGuiaTexto" style="flex:1;padding:8px;border-radius:8px;border:2px solid #7c3aed;background:#7c3aed;color:#fff;font-size:12px;cursor:pointer">&#128220; Colar Texto</button>
-      <button onclick="switchGuiaTab('foto')" id="tabGuiaFoto" style="flex:1;padding:8px;border-radius:8px;border:2px solid #e2e8f0;background:#f8fafc;color:#64748b;font-size:12px;cursor:pointer">&#128247; Foto/PDF</button>
-      <button onclick="switchGuiaTab('pilula')" id="tabGuiaPilula" style="flex:1;padding:8px;border-radius:8px;border:2px solid #e2e8f0;background:#f8fafc;color:#64748b;font-size:12px;cursor:pointer">&#9889; P&iacute;lulas</button>
+      <button onclick="switchGuiaTab('texto')" id="tabGuiaTexto" style="flex:1;padding:8px;border-radius:8px;border:2px solid #7c3aed;background:#7c3aed;color:#fff;font-size:12px;font-weight:700;cursor:pointer">&#128220; Colar Texto</button>
+      <button onclick="switchGuiaTab('foto')" id="tabGuiaFoto" style="flex:1;padding:8px;border-radius:8px;border:2px solid #4f46e5;background:#eef2ff;color:#3730a3;font-size:12px;font-weight:700;cursor:pointer">&#128247; Foto/PDF</button>
+      <button onclick="switchGuiaTab('pilula')" id="tabGuiaPilula" style="flex:1;padding:8px;border-radius:8px;border:2px solid #e2e8f0;background:#f8fafc;color:#475569;font-size:12px;font-weight:700;cursor:pointer">&#9889; P&iacute;lulas</button>
     </div>
     <div id="painelGuiaTexto">
-      <textarea id="guiaEmpresaTexto" placeholder="Cole aqui o texto do guia de execucao da empresa..." style="width:100%;min-height:100px;border:1px solid #c4b5fd;border-radius:8px;padding:10px;font-size:12px;resize:vertical"></textarea>
+      <textarea id="guiaEmpresaTexto" placeholder="Cole aqui o texto completo do guia de execucao da empresa..." style="width:100%;min-height:100px;border:1px solid #c4b5fd;border-radius:8px;padding:10px;font-size:12px;resize:vertical"></textarea>
     </div>
     <div id="painelGuiaFoto" style="display:none">
       <div id="gridGuiaFotos" style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:8px"></div>
       <div style="display:flex;gap:6px">
-        <button onclick="document.getElementById('fotoGuiaCamera').click()" style="flex:1;background:#7c3aed;color:#fff;border:none;border-radius:8px;padding:10px;cursor:pointer;font-size:12px">&#128247; Camera</button>
-        <button onclick="document.getElementById('fotoGuiaGaleria').click()" style="flex:1;background:#a78bfa;color:#fff;border:none;border-radius:8px;padding:10px;cursor:pointer;font-size:12px">&#128444; Galeria/PDF</button>
+        <button type="button" onclick="document.getElementById('fotoGuiaCamera').click()" style="flex:1;background:#6d28d9;color:#fff;border:none;border-radius:8px;padding:10px;cursor:pointer;font-size:12px;font-weight:700">&#128247; C&acirc;mera</button>
+        <button type="button" onclick="document.getElementById('fotoGuiaGaleria').click()" style="flex:1;background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;border:none;border-radius:8px;padding:10px;cursor:pointer;font-size:12px;font-weight:700;box-shadow:0 2px 8px rgba(79,70,229,0.3)">&#128196; Galeria / PDF</button>
       </div>
       <input type="file" id="fotoGuiaCamera" accept="image/*" capture="environment" style="display:none" onchange="adicionarFotoGuia(this)">
       <input type="file" id="fotoGuiaGaleria" accept="image/*,application/pdf" multiple style="display:none" onchange="adicionarFotoGuia(this)">
-      <button onclick="processarGuiaFotos()" id="btnProcessarGuia" style="width:100%;margin-top:8px;background:#7c3aed;color:#fff;border:none;border-radius:8px;padding:10px;cursor:pointer;font-size:13px;font-weight:700">&#128229; Processar Guia</button>
-      <button onclick="reclassificarTagsGuia()" id="btnReclassificarTags" style="width:100%;margin-top:8px;background:#1e293b;color:#a5b4fc;border:1px solid #6366f1;border-radius:8px;padding:8px;cursor:pointer;font-size:12px">&#127991;&#65039; Atualizar tags das p&aacute;ginas j&aacute; processadas</button>
-      <div id="statusGuiaFoto" style="display:none;text-align:center;padding:10px;color:#7c3aed;font-size:12px">&#9881;&#65039; Processando guia...</div>
+      <button type="button" onclick="processarGuiaFotos()" id="btnProcessarGuia" style="width:100%;margin-top:8px;background:linear-gradient(135deg,#7c3aed,#5b21b6);color:#fff;border:none;border-radius:8px;padding:11px;cursor:pointer;font-size:13px;font-weight:800">&#128269; 2. Ler Guia Completo</button>
+      <button type="button" onclick="reclassificarTagsGuia()" id="btnReclassificarTags" style="width:100%;margin-top:6px;background:#1e293b;color:#a5b4fc;border:1px solid #6366f1;border-radius:8px;padding:8px;cursor:pointer;font-size:12px">&#127991;&#65039; Atualizar t&oacute;picos das p&aacute;ginas j&aacute; lidas</button>
+      <div id="statusGuiaFoto" style="display:none;text-align:center;padding:10px;color:#7c3aed;font-size:12px">&#9881;&#65039; Lendo Guia Completo...</div>
     </div>
     <div id="painelGuiaPilula" style="display:none">
       <div style="font-size:11px;color:#4c1d95;margin-bottom:8px;line-height:1.4">Adicione <b>P&iacute;lulas de Atualiza&ccedil;&atilde;o</b> (prints de WhatsApp, comunicados ou PDFs avulsos). Em caso de conflito, a p&iacute;lula mais recente tem prioridade sobre o Guia Base.</div>
@@ -1341,8 +1383,8 @@ body.dark-mode .gemini-model-chip.ativo{background:#2563eb!important;color:#fff!
       <div id="compPilulasLista" style="margin-top:8px;max-height:180px;overflow-y:auto"></div>
     </div>
     <div style="display:flex;gap:6px;margin-top:8px">
-      <button onclick="salvarGuiaEmpresa()" style="flex:1;background:#16a34a;color:#fff;border:none;border-radius:8px;padding:10px;cursor:pointer;font-size:13px;font-weight:700">&#128190; Salvar Guia</button>
-      <button onclick="verGuiaSalvo()" style="background:#e2e8f0;border:none;border-radius:8px;padding:10px 14px;cursor:pointer;font-size:12px;color:#475569">Ver salvo</button>
+      <button type="button" onclick="salvarGuiaEmpresa()" style="flex:1;background:#16a34a;color:#fff;border:none;border-radius:8px;padding:10px;cursor:pointer;font-size:13px;font-weight:800">&#128190; 3. Salvar Guia</button>
+      <button type="button" onclick="verGuiaSalvo()" style="background:#e2e8f0;border:none;border-radius:8px;padding:10px 14px;cursor:pointer;font-size:12px;color:#475569">Ver salvo</button>
     </div>
     <div id="msgGuiaEmpresa" style="font-size:11px;margin-top:6px"></div>
   </div>
@@ -1456,6 +1498,21 @@ body.dark-mode .gemini-model-chip.ativo{background:#2563eb!important;color:#fff!
     <div class="fg"><label>Gerente da Loja</label><input type="text" id="clientManager" placeholder="Ex: Maria Santos"></div>
     <div class="fg"><label>Tel. Gerente</label><input type="text" id="clientManagerPhone" placeholder="(21) 99999-9999"></div>
   </div>
+  <!-- MIX CADASTRADO NA LOJA (PUXADO DA EMPRESA ATIVA OFFLINE/ONLINE) -->
+  <div class="mix-loja-card" id="clientMixCard">
+    <div class="mix-loja-head">
+      <div class="mix-loja-title">&#128230; Mix Cadastrado na Loja</div>
+      <span id="clientMixCounter" class="plu-count-pill">0 no mix</span>
+    </div>
+    <div style="font-size:11px;color:#475569;margin-bottom:6px;line-height:1.4">SKUs ativos do portf&oacute;lio da empresa. Defina o que trabalha nesta loja como <b>[&#10003; No Mix]</b> ou <b>[&#10005; Fora do Mix]</b>; apenas os itens no mix aparecem no Estoque, Auditoria, Pedido, Rupturas e Validade por padr&atilde;o.</div>
+    <div class="comp-batch-bar">
+      <button type="button" class="comp-batch-btn" onclick="marcarTodosMixCliente(true)">&#9989; Marcar Todos</button>
+      <button type="button" class="comp-batch-btn" onclick="marcarTodosMixCliente(false)">&#10060; Desmarcar Todos</button>
+      <button type="button" class="comp-batch-btn" onclick="inverterMixCliente()">&#128260; Inverter Sele&ccedil;&atilde;o</button>
+    </div>
+    <div id="clientMixList" class="mix-loja-list"><div style="text-align:center;color:#64748b;padding:14px;font-size:12px">Selecione a empresa para carregar o portf&oacute;lio regional.</div></div>
+  </div>
+
   <h2>Produtos do Cliente</h2>
   <div class="tabs">
     <button class="tab active" onclick="switchTab(event,'pasteCli')">Copiar/Colar</button>
@@ -1718,6 +1775,46 @@ body.dark-mode .gemini-model-chip.ativo{background:#2563eb!important;color:#fff!
     <button class="mb" onclick="abrirExtratoGeral()" style="background:linear-gradient(135deg,#1e40af,#3b82f6)"><span class="mi" style="color:#fff">&#128196;</span><div><div style="color:#fff;font-weight:700">Relatorio Geral Completo</div><div class="md" style="color:#bfdbfe">Extrato completo por periodo</div></div></button>
   </div>
   <div style="margin-top:10px"><button onclick="goToMenu()" class="sec">&#8592; Voltar</button></div>
+</div>
+
+<!-- RELATORIOS CONSOLIDADOS POR PERIODO -->
+<div class="page" id="pageRelPeriodo">
+  <div class="topbar">
+    <img data-lcs-asset="logo-lcs" alt="LocalShelf" style="height:38px;object-fit:contain;border-radius:6px">
+    <div style="display:flex;flex-direction:column;justify-content:center;line-height:1.1;flex:1;padding-left:8px"><span style="color:#fff;font-size:13px;font-weight:700;letter-spacing:1px">LOCALSHELF</span><span style="color:#94a3b8;font-size:10px;letter-spacing:2px">GEST&Atilde;O INTELIGENTE</span></div>
+    <button class="topbar-hb" onclick="openHamburger()">&#9776;</button>
+  </div>
+  <div class="ph-faixa">
+    <div class="ph-faixa-bg"></div>
+    <div class="ph-faixa-text">
+      <div class="ph-faixa-label">Consolidado Operacional</div>
+      <div class="ph-faixa-nome" id="relPeriodoTitle">Relat&oacute;rios por Per&iacute;odo</div>
+    </div>
+  </div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px">
+    <select id="relPeriodoLojaSel" onchange="renderRelatorioPeriodo()" style="flex:1;min-width:170px;margin:0;padding:8px;border:1px solid #cbd5e1;border-radius:8px;font-size:12px">
+      <option value="__ALL__">Todas as lojas da empresa</option>
+    </select>
+  </div>
+  <div class="relp-pills" id="relPeriodoPills">
+    <button type="button" class="relp-pill" data-p="hoje" onclick="filtrarPeriodoRapido('hoje')">Hoje</button>
+    <button type="button" class="relp-pill" data-p="7" onclick="filtrarPeriodoRapido('7')">Semanal (7d)</button>
+    <button type="button" class="relp-pill ativo" data-p="15" onclick="filtrarPeriodoRapido('15')">Quinzenal (15d)</button>
+    <button type="button" class="relp-pill" data-p="30" onclick="filtrarPeriodoRapido('30')">Mensal (30d)</button>
+    <button type="button" class="relp-pill" data-p="custom" onclick="filtrarPeriodoRapido('custom')">Personalizado</button>
+  </div>
+  <div id="relPeriodoCustomDates" style="display:none;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">
+    <div class="fg" style="margin:0"><label style="font-size:11px">De</label><input type="date" id="relPeriodoDe" onchange="renderRelatorioPeriodo()"></div>
+    <div class="fg" style="margin:0"><label style="font-size:11px">At&eacute;</label><input type="date" id="relPeriodoAte" onchange="renderRelatorioPeriodo()"></div>
+  </div>
+  <div id="relPeriodoContent"></div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">
+    <button type="button" onclick="copiarRelatorioPeriodoWpp()" style="flex:1;background:#059669;color:#fff;border:none;border-radius:8px;padding:10px 12px;font-size:12px;font-weight:700;cursor:pointer">&#128203; Copiar WhatsApp</button>
+    <button type="button" onclick="compartilharRelatorioPeriodoWpp()" style="flex:1;background:#16a34a;color:#fff;border:none;border-radius:8px;padding:10px 12px;font-size:12px;font-weight:700;cursor:pointer">&#128242; Enviar WhatsApp</button>
+    <button type="button" onclick="exportarRelatorioPeriodoPdf()" style="flex:1;background:#1e40af;color:#fff;border:none;border-radius:8px;padding:10px 12px;font-size:12px;font-weight:700;cursor:pointer">&#128196; Exportar PDF</button>
+    <button type="button" onclick="imprimirRelatorioPeriodo()" class="sec" style="padding:10px 12px;font-size:12px;font-weight:700">&#128424;&#65039; Imprimir</button>
+  </div>
+  <div class="sm" id="msgRelPeriodo" style="margin-top:8px"></div>
 </div>
 
 <!-- DADOS DA LOJA -->
@@ -2952,10 +3049,12 @@ function getCompanyCatalogMatch(prod, company) {
     }
     return null;
 }
-function isProdutoAtivoNoMix(prod, company) {
+window._mostrarForaDoMix = window._mostrarForaDoMix || {};
+function isProdutoAtivoNoMix(prod, company, incluirForaDoMix) {
     if (!prod) return false;
     if (prod.activeRegional === false) return false;
     if (String(prod.status || "").toLowerCase() === "descontinuado") return false;
+    if (!incluirForaDoMix && prod.noMix === false) return false;
     if (company) {
         var match = getCompanyCatalogMatch(prod, company);
         if (match) {
@@ -2977,15 +3076,62 @@ function syncCompanyCatalogFieldsToClient(clientObj, companyObj) {
         p.priority = !!p.priority || !!cp.priority || isPriorityProduct(p.name);
     });
 }
-function renderRegionalBanner(bannerId, products, company) {
+function toggleMostrarForaDoMix(modulo, checked) {
+    if (!window._mostrarForaDoMix) window._mostrarForaDoMix = {};
+    window._mostrarForaDoMix[modulo] = !!checked;
+    if (modulo === "pedido") {
+        var savedQtys = {};
+        if (currentClient && Array.isArray(currentClient.products)) {
+            currentClient.products.forEach(function(_, k) {
+                var qEl = document.getElementById("oqty_" + k);
+                if (qEl && parseInt(qEl.value, 10) > 0) savedQtys[k] = qEl.value;
+            });
+        }
+        goToPedidos();
+        Object.keys(savedQtys).forEach(function(k) {
+            var qEl2 = document.getElementById("oqty_" + k);
+            if (qEl2) qEl2.value = savedQtys[k];
+        });
+        updateSummary();
+    } else if (modulo === "estoque") {
+        goToEstoque();
+    } else if (modulo === "rupturas") {
+        goToRupturas();
+    } else if (modulo === "validade") {
+        goToValidade();
+    } else if (modulo === "precos") {
+        renderPrecosList();
+    } else if (modulo === "auditoria") {
+        goToAuditoria();
+    }
+}
+function renderRegionalBanner(bannerId, products, company, modulo) {
     var el = document.getElementById(bannerId);
     if (!el) return;
     var list = Array.isArray(products) ? products : [];
-    var ocultos = 0;
-    list.forEach(function(p) { if (!isProdutoAtivoNoMix(p, company)) ocultos++; });
-    if (ocultos > 0) {
+    var ocultosReg = 0;
+    var foraMixLoja = 0;
+    list.forEach(function(p) {
+        if (!isProdutoAtivoNoMix(p, company, true)) {
+            ocultosReg++;
+        } else if (p && p.noMix === false) {
+            foraMixLoja++;
+        }
+    });
+    var mostrarFora = !!(modulo && window._mostrarForaDoMix && window._mostrarForaDoMix[modulo]);
+    if (ocultosReg > 0 || foraMixLoja > 0 || mostrarFora) {
         var reg = (company && company.regional) ? company.regional : "Selecionada";
-        el.innerHTML = "&#127758; <b>Mix Regional (" + escHtml(reg) + "):</b> " + ocultos + " SKU(s) fora desta regional ou descontinuado(s) est&atilde;o ocultos (hist&oacute;rico preservado).";
+        var partes = [];
+        if (foraMixLoja > 0) {
+            partes.push(foraMixLoja + " SKU(s) marcados como <b>Fora do Mix</b> nesta loja" + (mostrarFora ? " (exibidos agora)" : " (ocultos por padr&atilde;o)"));
+        }
+        if (ocultosReg > 0) {
+            partes.push(ocultosReg + " SKU(s) fora da regional " + escHtml(reg) + " ou descontinuado(s)");
+        }
+        var toggleHtml = (modulo && (foraMixLoja > 0 || mostrarFora))
+            ? "<label class='reg-toggle-lbl'><input type='checkbox' " + (mostrarFora ? "checked " : "") + "onchange=\"toggleMostrarForaDoMix('" + escAttr(modulo) + "', this.checked)\" style='width:auto;margin:0;accent-color:#1e40af'> Mostrar fora do mix</label>"
+            : "";
+        el.innerHTML = "<div class='reg-banner-row'><div>&#127758; <b>Mix da Loja:</b> " + partes.join(" &bull; ") + ".</div>" + toggleHtml + "</div>";
         el.classList.add("ativo");
     } else {
         el.innerHTML = "";
@@ -3519,13 +3665,17 @@ async function _escolherProximoModeloTexto(apiKey, state) {
     if (alt) return alt;
     return _selecionarMelhorFlashModel(LS_GEMINI_FALLBACK_CHAIN, state.modelosTentados);
 }
-async function chamarGoogleGeminiFlash(prompt, partsArray, jsonMode, _state) {
+async function chamarGoogleGeminiFlash(prompt, partsArray, jsonMode, _state, opts) {
     var apiKey = getGoogleGeminiKey();
     if (!apiKey) throw new Error("CHAVE_GOOGLE_NAO_CONFIGURADA");
 
     var state = (_state && typeof _state === "object")
         ? _state
-        : { modeloAtual: getGeminiModel(), retriesTransient: 0, modelosTentados: [], modelosCache: null };
+        : { modeloAtual: getGeminiModel(), retriesTransient: 0, modelosTentados: [], modelosCache: null, opts: opts || {} };
+    if (opts && typeof opts === "object" && !_state) {
+        state.opts = Object.assign({}, opts);
+    }
+    if (!state.opts) state.opts = {};
     if (!state.modeloAtual || !_ehModeloTextoGeminiValido(state.modeloAtual)) {
         state.modeloAtual = getGeminiModel();
     }
@@ -3554,22 +3704,32 @@ async function chamarGoogleGeminiFlash(prompt, partsArray, jsonMode, _state) {
     }
     if (promptFinal) parts.push({ text: promptFinal });
     var genCfg = { temperature: 0.2 };
+    var bodyPayload = {
+        contents: [{ role: "user", parts: parts }],
+        generationConfig: genCfg
+    };
+    if (state.opts && state.opts.useSearch) {
+        bodyPayload.tools = [{ google_search: {} }];
+    }
     var url = "https://generativelanguage.googleapis.com/v1beta/models/" + encodeURIComponent(modeloAtivo) + ":generateContent?key=" + encodeURIComponent(apiKey);
     var ctrl = (typeof AbortController !== "undefined") ? new AbortController() : null;
-    var timer = ctrl ? setTimeout(function(){ ctrl.abort(); }, 45000) : null;
+    var timeoutMs = (state.opts && Number(state.opts.timeoutMs) > 0) ? Number(state.opts.timeoutMs) : 90000;
+    var timer = ctrl ? setTimeout(function(){ ctrl.abort(); }, timeoutMs) : null;
     try {
         var resp = await fetch(url, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             signal: ctrl ? ctrl.signal : undefined,
-            body: JSON.stringify({
-                contents: [{ role: "user", parts: parts }],
-                generationConfig: genCfg
-            })
+            body: JSON.stringify(bodyPayload)
         });
         if (!resp.ok) {
             var errMsg = "";
             try { var ej = await resp.json(); errMsg = ej.error && ej.error.message ? ej.error.message : ""; } catch(e2) {}
+            if (resp.status === 400 && state.opts && state.opts.useSearch && /search|tool|grounding/i.test(errMsg || "")) {
+                console.warn("LocalShelf AI: pesquisa web nao suportada neste modelo, tentando sem tools.");
+                state.opts.useSearch = false;
+                return await chamarGoogleGeminiFlash(prompt, partsArray, jsonMode, state);
+            }
             var isTransient = (resp.status === 503 || resp.status === 429) ||
                 /high demand|overloaded|resource exhausted|rate limit|quota|too many requests|temporarily unavailable/i.test(errMsg || "");
             var isModelUnavailable = (resp.status === 404) ||
@@ -3829,12 +3989,78 @@ function _fecharModalAtivoNoVoltar() {
     if (_isElVisibleModal("modalNomeCat")) { modalCatCancelar(); return true; }
     var hb = document.getElementById("hbDrawer");
     if (hb && hb.classList.contains("open")) { closeHamburger(); return true; }
+    var ov = document.getElementById("guardiao-overlay");
+    if (ov && ov.classList.contains("ativo") && typeof _bgTaskState !== "undefined" && _bgTaskState.status === "running" && _bgTaskState.canBackground) {
+        minimizarTarefaParaSegundoPlano();
+        return true;
+    }
     return false;
+}
+function _garantirTopbarVoltar(pageEl) {
+    if (!pageEl || pageEl.id === "pageClients") return;
+    var tb = pageEl.querySelector(".topbar");
+    if (!tb) {
+        tb = document.createElement("div");
+        tb.className = "topbar";
+        var logoSrc = (window._LCS_ASSETS && window._LCS_ASSETS["logo-lcs"]) || "";
+        tb.innerHTML = "<img data-lcs-asset='logo-lcs' alt='LocalShelf' style='height:34px;object-fit:contain;border-radius:6px'" + (logoSrc ? " src='" + logoSrc + "'" : "") + ">" +
+            "<div style='display:flex;flex-direction:column;justify-content:center;line-height:1.1;flex:1;padding-left:8px'><span style='color:#fff;font-size:13px;font-weight:700;letter-spacing:1px'>LOCALSHELF</span><span style='color:#94a3b8;font-size:10px;letter-spacing:2px'>GEST&Atilde;O INTELIGENTE</span></div>" +
+            "<button class='topbar-hb' onclick='openHamburger()'>&#9776;</button>";
+        pageEl.insertBefore(tb, pageEl.firstChild);
+    }
+    if (!tb.querySelector(".topbar-back")) {
+        var btnBack = document.createElement("button");
+        btnBack.type = "button";
+        btnBack.className = "topbar-back";
+        btnBack.innerHTML = "&#8592; Voltar";
+        btnBack.onclick = function() { voltarCabecalhoApp(); };
+        tb.insertBefore(btnBack, tb.firstChild);
+    }
+}
+function voltarCabecalhoApp() {
+    if (typeof _fecharModalAtivoNoVoltar === "function" && _fecharModalAtivoNoVoltar()) return;
+    var cur = window._currentPage || "pageClients";
+    if (cur === "pageExtrato" || cur === "pagePreview") {
+        if (typeof showPage === "function") showPage("pageRelatorios");
+        return;
+    }
+    var clientSubPages = [
+        "pageOrder","pageEstoque","pageRupturas","pageValidade",
+        "pageAuditoria","pageLojaIdeal","pageDadosLoja","pageTrocas",
+        "pageRelInterno","pagePrecos","pageRelatorios","pageAuditoriaIA"
+    ];
+    if (clientSubPages.indexOf(cur) >= 0) {
+        if (currentClient) goToMenu();
+        else if (currentCompany) backToClients();
+        else voltarParaSplash();
+        return;
+    }
+    if (cur === "pageClient") {
+        if (typeof voltarClientForm === "function") voltarClientForm();
+        else backToClients();
+        return;
+    }
+    if (cur === "pageMenu" || cur === "pageCompany" || cur === "pageLogistica" || cur === "pageRelPeriodo" || cur === "pageConfigGeral" || cur === "pageConfig" || cur === "pageUser" || cur === "pageManage") {
+        if (cur === "pageUser" && window._userFromSplash) {
+            window._userFromSplash = false;
+            voltarParaSplash();
+            return;
+        }
+        if (currentCompany) backToClients();
+        else voltarParaSplash();
+        return;
+    }
+    if (currentClient) goToMenu();
+    else if (currentCompany) backToClients();
+    else voltarParaSplash();
 }
 function showPage(id) {
     if (typeof limparBuscas === "function") limparBuscas();
     document.querySelectorAll(".page").forEach(function(p){ p.classList.remove("active"); });
-    document.getElementById(id).classList.add("active");
+    var targetEl = document.getElementById(id);
+    if (!targetEl) return;
+    _garantirTopbarVoltar(targetEl);
+    targetEl.classList.add("active");
     window._currentPage = id;
     _pushAppHistoryState(null);
     atualizarLogosCliente();
@@ -3947,7 +4173,9 @@ function goToNewClient() {
     if (typeof _limparDestaquesCamposCliente === "function") _limparDestaquesCamposCliente();
     if (typeof _vincularLimpezaCamposCliente === "function") _vincularLimpezaCamposCliente();
     if (typeof setClientSearchLoading === "function") setClientSearchLoading(false);
-    updateClientProductsTable(); loadCompanySelectForClient(); showPage("pageClient");
+    loadCompanySelectForClient();
+    carregarMixDaEmpresaNoCliente(false);
+    showPage("pageClient");
     atualizarFaixaCliente();
 }
 
@@ -3972,6 +4200,7 @@ function editClient(clientId) {
             category: p.category || (cpMatch ? cpMatch.category : ""),
             status: p.status || (cpMatch ? cpMatch.status : "Ativo"),
             activeRegional: (p.activeRegional !== undefined) ? (p.activeRegional !== false) : (cpMatch ? cpMatch.activeRegional !== false : true),
+            noMix: p.noMix !== false,
             thumb: p.thumb || (cpMatch ? cpMatch.thumb : "")
         };
     });
@@ -4003,7 +4232,7 @@ function editClient(clientId) {
     if (typeof _vincularLimpezaCamposCliente === "function") _vincularLimpezaCamposCliente();
     if (typeof setClientSearchLoading === "function") setClientSearchLoading(false);
     autoClassificarTipologia(false);
-    updateClientProductsTable();
+    carregarMixDaEmpresaNoCliente(true);
     showPage("pageClient");
 }
 
@@ -4455,44 +4684,104 @@ function _formatarEnderecoBrasilApi(d) {
     return [p1, p2, cepFmt].filter(Boolean).join(" | ");
 }
 
+function _normalizarPayloadCnpjWs(d, digits) {
+    var est = (d && d.estabelecimento) ? d.estabelecimento : {};
+    var logradouro = [est.tipo_logradouro, est.logradouro].filter(Boolean).join(" ").trim();
+    var p1 = [logradouro, est.numero, est.complemento].filter(Boolean).join(", ");
+    var mun = (est.cidade && est.cidade.nome) ? est.cidade.nome : "";
+    var uf = (est.estado && est.estado.sigla) ? String(est.estado.sigla).toUpperCase() : "";
+    var p2 = [est.bairro, [mun, uf].filter(Boolean).join("/")].filter(Boolean).join(" - ");
+    var cepDig = String(est.cep || "").replace(/\D/g, "");
+    var cepFmt = cepDig.length === 8 ? ("CEP " + cepDig.replace(/^(\d{5})(\d{3})$/, "$1-$2")) : (cepDig ? ("CEP " + cepDig) : "");
+    var end = [p1, p2, cepFmt].filter(Boolean).join(" | ");
+    var cnae = (est.atividade_principal && (est.atividade_principal.id || est.atividade_principal.descricao))
+        ? [est.atividade_principal.id, est.atividade_principal.descricao].filter(Boolean).join(" - ")
+        : "";
+    var tel = [est.ddd1, est.telefone1].filter(Boolean).join("");
+    return {
+        source: "CadastroOficial",
+        nome: String(est.nome_fantasia || d.razao_social || "").trim(),
+        nomeFantasia: String(est.nome_fantasia || "").trim(),
+        razaoSocial: String(d.razao_social || "").trim(),
+        cnpj: formatarCNPJ(digits),
+        endereco: end,
+        logradouro: logradouro,
+        numero: String(est.numero || "").trim(),
+        complemento: String(est.complemento || "").trim(),
+        bairro: String(est.bairro || "").trim(),
+        municipio: String(mun || "").trim(),
+        uf: uf,
+        cep: cepDig,
+        cnae: cnae,
+        porte: (d.porte && d.porte.descricao) ? String(d.porte.descricao).trim() : "",
+        situacao: String(est.situacao_cadastral || "").trim(),
+        telefone: tel
+    };
+}
 async function consultarBrasilApiCnpj(cnpjDigits) {
     var digits = String(cnpjDigits || "").replace(/\D/g, "");
     if (digits.length !== 14) throw new Error("CNPJ deve ter 14 dígitos.");
+    var lastErr = null;
+    // 1. Consulta cadastral primaria
     var ctrl = (typeof AbortController !== "undefined") ? new AbortController() : null;
     var timer = ctrl ? setTimeout(function(){ ctrl.abort(); }, 25000) : null;
     try {
         var resp = await fetch("https://brasilapi.com.br/api/cnpj/v1/" + digits, {
             signal: ctrl ? ctrl.signal : undefined
         });
-        if (!resp.ok) {
-            if (resp.status === 404) throw new Error("CNPJ não encontrado na base cadastral.");
-            throw new Error("Consulta cadastral indisponível no momento.");
+        if (resp.ok) {
+            var d = await resp.json();
+            if (d && (d.razao_social || d.nome_fantasia)) {
+                var logradouro = [d.descricao_tipo_de_logradouro, d.logradouro].filter(Boolean).join(" ").trim();
+                var end = _formatarEnderecoBrasilApi(d);
+                return {
+                    source: "CadastroOficial",
+                    nome: (d.nome_fantasia || d.razao_social || "").trim(),
+                    nomeFantasia: (d.nome_fantasia || "").trim(),
+                    razaoSocial: (d.razao_social || "").trim(),
+                    cnpj: formatarCNPJ(digits),
+                    endereco: end,
+                    logradouro: logradouro,
+                    numero: String(d.numero || "").trim(),
+                    complemento: String(d.complemento || "").trim(),
+                    bairro: String(d.bairro || "").trim(),
+                    municipio: String(d.municipio || "").trim(),
+                    uf: String(d.uf || "").trim().toUpperCase(),
+                    cep: String(d.cep || "").replace(/\D/g, ""),
+                    cnae: [d.cnae_fiscal, d.cnae_fiscal_descricao].filter(Boolean).join(" - "),
+                    porte: _formatarPorteBrasilApi(d.porte),
+                    situacao: String(d.descricao_situacao_cadastral || "").trim(),
+                    telefone: String(d.ddd_telefone_1 || "").trim()
+                };
+            }
         }
-        var d = await resp.json();
-        var logradouro = [d.descricao_tipo_de_logradouro, d.logradouro].filter(Boolean).join(" ").trim();
-        var end = _formatarEnderecoBrasilApi(d);
-        return {
-            source: "CadastroOficial",
-            nome: (d.nome_fantasia || d.razao_social || "").trim(),
-            nomeFantasia: (d.nome_fantasia || "").trim(),
-            razaoSocial: (d.razao_social || "").trim(),
-            cnpj: formatarCNPJ(digits),
-            endereco: end,
-            logradouro: logradouro,
-            numero: String(d.numero || "").trim(),
-            complemento: String(d.complemento || "").trim(),
-            bairro: String(d.bairro || "").trim(),
-            municipio: String(d.municipio || "").trim(),
-            uf: String(d.uf || "").trim().toUpperCase(),
-            cep: String(d.cep || "").replace(/\D/g, ""),
-            cnae: [d.cnae_fiscal, d.cnae_fiscal_descricao].filter(Boolean).join(" - "),
-            porte: _formatarPorteBrasilApi(d.porte),
-            situacao: String(d.descricao_situacao_cadastral || "").trim(),
-            telefone: String(d.ddd_telefone_1 || "").trim()
-        };
+        lastErr = new Error(resp.status === 404 ? "CNPJ não encontrado na base cadastral." : "Consulta cadastral indisponível no momento.");
+    } catch(ePrimary) {
+        lastErr = ePrimary;
     } finally {
         if (timer) clearTimeout(timer);
     }
+
+    // 2. Backup automatico via publica.cnpj.ws
+    var ctrl2 = (typeof AbortController !== "undefined") ? new AbortController() : null;
+    var timer2 = ctrl2 ? setTimeout(function(){ ctrl2.abort(); }, 25000) : null;
+    try {
+        var resp2 = await fetch("https://publica.cnpj.ws/cnpj/" + digits, {
+            signal: ctrl2 ? ctrl2.signal : undefined
+        });
+        if (resp2.ok) {
+            var d2 = await resp2.json();
+            if (d2 && (d2.razao_social || (d2.estabelecimento && d2.estabelecimento.nome_fantasia))) {
+                return _normalizarPayloadCnpjWs(d2, digits);
+            }
+        }
+        if (resp2.status === 404) throw new Error("CNPJ não encontrado na base cadastral.");
+    } catch(eBackup) {
+        if (!lastErr) lastErr = eBackup;
+    } finally {
+        if (timer2) clearTimeout(timer2);
+    }
+    throw (lastErr || new Error("Consulta cadastral indisponível no momento."));
 }
 async function buscarOpenStreetMapNominatim(query, ctx) {
     var qTexto = String(query || "").trim();
@@ -4583,13 +4872,13 @@ async function buscarLojasGeminiFlash(query, ctx) {
     if (!key) return [];
     ctx = ctx || _obterUfContextoDispositivo();
     var ufInfo = (ctx.cidade ? ctx.cidade + " / " : "") + (ctx.uf || "Brasil");
-    var prompt = "Assistente de geocadastro varejista no Brasil.\n" +
+    var prompt = "Pesquisa comercial profunda de lojas e supermercados no Brasil usando busca na web.\n" +
         "Busca: \"" + query + "\". Localização prioritária: " + ufInfo + ".\n" +
-        "Liste até 5 unidades reais dessa loja priorizando a UF/região informada.\n" +
+        "Pesquise ativamente na web até 5 unidades reais dessa rede/loja priorizando a UF/região informada, cruzando nome da rede + rua/bairro/cidade para encontrar o CNPJ exato de 14 dígitos de cada filial, Razão Social, CNAE, canal/porte e estimativa de checkouts.\n" +
         "Retorne APENAS JSON array:\n" +
-        "[{\"nome\":\"Nome Unidade/Bairro\",\"razaoSocial\":\"\",\"cnpj\":\"00.000.000/0000-00 ou vazio\",\"endereco\":\"Rua, nº - Bairro, Cidade/UF\",\"municipio\":\"\",\"uf\":\"\",\"canalSugerido\":\"Vizinhanca|Super|Hiper|Atacado\",\"checkoutsEstimado\":null,\"siteDominio\":\"\"}]\n" +
-        "Nunca invente CNPJ ou números sem certeza; deixe vazio/null se desconhecer.";
-    var txt = await chamarGoogleGeminiFlash(prompt, [], true);
+        "[{\"nome\":\"Nome Unidade/Bairro\",\"razaoSocial\":\"\",\"cnpj\":\"00.000.000/0000-00\",\"endereco\":\"Rua, nº - Bairro, Cidade/UF\",\"municipio\":\"\",\"uf\":\"\",\"cnae\":\"\",\"canalSugerido\":\"Vizinhanca|Super|Hiper|Atacado\",\"porteSugerido\":\"\",\"checkoutsEstimado\":null,\"siteDominio\":\"\"}]\n" +
+        "Só deixe cnpj vazio se realmente não existir registro público na web após pesquisar a filial.";
+    var txt = await chamarGoogleGeminiFlash(prompt, [], true, null, { useSearch: true, timeoutMs: 90000 });
     var arr = parseGeminiJSON(txt);
     if (!Array.isArray(arr) && arr && Array.isArray(arr.unidades)) arr = arr.unidades;
     if (!Array.isArray(arr)) return [];
@@ -4603,7 +4892,7 @@ async function buscarLojasGeminiFlash(query, ctx) {
             endereco: String(it.endereco || "").trim(),
             municipio: String(it.municipio || "").trim(),
             uf: String(it.uf || "").trim().toUpperCase(),
-            cnae: "",
+            cnae: String(it.cnae || "").trim(),
             canalSugerido: String(it.canalSugerido || "").trim(),
             porte: String(it.porteSugerido || it.porte || "").trim(),
             checkoutsEstimado: parseInt(it.checkoutsEstimado) || null,
@@ -4624,14 +4913,15 @@ async function enriquecerDossieLojaCascata(item, ctx) {
     if (getGoogleGeminiKey()) {
         try {
             var ufCtx = (ctx.cidade ? ctx.cidade + " / " : "") + (ctx.uf || "Brasil");
-            var prompt2 = "Extração rápida de cadastro comercial no Brasil para a loja:\n" +
-                "- Nome: \"" + (enriched.nome || "") + "\"\n" +
-                (enriched.endereco ? "- Endereço: \"" + enriched.endereco + "\"\n" : "") +
-                (enriched.cnpj ? "- CNPJ: \"" + enriched.cnpj + "\"\n" : "") +
+            var prompt2 = "PESQUISA PROFUNDA OBRIGATÓRIA com busca na web para localizar os dados fiscais exatos desta filial no Brasil:\n" +
+                "- Nome da loja / rede: \"" + (enriched.nome || "") + "\"\n" +
+                (enriched.endereco ? "- Endereço / rua / bairro / cidade: \"" + enriched.endereco + "\"\n" : "") +
+                (enriched.cnpj ? "- CNPJ conhecido: \"" + enriched.cnpj + "\"\n" : "") +
                 "- UF referência: " + ufCtx + "\n\n" +
-                "Retorne APENAS JSON enxuto com os dados reais confirmáveis (deixe vazio/null se não tiver certeza, nunca invente):\n" +
+                "Cruze o nome da rede com rua, número, bairro e cidade na web para localizar o CNPJ de 14 dígitos desta filial específica, Razão Social, CNAE, canal/porte e estimativa real de checkouts.\n" +
+                "Retorne APENAS JSON:\n" +
                 "{\"cnpj\":\"\",\"razaoSocial\":\"\",\"nomeFantasia\":\"\",\"enderecoCompleto\":\"\",\"cnae\":\"\",\"canalSugerido\":\"Vizinhanca|Super|Hiper|Atacado\",\"perfilSugerido\":\"Vizinhanca|Mercado|Supermercado|Hipermercado|Atacarejo|Conveniencia\",\"porteSugerido\":\"\",\"checkoutsEstimado\":null,\"siteDominio\":\"\"}";
-            var raw2 = await chamarGoogleGeminiFlash(prompt2, [], true);
+            var raw2 = await chamarGoogleGeminiFlash(prompt2, [], true, null, { useSearch: true, timeoutMs: 90000 });
             var d = parseGeminiJSON(raw2);
             if (Array.isArray(d)) d = d[0] || {};
             if (d && typeof d === "object") {
@@ -5341,6 +5631,32 @@ function salvarEditCompProd() {
     fecharEditCompProd();
     updateCompanyProductsTable();
 }
+function _produtoPassaFiltroEmpresa(p) {
+    if (!p) return false;
+    var st = String(p.status || "Ativo");
+    var stLow = st.toLowerCase();
+    var mixOn = (p.activeRegional !== false) && (stLow !== "descontinuado");
+    if (_compProdFilter === "ativos" && !mixOn) return false;
+    if (_compProdFilter === "ocultos" && p.activeRegional !== false) return false;
+    if (_compProdFilter === "lancamento" && stLow.indexOf("lanc") < 0) return false;
+    if (_compProdFilter === "descontinuado" && stLow.indexOf("desc") < 0) return false;
+    return true;
+}
+function selecionarTodosEmpresa(estado) {
+    var val = !!estado;
+    tempCompanyProducts.forEach(function(p) {
+        if (_produtoPassaFiltroEmpresa(p)) p.activeRegional = val;
+    });
+    updateCompanyProductsTable();
+}
+function inverterSelecaoEmpresa() {
+    tempCompanyProducts.forEach(function(p) {
+        if (_produtoPassaFiltroEmpresa(p)) {
+            p.activeRegional = (p.activeRegional === false);
+        }
+    });
+    updateCompanyProductsTable();
+}
 function updateCompanyProductsTable() {
     var t = document.getElementById("companyProductsBody");
     var ativosCount = tempCompanyProducts.filter(function(p){ return p.activeRegional !== false && String(p.status||"").toLowerCase() !== "descontinuado"; }).length;
@@ -5349,13 +5665,10 @@ function updateCompanyProductsTable() {
 
     var rows = [];
     tempCompanyProducts.forEach(function(p, i) {
+        if (!_produtoPassaFiltroEmpresa(p)) return;
         var st = String(p.status || "Ativo");
         var stLow = st.toLowerCase();
         var mixOn = (p.activeRegional !== false) && (stLow !== "descontinuado");
-        if (_compProdFilter === "ativos" && !mixOn) return;
-        if (_compProdFilter === "ocultos" && p.activeRegional !== false) return;
-        if (_compProdFilter === "lancamento" && stLow.indexOf("lanc") < 0) return;
-        if (_compProdFilter === "descontinuado" && stLow.indexOf("desc") < 0) return;
 
         var isPrio = p.priority || isPriorityProduct(p.name);
         var star = isPrio ? "&#11088;" : "&#9734;";
@@ -5365,6 +5678,7 @@ function updateCompanyProductsTable() {
 
         rows.push(
             "<tr style='" + bg + "'>" +
+            "<td style='text-align:center'><input type='checkbox' class='comp-prod-chk' " + (p.activeRegional !== false ? "checked " : "") + "onchange='toggleCompanyMixRegional(" + i + ")' style='width:auto;margin:0;accent-color:#16a34a;cursor:pointer' aria-label='Incluir no Mix'></td>" +
             "<td style='text-align:center;cursor:pointer;font-size:16px' onclick='toggleCompanyPriority(" + i + ")'>" + star + "</td>" +
             "<td><div class='sku-cell'>" + renderSkuThumbHtml(p, "company", i, 38) +
             "<div class='sku-info'><div class='sku-name'>" + escHtml(p.name) + "</div>" +
@@ -5382,7 +5696,7 @@ function updateCompanyProductsTable() {
             "</tr>"
         );
     });
-    t.innerHTML = rows.length ? rows.join("") : "<tr><td colspan='5' style='text-align:center;color:#999'>Nenhum produto neste filtro</td></tr>";
+    t.innerHTML = rows.length ? rows.join("") : "<tr><td colspan='6' style='text-align:center;color:#999'>Nenhum produto neste filtro</td></tr>";
 }
 
 function toggleCompanyPriority(i) {
@@ -5931,7 +6245,124 @@ function loadCompanySelectForClient() {
     Object.values(companies).forEach(function(c){ var s = currentCompany&&c.id===currentCompany.id?" selected":""; sel.innerHTML += "<option value='"+escAttr(c.id)+"'"+s+">"+escHtml(c.name)+"</option>"; });
 }
 function onClientCompanyChange() {
-    atualizarFaixaCliente(); var id=document.getElementById("clientCompany").value; if(id) currentCompany=companies[id]; }
+    atualizarFaixaCliente();
+    var id = document.getElementById("clientCompany").value;
+    if (id) currentCompany = companies[id];
+    var preserve = !!editingClientId && tempClientProducts.length > 0;
+    carregarMixDaEmpresaNoCliente(preserve);
+}
+function carregarMixDaEmpresaNoCliente(preserveSelections) {
+    var compSel = document.getElementById("clientCompany");
+    var compId = (compSel && compSel.value) || (currentCompany ? currentCompany.id : "");
+    var comp = compId ? companies[compId] : null;
+    if (comp && Array.isArray(comp.products) && comp.products.length) {
+        var ativosEmpresa = comp.products.filter(function(cp) {
+            return cp && cp.activeRegional !== false && String(cp.status || "").toLowerCase() !== "descontinuado";
+        });
+        if (!preserveSelections || !tempClientProducts.length) {
+            tempClientProducts = ativosEmpresa.map(function(cp) {
+                return {
+                    code: cp.code || "",
+                    clientCode: "",
+                    name: cp.name,
+                    gramatura: cp.gramatura || "",
+                    quantity: cp.quantity || 1,
+                    priority: !!cp.priority || isPriorityProduct(cp.name),
+                    category: cp.category || inferirCategoriaSKU(cp.name, ""),
+                    status: cp.status || "Ativo",
+                    activeRegional: true,
+                    noMix: true,
+                    thumb: cp.thumb || ""
+                };
+            });
+        } else {
+            var existingKeys = {};
+            tempClientProducts.forEach(function(p) {
+                if (!p) return;
+                if (p.noMix === undefined) p.noMix = true;
+                var cpMatch = getCompanyCatalogMatch(p, comp);
+                if (cpMatch) {
+                    if (!p.thumb && cpMatch.thumb) p.thumb = cpMatch.thumb;
+                    if (!p.category && cpMatch.category) p.category = cpMatch.category;
+                    if (cpMatch.status) p.status = cpMatch.status;
+                    if (cpMatch.activeRegional !== undefined) p.activeRegional = (cpMatch.activeRegional !== false);
+                }
+                existingKeys[normProdKey(p.name) + "|" + normProdKey(p.gramatura)] = true;
+                if (p.code) existingKeys["c:" + String(p.code).trim()] = true;
+            });
+            ativosEmpresa.forEach(function(cp) {
+                var k1 = normProdKey(cp.name) + "|" + normProdKey(cp.gramatura);
+                var k2 = cp.code ? ("c:" + String(cp.code).trim()) : "";
+                if (!existingKeys[k1] && !(k2 && existingKeys[k2])) {
+                    tempClientProducts.push({
+                        code: cp.code || "",
+                        clientCode: "",
+                        name: cp.name,
+                        gramatura: cp.gramatura || "",
+                        quantity: cp.quantity || 1,
+                        priority: !!cp.priority || isPriorityProduct(cp.name),
+                        category: cp.category || inferirCategoriaSKU(cp.name, ""),
+                        status: cp.status || "Ativo",
+                        activeRegional: true,
+                        noMix: false,
+                        thumb: cp.thumb || ""
+                    });
+                }
+            });
+        }
+    }
+    updateClientProductsTable();
+}
+function renderClientMixList() {
+    var listEl = document.getElementById("clientMixList");
+    var cntEl = document.getElementById("clientMixCounter");
+    if (!listEl) return;
+    var compSel = document.getElementById("clientCompany");
+    var compId = (compSel && compSel.value) || (currentCompany ? currentCompany.id : "");
+    var comp = compId ? companies[compId] : null;
+    var ativos = [];
+    tempClientProducts.forEach(function(p, idx) {
+        if (!p || p._del) return;
+        if (!isProdutoAtivoNoMix(p, comp, true)) return;
+        ativos.push({ p: p, idx: idx });
+    });
+    var noMixCount = ativos.filter(function(item){ return item.p.noMix !== false; }).length;
+    if (cntEl) cntEl.textContent = noMixCount + " no mix / " + ativos.length + " ativos";
+    if (!ativos.length) {
+        listEl.innerHTML = "<div style='text-align:center;color:#64748b;padding:14px;font-size:12px'>Selecione uma empresa com portf&oacute;lio ativo ou adicione SKUs abaixo.</div>";
+        return;
+    }
+    listEl.innerHTML = ativos.map(function(item) {
+        var p = item.p, idx = item.idx;
+        var inMix = (p.noMix !== false);
+        var btnCls = inMix ? "mix-pill-btn on" : "mix-pill-btn off";
+        var btnLbl = inMix ? "&#10003; No Mix" : "&#10005; Fora do Mix";
+        return "<div class='mix-loja-row'>" +
+            "<div class='sku-cell' style='flex:1;min-width:0'>" + renderSkuThumbHtml(p, "clientForm", idx, 32) +
+            "<div class='sku-info'><div class='sku-name'>" + escHtml(p.name) + " " + renderGramaturaSeloHtml(p.gramatura) + "</div>" +
+            "<div style='font-size:10px;color:#64748b'>" + escHtml(p.category || "") + (p.code ? (" &bull; " + escHtml(p.code)) : "") + "</div></div></div>" +
+            "<button type='button' class='" + btnCls + "' onclick='toggleClientMixSku(" + idx + ")'>" + btnLbl + "</button>" +
+            "</div>";
+    }).join("");
+}
+function toggleClientMixSku(idx) {
+    if (!tempClientProducts[idx]) return;
+    tempClientProducts[idx].noMix = (tempClientProducts[idx].noMix === false);
+    updateClientProductsTable();
+}
+function marcarTodosMixCliente(estado) {
+    var val = !!estado;
+    tempClientProducts.forEach(function(p) {
+        if (p && !p._del) p.noMix = val;
+    });
+    updateClientProductsTable();
+}
+function inverterMixCliente() {
+    tempClientProducts.forEach(function(p) {
+        if (p && !p._del) p.noMix = (p.noMix === false);
+    });
+    updateClientProductsTable();
+}
 function onClientPerfilChange() {
     var val = document.getElementById("clientPerfil").value;
     var wrap = document.getElementById("clientPerfilCustomWrap");
@@ -5964,6 +6395,7 @@ function processClientProducts() {
                 category: matchedComp ? matchedComp.category : inferirCategoriaSKU(name, ""),
                 status: matchedComp ? (matchedComp.status || "Ativo") : "Ativo",
                 activeRegional: matchedComp ? (matchedComp.activeRegional !== false) : true,
+                noMix: true,
                 thumb: matchedComp ? (matchedComp.thumb || "") : ""
             });
         }
@@ -6000,6 +6432,7 @@ function addClientProduct() {
         category: m ? m.category : inferirCategoriaSKU(name, ""),
         status: m ? (m.status || "Ativo") : "Ativo",
         activeRegional: m ? (m.activeRegional !== false) : true,
+        noMix: true,
         thumb: m ? (m.thumb || "") : ""
     });
     document.getElementById("client_prod_code").value=""; document.getElementById("client_prod_name").value=""; document.getElementById("client_prod_gram").value="";
@@ -6010,6 +6443,7 @@ function addClientProduct() {
 
 function updateClientProductsTable() {
     var t = document.getElementById("clientProductsBody");
+    renderClientMixList();
     if (!tempClientProducts.length) {
         t.innerHTML = "<tr><td colspan='5' style='text-align:center;color:#999'>Nenhum produto</td></tr>";
         atualizarNotaRemocao();
@@ -6023,7 +6457,8 @@ function updateClientProductsTable() {
             : "<button class='blue' style='font-size:11px;padding:3px 7px;margin-right:3px' onclick='editClientProduct("+i+")'>✏️</button>" +
               "<button class='red' style='font-size:11px;padding:3px 7px' onclick='removeClientProduct("+i+")'>🗑️</button>";
         var codHtml = escHtml(p.code||"-") + (p.clientCode ? "<div class='plu-badge'>PLU: " + escHtml(p.clientCode) + "</div>" : "");
-        var prodHtml = "<div class='sku-cell'>" + renderSkuThumbHtml(p, "clientForm", i, 34) + "<div class='sku-info'><div class='sku-name'>" + escHtml(p.name) + "</div></div></div>";
+        var foraTag = (p.noMix === false) ? "<span style='font-size:9px;font-weight:700;background:#fee2e2;color:#b91c1c;padding:1px 5px;border-radius:4px;margin-left:4px'>Fora do Mix</span>" : "";
+        var prodHtml = "<div class='sku-cell'>" + renderSkuThumbHtml(p, "clientForm", i, 34) + "<div class='sku-info'><div class='sku-name'>" + escHtml(p.name) + foraTag + "</div></div></div>";
         return "<tr"+cls+">" +
             "<td style='font-size:11px'>"+codHtml+"</td>" +
             "<td style='font-size:11px'>"+prodHtml+"</td>" +
@@ -6077,6 +6512,7 @@ function salvarEditProd() {
         category:  prev.category||inferirCategoriaSKU(name,""),
         status:    prev.status||"Ativo",
         activeRegional: prev.activeRegional !== false,
+        noMix:     prev.noMix !== false,
         thumb:     prev.thumb||""
     };
     fecharEditProd();
@@ -6130,7 +6566,7 @@ function saveClient() {
         perfil:perfil, perfilCustom:perfilCustom, checkouts:parseInt(checkouts)||0,
         logo:logoFinal, logoSource:_pendingClientLogoSource || (prevClient ? (prevClient.logoSource||"") : ""),
         products:tempClientProducts.map(function(p){
-            var item = {code:p.code||"",name:p.name,gramatura:p.gramatura,quantity:p.quantity||1,priority:!!p.priority};
+            var item = {code:p.code||"",name:p.name,gramatura:p.gramatura,quantity:p.quantity||1,priority:!!p.priority,noMix:(p.noMix!==false)};
             if (p.clientCode) item.clientCode = String(p.clientCode).trim();
             if (p.category) item.category = p.category;
             if (p.status) item.status = p.status;
@@ -6245,7 +6681,7 @@ function goToPedidos() {
     if (!currentClient) return;
     var comp = currentCompany || companies[currentClient.companyId];
     syncCompanyCatalogFieldsToClient(currentClient, comp);
-    renderRegionalBanner("orderRegionalBanner", currentClient.products, comp);
+    renderRegionalBanner("orderRegionalBanner", currentClient.products, comp, "pedido");
     document.getElementById("orderTitle").textContent = currentClient.name;
     document.getElementById("requesterName").value = currentUser||"";
     document.getElementById("requesterPhone").value = "";
@@ -6255,10 +6691,11 @@ function goToPedidos() {
     window._ultimoMotorGiroOrder = motorGiro;
     renderOrderGiroBar(motorGiro);
 
-    // Agrupar produtos ativos no mix regional por categoria, mantendo índice original
+    // Agrupar produtos ativos no mix da loja por categoria, mantendo índice original
+    var mostrarForaPed = !!(window._mostrarForaDoMix && window._mostrarForaDoMix.pedido);
     var grupos = {};
     currentClient.products.forEach(function(p, idx){
-        if (!isProdutoAtivoNoMix(p, comp)) return;
+        if (!isProdutoAtivoNoMix(p, comp, mostrarForaPed)) return;
         var cat = (p.category && p.category.trim()) ? p.category.trim().toUpperCase() : categoriaProduto(p.name);
         if (!grupos[cat]) grupos[cat] = [];
         grupos[cat].push({ p: p, idx: idx });
@@ -6316,9 +6753,10 @@ function handleQty(el) { var pfx=el.getAttribute("data-pfx"); var idx=parseInt(e
 function updateSummary() {
     if (!currentClient) return;
     var comp = currentCompany || companies[currentClient.companyId];
+    var mostrarForaSum = !!(window._mostrarForaDoMix && window._mostrarForaDoMix.pedido);
     var tb=0,tp=0,html="";
     currentClient.products.forEach(function(p,idx){
-        if (!isProdutoAtivoNoMix(p, comp)) return;
+        if (!isProdutoAtivoNoMix(p, comp, mostrarForaSum)) return;
         var inp=document.getElementById("oqty_"+idx);
         var boxes=parseInt(inp?inp.value:0)||0;
         var total=boxes*(parseInt(p.quantity)||1);
@@ -6370,7 +6808,7 @@ function goToEstoque() {
     if (!currentClient) return;
     var comp = currentCompany || companies[currentClient.companyId];
     syncCompanyCatalogFieldsToClient(currentClient, comp);
-    renderRegionalBanner("estoqueRegionalBanner", currentClient.products, comp);
+    renderRegionalBanner("estoqueRegionalBanner", currentClient.products, comp, "estoque");
     document.getElementById("estoqueTitle").textContent = currentClient.name + " - Estoque";
     document.getElementById("rpEstoque").innerHTML = htmlRealizadoPor("estoque");
     var key = "ls23_estoque_" + currentClient.companyId + "_" + currentClient.id;
@@ -6386,9 +6824,10 @@ function goToEstoque() {
     var pvEl = document.getElementById("proximaVisita");
     if (pvEl) pvEl.value = pv || "";
     document.getElementById("estoqueObs").value = saved._obs||"";
+    var mostrarForaEst = !!(window._mostrarForaDoMix && window._mostrarForaDoMix.estoque);
     var out = "";
     currentClient.products.forEach(function(p, idx){
-        if (!isProdutoAtivoNoMix(p, comp)) return;
+        if (!isProdutoAtivoNoMix(p, comp, mostrarForaEst)) return;
         var d = saved[idx]||{caixas:0};
         var rc = d.caixas>0&&d.caixas<=3 ? " class='eb'" : "";
         var isPrioE = p.priority || isPriorityProduct(p.name);
@@ -6456,14 +6895,15 @@ function goToRupturas() {
     if (!currentClient) return;
     var comp = currentCompany || companies[currentClient.companyId];
     syncCompanyCatalogFieldsToClient(currentClient, comp);
-    renderRegionalBanner("rupturasRegionalBanner", currentClient.products, comp);
+    renderRegionalBanner("rupturasRegionalBanner", currentClient.products, comp, "rupturas");
     document.getElementById("rupturasTitle").textContent = currentClient.name+" - Rupturas";
     document.getElementById("rpRupturas").innerHTML = htmlRealizadoPor("rupturas");
     var key="ls23_rupturas_"+currentClient.companyId+"_"+currentClient.id;
     var saved=lsGetJSON(key, {});
     document.getElementById("rupturasObs").value=saved._obs||"";
+    var mostrarForaRup = !!(window._mostrarForaDoMix && window._mostrarForaDoMix.rupturas);
     var html = currentClient.products.map(function(p,idx){
-        if (!isProdutoAtivoNoMix(p, comp)) return "";
+        if (!isProdutoAtivoNoMix(p, comp, mostrarForaRup)) return "";
         var isPrioR=p.priority||isPriorityProduct(p.name);
         var d=saved[idx]||{falta:false,dataInicio:null};
         var chk=d.falta?"checked":""; var rc=d.falta?"class='er'":"";
@@ -6536,15 +6976,16 @@ function goToValidade() {
     if (!currentClient) return;
     var comp = currentCompany || companies[currentClient.companyId];
     syncCompanyCatalogFieldsToClient(currentClient, comp);
-    renderRegionalBanner("validadeRegionalBanner", currentClient.products, comp);
+    renderRegionalBanner("validadeRegionalBanner", currentClient.products, comp, "validade");
     document.getElementById("validadeTitle").textContent = currentClient.name+" - Validade";
     document.getElementById("rpValidade").innerHTML = htmlRealizadoPor("validade");
     var key="ls23_validade_"+currentClient.companyId+"_"+currentClient.id;
     var saved=lsGetJSON(key, {});
     document.getElementById("validadeObs").value=saved._obs||"";
+    var mostrarForaVal = !!(window._mostrarForaDoMix && window._mostrarForaDoMix.validade);
     var hoje=new Date();
     var htmlV = currentClient.products.map(function(p,idx){
-        if (!isProdutoAtivoNoMix(p, comp)) return "";
+        if (!isProdutoAtivoNoMix(p, comp, mostrarForaVal)) return "";
         var isPrioV=p.priority||isPriorityProduct(p.name);
         var d=saved[idx]||{marcado:false,data:"",resolvido:false}; var chk=d.marcado?"checked":""; var diasInfo="",cls="",status="";
         if (d.marcado&&d.data&&!d.resolvido) { var venc=new Date(d.data+"T12:00:00"); var diff=Math.ceil((venc-hoje)/(1000*60*60*24)); var cor=getCorVal(diff); cls=cor.cls; status=cor.label; diasInfo=diff+"d"; }
@@ -6611,8 +7052,9 @@ function renderPainelValidade() {
     var saved = lsGetJSON(key, {});
     var hoje = new Date();
     var lista = [];
+    var mostrarForaPainel = !!(window._mostrarForaDoMix && window._mostrarForaDoMix.validade);
     currentClient.products.forEach(function(p, idx) {
-        if (!isProdutoAtivoNoMix(p, comp)) return;
+        if (!isProdutoAtivoNoMix(p, comp, mostrarForaPainel)) return;
         var d = saved[idx];
         if (d && d.marcado && d.data && !d.resolvido) {
             var venc = new Date(d.data + "T12:00:00");
@@ -7332,12 +7774,20 @@ function removerTroca(i) {
 
 function goToAuditoria() {
     if (!currentClient) return;
+    var comp = currentCompany || companies[currentClient.companyId];
+    syncCompanyCatalogFieldsToClient(currentClient, comp);
     document.getElementById("auditoriaTitle").textContent = currentClient.name+" - Auditoria";
     var key="ls23_auditoria_"+currentClient.companyId+"_"+currentClient.id;
     var saved=lsGetJSON(key, {});
     var keyDl="ls23_dadosloja_"+currentClient.companyId+"_"+currentClient.id;
     var dl=lsGetJSON(keyDl, {});
-    var html="";
+    var mostrarForaAud = !!(window._mostrarForaDoMix && window._mostrarForaDoMix.auditoria);
+    var skusAud = (currentClient.products || []).filter(function(p){ return isProdutoAtivoNoMix(p, comp, mostrarForaAud); });
+    var html="<div id='auditoriaRegionalBanner' class='regional-banner'></div>";
+    html += "<div style='background:#f0fdf4;border:1px solid #86efac;border-radius:10px;padding:10px;margin-bottom:10px;font-size:11px;color:#166534'>" +
+        "<b>&#128230; Mix Ativo Auditado (" + skusAud.length + " SKUs):</b> " +
+        (skusAud.length ? skusAud.slice(0, 12).map(function(s){ return escHtml(s.name + (s.gramatura ? " " + s.gramatura : "")); }).join(", ") + (skusAud.length > 12 ? (" +" + (skusAud.length - 12) + " itens") : "") : "Nenhum SKU ativo no Mix desta loja.") +
+        "</div>";
     // Cabeçalho
     var logoHtml=currentClient.logo?"<img src='"+currentClient.logo+"' style='height:48px;object-fit:contain;border-radius:6px;margin-bottom:8px'><br>":"";
     html+="<div class='aud-sec' style='background:#eff6ff;border:1px solid #bfdbfe'>";
@@ -7384,6 +7834,7 @@ function goToAuditoria() {
     html+="</div>";
     html += htmlRealizadoPor("auditoria");
     document.getElementById("auditoriaContent").innerHTML=html;
+    renderRegionalBanner("auditoriaRegionalBanner", currentClient.products, comp, "auditoria");
     showPage("pageAuditoria");
 }
 
@@ -8652,7 +9103,7 @@ document.addEventListener("DOMContentLoaded", function() {
         var clientSubPages = [
             "pageOrder","pageEstoque","pageRupturas","pageValidade",
             "pageAuditoria","pageLojaIdeal","pageDadosLoja","pageTrocas",
-            "pageRelInterno","pagePrecos","pageRelatorios","pageExtrato","pageAuditoriaIA"
+            "pageRelInterno","pagePrecos","pageRelatorios","pageExtrato","pageAuditoriaIA","pagePreview"
         ];
         if (cur === "pageClients") {
             if (_exitPending) { return; }
@@ -8660,10 +9111,15 @@ document.addEventListener("DOMContentLoaded", function() {
             showMsg("msgClients", "Pressione voltar novamente para sair");
             _pushAppHistoryState(null);
             setTimeout(function(){ _exitPending = false; }, 3000);
+        } else if (cur === "pageExtrato" || cur === "pagePreview") {
+            showPage("pageRelatorios");
         } else if (clientSubPages.indexOf(cur) >= 0 && currentClient) {
             goToMenu();
-        } else if (cur === "pageMenu" || cur === "pageCompany" || cur === "pageClient" || cur === "pageLogistica" || cur === "pageConfigGeral" || cur === "pageUser") {
-            if (currentCompany) {
+        } else if (cur === "pageMenu" || cur === "pageCompany" || cur === "pageClient" || cur === "pageLogistica" || cur === "pageRelPeriodo" || cur === "pageConfigGeral" || cur === "pageConfig" || cur === "pageUser" || cur === "pageManage") {
+            if (cur === "pageUser" && window._userFromSplash) {
+                window._userFromSplash = false;
+                voltarParaSplash();
+            } else if (currentCompany) {
                 backToClients();
             } else {
                 voltarParaSplash();
@@ -8676,6 +9132,7 @@ document.addEventListener("DOMContentLoaded", function() {
             voltarParaSplash();
         }
     });
+    document.querySelectorAll(".page").forEach(function(p) { _garantirTopbarVoltar(p); });
     var inp = document.getElementById("confImagem");
     if (inp) {
         inp.addEventListener("change", function() {
@@ -8749,11 +9206,21 @@ function renderPrecosList() {
     }
     var comp = currentCompany || companies[currentClient.companyId];
     syncCompanyCatalogFieldsToClient(currentClient, comp);
+    var listaEl = document.getElementById("precosLista");
+    var banP = document.getElementById("precosRegionalBanner");
+    if (!banP && listaEl && listaEl.parentNode) {
+        banP = document.createElement("div");
+        banP.id = "precosRegionalBanner";
+        banP.className = "regional-banner";
+        listaEl.parentNode.insertBefore(banP, listaEl);
+    }
+    renderRegionalBanner("precosRegionalBanner", currentClient.products, comp, "precos");
     var pkKey = "ls23_precos_" + currentClient.companyId + "_" + currentClient.id;
     var precos = lsGetJSON(pkKey, {});
+    var mostrarForaPrec = !!(window._mostrarForaDoMix && window._mostrarForaDoMix.precos);
     var html = "";
     currentClient.products.forEach(function(p, idx) {
-        if (!isProdutoAtivoNoMix(p, comp)) return;
+        if (!isProdutoAtivoNoMix(p, comp, mostrarForaPrec)) return;
         var key = p.code || p.name;
         var pc = precos[key] || {};
         var qtdCx = parseInt(p.quantity) || 1;
@@ -10358,17 +10825,20 @@ function abrirAuditoriaIA() {
     if (currentClient.logo) { logoEl.src = currentClient.logo; logoEl.style.display = "block"; }
     else logoEl.style.display = "none";
     var elCheck = document.getElementById("checklistRefAudIA");
+    var compAud = currentCompany || companies[currentClient.companyId];
+    syncCompanyCatalogFieldsToClient(currentClient, compAud);
+    var skusAtivosAud = (currentClient.products || []).filter(function(p){ return isProdutoAtivoNoMix(p, compAud, false); });
     var guiaEmp = currentCompany ? (localStorage.getItem("ls23_guia_empresa_" + currentCompany.id) || "") : "";
     if (guiaEmp) {
         elCheck.style.background = "#eff6ff";
         elCheck.style.borderColor = "#bfdbfe";
         elCheck.style.color = "#1e3a8a";
-        elCheck.innerHTML = "&#10004; Guia da empresa carregado (" + guiaEmp.length + " caracteres). A IA vai cruzar as fotos com este guia.";
+        elCheck.innerHTML = "&#10004; Guia da empresa carregado (" + guiaEmp.length + " caracteres) &bull; Mix ativo na loja: <b>" + skusAtivosAud.length + " SKU(s)</b>.";
     } else {
         elCheck.style.background = "#fff7ed";
         elCheck.style.borderColor = "#fdba74";
         elCheck.style.color = "#92400e";
-        elCheck.innerHTML = "&#9888; Nenhum guia cadastrado para esta empresa. Acesse Editar Empresa e adicione o guia de execucao.";
+        elCheck.innerHTML = "&#9888; Nenhum guia cadastrado para esta empresa. Mix ativo na loja: <b>" + skusAtivosAud.length + " SKU(s)</b>.";
     }
     var topbarImg = document.getElementById("topbarLogoAudIA");
     if (topbarImg && window._LCS_ASSETS && window._LCS_ASSETS["logo-lcs"]) {
@@ -10525,6 +10995,12 @@ async function analisarAuditoriaIA() {
         : (guiaEmpresaAud ? ("\nGUIA DA EMPRESA:\n" + guiaEmpresaAud.substring(0, 2200)) : "\nSem guia cadastrado — avalie execucao padrao de Trade Marketing (Ponto Natural, Pontos Extras, Checkout, precificacao, FEFO e limpeza).");
 
     var setoresLista = _fotosAuditoriaIA.map(function(f, idx){ return "Foto " + (idx+1) + ": " + (f.setor || "Geral"); }).join(" | ");
+    var compAudIA = currentCompany || companies[compId];
+    var skusAtivosLoja = (currentClient.products || []).filter(function(p){ return isProdutoAtivoNoMix(p, compAudIA, false); });
+    var blocoMixAtivo = skusAtivosLoja.length
+        ? ("\nMIX ATIVO CADASTRADO NESTA LOJA (" + skusAtivosLoja.length + " SKUs - audite considerando apenas estes itens ativos):\n" +
+           skusAtivosLoja.slice(0, 40).map(function(s){ return "- " + s.name + (s.gramatura ? " " + s.gramatura : "") + (s.priority ? " [PRIORITARIO]" : ""); }).join("\n") + "\n")
+        : "";
 
     var prompt = "Voce e o Guardiao LocalShelf realizando uma Auditoria Visual de PDV (Programa Loja Perfeita — Meta 80%+).\n" +
         "DADOS DA LOJA:\n" +
@@ -10532,6 +11008,7 @@ async function analisarAuditoriaIA() {
         "- Canal / Perfil: " + perfilLoja + (checkoutsLoja ? (" | Checkouts: " + checkoutsLoja) : "") + "\n" +
         "- " + contratoTxt + "\n" +
         "- Setores das fotos: " + setoresLista + "\n" +
+        blocoMixAtivo +
         blocoPilulas +
         blocoGuia + "\n\n" +
         "INSTRUCOES:\n" +
@@ -11002,7 +11479,7 @@ function switchGuiaTab(tab) {
     }
 }
 
-// Converte PDF em array de imagens (uma por página)
+// Converte PDF em array de imagens + texto integral (uma entrada por página)
 async function pdfParaImagens(file, maxPaginas) {
     if (!window.pdfjsLib) throw new Error("Biblioteca PDF nao carregada");
     var arrayBuffer = await file.arrayBuffer();
@@ -11017,7 +11494,16 @@ async function pdfParaImagens(file, maxPaginas) {
         canvas.height = viewport.height;
         await page.render({canvasContext: canvas.getContext("2d"), viewport: viewport}).promise;
         var dataUrl = canvas.toDataURL("image/jpeg", 0.8);
-        imagens.push({ data: dataUrl.split(",")[1], mime: "image/jpeg", src: dataUrl });
+        var pdfText = "";
+        try {
+            if (typeof page.getTextContent === "function") {
+                var tc = await page.getTextContent();
+                if (tc && Array.isArray(tc.items)) {
+                    pdfText = tc.items.map(function(it){ return it && it.str ? String(it.str) : ""; }).join(" ").replace(/\s+/g, " ").trim();
+                }
+            }
+        } catch(eTxtPdf) {}
+        imagens.push({ data: dataUrl.split(",")[1], mime: "image/jpeg", src: dataUrl, pageNum: i, pdfText: pdfText });
     }
     return imagens;
 }
@@ -11385,6 +11871,30 @@ function _comTimeout(promise, ms, mensagemErro) {
     });
 }
 
+async function _lerPaginaGuiaCompleta(fotoItem, fi, totalGeral, promptBase) {
+    var pageNum = fotoItem.pageNum || (fi + 1);
+    var comp = await _comTimeout(comprimirImagemParaIA(fotoItem.data, fotoItem.mime), 25000, "Tempo esgotado ao preparar página " + pageNum);
+    var txtPdfExtra = (fotoItem.pdfText && fotoItem.pdfText.trim())
+        ? ("\n\nTEXTO EXTRAIDO INTEGRALMENTE DO PDF (NAO RESUMA; incorpore todos os detalhes ao cruzar com os elementos visuais):\n" + fotoItem.pdfText.trim())
+        : "";
+    var promptFinal = promptBase + " (Pagina " + pageNum + " de " + totalGeral + ".)" + txtPdfExtra;
+    var resp = getGoogleGeminiKey()
+        ? await _comTimeout(chamarGoogleGeminiFlash(promptFinal, [{ mimeType: comp.mime, data: comp.data }], false, null, { timeoutMs: 90000 }), 90000, "Tempo esgotado na leitura da página " + pageNum + ". Verifique sua conexão.")
+        : await _comTimeout(chamarClaudeWorker(promptFinal, comp.data, comp.mime, "classificar"), 60000, "Tempo esgotado na leitura da página " + pageNum + ". Verifique sua conexão.");
+    var parsed = _parseGuiaResposta(resp);
+    if (fotoItem.pdfText && (!parsed.descricao || parsed.descricao.length < 40)) {
+        parsed.descricao = (parsed.descricao ? parsed.descricao + "\n" : "") + fotoItem.pdfText;
+    }
+    var imgStorage = await _comTimeout(_reduzirImagemGuiaParaStorage(fotoItem.src || ("data:" + comp.mime + ";base64," + comp.data)), 12000, "Tempo esgotado ao salvar miniatura da página " + pageNum);
+    return {
+        pagina: pageNum,
+        descricao: parsed.descricao,
+        tags: parsed.tags,
+        imagemBase64: imgStorage,
+        pdfText: fotoItem.pdfText || ""
+    };
+}
+
 async function processarGuiaFotos() {
     var apiKey = getGoogleGeminiKey() || getApiKey() || "";
     if (!apiKey) { alert("Configure sua chave de acesso em Configurações para usar esta funcionalidade."); return; }
@@ -11399,61 +11909,68 @@ async function processarGuiaFotos() {
     var totalGeral = _fotosGuia.length;
     var cidAtiva = _resolverCompanyIdAtiva() || "geral";
     var progKey = "ls23_guia_bg_progress_" + cidAtiva;
+    var BATCH_SIZE = 2;
 
     iniciarTarefaGuardiao({
         id: "leitura_guia_" + cidAtiva,
-        titulo: "Lendo Guia de Execução...",
-        sub: "Lendo página " + (inicio + 1) + " de " + totalGeral + "...",
+        titulo: "Lendo Guia Completo...",
+        sub: "Lendo páginas 1-" + Math.min(BATCH_SIZE, totalGeral) + " de " + totalGeral + "...",
         canBackground: true,
         totalSteps: totalGeral,
         pageTarget: window._currentPage || "pageCompany"
     });
 
-    var prompt = "Voce e um especialista em trade marketing analisando uma pagina de um GUIA DE EXECUCAO COMERCIAL (ex: Guia de Execucao OT). " +
-        "A imagem pode conter texto, planogramas, sortimento por perfil (Vizinhanca, Super, Hiper, Atacado), regras de SOD, SOE, FEFO, tiras cross ou auditoria. " +
+    var prompt = "Voce e um especialista em trade marketing fazendo a TRANSCRICAO INTEGRAL de uma pagina de GUIA DE EXECUCAO COMERCIAL (ex: Guia de Execucao OT). " +
+        "REGRA CRITICA: NAO RESUMA, NAO COMPACTE E NAO OMITA NENHUM DETALHE, REGRA DE CANAL (Vizinhanca, Super, Hiper, Atacarejo), NUMERO DE FACINGS, PONTOS EXTRAS (ilha de checkout, ponta de gondola, clip strip, tira cross, Lego, bloco de marca), METAS DE SOD/SOE/FEFO, SKUS OU PERCENTUAIS DA PAGINA. " +
         "Responda APENAS com um objeto JSON valido neste formato exato: " +
         '{"descricao":"...","tags":["..."]}. ' +
-        "Em 'descricao' descreva DETALHADAMENTE tudo que ve: texto, tabelas de perfil, produtos prioritarios, layout, percentuais e regras. " +
+        "Em 'descricao' transcreva COMPLETAMENTE todas as secoes, tabelas de perfil/tipologia, regras por categoria/canal, planogramas, textos e numeros visiveis na pagina. " +
         "Em 'tags' use APENAS tags desta lista: " + TAGS_GUIA_PERMITIDAS.join(", ") + ".";
 
     try {
         var paginas = _lerGuiaPages();
-        var textoCompleto = "";
         var quotaEstourou = false;
-        for (var fi = inicio; fi < totalGeral; fi++) {
+        for (var batchStart = inicio; batchStart < totalGeral; batchStart += BATCH_SIZE) {
+            var batchEnd = Math.min(batchStart + BATCH_SIZE, totalGeral);
+            var labelLote = batchEnd > (batchStart + 1) ? ((batchStart + 1) + "-" + batchEnd) : String(batchStart + 1);
             atualizarProgressoTarefa(
-                "Lendo Guia de Execução...",
-                "Lendo página " + (fi + 1) + " de " + totalGeral + "...",
-                fi,
+                "Lendo Guia Completo...",
+                "Lendo páginas " + labelLote + " de " + totalGeral + "...",
+                batchStart,
                 totalGeral
             );
-            if (fi > inicio) await new Promise(function(r){ setTimeout(r, 900); });
-            var comp = await _comTimeout(comprimirImagemParaIA(_fotosGuia[fi].data, _fotosGuia[fi].mime), 20000, "Tempo esgotado ao preparar página " + (fi+1));
-            var resp = await _comTimeout(chamarClaudeWorker(prompt + " (Pagina " + (fi+1) + " de " + totalGeral + ".)", comp.data, comp.mime, "classificar"), 45000, "Tempo esgotado na leitura da página " + (fi+1) + ". Verifique sua conexão.");
-            var parsed = _parseGuiaResposta(resp);
-            var imgStorage = await _comTimeout(_reduzirImagemGuiaParaStorage(_fotosGuia[fi].src || ("data:" + comp.mime + ";base64," + comp.data)), 12000, "Tempo esgotado ao salvar miniatura da página " + (fi+1));
-            paginas.push({ pagina: fi+1, descricao: parsed.descricao, tags: parsed.tags, imagemBase64: imgStorage });
-            textoCompleto += (textoCompleto ? "\n\n" : "") + "=== PAGINA " + (fi+1) + " ===\n" + parsed.descricao;
-            var salvouOk = _salvarGuiaPages(paginas);
-            if (!salvouOk) {
-                quotaEstourou = true;
-                paginas.pop();
-                _guiaProcessadas = fi;
-                try { localStorage.setItem(progKey, JSON.stringify({ processadas: fi, total: totalGeral, updatedAt: new Date().toISOString() })); } catch(eProg){}
-                break;
+            if (batchStart > inicio) await new Promise(function(r){ setTimeout(r, 600); });
+            var promisesLote = [];
+            for (var fi = batchStart; fi < batchEnd; fi++) {
+                promisesLote.push(_lerPaginaGuiaCompleta(_fotosGuia[fi], fi, totalGeral, prompt));
             }
-            _guiaProcessadas = fi + 1;
-            try {
-                localStorage.setItem(progKey, JSON.stringify({ processadas: _guiaProcessadas, total: totalGeral, updatedAt: new Date().toISOString() }));
-            } catch(eProg2) {}
-            var textareaStep = document.getElementById("guiaEmpresaTexto");
-            if (textareaStep) {
-                var sepStep = textareaStep.value ? "\n\n" : "";
-                textareaStep.value = textareaStep.value + sepStep + "=== PAGINA " + (fi+1) + " ===\n" + parsed.descricao;
-                if (cidAtiva && cidAtiva !== "geral") {
-                    try { localStorage.setItem("ls23_guia_empresa_" + cidAtiva, textareaStep.value); } catch(eTxt){}
+            var resultadosLote = await Promise.all(promisesLote);
+            for (var ri = 0; ri < resultadosLote.length; ri++) {
+                var pageObj = resultadosLote[ri];
+                var realIdx = batchStart + ri;
+                paginas.push(pageObj);
+                var salvouOk = _salvarGuiaPages(paginas);
+                if (!salvouOk) {
+                    quotaEstourou = true;
+                    paginas.pop();
+                    _guiaProcessadas = realIdx;
+                    try { localStorage.setItem(progKey, JSON.stringify({ processadas: realIdx, total: totalGeral, updatedAt: new Date().toISOString() })); } catch(eProg){}
+                    break;
+                }
+                _guiaProcessadas = realIdx + 1;
+                try {
+                    localStorage.setItem(progKey, JSON.stringify({ processadas: _guiaProcessadas, total: totalGeral, updatedAt: new Date().toISOString() }));
+                } catch(eProg2) {}
+                var textareaStep = document.getElementById("guiaEmpresaTexto");
+                if (textareaStep) {
+                    var sepStep = textareaStep.value ? "\n\n" : "";
+                    textareaStep.value = textareaStep.value + sepStep + "=== PAGINA " + pageObj.pagina + " ===\n" + pageObj.descricao;
+                    if (cidAtiva && cidAtiva !== "geral") {
+                        try { localStorage.setItem("ls23_guia_empresa_" + cidAtiva, textareaStep.value); } catch(eTxt){}
+                    }
                 }
             }
+            if (quotaEstourou) break;
         }
 
         if (document.getElementById("painelGuiaTexto")) switchGuiaTab("texto");
@@ -11461,26 +11978,26 @@ async function processarGuiaFotos() {
 
         var restantes = totalGeral - _guiaProcessadas;
         if (quotaEstourou) {
-            if (btn) { btn.innerHTML = "&#128229; Processar mais (faltam " + restantes + ")"; btn.style.display = "block"; }
+            if (btn) { btn.innerHTML = "&#128269; Continuar Leitura (faltam " + restantes + ")"; btn.style.display = "block"; }
             falharTarefaGuardiao("Armazenamento local cheio!", _guiaProcessadas + " de " + totalGeral + " páginas salvas.");
         } else if (restantes > 0) {
-            if (btn) { btn.innerHTML = "&#128229; Processar mais (faltam " + restantes + ")"; btn.style.display = "block"; }
+            if (btn) { btn.innerHTML = "&#128269; Continuar Leitura (faltam " + restantes + ")"; btn.style.display = "block"; }
             atualizarProgressoTarefa("Lote parcial concluído", _guiaProcessadas + " de " + totalGeral + " páginas salvas.", _guiaProcessadas, totalGeral);
             var btnContinuar = document.getElementById("guardiao-btn-continuar");
             if (btnContinuar) {
-                btnContinuar.textContent = "📥 Processar mais (faltam " + restantes + ")";
+                btnContinuar.textContent = "🔍 Continuar Leitura (faltam " + restantes + ")";
                 btnContinuar.style.display = "block";
                 btnContinuar.onclick = function(){ btnContinuar.style.display = "none"; processarGuiaFotos(); };
             }
         } else {
             try { localStorage.removeItem(progKey); } catch(eRm) {}
-            if (btn) { btn.innerHTML = "&#128229; Processar Guia"; btn.style.display = "block"; }
+            if (btn) { btn.innerHTML = "&#128269; 2. Ler Guia Completo"; btn.style.display = "block"; }
             var btnContinuar2 = document.getElementById("guardiao-btn-continuar");
             if (btnContinuar2) btnContinuar2.style.display = "none";
             _fotosGuia = []; _guiaProcessadas = 0;
             if (typeof renderGridGuiaFotos === "function") renderGridGuiaFotos();
             if (typeof renderBaseConhecimentoGuardiao === "function") renderBaseConhecimentoGuardiao();
-            concluirTarefaGuardiao("✅ Leitura do Guia concluída! Toque para revisar", totalGeral + " página(s) prontas no Guardião.", {
+            concluirTarefaGuardiao("✅ Leitura completa do Guia concluída! Toque para revisar", totalGeral + " página(s) processada(s) na íntegra no Guardião.", {
                 keepOverlayMs: 2400,
                 onReturn: function(){
                     if (_gchatAberto || window._currentPage !== "pageCompany") {
@@ -11496,14 +12013,14 @@ async function processarGuiaFotos() {
         if (stEl) stEl.style.display = "none";
         var temRestante = _fotosGuia.length - _guiaProcessadas;
         if (btn) {
-            btn.innerHTML = (_guiaProcessadas > 0 ? "&#128229; Processar mais (faltam " + temRestante + ")" : "&#128229; Processar Guia");
+            btn.innerHTML = (_guiaProcessadas > 0 ? "&#128269; Continuar Leitura (faltam " + temRestante + ")" : "&#128269; 2. Ler Guia Completo");
             btn.style.display = "block";
         }
         var msgErrGuia = (typeof _traduzirErroAmigavelIA === "function") ? _traduzirErroAmigavelIA(e) : (e.message || "Falha ao ler Guia.");
         falharTarefaGuardiao("Erro ao ler Guia", msgErrGuia);
         var btnContinuar3 = document.getElementById("guardiao-btn-continuar");
         if (btnContinuar3 && temRestante > 0) {
-            btnContinuar3.textContent = "📥 Processar mais (faltam " + temRestante + ")";
+            btnContinuar3.textContent = "🔍 Continuar Leitura (faltam " + temRestante + ")";
             btnContinuar3.style.display = "block";
             btnContinuar3.onclick = function(){ btnContinuar3.style.display = "none"; processarGuiaFotos(); };
         }
@@ -12877,23 +13394,173 @@ function montarSugestoesGuardiao() {
 }
 
 var _guiaSinonimos = {
-    layout_checkout:          ["checkout", "check-out", "caixa", "caixas", "frente de caixa", "papa-fila", "papa fila"],
+    layout_checkout:          ["checkout", "check-out", "caixa", "caixas", "frente de caixa", "papa-fila", "papa fila", "ilha de checkout", "terminal de caixa", "balcao de caixa", "balcão de caixa", "checkstand", "check-stand"],
     layout_gondola:           ["gondola", "gôndola", "prateleira", "prateleiras", "shelf", "linear", "ponto natural"],
-    layout_ponto_extra:       ["ponto extra", "ponto_extra", "pontos extras", "exposicao extra", "exposição extra", "perimetro", "ilha"],
+    layout_ponto_extra:       ["ponto extra", "ponto_extra", "pontos extras", "exposicao extra", "exposição extra", "perimetro", "ilha", "ilha de checkout", "ponta de gondola", "ponta de gôndola", "terminal", "ilha promocional", "ponto adicional"],
     layout_displays:          ["display", "displays", "expositor", "posicionamento de display"],
-    layout_planograma:        ["layout", "leiaute", "planograma", "disposicao", "disposição", "arrumacao", "organizacao"],
-    sortimentos:              ["sortimento", "sortimentos", "mix de produtos", "mix"],
+    layout_planograma:        ["layout", "leiaute", "planograma", "disposicao", "disposição", "arrumacao", "organizacao", "lego", "bloco de marca", "bloco", "frentes", "facing", "facings", "modulacao", "modulação"],
+    sortimentos:              ["sortimento", "sortimentos", "mix de produtos", "mix", "sortimento obrigatorio", "sortimento obrigatório", "obrigatorio", "obrigatório"],
     prioritarios:             ["prioritario", "prioritário", "prioritarios", "prioritários"],
-    perfil_loja:              ["perfil da loja", "perfil de loja", "tipo de loja", "vizinhanca", "super", "hiper", "atacado"],
+    perfil_loja:              ["perfil da loja", "perfil de loja", "tipo de loja", "vizinhanca", "vizinhança", "super", "hiper", "atacado", "atacarejo", "cash and carry", "canal", "tipologia", "regional"],
     sazonalidade_lancamento:  ["sazonalidade", "sazonalidades", "lancamento", "lançamento", "lancamentos"],
     momentos_consumo:         ["momento de consumo", "momentos de consumo", "ocasiao de consumo"],
-    tiras_cross:              ["tiras cross", "tira cross", "cross"],
+    tiras_cross:              ["tiras cross", "tira cross", "cross", "clip strip", "clip-strip", "fita cross", "cross merchandising", "fita", "pendura"],
     percentual_exigido:       ["percentual", "percentual exigido", "meta", "% exigido", "loja perfeita"],
     sod:                      ["sod", "share of display", "espaco", "espaço"],
     soe:                      ["soe", "execucao", "execução", "share of execution"],
     fefo:                     ["fefo", "validade", "vencimento", "vencer"],
     auditoria_loja_perfeita:  ["auditoria", "loja perfeita", "ofensor", "pontuacao"]
 };
+
+var LS_CONHECIMENTO_VALIDADO_KEY = "ls23_conhecimento_validado";
+
+function _lerConhecimentoValidadoLocal() {
+    var arr = lsGetJSON(LS_CONHECIMENTO_VALIDADO_KEY, []);
+    return Array.isArray(arr) ? arr : [];
+}
+
+function _normalizarTokensPergunta(texto) {
+    return String(texto || "")
+        .toLowerCase()
+        .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^a-z0-9\s]/g, " ")
+        .split(/\s+/)
+        .filter(function(w){ return w.length >= 3; });
+}
+
+function _matchConhecimentoValidadoLista(lista, pergunta, compId, canal) {
+    var qTokens = _normalizarTokensPergunta(pergunta);
+    if (!qTokens.length || !Array.isArray(lista) || !lista.length) return null;
+    var qNorm = qTokens.join(" ");
+    var canalNorm = String(canal || "").trim().toLowerCase();
+    var melhor = null;
+
+    lista.forEach(function(item) {
+        if (!item || !item.pergunta || !item.resposta) return;
+        if (compId && item.empresa_id && String(item.empresa_id) !== String(compId)) return;
+        if (canalNorm && item.canal && String(item.canal).trim().toLowerCase() !== canalNorm) return;
+
+        var iTokens = _normalizarTokensPergunta(item.pergunta);
+        if (!iTokens.length) return;
+        var iNorm = iTokens.join(" ");
+        if (iNorm === qNorm) {
+            melhor = { item: item, score: 1.0 };
+            return;
+        }
+        var comuns = 0;
+        qTokens.forEach(function(t) {
+            if (iTokens.indexOf(t) >= 0) comuns++;
+        });
+        var ratio = comuns / Math.max(qTokens.length, iTokens.length);
+        var qCover = comuns / qTokens.length;
+        var score = (ratio * 0.65) + (qCover * 0.35);
+        if ((comuns >= 2 && score >= 0.55) || qCover >= 0.85) {
+            if (!melhor || score > melhor.score) {
+                melhor = { item: item, score: score };
+            }
+        }
+    });
+    return melhor ? melhor.item : null;
+}
+
+async function buscarConhecimentoValidado(pergunta, compId, canal) {
+    var cid = compId || _resolverCompanyIdAtiva() || "";
+    var canalAlvo = canal || (currentClient ? (currentClient.canal || currentClient.perfil || "") : "");
+    var localList = _lerConhecimentoValidadoLocal();
+    var localHit = _matchConhecimentoValidadoLista(localList, pergunta, cid, canalAlvo);
+
+    if (!localHit && typeof isSupabaseConfigurado === "function" && isSupabaseConfigurado() && navigator.onLine !== false && typeof getSupabaseClient === "function") {
+        try {
+            var client = getSupabaseClient();
+            if (client) {
+                var query = client.from("conhecimento_validado").select("*").order("updated_at", { ascending: false }).limit(80);
+                if (cid) query = query.eq("empresa_id", String(cid));
+                var res = await _comTimeout(query, 4000, "Timeout base validada");
+                if (res && Array.isArray(res.data) && res.data.length) {
+                    var mapa = {};
+                    localList.forEach(function(it){ if (it && it.id) mapa[it.id] = it; });
+                    res.data.forEach(function(it){ if (it && it.id) mapa[it.id] = it; });
+                    var merged = Object.values(mapa);
+                    lsSetJSON(LS_CONHECIMENTO_VALIDADO_KEY, merged.slice(0, 200));
+                    localHit = _matchConhecimentoValidadoLista(merged, pergunta, cid, canalAlvo);
+                }
+            }
+        } catch(eSbKn) {}
+    }
+    return localHit;
+}
+
+function salvarConhecimentoValidado(pergunta, resposta, fontePagina, opts) {
+    opts = opts || {};
+    var cid = opts.empresa_id || _resolverCompanyIdAtiva() || "";
+    var canal = opts.canal || (currentClient ? (currentClient.canal || currentClient.perfil || "") : "");
+    var cfg = (typeof getSupabaseConfig === "function") ? getSupabaseConfig() : { promotor: "" };
+    var pLimpa = String(pergunta || "").trim();
+    var rLimpa = String(resposta || "").trim();
+    if (!pLimpa || !rLimpa) return null;
+
+    var qSlug = _normalizarTokensPergunta(pLimpa).slice(0, 8).join("_") || ("q_" + Date.now());
+    var id = "cv_" + (cid || "geral") + "_" + (canal ? canal.toLowerCase().replace(/[^a-z0-9]/g, "") : "all") + "_" + qSlug;
+    var rec = {
+        id: id,
+        empresa_id: String(cid),
+        canal: String(canal),
+        pergunta: pLimpa,
+        resposta: rLimpa,
+        fonte_pagina: String(fontePagina || ""),
+        opcoes_confirmacao: Array.isArray(opts.opcoes) ? opts.opcoes : [],
+        promotor_id: cfg.promotor || currentUser || "",
+        updated_at: new Date().toISOString()
+    };
+
+    var lista = _lerConhecimentoValidadoLocal().filter(function(it){ return it && it.id !== id; });
+    lista.unshift(rec);
+    lsSetJSON(LS_CONHECIMENTO_VALIDADO_KEY, lista.slice(0, 200));
+
+    if (typeof enfileirarSyncSupabase === "function") {
+        enfileirarSyncSupabase("conhecimento_validado", rec);
+        if (navigator.onLine !== false && typeof sincronizarFilaSupabase === "function") {
+            setTimeout(function(){ sincronizarFilaSupabase(false); }, 150);
+        }
+    }
+    return rec;
+}
+
+function adicionarBotoesConfirmacaoChat(msgDiv, opcoes, perguntaOrig, respostaTxt, fontePagina) {
+    if (!msgDiv) return;
+    var wrap = document.createElement("div");
+    wrap.className = "gchat-disambig-wrap";
+    var listaOpcoes = Array.isArray(opcoes) ? opcoes.filter(Boolean) : [];
+    if (listaOpcoes.length > 0) {
+        listaOpcoes.forEach(function(optTxt) {
+            var b = document.createElement("button");
+            b.type = "button";
+            b.className = "gchat-disambig-btn";
+            b.textContent = "✓ " + optTxt;
+            b.onclick = function() {
+                b.disabled = true;
+                var perguntaRefinada = perguntaOrig + " (Confirmado: " + optTxt + ")";
+                salvarConhecimentoValidado(perguntaRefinada, respostaTxt + "\n[Interpretação confirmada: " + optTxt + "]", fontePagina || "", { opcoes: listaOpcoes });
+                perguntarGuardiao("Aplique especificamente a opção \"" + optTxt + "\" para a pergunta anterior: " + perguntaOrig);
+            };
+            wrap.appendChild(b);
+        });
+    } else {
+        var bSave = document.createElement("button");
+        bSave.type = "button";
+        bSave.className = "gchat-disambig-btn";
+        bSave.textContent = "✅ Confirmar e Salvar Regra";
+        bSave.onclick = function() {
+            salvarConhecimentoValidado(perguntaOrig, respostaTxt, fontePagina || "");
+            bSave.textContent = "💾 Regra validada salva!";
+            bSave.disabled = true;
+        };
+        wrap.appendChild(bSave);
+    }
+    msgDiv.appendChild(wrap);
+    var body = document.getElementById("gchat-body");
+    if (body) body.scrollTop = body.scrollHeight;
+}
 
 function buscarPaginasGuia(pergunta) {
     var paginas = _lerGuiaPages();
@@ -12910,7 +13577,7 @@ function buscarPaginasGuia(pergunta) {
 
     var ranqueadas = paginas.map(function(pag) {
         var tags = pag.tags || [];
-        var desc = (pag.descricao || "").toLowerCase();
+        var desc = ((pag.descricao || "") + " " + (pag.pdfText || "")).toLowerCase();
         var score = tagsAlvo.reduce(function(acc, t){ return acc + (tags.indexOf(t) !== -1 ? 3 : 0); }, 0);
         if (termosTexto.some(function(termo){ return desc.indexOf(termo) !== -1; })) score += 2;
         palavras.forEach(function(w){ if (desc.indexOf(w) !== -1) score += 1; });
@@ -12989,10 +13656,10 @@ function montarContextoLoja(perguntaAtual) {
         if (dl.dlPossuiContrato) ctx += "Contrato ativo: " + dl.dlPossuiContrato + (dl.dlTipoContrato ? " (" + dl.dlTipoContrato + ")" : "") + (dl.dlObsContrato ? " - " + dl.dlObsContrato : "") + "\n";
     } catch(e){}
 
-    // Portfolio regional ativo
-    var ativosMix = (currentClient.products || []).filter(function(p){ return isProdutoAtivoNoMix(p, comp); });
+    // Portfolio ativo da loja
+    var ativosMix = (currentClient.products || []).filter(function(p){ return isProdutoAtivoNoMix(p, comp, false); });
     var prio = ativosMix.filter(function(p){ return p.priority; });
-    ctx += "PORTFOLIO REGIONAL ATIVO: " + ativosMix.length + " SKUs (de " + (currentClient.products||[]).length + " cadastrados)\n";
+    ctx += "PORTFOLIO NO MIX DA LOJA: " + ativosMix.length + " SKUs (de " + (currentClient.products||[]).length + " cadastrados)\n";
     if (prio.length) ctx += "SKUs prioritarios: " + prio.slice(0, 12).map(function(p){ return p.name + (p.gramatura ? " " + p.gramatura : ""); }).join(", ") + "\n";
 
     // Motor matematico de Giro Real & FEFO
@@ -13034,22 +13701,22 @@ function montarContextoLoja(perguntaAtual) {
         }
     } catch(e){}
 
-    // Conhecimento hibrido (Pilulas + Guia Base)
+    // Conhecimento hibrido (Pilulas + Guia Base completo com citacao de pagina)
     var kn = buscarConhecimentoHibrido(perguntaAtual || "");
     if (kn.pilulas.length) {
         ctx += "\nPILULAS DE ATUALIZACAO (PREVALECEM SOBRE O GUIA BASE EM CASO DE CONFLITO):\n";
-        kn.pilulas.slice(0, 3).forEach(function(item){
+        kn.pilulas.slice(0, 4).forEach(function(item){
             ctx += "--- [PILULA " + (item.pilula.dataExibicao || "") + "] " + item.pilula.titulo + " ---\n" + item.pilula.texto + "\n";
         });
     }
     if (kn.paginasBase.length) {
-        ctx += "\nGUIA DE EXECUCAO BASE (paginas relevantes):\n";
-        kn.paginasBase.slice(0, 3).forEach(function(r){
-            ctx += "--- Pagina " + r.pagina.pagina + " ---\n" + r.pagina.descricao + "\n";
+        ctx += "\nGUIA DE EXECUCAO BASE (paginas relevantes - cite [Pagina X] na resposta):\n";
+        kn.paginasBase.slice(0, 6).forEach(function(r){
+            ctx += "--- [Pagina " + r.pagina.pagina + "] ---\n" + String(r.pagina.descricao || r.pagina.pdfText || "").substring(0, 1400) + "\n";
         });
     } else if (!kn.pilulas.length) {
         var guiaTxt = localStorage.getItem("ls23_guia_empresa_" + compId) || "";
-        if (guiaTxt) ctx += "\nGUIA DA EMPRESA:\n" + guiaTxt.substring(0, 1500) + "\n";
+        if (guiaTxt) ctx += "\nGUIA COMPLETO DA EMPRESA:\n" + guiaTxt.substring(0, 6500) + "\n";
     }
 
     return ctx;
@@ -13070,13 +13737,40 @@ async function enviarGuardiaoChat() {
     input.value = "";
     document.getElementById("gchat-send").disabled = true;
     adicionarMsgChat("user", pergunta);
-    var typing = adicionarMsgChat("typing", "Guardião está analisando...");
+    var typing = adicionarMsgChat("typing", "Guardião está consultando a base validada e o Guia...");
 
-    var contexto = montarContextoLoja(pergunta);
+    var cidAtiva = _resolverCompanyIdAtiva();
+    var canalAtivo = currentClient ? (currentClient.canal || currentClient.perfil || "") : "";
     var kn = buscarConhecimentoHibrido(pergunta);
     var visual = kn.destaqueVisual;
 
     try {
+        var validado = await buscarConhecimentoValidado(pergunta, cidAtiva, canalAtivo);
+        if (validado && validado.resposta) {
+            typing.remove();
+            var textoVal = "📚 [Base Validada da Equipe]\n" + validado.resposta +
+                (validado.fonte_pagina ? ("\n\nFonte: " + validado.fonte_pagina) : "");
+            var msgValDiv = adicionarMsgChat("bot", textoVal);
+            if (visual && visual.src) {
+                adicionarImagemChat(visual.src, visual.legenda);
+            }
+            var recheckWrap = document.createElement("div");
+            recheckWrap.className = "gchat-disambig-wrap";
+            var bRe = document.createElement("button");
+            bRe.type = "button";
+            bRe.className = "gchat-disambig-btn";
+            bRe.textContent = "🔄 Reconsultar Guia completo";
+            bRe.onclick = function() {
+                perguntarGuardiao("Ignore o cache e consulte diretamente o Guia de Execução completo para: " + pergunta);
+            };
+            recheckWrap.appendChild(bRe);
+            msgValDiv.appendChild(recheckWrap);
+            _gchatHistorico.push({ pergunta: pergunta, resposta: textoVal });
+            document.getElementById("gchat-send").disabled = false;
+            return;
+        }
+
+        var contexto = montarContextoLoja(pergunta);
         var parts = [];
         if (visual && visual.src) {
             var b64 = visual.src.indexOf(",") !== -1 ? visual.src.split(",")[1] : visual.src;
@@ -13085,11 +13779,13 @@ async function enviarGuardiaoChat() {
         }
         var prompt = "Voce e o Guardiao LocalShelf, assistente estrategico de Trade Marketing em campo.\n" +
             "REGRAS DE RESPOSTA:\n" +
-            "1. Seja DIRETO, PRATICO e OBJETIVO (4 a 6 frases ou lista curta).\n" +
+            "1. Seja DIRETO, PRATICO e OBJETIVO (4 a 7 frases ou lista curta), sem jargoes tecnicos.\n" +
             "2. Aplique orientacoes de Guia/Pilulas ao perfil real desta loja (Canal, Checkouts, Contratos ativos, Regional).\n" +
-            "3. CONFLITO: Se houver divergencia entre uma PILULA DE ATUALIZACAO mais recente e o GUIA BASE, A PILULA MAIS RECENTE PREVALECE.\n" +
-            "4. Use somente numeros reais do contexto abaixo. Nunca invente valores.\n" +
-            (visual ? ("5. A imagem anexada e a referencia visual principal (" + visual.legenda + "); considere-a na resposta.\n") : "") +
+            "3. CITACAO OBRIGATORIA: sempre que responder usando o Guia ou Pilula, cite a origem exata (ex: [Página 4 - Seção Checkout] ou [Pílula DD/MM]).\n" +
+            "4. CONFLITO: Se houver divergencia entre uma PILULA DE ATUALIZACAO mais recente e o GUIA BASE, A PILULA MAIS RECENTE PREVALECE.\n" +
+            "5. DESAMBIGUACAO: Se o Guia tiver mais de uma interpretacao possivel para a pergunta (ex: Checkout Geral vs. Ilha de Checkout, Super vs. Hiper, Com Contrato vs. Sem Contrato), apresente ambas de forma resumida e finalize com uma ultima linha exatamente neste formato: [OPCOES_CONFIRMACAO: Opcao 1 | Opcao 2]\n" +
+            "6. Use somente numeros reais do contexto abaixo. Nunca invente valores.\n" +
+            (visual ? ("7. A imagem anexada e a referencia visual principal (" + visual.legenda + "); considere-a na resposta.\n") : "") +
             "\n=== CONTEXTO COMPLETO LOCALSHELF ===\n" + contexto +
             "\n=== PERGUNTA DO PROMOTOR ===\n" + pergunta;
 
@@ -13098,16 +13794,387 @@ async function enviarGuardiaoChat() {
             : await chamarGeminiIA(prompt, parts.length ? parts[0].data : null, parts.length ? parts[0].mimeType : null);
 
         typing.remove();
-        adicionarMsgChat("bot", resposta.trim());
+        var rawResp = String(resposta || "").trim();
+        var opcoesConfirm = [];
+        var mOpc = rawResp.match(/\[OPCOES_CONFIRMACAO\s*:\s*([^\]]+)\]/i);
+        if (mOpc && mOpc[1]) {
+            opcoesConfirm = mOpc[1].split("|").map(function(s){ return s.trim(); }).filter(Boolean).slice(0, 4);
+            rawResp = rawResp.replace(mOpc[0], "").trim();
+        }
+        var mPag = rawResp.match(/\[(P[áa]gina\s*\d+[^\]]*|P[íi]lula[^\]]*)\]/i);
+        var fonteDetectada = mPag ? mPag[1] : (kn.paginasBase.length ? ("Página " + kn.paginasBase[0].pagina) : "");
+
+        var botDiv = adicionarMsgChat("bot", rawResp);
+        adicionarBotoesConfirmacaoChat(botDiv, opcoesConfirm, pergunta, rawResp, fonteDetectada);
         if (visual && visual.src) {
             adicionarImagemChat(visual.src, visual.legenda);
         }
-        _gchatHistorico.push({ pergunta: pergunta, resposta: resposta });
+        _gchatHistorico.push({ pergunta: pergunta, resposta: rawResp });
     } catch(e) {
         typing.remove();
         adicionarMsgChat("bot", "Desculpe, não foi possível concluir agora: " + _traduzirErroAmigavelIA(e));
     }
     document.getElementById("gchat-send").disabled = false;
+}
+
+// ── RELATORIOS CONSOLIDADOS POR PERIODO (HOJE / 7D / 15D / 30D / PERSONALIZADO) ──
+window._relPeriodoFiltro = "15";
+
+function abrirRelatoriosPeriodo() {
+    var sel = document.getElementById("relPeriodoLojaSel");
+    if (sel) {
+        var compId = currentCompany ? currentCompany.id : null;
+        var listaCli = Object.values(clients).filter(function(c) {
+            return !compId || c.companyId === compId;
+        });
+        var opts = "<option value='__ALL__'>Todas as lojas" + (currentCompany ? (" (" + escHtml(currentCompany.name) + ")") : "") + "</option>";
+        listaCli.forEach(function(c) {
+            var isSel = currentClient && c.id === currentClient.id;
+            opts += "<option value='" + escAttr(c.id) + "'" + (isSel ? " selected" : "") + ">" + escHtml(c.name) + "</option>";
+        });
+        sel.innerHTML = opts;
+    }
+    var hojeIso = localDateISO();
+    var dIni = new Date();
+    dIni.setDate(dIni.getDate() - 14);
+    var iniIso = dIni.getFullYear() + "-" + String(dIni.getMonth() + 1).padStart(2, "0") + "-" + String(dIni.getDate()).padStart(2, "0");
+    var elDe = document.getElementById("relPeriodoDe");
+    var elAte = document.getElementById("relPeriodoAte");
+    if (elDe && !elDe.value) elDe.value = iniIso;
+    if (elAte && !elAte.value) elAte.value = hojeIso;
+
+    filtrarPeriodoRapido(window._relPeriodoFiltro || "15");
+    showPage("pageRelPeriodo");
+}
+
+function filtrarPeriodoRapido(tipo) {
+    window._relPeriodoFiltro = String(tipo || "15");
+    var pills = document.querySelectorAll("#relPeriodoPills .relp-pill");
+    pills.forEach(function(b) {
+        b.classList.toggle("ativo", b.getAttribute("data-p") === window._relPeriodoFiltro);
+    });
+    var customWrap = document.getElementById("relPeriodoCustomDates");
+    if (customWrap) {
+        customWrap.style.display = (window._relPeriodoFiltro === "custom") ? "grid" : "none";
+    }
+    renderRelatorioPeriodo();
+}
+
+function _resolverIntervaloPeriodo() {
+    var tipo = window._relPeriodoFiltro || "15";
+    var agora = new Date();
+    var fim = new Date(agora.getFullYear(), agora.getMonth(), agora.getDate(), 23, 59, 59, 999);
+    var inicio;
+    var label = "";
+
+    if (tipo === "hoje") {
+        inicio = new Date(agora.getFullYear(), agora.getMonth(), agora.getDate(), 0, 0, 0, 0);
+        label = "Hoje (" + localDateISO().split("-").reverse().join("/") + ")";
+    } else if (tipo === "custom") {
+        var deVal = (document.getElementById("relPeriodoDe") || {}).value || localDateISO();
+        var ateVal = (document.getElementById("relPeriodoAte") || {}).value || localDateISO();
+        inicio = new Date(deVal + "T00:00:00");
+        fim = new Date(ateVal + "T23:59:59");
+        if (isNaN(inicio.getTime())) inicio = new Date(agora.getTime() - 14 * 86400000);
+        if (isNaN(fim.getTime())) fim = new Date();
+        label = deVal.split("-").reverse().join("/") + " a " + ateVal.split("-").reverse().join("/");
+    } else {
+        var dias = parseInt(tipo, 10) || 15;
+        inicio = new Date(agora.getFullYear(), agora.getMonth(), agora.getDate() - (dias - 1), 0, 0, 0, 0);
+        label = "Últimos " + dias + " dias";
+    }
+    return { tipo: tipo, inicioMs: inicio.getTime(), fimMs: fim.getTime(), label: label };
+}
+
+function _coletarDadosRelatorioPeriodo() {
+    var rng = _resolverIntervaloPeriodo();
+    var selEl = document.getElementById("relPeriodoLojaSel");
+    var cliFiltroId = selEl ? selEl.value : (currentClient ? currentClient.id : "__ALL__");
+    var compIdAtiva = currentCompany ? currentCompany.id : null;
+    var lojasAlvo = Object.values(clients).filter(function(c) {
+        if (!c) return false;
+        if (cliFiltroId && cliFiltroId !== "__ALL__") return c.id === cliFiltroId;
+        return !compIdAtiva || c.companyId === compIdAtiva;
+    });
+
+    var visitasCount = 0;
+    var inventariosCount = 0;
+    var caixasEmEstoqueTotal = 0;
+    var pedidosCount = 0;
+    var pedidosCaixas = 0;
+    var pedidosUnidades = 0;
+    var vencimentosEvitados = 0;
+    var alertasFefoAtivos = 0;
+    var rupturasAbertas = 0;
+    var auditoriasCount = 0;
+    var auditoriaScoreSoma = 0;
+    var auditoriaScoreQtd = 0;
+    var lojaSummaries = [];
+    var cliIdsMap = {};
+
+    lojasAlvo.forEach(function(c) {
+        cliIdsMap[c.id] = true;
+        var compId = c.companyId;
+        var vLoja = 0, invLoja = 0, pedLoja = 0, evLoja = 0, rupLoja = 0, audLoja = 0;
+
+        var hg = lsGetJSON("ls23_histgeral_" + compId + "_" + c.id, []);
+        (Array.isArray(hg) ? hg : []).forEach(function(h) {
+            var ms = _parseDateMs(h && h.data);
+            if (ms && ms >= rng.inicioMs && ms <= rng.fimMs) {
+                visitasCount++; vLoja++;
+            }
+        });
+
+        var invHist = lsGetJSON("ls23_inv_hist_" + compId + "_" + c.id, []);
+        (Array.isArray(invHist) ? invHist : []).forEach(function(s) {
+            var ms = _parseDateMs(s && s.data);
+            if (ms && ms >= rng.inicioMs && ms <= rng.fimMs) {
+                inventariosCount++; invLoja++;
+            }
+        });
+        var estAtual = lsGetJSON("ls23_estoque_" + compId + "_" + c.id, {});
+        Object.keys(estAtual).forEach(function(k) {
+            if (/^\d+$/.test(k) && estAtual[k] && Number(estAtual[k].caixas) > 0) {
+                caixasEmEstoqueTotal += Number(estAtual[k].caixas) || 0;
+            }
+        });
+
+        var peds = lsGetJSON("ls23_hist_pedidos_" + compId + "_" + c.id, []);
+        (Array.isArray(peds) ? peds : []).forEach(function(p) {
+            var ms = _parseDateMs(p && p.data);
+            if (ms && ms >= rng.inicioMs && ms <= rng.fimMs) {
+                pedidosCount++; pedLoja++;
+                pedidosCaixas += Number(p.totalCaixas) || 0;
+                pedidosUnidades += Number(p.totalUnidades) || 0;
+            }
+        });
+
+        var valMap = lsGetJSON("ls23_validade_" + compId + "_" + c.id, {});
+        Object.keys(valMap).forEach(function(k) {
+            if (!/^\d+$/.test(k)) return;
+            var it = valMap[k];
+            if (!it) return;
+            if (it.resolvido) {
+                vencimentosEvitados++; evLoja++;
+            } else if (it.marcado && it.data) {
+                alertasFefoAtivos++;
+            }
+        });
+
+        var rupMap = lsGetJSON("ls23_rupturas_" + compId + "_" + c.id, {});
+        Object.keys(rupMap).forEach(function(k) {
+            if (!/^\d+$/.test(k)) return;
+            if (rupMap[k] && rupMap[k].falta) {
+                rupturasAbertas++; rupLoja++;
+            }
+        });
+
+        var audIA = lsGetJSON("ls23_auditoria_ia_" + compId + "_" + c.id, []);
+        (Array.isArray(audIA) ? audIA : []).forEach(function(a) {
+            var ms = _parseDateMs(a && a.data);
+            if (!ms || (ms >= rng.inicioMs && ms <= rng.fimMs)) {
+                auditoriasCount++; audLoja++;
+                var sc = parseFloat(String((a && a.score) || "").replace("%", ""));
+                if (!isNaN(sc)) { auditoriaScoreSoma += sc; auditoriaScoreQtd++; }
+            }
+        });
+
+        lojaSummaries.push({
+            nome: c.name,
+            visitas: vLoja,
+            inventarios: invLoja,
+            pedidos: pedLoja,
+            evitados: evLoja,
+            rupturas: rupLoja,
+            auditorias: audLoja
+        });
+    });
+
+    var entregasTotal = 0, entregasRecebidas = 0, entregasEmRota = 0, entregasCxRec = 0, entregasCortes = 0, entregasDev = 0;
+    var mapaLog = (typeof _lerMapaLogistica === "function") ? _lerMapaLogistica() : {};
+    Object.keys(mapaLog).forEach(function(dtKey) {
+        var dtMs = new Date(dtKey + "T12:00:00").getTime();
+        if (isNaN(dtMs) || dtMs < rng.inicioMs || dtMs > rng.fimMs) return;
+        var arr = Array.isArray(mapaLog[dtKey]) ? mapaLog[dtKey] : [];
+        arr.forEach(function(deliv) {
+            if (!deliv) return;
+            if (cliFiltroId && cliFiltroId !== "__ALL__") {
+                if (deliv.clientId !== cliFiltroId) return;
+            } else if (compIdAtiva && deliv.companyId && deliv.companyId !== compIdAtiva && !cliIdsMap[deliv.clientId]) {
+                return;
+            }
+            entregasTotal++;
+            if (deliv.status === "recebida") entregasRecebidas++;
+            else entregasEmRota++;
+            entregasCxRec += parseInt(deliv.caixasRecebidas, 10) || 0;
+            entregasCortes += parseInt(deliv.cortes, 10) || 0;
+            entregasDev += parseInt(deliv.devolucoes, 10) || 0;
+        });
+    });
+
+    var mediaAuditoria = auditoriaScoreQtd > 0 ? Math.round(auditoriaScoreSoma / auditoriaScoreQtd) : null;
+    var escopoNome = (cliFiltroId && cliFiltroId !== "__ALL__" && clients[cliFiltroId])
+        ? clients[cliFiltroId].name
+        : ("Todas as lojas (" + lojasAlvo.length + ")");
+
+    return {
+        labelPeriodo: rng.label,
+        escopo: escopoNome,
+        empresa: currentCompany ? currentCompany.name : "LocalShelf",
+        lojasQtd: lojasAlvo.length,
+        visitasCount: visitasCount,
+        inventariosCount: inventariosCount,
+        caixasEmEstoqueTotal: caixasEmEstoqueTotal,
+        pedidosCount: pedidosCount,
+        pedidosCaixas: pedidosCaixas,
+        pedidosUnidades: pedidosUnidades,
+        vencimentosEvitados: vencimentosEvitados,
+        alertasFefoAtivos: alertasFefoAtivos,
+        rupturasAbertas: rupturasAbertas,
+        auditoriasCount: auditoriasCount,
+        mediaAuditoria: mediaAuditoria,
+        entregasTotal: entregasTotal,
+        entregasRecebidas: entregasRecebidas,
+        entregasEmRota: entregasEmRota,
+        entregasCxRec: entregasCxRec,
+        entregasCortes: entregasCortes,
+        entregasDev: entregasDev,
+        lojaSummaries: lojaSummaries
+    };
+}
+
+function renderRelatorioPeriodo() {
+    var out = document.getElementById("relPeriodoContent");
+    if (!out) return;
+    var d = _coletarDadosRelatorioPeriodo();
+    window._ultimoRelatorioPeriodo = d;
+
+    var html = "<div class='relp-sec' style='background:#eff6ff;border-color:#bfdbfe'>" +
+        "<div style='font-size:12px;font-weight:800;color:#1e3a8a'>" + escHtml(d.empresa) + " &bull; " + escHtml(d.escopo) + "</div>" +
+        "<div style='font-size:11px;color:#475569;margin-top:2px'>Per&iacute;odo selecionado: <b>" + escHtml(d.labelPeriodo) + "</b></div>" +
+        "</div>";
+
+    html += "<div class='relp-grid'>" +
+        "<div class='relp-kpi'><div class='relp-kpi-lbl'>Visitas / Registros</div><div class='relp-kpi-val'>" + d.visitasCount + "</div></div>" +
+        "<div class='relp-kpi'><div class='relp-kpi-lbl'>Invent&aacute;rios Realizados</div><div class='relp-kpi-val'>" + d.inventariosCount + " <span style='font-size:11px;font-weight:600;color:#64748b'>(" + d.caixasEmEstoqueTotal + " cx atuais)</span></div></div>" +
+        "<div class='relp-kpi'><div class='relp-kpi-lbl'>Pedidos Gerados</div><div class='relp-kpi-val'>" + d.pedidosCount + " <span style='font-size:11px;font-weight:600;color:#64748b'>(" + d.pedidosCaixas + " cx)</span></div></div>" +
+        "<div class='relp-kpi'><div class='relp-kpi-lbl'>Vencimentos Evitados (FEFO)</div><div class='relp-kpi-val' style='color:#059669'>" + d.vencimentosEvitados + " <span style='font-size:11px;font-weight:600;color:#d97706'>(" + d.alertasFefoAtivos + " alertas)</span></div></div>" +
+        "<div class='relp-kpi'><div class='relp-kpi-lbl'>Rupturas Abertas</div><div class='relp-kpi-val' style='color:" + (d.rupturasAbertas > 0 ? "#dc2626" : "#059669") + "'>" + d.rupturasAbertas + "</div></div>" +
+        "<div class='relp-kpi'><div class='relp-kpi-lbl'>Auditorias Loja Perfeita</div><div class='relp-kpi-val'>" + d.auditoriasCount + (d.mediaAuditoria !== null ? (" <span style='font-size:12px;color:#7c3aed'>(M&eacute;dia " + d.mediaAuditoria + "%)</span>") : "") + "</div></div>" +
+        "</div>";
+
+    html += "<div class='relp-sec'><h4>&#128666; Entregas &amp; Log&iacute;stica no Per&iacute;odo</h4>" +
+        "<div style='display:grid;grid-template-columns:repeat(3,1fr);gap:6px;text-align:center'>" +
+        "<div style='background:#f8fafc;padding:6px;border-radius:6px'><div style='font-size:10px;color:#64748b'>Total / Recebidas</div><b>" + d.entregasTotal + " / " + d.entregasRecebidas + "</b></div>" +
+        "<div style='background:#f8fafc;padding:6px;border-radius:6px'><div style='font-size:10px;color:#64748b'>Cx Recebidas</div><b>" + d.entregasCxRec + "</b></div>" +
+        "<div style='background:#f8fafc;padding:6px;border-radius:6px'><div style='font-size:10px;color:#64748b'>Cortes / Devol.</div><b style='color:" + ((d.entregasCortes + d.entregasDev) > 0 ? "#dc2626" : "#059669") + "'>" + d.entregasCortes + " / " + d.entregasDev + "</b></div>" +
+        "</div></div>";
+
+    if (d.lojaSummaries.length > 1) {
+        html += "<div class='relp-sec'><h4>&#127978; Resumo por Loja</h4>";
+        d.lojaSummaries.forEach(function(lsItem) {
+            html += "<div style='display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid #f1f5f9;font-size:11px'>" +
+                "<span style='font-weight:700;color:#1e293b'>" + escHtml(lsItem.nome) + "</span>" +
+                "<span style='color:#475569'>Inv:" + lsItem.inventarios + " &bull; Ped:" + lsItem.pedidos + " &bull; Aud:" + lsItem.auditorias + " &bull; Rup:" + lsItem.rupturas + "</span>" +
+                "</div>";
+        });
+        html += "</div>";
+    }
+    out.innerHTML = html;
+}
+
+function gerarTextoRelatorioPeriodoWpp() {
+    var d = window._ultimoRelatorioPeriodo || _coletarDadosRelatorioPeriodo();
+    var linhas = [
+        "📊 *RELATÓRIO CONSOLIDADO LOCALSHELF*",
+        "🏢 Empresa: " + d.empresa,
+        "🏪 Escopo: " + d.escopo,
+        "📅 Período: " + d.labelPeriodo,
+        "",
+        "• *Visitas registradas:* " + d.visitasCount,
+        "• *Inventários:* " + d.inventariosCount + " (" + d.caixasEmEstoqueTotal + " cx atuais)",
+        "• *Pedidos:* " + d.pedidosCount + " (" + d.pedidosCaixas + " cx / " + d.pedidosUnidades + " un)",
+        "• *Vencimentos evitados (FEFO):* " + d.vencimentosEvitados + " (Alertas ativos: " + d.alertasFefoAtivos + ")",
+        "• *Rupturas abertas:* " + d.rupturasAbertas,
+        "• *Auditorias Loja Perfeita:* " + d.auditoriasCount + (d.mediaAuditoria !== null ? (" (Média: " + d.mediaAuditoria + "%)") : ""),
+        "• *Entregas Logísticas:* " + d.entregasTotal + " (" + d.entregasRecebidas + " recebidas | " + d.entregasCxRec + " cx | Cortes: " + d.entregasCortes + " | Devoluções: " + d.entregasDev + ")"
+    ];
+    return linhas.join("\n");
+}
+
+function copiarRelatorioPeriodoWpp() {
+    var txt = gerarTextoRelatorioPeriodoWpp();
+    var msg = document.getElementById("msgRelPeriodo");
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(txt).then(function() {
+            if (msg) { msg.style.color = "#059669"; msg.textContent = "Relatório copiado para WhatsApp ✓"; }
+        }).catch(function() {
+            if (msg) { msg.style.color = "#d97706"; msg.textContent = "Não foi possível copiar automaticamente."; }
+        });
+    } else if (msg) {
+        msg.style.color = "#059669"; msg.textContent = txt.substring(0, 80) + "...";
+    }
+}
+
+function compartilharRelatorioPeriodoWpp() {
+    var txt = gerarTextoRelatorioPeriodoWpp();
+    if (navigator.share) {
+        navigator.share({ title: "Relatório LocalShelf", text: txt }).catch(function(){});
+    } else {
+        copiarRelatorioPeriodoWpp();
+        var a = document.createElement("a");
+        a.href = "https://wa.me/?text=" + encodeURIComponent(txt);
+        a.target = "_blank";
+        a.rel = "noopener";
+        a.click();
+    }
+}
+
+function exportarRelatorioPeriodoPdf() {
+    var d = window._ultimoRelatorioPeriodo || _coletarDadosRelatorioPeriodo();
+    var msg = document.getElementById("msgRelPeriodo");
+    if (window.jspdf && window.jspdf.jsPDF) {
+        try {
+            var doc = new window.jspdf.jsPDF();
+            doc.setFontSize(14);
+            doc.text("RELATORIO CONSOLIDADO LOCALSHELF", 14, 18);
+            doc.setFontSize(10);
+            var linhas = [
+                "Empresa: " + d.empresa,
+                "Escopo: " + d.escopo,
+                "Periodo: " + d.labelPeriodo,
+                "Visitas registradas: " + d.visitasCount,
+                "Inventarios: " + d.inventariosCount + " (" + d.caixasEmEstoqueTotal + " cx atuais)",
+                "Pedidos: " + d.pedidosCount + " (" + d.pedidosCaixas + " cx / " + d.pedidosUnidades + " un)",
+                "Vencimentos evitados (FEFO): " + d.vencimentosEvitados + " (Alertas ativos: " + d.alertasFefoAtivos + ")",
+                "Rupturas abertas: " + d.rupturasAbertas,
+                "Auditorias Loja Perfeita: " + d.auditoriasCount + (d.mediaAuditoria !== null ? (" (Media: " + d.mediaAuditoria + "%)") : ""),
+                "Entregas Logisticas: " + d.entregasTotal + " (" + d.entregasRecebidas + " recebidas | " + d.entregasCxRec + " cx | Cortes: " + d.entregasCortes + " | Devol.: " + d.entregasDev + ")"
+            ];
+            var y = 28;
+            linhas.forEach(function(ln) { doc.text(ln, 14, y); y += 7; });
+            if (d.lojaSummaries.length > 1) {
+                y += 4;
+                doc.setFontSize(11);
+                doc.text("Resumo por Loja:", 14, y);
+                y += 7;
+                doc.setFontSize(9);
+                d.lojaSummaries.slice(0, 25).forEach(function(lsItem) {
+                    if (y > 280) { doc.addPage(); y = 18; }
+                    doc.text("- " + lsItem.nome + " | Inv:" + lsItem.inventarios + " Ped:" + lsItem.pedidos + " Aud:" + lsItem.auditorias + " Rup:" + lsItem.rupturas, 14, y);
+                    y += 6;
+                });
+            }
+            doc.save("Relatorio_LocalShelf_" + localDateISO() + ".pdf");
+            if (msg) { msg.style.color = "#059669"; msg.textContent = "PDF gerado com sucesso ✓"; }
+            return;
+        } catch(ePdf) {}
+    }
+    imprimirRelatorioPeriodo();
+}
+
+function imprimirRelatorioPeriodo() {
+    if (typeof window.print === "function") window.print();
 }
 
 // ============================================================================
@@ -13664,7 +14731,7 @@ async function sincronizarFilaSupabase(manual) {
 function gerarScriptSqlSupabase() {
     return [
         "-- ============================================================================",
-        "-- LOCALSHELF — SCRIPT SQL COMPLETO PARA SUPABASE (6 TABELAS + BUCKET HD)",
+        "-- LOCALSHELF — SCRIPT SQL COMPLETO PARA SUPABASE (7 TABELAS + BUCKET HD)",
         "-- Execute no SQL Editor do Supabase (https://supabase.com/dashboard)",
         "-- ============================================================================",
         "",
@@ -13759,6 +14826,18 @@ function gerarScriptSqlSupabase() {
         "  updated_at timestamptz default now()",
         ");",
         "",
+        "create table if not exists public.conhecimento_validado (",
+        "  id text primary key,",
+        "  empresa_id text,",
+        "  canal text,",
+        "  pergunta text not null,",
+        "  resposta text not null,",
+        "  fonte_pagina text,",
+        "  opcoes_confirmacao jsonb default '[]'::jsonb,",
+        "  promotor_id text,",
+        "  updated_at timestamptz default now()",
+        ");",
+        "",
         "-- Habilitar RLS com politica de acesso para app offline-first (Anon Key)",
         "alter table public.empresas enable row level security;",
         "alter table public.produtos enable row level security;",
@@ -13766,6 +14845,7 @@ function gerarScriptSqlSupabase() {
         "alter table public.inventarios enable row level security;",
         "alter table public.auditorias enable row level security;",
         "alter table public.entregas_logistica enable row level security;",
+        "alter table public.conhecimento_validado enable row level security;",
         "",
         "drop policy if exists \"LocalShelf Anon empresas\" on public.empresas;",
         "create policy \"LocalShelf Anon empresas\" on public.empresas for all using (true) with check (true);",
@@ -13779,6 +14859,8 @@ function gerarScriptSqlSupabase() {
         "create policy \"LocalShelf Anon auditorias\" on public.auditorias for all using (true) with check (true);",
         "drop policy if exists \"LocalShelf Anon entregas\" on public.entregas_logistica;",
         "create policy \"LocalShelf Anon entregas\" on public.entregas_logistica for all using (true) with check (true);",
+        "drop policy if exists \"LocalShelf Anon conhecimento_validado\" on public.conhecimento_validado;",
+        "create policy \"LocalShelf Anon conhecimento_validado\" on public.conhecimento_validado for all using (true) with check (true);",
         "",
         "-- Bucket publico para fotos HD de Auditoria",
         "insert into storage.buckets (id, name, public)",
@@ -15190,12 +16272,12 @@ async function buscarEmpresaComIA(manualTrigger) {
         var obj = {};
         if (getGoogleGeminiKey()) {
             var qRef = bApiDireta ? (bApiDireta.razaoSocial + " (CNPJ " + bApiDireta.cnpj + ")") : query;
-            var prompt = "Cadastro corporativo Brasil. Indústria: \"" + qRef + "\".\n" +
+            var prompt = "Pesquisa corporativa profunda no Brasil com busca na web. Indústria: \"" + qRef + "\".\n" +
                 "Localização atual do promotor: " + (ctx.cidade ? ctx.cidade + "/" : "") + ctx.uf + " (Regional: " + ctx.regional + ").\n" +
-                "Se houver filial ou Centro de Distribuição oficial na UF " + ctx.uf + ", PRIORIZE o CNPJ (14 dígitos) e endereço dessa filial/CD.\n" +
+                "Pesquise ativamente na web a Razão Social, o CNPJ de 14 dígitos da matriz ou da filial/Centro de Distribuição oficial na UF " + ctx.uf + ", endereço do CD/filial, CNAE/segmento e site oficial.\n" +
                 "Retorne APENAS JSON válido:\n" +
                 "{\"nomeFantasia\":\"\",\"razaoSocial\":\"\",\"cnpj\":\"\",\"enderecoCd\":\"\",\"segmento\":\"\",\"porteSugerido\":\"\",\"regionalSugerida\":\"Nacional|RJ / Leste|SP|MG / ES|Sul|Nordeste|Centro-Oeste|Norte\",\"ufLabel\":\"\",\"siteDominio\":\"\",\"coresBandeira\":[\"#1e3a8a\",\"#2563eb\"],\"contatosResumo\":\"\"}";
-            var raw = await chamarGoogleGeminiFlash(prompt, [], true);
+            var raw = await chamarGoogleGeminiFlash(prompt, [], true, null, { useSearch: true, timeoutMs: 90000 });
             obj = parseGeminiJSON(raw);
             if (Array.isArray(obj)) obj = obj[0] || {};
         }
