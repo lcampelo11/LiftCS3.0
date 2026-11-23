@@ -833,6 +833,23 @@ body.dark-mode .cat-ia-row.checked{background:#2e1065!important;border-color:#a8
 body.dark-mode .gemini-models-list{background:#0f172a!important;border-color:#334155!important}
 body.dark-mode .gemini-model-chip{background:#1e293b!important;color:#93c5fd!important;border-color:#334155!important}
 body.dark-mode .gemini-model-chip.ativo{background:#2563eb!important;color:#fff!important;border-color:#60a5fa!important}
+/* Cofre Multi-API (Rodizio Automatico) */
+.vault-card{border:1.5px solid #93c5fd;border-radius:12px;padding:14px;margin-bottom:10px;background:linear-gradient(180deg,#eff6ff 0%,#f8fafc 100%)}
+.vault-header{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:6px}
+.vault-total-pill{font-size:11px;font-weight:800;padding:3px 9px;border-radius:999px;background:#dbeafe;color:#1e40af;border:1px solid #93c5fd}
+.vault-total-pill.ready{background:#dcfce7;color:#166534;border-color:#86efac}
+.vault-row{background:#fff;border:1px solid #dbeafe;border-radius:10px;padding:10px;margin-bottom:8px}
+.vault-row-head{display:flex;justify-content:space-between;align-items:center;gap:6px;margin-bottom:5px;flex-wrap:wrap}
+.vault-row-title{font-size:12px;font-weight:800;color:#1e293b;display:flex;align-items:center;gap:6px}
+.vault-pill{font-size:10px;font-weight:800;padding:2px 8px;border-radius:999px;font-family:monospace}
+.vault-pill.on{background:#dcfce7;color:#15803d;border:1px solid #86efac}
+.vault-pill.off{background:#f1f5f9;color:#64748b;border:1px solid #cbd5e1}
+.vault-extra-hint{font-size:10px;color:#4f46e5;font-weight:700;margin-top:4px;min-height:14px}
+body.dark-mode .vault-card{background:linear-gradient(180deg,#0f172a 0%,#1e293b 100%)!important;border-color:#3b82f6!important}
+body.dark-mode .vault-row{background:#0f172a!important;border-color:#334155!important}
+body.dark-mode .vault-row-title{color:#f1f5f9!important}
+body.dark-mode .vault-pill.off{background:#1e293b!important;color:#94a3b8!important;border-color:#475569!important}
+body.dark-mode .vault-extra-hint{color:#a5b4fc!important}
 /* Mix da Loja, Batch Portfolio, Guardiao Desambiguacao & Relatorios por Periodo */
 .comp-batch-bar{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:6px 0 8px}
 .comp-batch-btn{background:#eff6ff;color:#1e40af;border:1px solid #bfdbfe;border-radius:7px;padding:5px 9px;font-size:11px;font-weight:700;cursor:pointer;margin:0}
@@ -2075,36 +2092,68 @@ body.dark-mode .relp-pill.ativo{background:#2563eb!important;color:#fff!importan
     <div id="cfgExcluirEmpresa"></div>
   </div>
 
-  <!-- Chave API Google Gemini (gemini-3.8-flash + Motor Aberto) -->
-  <div style="border:1px solid #93c5fd;border-radius:10px;padding:14px;margin-bottom:10px;background:#eff6ff">
-    <div style="font-weight:700;color:#1e3a8a;margin-bottom:4px" data-i18n="cfg_gemini_title">&#10024; Chave API Google Gemini (gemini-3.8-flash)</div>
-    <div style="font-size:11px;color:#475569;margin-bottom:8px;line-height:1.4" data-i18n="cfg_gemini_desc">Salva exclusivamente no <b>localStorage</b> deste aparelho. Usada na busca inteligente de empresas/lojas, cat&aacute;logo autom&aacute;tico, auditoria visual, Guardi&atilde;o e leitura de fotos/PDFs (com fallback anti-obsolesc&ecirc;ncia).</div>
-    <div class="cfg-key-row">
-      <input type="password" id="googleGeminiKeyInput" placeholder="Cole sua chave AIza... do Google AI Studio" autocomplete="off" style="padding:10px;border:1px solid #93c5fd;border-radius:8px;font-size:13px">
-      <button type="button" class="cfg-key-toggle" onclick="toggleMostrarGeminiKey()" title="Mostrar ou ocultar chave">&#128065;&#65039;</button>
+  <!-- Cofre Multi-API (Motores de IA Conectados com Rodizio Automatico) -->
+  <div class="vault-card" id="cfgVaultCard">
+    <div class="vault-header">
+      <div style="font-weight:800;color:#1e3a8a;font-size:14px" data-i18n="cfg_gemini_title">&#128272; Motores de IA Conectados (Rod&iacute;zio Autom&aacute;tico)</div>
+      <span class="vault-total-pill" id="vaultTotalStatus">0 motores conectados</span>
     </div>
-    <div style="margin:6px 0 8px">
-      <label style="font-size:11px;font-weight:700;color:#1e3a8a;display:block;margin-bottom:4px" data-i18n="cfg_gemini_model_lbl">Modelo Ativo (ex: gemini-3.8-flash)</label>
-      <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
-        <input type="text" id="googleGeminiModelInput" value="gemini-3.8-flash" placeholder="gemini-3.8-flash" onblur="salvarModeloGeminiInput(true)" style="flex:1;min-width:170px;padding:9px;border:1px solid #93c5fd;border-radius:8px;font-size:12px;font-family:monospace;margin:0">
-        <button type="button" id="btnDetectarModelosGemini" onclick="detectarModelosGeminiDisponiveis()" data-i18n="cfg_btn_detect_models" style="background:#0f766e;color:#fff;border:none;border-radius:8px;padding:9px 12px;cursor:pointer;font-size:12px;font-weight:700;margin:0">&#128269; Detectar Modelos Dispon&iacute;veis</button>
+    <div style="font-size:11px;color:#475569;margin-bottom:10px;line-height:1.45" data-i18n="cfg_gemini_desc">Cole todas as chaves que possuir (todas s&atilde;o opcionais e protegidas por ofusca&ccedil;&atilde;o local no <b>localStorage</b>). Quando um motor atingir cota (429) ou falhar, o sistema salta automaticamente para o pr&oacute;ximo sem travar a busca.</div>
+
+    <!-- 1. Google Gemini -->
+    <div class="vault-row">
+      <div class="vault-row-head">
+        <span class="vault-row-title">&#10024; 1. Google Gemini <span style="font-weight:500;color:#64748b">(AIza...)</span></span>
+        <span class="vault-pill off" id="vaultStatusGemini">Inativo</span>
       </div>
-      <div id="geminiModelsList" class="gemini-models-list"></div>
+      <div class="cfg-key-row" style="margin-bottom:0">
+        <input type="password" id="vaultGeminiKeyInput" placeholder="Cole sua chave AIza... do Google AI Studio" autocomplete="off" style="padding:9px;border:1px solid #93c5fd;border-radius:8px;font-size:12px">
+        <button type="button" class="cfg-key-toggle" onclick="toggleMostrarVaultKey('gemini')" title="Mostrar ou ocultar chave">&#128065;&#65039;</button>
+      </div>
     </div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap">
-      <button type="button" onclick="salvarConfigGemini()" data-i18n="cfg_btn_save_gemini" style="background:#1e40af;color:#fff;border:none;border-radius:8px;padding:10px 16px;cursor:pointer;font-size:13px;font-weight:700;margin:0">Salvar Chave Gemini</button>
-      <button type="button" onclick="limparConfigGemini()" class="sec" data-i18n="btn_remove" style="border:none;border-radius:8px;padding:10px 14px;cursor:pointer;font-size:12px;font-weight:600;margin:0">Remover</button>
+
+    <!-- 2. Grok / xAI -->
+    <div class="vault-row">
+      <div class="vault-row-head">
+        <span class="vault-row-title">&#9889; 2. Grok / xAI <span style="font-weight:500;color:#64748b">(xai-...)</span></span>
+        <span class="vault-pill off" id="vaultStatusGrok">Inativo</span>
+      </div>
+      <div class="cfg-key-row" style="margin-bottom:0">
+        <input type="password" id="vaultGrokKeyInput" placeholder="Cole sua chave xai-... do console xAI" autocomplete="off" style="padding:9px;border:1px solid #cbd5e1;border-radius:8px;font-size:12px">
+        <button type="button" class="cfg-key-toggle" onclick="toggleMostrarVaultKey('grok')" title="Mostrar ou ocultar chave">&#128065;&#65039;</button>
+      </div>
+    </div>
+
+    <!-- 3. Claude / Anthropic -->
+    <div class="vault-row">
+      <div class="vault-row-head">
+        <span class="vault-row-title">&#129504; 3. Claude / Anthropic <span style="font-weight:500;color:#64748b">(sk-ant-...)</span></span>
+        <span class="vault-pill off" id="vaultStatusClaude">Inativo</span>
+      </div>
+      <div class="cfg-key-row" style="margin-bottom:0">
+        <input type="password" id="vaultClaudeKeyInput" placeholder="Cole sua chave sk-ant-... da Anthropic" autocomplete="off" style="padding:9px;border:1px solid #cbd5e1;border-radius:8px;font-size:12px">
+        <button type="button" class="cfg-key-toggle" onclick="toggleMostrarVaultKey('claude')" title="Mostrar ou ocultar chave">&#128065;&#65039;</button>
+      </div>
+    </div>
+
+    <!-- 4. Chave Extra OpenAI-Compatível -->
+    <div class="vault-row">
+      <div class="vault-row-head">
+        <span class="vault-row-title">&#128268; 4. Chave Extra Compat&iacute;vel OpenAI <span style="font-weight:500;color:#64748b">(Groq / OpenRouter / OpenAI)</span></span>
+        <span class="vault-pill off" id="vaultStatusExtra">Inativo</span>
+      </div>
+      <div class="cfg-key-row" style="margin-bottom:0">
+        <input type="password" id="vaultExtraKeyInput" oninput="atualizarPreviewProvedorExtra()" placeholder="gsk_... (Groq), sk-or-... (OpenRouter), sk-... (OpenAI)" autocomplete="off" style="padding:9px;border:1px solid #cbd5e1;border-radius:8px;font-size:12px">
+        <button type="button" class="cfg-key-toggle" onclick="toggleMostrarVaultKey('extra')" title="Mostrar ou ocultar chave">&#128065;&#65039;</button>
+      </div>
+      <div class="vault-extra-hint" id="vaultExtraDetectedHint">Detec&ccedil;&atilde;o autom&aacute;tica por prefixo: gsk_ &bull; sk-or- &bull; xai- &bull; sk-</div>
+    </div>
+
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+      <button type="button" onclick="salvarCofreMultiAPI()" data-i18n="cfg_btn_save_gemini" style="flex:1;min-width:170px;background:#1e40af;color:#fff;border:none;border-radius:8px;padding:10px 16px;cursor:pointer;font-size:13px;font-weight:700;margin:0">&#128190; Salvar Cofre Multi-API</button>
+      <button type="button" onclick="limparCofreMultiAPI()" class="sec" data-i18n="btn_remove" style="border:none;border-radius:8px;padding:10px 14px;cursor:pointer;font-size:12px;font-weight:600;margin:0">Limpar Tudo</button>
     </div>
     <div id="msgConfigGemini" style="font-size:11px;margin-top:8px;font-weight:600"></div>
-    <details style="margin-top:10px;border-top:1px dashed #bfdbfe;padding-top:8px">
-      <summary style="font-size:11px;color:#6d28d9;font-weight:600;cursor:pointer">&#129302; Chave API Secund&aacute;ria / Compat&iacute;vel OpenAI (OpenAI, Grok, OpenRouter, Groq)</summary>
-      <div style="font-size:11px;color:#7c3aed;margin:6px 0 8px">Opcional. Aceita chaves e endpoints compat&iacute;veis com <code>/v1/chat/completions</code> (OpenAI, xAI Grok, OpenRouter ou Groq). Deixe o endpoint em branco para usar o padr&atilde;o legado.</div>
-      <input type="password" id="geminiKeyInput" placeholder="Cole sua chave API secund&aacute;ria (sk-..., xai-..., gsk_...)" style="width:100%;padding:10px;border:1px solid #c4b5fd;border-radius:8px;font-size:13px;margin-bottom:6px">
-      <input type="url" id="secAiEndpointInput" placeholder="Endpoint opcional (ex: https://api.openai.com/v1/chat/completions)" style="width:100%;padding:9px;border:1px solid #c4b5fd;border-radius:8px;font-size:12px;font-family:monospace;margin-bottom:6px">
-      <input type="text" id="secAiModelInput" placeholder="Modelo secund&aacute;rio opcional (ex: gpt-4o-mini, grok-3-mini)" style="width:100%;padding:9px;border:1px solid #c4b5fd;border-radius:8px;font-size:12px;font-family:monospace;margin-bottom:8px">
-      <button type="button" onclick="salvarConfigIA()" style="background:#7c3aed;color:#fff;border:none;border-radius:8px;padding:9px 14px;cursor:pointer;font-size:12px;font-weight:700;margin:0">Salvar Chave Secund&aacute;ria</button>
-      <div id="msgConfigIA" style="font-size:11px;margin-top:6px"></div>
-    </details>
   </div>
 
   <!-- Nuvem Supabase (Banco + Fotos HD) -->
@@ -2468,11 +2517,9 @@ var LS_I18N = {
         cfg_by_client: "👤 Dados por Cliente",
         cfg_danger_zone: "⚠️ Zona de Risco",
         cfg_danger_desc: "Excluir uma empresa remove permanentemente a empresa, todos os seus clientes e todos os dados vinculados (pedidos, estoque, auditorias, etc.). Esta ação não pode ser desfeita.",
-        cfg_gemini_title: "✨ Chave API Google Gemini (gemini-3.8-flash)",
-        cfg_gemini_desc: "Salva exclusivamente no localStorage deste aparelho. Usada na busca inteligente de empresas/lojas, catálogo automático, auditoria visual, Guardião e leitura de fotos/PDFs (com fallback anti-obsolescência).",
-        cfg_gemini_model_lbl: "Modelo Ativo (ex: gemini-3.8-flash)",
-        cfg_btn_detect_models: "🔍 Detectar Modelos Disponíveis",
-        cfg_btn_save_gemini: "Salvar Chave Gemini",
+        cfg_gemini_title: "🔐 Motores de IA Conectados (Rodízio Automático)",
+        cfg_gemini_desc: "Todas as chaves são opcionais e armazenadas com ofuscação local neste dispositivo. O sistema alterna automaticamente entre Gemini, Grok, Claude e OpenAI/Groq/OpenRouter.",
+        cfg_btn_save_gemini: "💾 Salvar Cofre Multi-API",
         cfg_supabase_title: "☁️ Nuvem Supabase (Banco + Fotos HD)",
         cfg_supabase_desc: "Opcional e 100% offline-first: sem sinal no PDV, salva localmente (localStorage + IndexedDB) e sincroniza automaticamente ao reconectar.",
         cfg_promotor_label: "Identificador do Promotor (Nome ou Matrícula)",
@@ -2611,11 +2658,9 @@ var LS_I18N = {
         cfg_by_client: "👤 Data by Store",
         cfg_danger_zone: "⚠️ Danger Zone",
         cfg_danger_desc: "Deleting a company permanently removes the company, all its stores and all linked records (orders, stock, audits, etc.). This action cannot be undone.",
-        cfg_gemini_title: "✨ Google Gemini API Key (gemini-3.8-flash)",
-        cfg_gemini_desc: "Saved strictly in this device's localStorage. Used for smart company/store lookup, auto catalog, visual audit, Guardian and PDF/photo reading (with anti-obsolescence fallback).",
-        cfg_gemini_model_lbl: "Active Model (e.g. gemini-3.8-flash)",
-        cfg_btn_detect_models: "🔍 Detect Available Models",
-        cfg_btn_save_gemini: "Save Gemini Key",
+        cfg_gemini_title: "🔐 Connected AI Engines (Auto-Rotation)",
+        cfg_gemini_desc: "All keys are optional and obfuscated locally on this device. When one provider hits quota or fails, the app automatically rotates to the next.",
+        cfg_btn_save_gemini: "💾 Save Multi-API Vault",
         cfg_supabase_title: "☁️ Supabase Cloud (DB + HD Photos)",
         cfg_supabase_desc: "Optional & 100% offline-first: with no signal in-store, saves locally (localStorage + IndexedDB) and auto-syncs once online.",
         cfg_promotor_label: "Merchandiser ID (Name or Badge)",
@@ -2754,11 +2799,9 @@ var LS_I18N = {
         cfg_by_client: "👤 Datos por Tienda",
         cfg_danger_zone: "⚠️ Zona de Riesgo",
         cfg_danger_desc: "Eliminar una empresa borra permanentemente la empresa, todas sus tiendas y todos los datos vinculados (pedidos, stock, auditorías, etc.). Esta acción no se puede deshacer.",
-        cfg_gemini_title: "✨ Clave API Google Gemini (gemini-3.8-flash)",
-        cfg_gemini_desc: "Guardada solo en el localStorage de este dispositivo. Usada en búsqueda de empresas/tiendas, catálogo automático, auditoría visual, Guardián y lectura PDF/foto (con respaldo automático).",
-        cfg_gemini_model_lbl: "Modelo Activo (ej: gemini-3.8-flash)",
-        cfg_btn_detect_models: "🔍 Detectar Modelos Disponibles",
-        cfg_btn_save_gemini: "Guardar Clave Gemini",
+        cfg_gemini_title: "🔐 Motores de IA Conectados (Rotación Automática)",
+        cfg_gemini_desc: "Todas las claves son opcionales y se almacenan ofuscadas en este dispositivo. Si un motor alcanza su cuota o falla, pasa automáticamente al siguiente.",
+        cfg_btn_save_gemini: "💾 Guardar Bóveda Multi-API",
         cfg_supabase_title: "☁️ Nube Supabase (BD + Fotos HD)",
         cfg_supabase_desc: "Opcional y 100% offline-first: sin señal en tienda, guarda localmente (localStorage + IndexedDB) y sincroniza automáticamente al reconectar.",
         cfg_promotor_label: "Identificador del Promotor (Nombre o Matrícula)",
@@ -3461,122 +3504,277 @@ var _canalManualOverride = false;
 var _smartStoreResults = [];
 var _compProdFilter = "todos";
 
-// ── ACESSO DIRETO & MOTOR GEMINI ANTI-OBSOLESCÊNCIA (gemini-3.8-flash) ──────
+// ── COFRE MULTI-API, OFUSCAÇÃO LOCAL & ESTEIRA UNIVERSAL DE IA ─────────────
 var LS_GEMINI_MODEL_KEY = "ls23_gemini_model";
 var LS_GEMINI_MODEL_DEFAULT = "gemini-3.8-flash";
-var LS_GEMINI_FALLBACK_CHAIN = ["gemini-3.8-flash", "gemini-3.7-flash", "gemini-flash-latest"];
+var LS_GEMINI_FALLBACK_CHAIN = ["gemini-3.8-flash", "gemini-3.7-flash", "gemini-flash-latest", "gemini-3.5-flash-lite", "gemini-3.1-flash-lite"];
+var LS_VAULT_GEMINI_KEY = "ls23_google_gemini_key";
+var LS_VAULT_GROK_KEY = "ls23_vault_grok_key";
+var LS_VAULT_CLAUDE_KEY = "ls23_vault_claude_key";
+var LS_VAULT_EXTRA_KEY = "ls23_vault_extra_key";
 var LS_SEC_ENDPOINT_KEY = "ls23_sec_ai_endpoint";
 var LS_SEC_MODEL_KEY = "ls23_sec_ai_model";
-var _k=["gsk_QsV6XlFuA2","14CquXxKIuWGdy","b3FYwDPFSuCAWK","FYEsInlAlLB7oe"];
-var _L23_BUILTIN_KEY=_k[0]+_k[1]+_k[2]+_k[3];
-function getApiKey(){return localStorage.getItem("ls23_gemini_key")||_L23_BUILTIN_KEY;}
-function getGoogleGeminiKey() {
-    var k = (localStorage.getItem("ls23_google_gemini_key") || "").trim();
-    if (k) return k;
-    var legacy = (localStorage.getItem("ls23_gemini_key") || "").trim();
-    if (legacy.indexOf("AIza") === 0) return legacy;
-    return "";
+var _VAULT_XOR_SECRET = "LocalShelf::CofreMultiAPI::2026::RJ";
+
+var _geminiDynamicModelsCache = { keyMask: "", ts: 0, models: [] };
+var _geminiDeadModels404 = {};
+
+function _ofuscarCredencial(plain) {
+    var s = String(plain || "").trim();
+    if (!s) return "";
+    try {
+        var bytes = (typeof TextEncoder !== "undefined")
+            ? new TextEncoder().encode(s)
+            : Array.from(unescape(encodeURIComponent(s))).map(function(ch){ return ch.charCodeAt(0); });
+        var keyBytes = (typeof TextEncoder !== "undefined")
+            ? new TextEncoder().encode(_VAULT_XOR_SECRET)
+            : Array.from(_VAULT_XOR_SECRET).map(function(ch){ return ch.charCodeAt(0); });
+        var bin = "";
+        for (var i = 0; i < bytes.length; i++) {
+            var x = bytes[i] ^ keyBytes[i % keyBytes.length] ^ ((i * 13 + 7) & 255);
+            bin += String.fromCharCode(x);
+        }
+        var b64Rev = btoa(bin).split("").reverse().join("");
+        return "v2:" + b64Rev;
+    } catch(e) {
+        return "";
+    }
 }
+
+function _revelarCredencial(stored) {
+    var raw = String(stored || "").trim();
+    if (!raw) return "";
+    if (raw.indexOf("v2:") !== 0) return raw;
+    try {
+        var b64 = raw.slice(3).split("").reverse().join("");
+        var bin = atob(b64);
+        var keyBytes = (typeof TextEncoder !== "undefined")
+            ? new TextEncoder().encode(_VAULT_XOR_SECRET)
+            : Array.from(_VAULT_XOR_SECRET).map(function(ch){ return ch.charCodeAt(0); });
+        var out = new Uint8Array(bin.length);
+        for (var i = 0; i < bin.length; i++) {
+            out[i] = bin.charCodeAt(i) ^ keyBytes[i % keyBytes.length] ^ ((i * 13 + 7) & 255);
+        }
+        if (typeof TextDecoder !== "undefined") {
+            return new TextDecoder().decode(out).trim();
+        }
+        var esc = "";
+        for (var j = 0; j < out.length; j++) esc += String.fromCharCode(out[j]);
+        return decodeURIComponent(escape(esc)).trim();
+    } catch(e) {
+        return "";
+    }
+}
+
+function _lerCredencialCofre(lsKey) {
+    try {
+        var raw = localStorage.getItem(lsKey) || "";
+        if (!raw) return "";
+        var decoded = _revelarCredencial(raw);
+        if (decoded && raw.indexOf("v2:") !== 0) {
+            var obf = _ofuscarCredencial(decoded);
+            if (obf) localStorage.setItem(lsKey, obf);
+        }
+        return decoded;
+    } catch(e) {
+        return "";
+    }
+}
+
+function _gravarCredencialCofre(lsKey, plainKey) {
+    var clean = String(plainKey || "").trim();
+    try {
+        if (!clean) {
+            localStorage.removeItem(lsKey);
+            return true;
+        }
+        var obf = _ofuscarCredencial(clean);
+        if (!obf) return false;
+        localStorage.setItem(lsKey, obf);
+        return true;
+    } catch(e) {
+        return false;
+    }
+}
+
+function _migrarChavesCofreLegado() {
+    try {
+        var legRaw = localStorage.getItem("ls23_gemini_key") || "";
+        if (legRaw) {
+            var legPlain = _revelarCredencial(legRaw);
+            if (legPlain) {
+                if (legPlain.indexOf("AIza") === 0) {
+                    if (!localStorage.getItem(LS_VAULT_GEMINI_KEY)) _gravarCredencialCofre(LS_VAULT_GEMINI_KEY, legPlain);
+                } else if (legPlain.indexOf("xai-") === 0) {
+                    if (!localStorage.getItem(LS_VAULT_GROK_KEY)) _gravarCredencialCofre(LS_VAULT_GROK_KEY, legPlain);
+                } else if (legPlain.indexOf("sk-ant-") === 0) {
+                    if (!localStorage.getItem(LS_VAULT_CLAUDE_KEY)) _gravarCredencialCofre(LS_VAULT_CLAUDE_KEY, legPlain);
+                } else if (!localStorage.getItem(LS_VAULT_EXTRA_KEY)) {
+                    _gravarCredencialCofre(LS_VAULT_EXTRA_KEY, legPlain);
+                }
+            }
+            localStorage.removeItem("ls23_gemini_key");
+        }
+        [LS_VAULT_GEMINI_KEY, LS_VAULT_GROK_KEY, LS_VAULT_CLAUDE_KEY, LS_VAULT_EXTRA_KEY].forEach(function(k) {
+            _lerCredencialCofre(k);
+        });
+    } catch(e) {}
+}
+_migrarChavesCofreLegado();
+
+function mascararChaveAPI(key) {
+    var s = String(key || "").trim();
+    if (!s) return "";
+    if (s.length <= 8) return "****";
+    return s.slice(0, 4) + "..." + s.slice(-4);
+}
+
+function _sanitizarTextoSemChaves(txt) {
+    return String(txt || "").replace(/\b(AIza[0-9A-Za-z_-]{12,}|sk-ant-[0-9A-Za-z_-]{8,}|xai-[0-9A-Za-z_-]{8,}|gsk_[0-9A-Za-z_-]{8,}|sk-(?:or-|proj-)?[0-9A-Za-z_-]{10,})/g, function(m) {
+        return mascararChaveAPI(m);
+    });
+}
+
+function getGoogleGeminiKey() { return _lerCredencialCofre(LS_VAULT_GEMINI_KEY); }
+function getVaultGrokKey() { return _lerCredencialCofre(LS_VAULT_GROK_KEY); }
+function getVaultClaudeKey() { return _lerCredencialCofre(LS_VAULT_CLAUDE_KEY); }
+function getVaultExtraKey() { return _lerCredencialCofre(LS_VAULT_EXTRA_KEY); }
+function getApiKey() { return getGoogleGeminiKey() || getVaultGrokKey() || getVaultClaudeKey() || getVaultExtraKey() || ""; }
+
+function detectarProvedorExtraPorPrefixo(key) {
+    var k = String(key || "").trim();
+    if (!k) return null;
+    if (k.indexOf("gsk_") === 0) {
+        return {
+            id: "groq",
+            nome: "Groq",
+            baseUrl: "https://api.groq.com/openai/v1",
+            textModels: ["llama-3.3-70b-versatile", "llama-3.1-8b-instant"],
+            visionModels: ["meta-llama/llama-4-scout-17b-16e-instruct"]
+        };
+    }
+    if (k.indexOf("sk-or-") === 0) {
+        return {
+            id: "openrouter",
+            nome: "OpenRouter",
+            baseUrl: "https://openrouter.ai/api/v1",
+            textModels: ["google/gemini-3.8-flash", "openai/gpt-4o-mini"],
+            visionModels: ["google/gemini-3.8-flash", "openai/gpt-4o-mini"]
+        };
+    }
+    if (k.indexOf("xai-") === 0) {
+        return {
+            id: "grok",
+            nome: "Grok / xAI",
+            baseUrl: "https://api.x.ai/v1",
+            textModels: ["grok-3-mini", "grok-3-latest"],
+            visionModels: ["grok-2-vision-1212", "grok-3-latest"]
+        };
+    }
+    if (k.indexOf("sk-ant-") === 0) {
+        return {
+            id: "claude",
+            nome: "Claude / Anthropic",
+            isAnthropic: true,
+            baseUrl: "https://api.anthropic.com/v1",
+            textModels: ["claude-haiku-4-5", "claude-sonnet-4-5"],
+            visionModels: ["claude-haiku-4-5", "claude-sonnet-4-5"]
+        };
+    }
+    if (k.indexOf("sk-") === 0) {
+        return {
+            id: "openai",
+            nome: "OpenAI",
+            baseUrl: "https://api.openai.com/v1",
+            textModels: ["gpt-4o-mini", "gpt-4.1-mini"],
+            visionModels: ["gpt-4o-mini", "gpt-4.1-mini"]
+        };
+    }
+    var customEp = "";
+    try { customEp = (localStorage.getItem(LS_SEC_ENDPOINT_KEY) || "").trim().replace(/\/chat\/completions\/?$/i, ""); } catch(e) {}
+    return {
+        id: "openai_compat",
+        nome: "OpenAI-Compatível",
+        baseUrl: customEp || "https://api.openai.com/v1",
+        textModels: ["gpt-4o-mini"],
+        visionModels: ["gpt-4o-mini"]
+    };
+}
+
+function contarMotoresConectados() {
+    var lista = [];
+    if (getGoogleGeminiKey()) lista.push("Gemini");
+    if (getVaultGrokKey()) lista.push("Grok");
+    if (getVaultClaudeKey()) lista.push("Claude");
+    if (getVaultExtraKey()) {
+        var p = detectarProvedorExtraPorPrefixo(getVaultExtraKey());
+        lista.push(p ? p.nome : "Extra");
+    }
+    return lista;
+}
+
+function temMotorIAConfigurado() {
+    return contarMotoresConectados().length > 0;
+}
+
 function _ehModeloTextoGeminiValido(modelId) {
     var low = String(modelId || "").trim().replace(/^models\//i, "").toLowerCase();
     if (!low || low.indexOf("gemini") < 0) return false;
     if (/-(tts|audio|image|embedding|vision|live|preview)\b|aqa|imagen|veo|lyria/.test(low)) return false;
     if (/^gemini-[12]\./.test(low)) return false;
+    if (_geminiDeadModels404[low]) return false;
     return true;
 }
+
 function _sanitizarNomeModeloGemini(m) {
     var clean = String(m || "").trim().replace(/^models\//i, "");
     if (!clean || !_ehModeloTextoGeminiValido(clean)) return LS_GEMINI_MODEL_DEFAULT;
     return clean;
 }
+
 function getGeminiModel() {
-    var raw = "";
-    try { raw = localStorage.getItem(LS_GEMINI_MODEL_KEY) || ""; } catch(e) {}
-    var clean = _sanitizarNomeModeloGemini(raw);
-    if (raw && raw.trim() !== clean) {
-        try { localStorage.setItem(LS_GEMINI_MODEL_KEY, clean); } catch(e2) {}
-    }
-    return clean;
+    return LS_GEMINI_MODEL_DEFAULT;
 }
-function setGeminiModel(modelName, syncInput) {
+
+function setGeminiModel(modelName) {
     var clean = _sanitizarNomeModeloGemini(modelName);
     lsSet(LS_GEMINI_MODEL_KEY, clean);
-    if (syncInput !== false) {
-        var inp = document.getElementById("googleGeminiModelInput");
-        if (inp) inp.value = clean;
-    }
     return clean;
 }
-function salvarModeloGeminiInput(silent) {
-    var inp = document.getElementById("googleGeminiModelInput");
-    var val = setGeminiModel(inp ? inp.value : LS_GEMINI_MODEL_DEFAULT, true);
-    if (!silent) {
-        var msgEl = document.getElementById("msgConfigGemini");
-        if (msgEl) {
-            msgEl.style.color = "#16a34a";
-            msgEl.textContent = "Modelo ativo atualizado: " + val + " ✓";
-        }
-    }
-    return val;
-}
+
 function _scoreFlashModelPriority(id) {
     var lower = String(id || "").trim().replace(/^models\//i, "").toLowerCase();
     if (!_ehModeloTextoGeminiValido(lower)) return -99999;
-    if (lower === "gemini-3.8-flash") return 5000;
-    if (lower === "gemini-3.7-flash") return 4800;
-    if (lower === "gemini-flash-latest") return 4600;
-    var score = 1000;
-    if (lower.indexOf("flash") >= 0) {
-        score += 2800;
-    } else if (lower.indexOf("pro") >= 0) {
-        score += 1800;
-    }
-    if (lower.indexOf("lite") >= 0) score -= 250;
-    if (lower.indexOf("thinking") >= 0 || lower.indexOf("exp") >= 0) score -= 200;
+    if (lower === "gemini-3.8-flash") return 6000;
+    if (lower === "gemini-3.7-flash") return 5700;
+    if (lower === "gemini-flash-latest") return 5400;
+    if (lower === "gemini-3.5-flash-lite") return 5100;
+    if (lower === "gemini-3.1-flash-lite") return 4900;
+    if (lower.indexOf("gemini-omni") === 0) return 4700;
+    var score = 1500;
+    if (lower.indexOf("flash") >= 0) score += 2600;
+    else if (lower.indexOf("pro") >= 0) score += 1700;
+    if (lower.indexOf("lite") >= 0) score -= 200;
+    if (lower.indexOf("thinking") >= 0 || lower.indexOf("exp") >= 0) score -= 350;
     var mVer = lower.match(/gemini-(\d+(?:\.\d+)?)/);
-    if (mVer) score += Math.round(parseFloat(mVer[1]) * 40);
+    if (mVer) score += Math.round(parseFloat(mVer[1]) * 45);
     return score;
 }
-function _selecionarMelhorFlashModel(modelsList, excluirModelos) {
-    if (!Array.isArray(modelsList)) return "";
-    var exclSet = {};
-    var exclList = Array.isArray(excluirModelos) ? excluirModelos : (excluirModelos ? [excluirModelos] : []);
-    exclList.forEach(function(em) {
-        var s = String(em || "").trim().replace(/^models\//i, "").toLowerCase();
-        if (s) exclSet[s] = true;
-    });
-    var candidatos = modelsList.filter(function(m) {
-        if (!m) return false;
-        var rawId = (typeof m === "string") ? m : (m.id || m.name || "");
-        var id = String(rawId || "").trim().replace(/^models\//i, "");
-        if (!_ehModeloTextoGeminiValido(id)) return false;
-        var methods = (typeof m === "object" && (m.supportedGenerationMethods || m.methods)) || [];
-        var canGen = !methods.length || methods.indexOf("generateContent") >= 0;
-        if (!canGen) return false;
-        if (exclSet[id.toLowerCase()]) return false;
-        return true;
-    }).map(function(m) {
-        var rawId = (typeof m === "string") ? m : (m.id || m.name || "");
-        var id = String(rawId || "").trim().replace(/^models\//i, "");
-        return { id: id, score: _scoreFlashModelPriority(id) };
-    });
-    if (!candidatos.length) return "";
-    candidatos.sort(function(a, b) { return b.score - a.score; });
-    return candidatos[0].id;
-}
+
 async function listarModelosGeminiAPI(apiKey) {
     var key = String(apiKey || getGoogleGeminiKey() || "").trim();
     if (!key) throw new Error("CHAVE_GOOGLE_NAO_CONFIGURADA");
     var url = "https://generativelanguage.googleapis.com/v1beta/models?key=" + encodeURIComponent(key);
     var ctrl = (typeof AbortController !== "undefined") ? new AbortController() : null;
-    var timer = ctrl ? setTimeout(function(){ ctrl.abort(); }, 15000) : null;
+    var timer = ctrl ? setTimeout(function(){ ctrl.abort(); }, 12000) : null;
     try {
         var resp = await fetch(url, { method: "GET", signal: ctrl ? ctrl.signal : undefined });
         if (!resp.ok) {
             var errModTxt = "";
             try { var emj = await resp.json(); errModTxt = emj && emj.error && emj.error.message ? emj.error.message : ""; } catch(eM) {}
-            var eMod = new Error("Não foi possível consultar os modelos disponíveis (" + resp.status + ").");
-            eMod.technicalDetail = "GET /v1beta/models -> HTTP " + resp.status + (errModTxt ? (": " + errModTxt) : "");
+            var eMod = new Error("GET /v1beta/models HTTP " + resp.status);
+            eMod.httpStatus = resp.status;
+            eMod.technicalDetail = _sanitizarTextoSemChaves("GET /v1beta/models (" + mascararChaveAPI(key) + ") -> HTTP " + resp.status + (errModTxt ? (": " + errModTxt) : ""));
             throw eMod;
         }
         var data = await resp.json();
@@ -3590,7 +3788,6 @@ async function listarModelosGeminiAPI(apiKey) {
             return {
                 id: cleanId,
                 displayName: m.displayName || cleanId,
-                description: m.description || "",
                 supportedGenerationMethods: m.supportedGenerationMethods || []
             };
         }).sort(function(a, b) {
@@ -3600,121 +3797,178 @@ async function listarModelosGeminiAPI(apiKey) {
         if (timer) clearTimeout(timer);
     }
 }
-function selecionarModeloGeminiChip(modelId) {
-    var val = setGeminiModel(modelId, true);
-    var msgEl = document.getElementById("msgConfigGemini");
-    if (msgEl) {
-        msgEl.style.color = "#16a34a";
-        msgEl.textContent = "Modelo \"" + val + "\" selecionado e salvo no localStorage ✓";
-    }
-    var listEl = document.getElementById("geminiModelsList");
-    if (listEl) {
-        listEl.querySelectorAll(".gemini-model-chip").forEach(function(btn) {
-            btn.classList.toggle("ativo", btn.getAttribute("data-model-id") === val);
-        });
-    }
-}
-async function detectarModelosGeminiDisponiveis() {
-    var keyInp = document.getElementById("googleGeminiKeyInput");
-    var rawKey = keyInp ? keyInp.value.trim() : "";
-    var apiKey = (rawKey && rawKey.indexOf("•") < 0) ? rawKey : getGoogleGeminiKey();
-    var msgEl = document.getElementById("msgConfigGemini");
-    var listEl = document.getElementById("geminiModelsList");
-    var btn = document.getElementById("btnDetectarModelosGemini");
-    if (!apiKey) {
-        if (msgEl) { msgEl.style.color = "#dc2626"; msgEl.textContent = "Informe/salve uma Chave API Google Gemini antes de detectar os modelos."; }
-        return [];
-    }
-    if (btn) { btn.disabled = true; btn.textContent = "Detectando..."; }
-    if (msgEl) { msgEl.style.color = "#1e40af"; msgEl.textContent = "Consultando modelos ativos em /v1beta/models..."; }
-    try {
-        var modelos = await listarModelosGeminiAPI(apiKey);
-        var ativoAtual = getGeminiModel();
-        if (listEl) {
-            if (!modelos.length) {
-                listEl.innerHTML = "<div style='font-size:11px;color:#b45309'>Nenhum modelo com generateContent retornado para esta chave.</div>";
-            } else {
-                listEl.innerHTML = "<div style='font-size:11px;font-weight:700;color:#1e3a8a;margin-bottom:4px'>" +
-                    modelos.length + " modelo(s) ativo(s) — toque para selecionar:</div>" +
-                    "<div style='display:flex;flex-wrap:wrap;gap:4px'>" +
-                    modelos.slice(0, 18).map(function(m) {
-                        var isAtivo = (m.id === ativoAtual);
-                        return "<button type='button' class='gemini-model-chip" + (isAtivo ? " ativo" : "") +
-                            "' data-model-id='" + escAttr(m.id) + "' onclick='selecionarModeloGeminiChip(this.getAttribute(\"data-model-id\"))'>" +
-                            escHtml(m.id) + "</button>";
-                    }).join("") +
-                    "</div>";
+
+async function listarModelosGeminiAtivosParaRodizio(apiKey) {
+    var mask = mascararChaveAPI(apiKey);
+    var now = Date.now();
+    var listaIds = [];
+    if (_geminiDynamicModelsCache.keyMask === mask && (now - _geminiDynamicModelsCache.ts) < 300000 && _geminiDynamicModelsCache.models.length) {
+        listaIds = _geminiDynamicModelsCache.models.slice();
+    } else {
+        try {
+            var fetched = await listarModelosGeminiAPI(apiKey);
+            listaIds = fetched.map(function(m){ return m.id; });
+            if (listaIds.length) {
+                _geminiDynamicModelsCache = { keyMask: mask, ts: now, models: listaIds.slice() };
             }
-            listEl.style.display = "block";
+        } catch(eList) {
+            if (eList && (eList.httpStatus === 400 || eList.httpStatus === 401 || eList.httpStatus === 403)) {
+                throw eList;
+            }
+            console.warn("LocalShelf AI: falha ao consultar /v1beta/models (" + mask + "), usando cadeia padrão.");
         }
-        if (msgEl) {
-            msgEl.style.color = "#059669";
-            msgEl.textContent = modelos.length + " modelo(s) encontrado(s). Modelo ativo: " + ativoAtual;
-        }
-        return modelos;
-    } catch(err) {
-        if (msgEl) {
-            msgEl.style.color = "#dc2626";
-            msgEl.textContent = "Falha ao detectar modelos: " + (err && (err.technicalDetail || err.message) ? (err.technicalDetail || err.message) : err);
-        }
-        return [];
-    } finally {
-        if (btn) { btn.disabled = false; btn.innerHTML = "&#128269; Detectar Modelos Dispon&iacute;veis"; }
     }
+    var seen = {};
+    var out = [];
+    listaIds.concat(LS_GEMINI_FALLBACK_CHAIN).forEach(function(id) {
+        var clean = String(id || "").trim().replace(/^models\//i, "");
+        if (!clean || !_ehModeloTextoGeminiValido(clean)) return;
+        var low = clean.toLowerCase();
+        if (!seen[low]) { seen[low] = true; out.push(clean); }
+    });
+    out.sort(function(a, b) { return _scoreFlashModelPriority(b) - _scoreFlashModelPriority(a); });
+    return out;
 }
-function salvarConfigGemini() {
-    var el = document.getElementById("googleGeminiKeyInput");
-    var raw = el ? el.value.trim() : "";
-    var modEl = document.getElementById("googleGeminiModelInput");
-    var modeloSalvo = setGeminiModel(modEl ? modEl.value : getGeminiModel(), true);
-    var msgEl = document.getElementById("msgConfigGemini");
-    if (!raw || raw.indexOf("•") >= 0) {
-        var atual = getGoogleGeminiKey();
-        if (atual) {
-            if (msgEl) { msgEl.style.color = "#16a34a"; msgEl.textContent = "Chave Google Gemini mantida e ativa ✓ (" + modeloSalvo + ")"; }
+
+function atualizarPreviewProvedorExtra() {
+    var inp = document.getElementById("vaultExtraKeyInput");
+    var hint = document.getElementById("vaultExtraDetectedHint");
+    if (!inp || !hint) return;
+    var val = inp.value.trim();
+    if (!val || val.indexOf("•") >= 0) {
+        var savedExtra = getVaultExtraKey();
+        if (savedExtra) {
+            var pSaved = detectarProvedorExtraPorPrefixo(savedExtra);
+            hint.textContent = "Provedor detectado: " + (pSaved ? (pSaved.nome + " (" + pSaved.baseUrl.replace(/^https?:\/\//, "") + ")") : "OpenAI-Compatível");
         } else {
-            if (msgEl) { msgEl.style.color = "#dc2626"; msgEl.textContent = "Cole uma chave API válida do Google Gemini (AIza...). Modelo salvo: " + modeloSalvo; }
+            hint.textContent = "Detecção automática por prefixo: gsk_ • sk-or- • xai- • sk-";
         }
         return;
     }
-    lsSet("ls23_google_gemini_key", raw);
-    if (el) { el.type = "password"; el.value = "••••••••"; }
-    if (msgEl) { msgEl.style.color = "#16a34a"; msgEl.textContent = "Chave Google Gemini salva no localStorage ✓ (" + modeloSalvo + " pronto)"; }
+    var p = detectarProvedorExtraPorPrefixo(val);
+    hint.textContent = p ? ("Detectado agora: " + p.nome + " (" + p.baseUrl.replace(/^https?:\/\//, "") + ")") : "Detecção automática por prefixo";
 }
-function removerConfigGemini() {
-    try { localStorage.removeItem("ls23_google_gemini_key"); } catch(e) {}
-    var el = document.getElementById("googleGeminiKeyInput");
-    if (el) { el.type = "password"; el.value = ""; }
-    var msgEl = document.getElementById("msgConfigGemini");
-    if (msgEl) { msgEl.style.color = "#64748b"; msgEl.textContent = "Chave Google Gemini removida deste aparelho."; }
+
+function atualizarBadgesCofreUI() {
+    var slots = [
+        { id: "vaultStatusGemini", key: getGoogleGeminiKey() },
+        { id: "vaultStatusGrok",   key: getVaultGrokKey() },
+        { id: "vaultStatusClaude", key: getVaultClaudeKey() },
+        { id: "vaultStatusExtra",  key: getVaultExtraKey() }
+    ];
+    var ativos = 0;
+    slots.forEach(function(s) {
+        var pill = document.getElementById(s.id);
+        if (!pill) return;
+        if (s.key) {
+            ativos++;
+            pill.classList.remove("off");
+            pill.classList.add("on");
+            pill.textContent = "Ativo (" + mascararChaveAPI(s.key) + ")";
+        } else {
+            pill.classList.remove("on");
+            pill.classList.add("off");
+            pill.textContent = "Inativo";
+        }
+    });
+    var totalEl = document.getElementById("vaultTotalStatus");
+    if (totalEl) {
+        totalEl.classList.toggle("ready", ativos > 0);
+        totalEl.textContent = ativos === 0
+            ? "Nenhum motor configurado"
+            : (ativos === 1 ? "1 motor pronto para uso" : (ativos + " motores prontos para rodízio automático"));
+    }
+    atualizarPreviewProvedorExtra();
 }
-function limparConfigGemini() { return removerConfigGemini(); }
-function toggleMostrarGeminiKey() {
-    var el = document.getElementById("googleGeminiKeyInput");
+
+function toggleMostrarVaultKey(slot) {
+    var map = {
+        gemini: { id: "vaultGeminiKeyInput", getter: getGoogleGeminiKey },
+        grok:   { id: "vaultGrokKeyInput",   getter: getVaultGrokKey },
+        claude: { id: "vaultClaudeKeyInput", getter: getVaultClaudeKey },
+        extra:  { id: "vaultExtraKeyInput",  getter: getVaultExtraKey }
+    };
+    var cfg = map[slot];
+    if (!cfg) return;
+    var el = document.getElementById(cfg.id);
     if (!el) return;
+    var salvo = cfg.getter();
     if (el.type === "password") {
-        var k = getGoogleGeminiKey();
-        if (k && el.value.indexOf("•") >= 0) el.value = k;
+        if (salvo && el.value.indexOf("•") >= 0) el.value = salvo;
         el.type = "text";
     } else {
-        if (el.value && el.value === getGoogleGeminiKey()) el.value = "••••••••";
+        if (el.value && salvo && el.value.trim() === salvo) el.value = "••••••••••••";
         el.type = "password";
     }
 }
+
+function salvarCofreMultiAPI() {
+    var specs = [
+        { id: "vaultGeminiKeyInput", lsKey: LS_VAULT_GEMINI_KEY, getter: getGoogleGeminiKey },
+        { id: "vaultGrokKeyInput",   lsKey: LS_VAULT_GROK_KEY,   getter: getVaultGrokKey },
+        { id: "vaultClaudeKeyInput", lsKey: LS_VAULT_CLAUDE_KEY, getter: getVaultClaudeKey },
+        { id: "vaultExtraKeyInput",  lsKey: LS_VAULT_EXTRA_KEY,  getter: getVaultExtraKey }
+    ];
+    specs.forEach(function(sp) {
+        var el = document.getElementById(sp.id);
+        if (!el) return;
+        var val = el.value.trim();
+        if (val.indexOf("•") >= 0) return;
+        _gravarCredencialCofre(sp.lsKey, val);
+        el.type = "password";
+        el.value = val ? "••••••••••••" : "";
+    });
+    _geminiDynamicModelsCache = { keyMask: "", ts: 0, models: [] };
+    _geminiDeadModels404 = {};
+    atualizarBadgesCofreUI();
+    var ativos = contarMotoresConectados();
+    var msgEl = document.getElementById("msgConfigGemini");
+    if (msgEl) {
+        if (ativos.length) {
+            msgEl.style.color = "#16a34a";
+            msgEl.textContent = "Cofre salvo com ofuscação local ✓ (" + ativos.join(" → ") + ")";
+        } else {
+            msgEl.style.color = "#dc2626";
+            msgEl.textContent = "Nenhuma chave salva. Cole pelo menos 1 chave para ativar o rodízio automático.";
+        }
+    }
+}
+
+function limparCofreMultiAPI() {
+    if (!confirm("Remover todas as chaves do Cofre Multi-API deste aparelho?")) return;
+    [LS_VAULT_GEMINI_KEY, LS_VAULT_GROK_KEY, LS_VAULT_CLAUDE_KEY, LS_VAULT_EXTRA_KEY, "ls23_gemini_key"].forEach(function(k) {
+        try { localStorage.removeItem(k); } catch(e) {}
+    });
+    ["vaultGeminiKeyInput", "vaultGrokKeyInput", "vaultClaudeKeyInput", "vaultExtraKeyInput"].forEach(function(id) {
+        var el = document.getElementById(id);
+        if (el) { el.type = "password"; el.value = ""; }
+    });
+    _geminiDynamicModelsCache = { keyMask: "", ts: 0, models: [] };
+    _geminiDeadModels404 = {};
+    atualizarBadgesCofreUI();
+    var msgEl = document.getElementById("msgConfigGemini");
+    if (msgEl) { msgEl.style.color = "#64748b"; msgEl.textContent = "Todas as chaves foram removidas deste aparelho."; }
+}
+
+function salvarConfigGemini() { return salvarCofreMultiAPI(); }
+function removerConfigGemini() { return limparCofreMultiAPI(); }
+function limparConfigGemini() { return limparCofreMultiAPI(); }
+
 function _aguardarBackoffMs(ms) {
     return new Promise(function(resolve) { setTimeout(resolve, ms); });
 }
+
 function _traduzirErroAmigavelIA(err) {
     var msg = String((err && err.message) ? err.message : (err || "")).trim();
     if (!msg) return "Não foi possível completar a consulta agora. Tente novamente.";
     if (msg === "CHAVE_GOOGLE_NAO_CONFIGURADA" || msg === "CHAVE_NAO_CONFIGURADA") {
-        return "Configure sua Chave API Google Gemini nas Configurações para usar a busca automática.";
+        return "Configure pelo menos 1 chave no Cofre Multi-API nas Configurações para usar os recursos de IA.";
     }
     if (/high demand|overloaded|unavailable|503|service unavailable/i.test(msg)) {
-        return "Serviço temporariamente congestionado. Tente novamente em alguns instantes.";
+        return "Todos os motores conectados estão congestionados no momento. Tente novamente em instantes.";
     }
     if (/429|quota|rate limit|resource exhausted|too many requests/i.test(msg)) {
-        return "Limite temporário de consultas atingido. Aguarde alguns segundos e tente novamente.";
+        return "Limite de cota atingido em todos os motores conectados mesmo após nova tentativa. Aguarde alguns instantes.";
     }
     if (/failed to fetch|networkerror|load failed|offline|network/i.test(msg)) {
         return "Falha de conexão. Verifique sua internet e tente novamente.";
@@ -3725,53 +3979,63 @@ function _traduzirErroAmigavelIA(err) {
     if (/api key|permission|unauth|forbidden|401|403/i.test(msg)) {
         return "Chave de acesso inválida ou sem permissão nas Configurações.";
     }
-    return msg;
+    return _sanitizarTextoSemChaves(msg);
 }
+
 function _extrairDetalheTecnicoErro(err) {
     if (!err) return "";
-    if (err.technicalDetail) return String(err.technicalDetail).trim();
+    if (err.technicalDetail) return _sanitizarTextoSemChaves(String(err.technicalDetail).trim());
     var msg = String(err.message || err || "").trim();
-    if (msg === "CHAVE_GOOGLE_NAO_CONFIGURADA") return "Chave ls23_google_gemini_key vazia nas Configurações.";
-    return msg;
+    if (msg === "CHAVE_GOOGLE_NAO_CONFIGURADA" || msg === "CHAVE_NAO_CONFIGURADA") {
+        return "Cofre Multi-API vazio nas Configurações.";
+    }
+    return _sanitizarTextoSemChaves(msg);
 }
+
 function _renderSmartStatus(stEl, alertClass, msg, techDetail) {
     if (!stEl) return;
     stEl.style.display = "block";
     stEl.classList.remove("smart-alert-warn", "smart-alert-ok", "smart-alert-err");
     if (alertClass) stEl.classList.add(alertClass);
     stEl.style.color = "";
-    var html = "<div>" + escHtml(msg || "") + "</div>";
+    var html = "<div>" + escHtml(_sanitizarTextoSemChaves(msg || "")) + "</div>";
     if (techDetail) {
-        html += "<div class='smart-err-detail'>Diagnóstico: " + escHtml(techDetail) + "</div>";
+        html += "<div class='smart-err-detail'>Diagnóstico: " + escHtml(_sanitizarTextoSemChaves(techDetail)) + "</div>";
     }
     stEl.innerHTML = html;
 }
-async function _escolherProximoModeloTexto(apiKey, state) {
-    return _selecionarMelhorFlashModel(LS_GEMINI_FALLBACK_CHAIN, state.modelosTentados);
+
+function _prepararPromptFinalIA(prompt, jsonMode) {
+    var p = String(prompt || "");
+    if (jsonMode && p) {
+        if (!/exclusivamente.*json|apenas.*json/i.test(p)) {
+            p += "\n\nIMPORTANTE: Responda EXCLUSIVAMENTE com JSON válido (sem blocos markdown ```json, sem texto antes ou depois).";
+        } else {
+            p += "\n\nNão inclua texto explicativo antes ou depois do JSON.";
+        }
+    }
+    return p;
 }
-async function chamarGoogleGeminiFlash(prompt, partsArray, jsonMode, _state, opts) {
-    var apiKey = getGoogleGeminiKey();
-    if (!apiKey) {
-        var eKey = new Error("CHAVE_GOOGLE_NAO_CONFIGURADA");
-        eKey.technicalDetail = "CHAVE_GOOGLE_NAO_CONFIGURADA (adicione sua chave AIza... em Configurações)";
-        throw eKey;
-    }
 
-    var state = (_state && typeof _state === "object")
-        ? _state
-        : { modeloAtual: getGeminiModel(), retriesTransient: 0, modelosTentados: [], opts: opts || {}, lastTechnicalError: "" };
-    if (opts && typeof opts === "object" && !_state) {
-        state.opts = Object.assign({}, opts);
+function _normalizarPartsParaProvedores(partsArray) {
+    var images = [];
+    var extraTexts = [];
+    if (Array.isArray(partsArray)) {
+        partsArray.forEach(function(pt) {
+            if (!pt) return;
+            if (pt.data && pt.mimeType) {
+                if (String(pt.mimeType).indexOf("image/") === 0 || String(pt.mimeType) === "application/pdf") {
+                    images.push({ mimeType: pt.mimeType, data: pt.data });
+                }
+            } else if (pt.text) {
+                extraTexts.push(String(pt.text));
+            }
+        });
     }
-    if (!state.opts) state.opts = {};
-    if (!state.modeloAtual || !_ehModeloTextoGeminiValido(state.modeloAtual)) {
-        state.modeloAtual = getGeminiModel();
-    }
-    var modeloAtivo = state.modeloAtual;
-    if (state.modelosTentados.indexOf(modeloAtivo.toLowerCase()) < 0) {
-        state.modelosTentados.push(modeloAtivo.toLowerCase());
-    }
+    return { images: images, extraTexts: extraTexts };
+}
 
+async function _chamarGeminiUnicoModelo(apiKey, modelo, partsArray, promptFinal, timeoutMs) {
     var parts = [];
     if (Array.isArray(partsArray)) {
         partsArray.forEach(function(pt) {
@@ -3782,23 +4046,13 @@ async function chamarGoogleGeminiFlash(prompt, partsArray, jsonMode, _state, opt
             }
         });
     }
-    var promptFinal = String(prompt || "");
-    if (jsonMode && promptFinal) {
-        if (!/exclusivamente.*json|apenas.*json/i.test(promptFinal)) {
-            promptFinal += "\n\nIMPORTANTE: Responda EXCLUSIVAMENTE com JSON válido (sem blocos markdown ```json, sem texto antes ou depois).";
-        } else {
-            promptFinal += "\n\nNão inclua texto explicativo antes ou depois do JSON.";
-        }
-    }
     if (promptFinal) parts.push({ text: promptFinal });
-    var genCfg = { temperature: 0.2 };
     var bodyPayload = {
         contents: [{ role: "user", parts: parts }],
-        generationConfig: genCfg
+        generationConfig: { temperature: 0.2 }
     };
-    var url = "https://generativelanguage.googleapis.com/v1beta/models/" + encodeURIComponent(modeloAtivo) + ":generateContent?key=" + encodeURIComponent(apiKey);
+    var url = "https://generativelanguage.googleapis.com/v1beta/models/" + encodeURIComponent(modelo) + ":generateContent?key=" + encodeURIComponent(apiKey);
     var ctrl = (typeof AbortController !== "undefined") ? new AbortController() : null;
-    var timeoutMs = (state.opts && Number(state.opts.timeoutMs) > 0) ? Number(state.opts.timeoutMs) : 60000;
     var timer = ctrl ? setTimeout(function(){ ctrl.abort(); }, timeoutMs) : null;
     try {
         var resp = await fetch(url, {
@@ -3809,55 +4063,11 @@ async function chamarGoogleGeminiFlash(prompt, partsArray, jsonMode, _state, opt
         });
         if (!resp.ok) {
             var errMsg = "";
-            try { var ej = await resp.json(); errMsg = ej.error && ej.error.message ? ej.error.message : ""; } catch(e2) {}
-            var techDetail = "HTTP " + resp.status + " (" + modeloAtivo + ")" + (errMsg ? (": " + errMsg) : "");
-            state.lastTechnicalError = techDetail;
-
-            var isTransient = (resp.status === 503 || resp.status === 429) ||
-                /high demand|overloaded|resource exhausted|rate limit|quota|too many requests|temporarily unavailable/i.test(errMsg || "");
-            var isModelUnavailable = (resp.status === 404) ||
-                /model.*not found|not supported|deprecated|modality|tts|audio/i.test(errMsg || "");
-
-            if (isTransient) {
-                if (state.retriesTransient < 3) {
-                    state.retriesTransient++;
-                    var waitMs = state.retriesTransient === 1 ? 2500 : (state.retriesTransient === 2 ? 4000 : 6000);
-                    var nextMod = (resp.status === 503 || state.retriesTransient >= 2)
-                        ? await _escolherProximoModeloTexto(apiKey, state)
-                        : "";
-                    if (nextMod) {
-                        console.warn("LocalShelf AI Retry (" + resp.status + "): trocando de '" + modeloAtivo + "' para '" + nextMod + "' após " + waitMs + "ms (tentativa " + state.retriesTransient + "/3).");
-                        state.modeloAtual = nextMod;
-                    } else {
-                        console.warn("LocalShelf AI Retry (" + resp.status + "): repetindo '" + modeloAtivo + "' após " + waitMs + "ms (tentativa " + state.retriesTransient + "/3).");
-                    }
-                    await _aguardarBackoffMs(waitMs);
-                    return await chamarGoogleGeminiFlash(prompt, partsArray, jsonMode, state);
-                }
-                var eTrans = new Error(resp.status === 429
-                    ? "Limite temporário de consultas atingido. Aguarde alguns instantes e tente novamente."
-                    : "Serviço temporariamente congestionado. Tente novamente em alguns instantes.");
-                eTrans.technicalDetail = techDetail;
-                throw eTrans;
-            }
-
-            if (isModelUnavailable) {
-                var altModelo = await _escolherProximoModeloTexto(apiKey, state);
-                if (altModelo) {
-                    console.warn("LocalShelf AI Fallback: modelo '" + modeloAtivo + "' indisponível (" + resp.status + "). Usando '" + altModelo + "'.");
-                    state.modeloAtual = altModelo;
-                    return await chamarGoogleGeminiFlash(prompt, partsArray, jsonMode, state);
-                }
-            }
-
-            if (resp.status === 400 || resp.status === 401 || resp.status === 403) {
-                var eAuth = new Error("Chave de acesso inválida ou sem permissão nas Configurações.");
-                eAuth.technicalDetail = techDetail;
-                throw eAuth;
-            }
-            var eHttp = new Error("Não foi possível concluir a consulta na IA.");
-            eHttp.technicalDetail = techDetail;
-            throw eHttp;
+            try { var ej = await resp.json(); errMsg = ej && ej.error && ej.error.message ? ej.error.message : ""; } catch(eJ) {}
+            var eH = new Error("HTTP " + resp.status + " (" + modelo + "): " + _sanitizarTextoSemChaves(errMsg));
+            eH.httpStatus = resp.status;
+            eH.rawMsg = errMsg;
+            throw eH;
         }
         var data = await resp.json();
         var cand = data && data.candidates && data.candidates[0];
@@ -3865,26 +4075,268 @@ async function chamarGoogleGeminiFlash(prompt, partsArray, jsonMode, _state, opt
             ? cand.content.parts.map(function(p){ return p.text || ""; }).join("")
             : "";
         if (!txt) {
-            var blockReason = (cand && cand.finishReason) || (data && data.promptFeedback && data.promptFeedback.blockReason) || "empty_candidates";
-            var eEmpty = new Error("Não foi possível extrair os dados solicitados.");
-            eEmpty.technicalDetail = "Resposta vazia do modelo " + modeloAtivo + " (" + blockReason + ")";
+            var eEmpty = new Error("Resposta vazia (" + modelo + ")");
+            eEmpty.httpStatus = 204;
             throw eEmpty;
         }
         return txt;
-    } catch(err) {
-        if (err && err.name === "AbortError") {
-            var eAb = new Error("A consulta demorou mais que o esperado (" + Math.round(timeoutMs / 1000) + "s). Tente novamente.");
-            eAb.technicalDetail = "Timeout (" + timeoutMs + "ms) no modelo " + modeloAtivo + (state.lastTechnicalError ? (" | Anterior: " + state.lastTechnicalError) : "");
-            throw eAb;
-        }
-        if (err && err.message === "CHAVE_GOOGLE_NAO_CONFIGURADA") throw err;
-        var rawTechnical = (err && err.technicalDetail) || state.lastTechnicalError || (err && err.message) || String(err || "");
-        var friendly = new Error(_traduzirErroAmigavelIA(err));
-        friendly.technicalDetail = rawTechnical;
-        throw friendly;
     } finally {
         if (timer) clearTimeout(timer);
     }
+}
+
+async function _chamarOpenAICompatUnicoModelo(cfg, apiKey, modelo, normParts, promptFinal, timeoutMs) {
+    var content = promptFinal;
+    var imgOnly = normParts.images.filter(function(im){ return String(im.mimeType).indexOf("image/") === 0; });
+    if (imgOnly.length) {
+        content = imgOnly.map(function(im) {
+            return { type: "image_url", image_url: { url: "data:" + im.mimeType + ";base64," + im.data } };
+        });
+        content.push({ type: "text", text: promptFinal });
+    }
+    var headers = {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + apiKey
+    };
+    if (cfg.baseUrl.indexOf("openrouter.ai") >= 0) {
+        headers["HTTP-Referer"] = (typeof location !== "undefined" && location.origin) ? location.origin : "https://localshelf.app";
+        headers["X-Title"] = "LocalShelf";
+    }
+    var url = cfg.baseUrl.replace(/\/+$/, "") + "/chat/completions";
+    var ctrl = (typeof AbortController !== "undefined") ? new AbortController() : null;
+    var timer = ctrl ? setTimeout(function(){ ctrl.abort(); }, timeoutMs) : null;
+    try {
+        var resp = await fetch(url, {
+            method: "POST",
+            headers: headers,
+            signal: ctrl ? ctrl.signal : undefined,
+            body: JSON.stringify({
+                model: modelo,
+                messages: [{ role: "user", content: content }],
+                temperature: 0.2,
+                max_tokens: 4096
+            })
+        });
+        if (!resp.ok) {
+            var errMsg = "";
+            try { var ej = await resp.json(); errMsg = ej && ej.error && ej.error.message ? ej.error.message : ""; } catch(eJ) {}
+            var eH = new Error(cfg.nome + " HTTP " + resp.status + " (" + modelo + "): " + _sanitizarTextoSemChaves(errMsg));
+            eH.httpStatus = resp.status;
+            eH.rawMsg = errMsg;
+            throw eH;
+        }
+        var data = await resp.json();
+        var txt = data && data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content;
+        if (!txt) {
+            var eEmpty = new Error(cfg.nome + " retornou vazio (" + modelo + ")");
+            eEmpty.httpStatus = 204;
+            throw eEmpty;
+        }
+        return String(txt);
+    } finally {
+        if (timer) clearTimeout(timer);
+    }
+}
+
+async function _chamarClaudeUnicoModelo(apiKey, modelo, normParts, promptFinal, timeoutMs) {
+    var imgOnly = normParts.images.filter(function(im){ return String(im.mimeType).indexOf("image/") === 0; });
+    var content = promptFinal;
+    if (imgOnly.length) {
+        content = imgOnly.map(function(im) {
+            return {
+                type: "image",
+                source: { type: "base64", media_type: im.mimeType, data: im.data }
+            };
+        });
+        content.push({ type: "text", text: promptFinal });
+    }
+    var ctrl = (typeof AbortController !== "undefined") ? new AbortController() : null;
+    var timer = ctrl ? setTimeout(function(){ ctrl.abort(); }, timeoutMs) : null;
+    try {
+        var resp = await fetch("https://api.anthropic.com/v1/messages", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "x-api-key": apiKey,
+                "anthropic-version": "2023-06-01",
+                "anthropic-dangerous-direct-browser-access": "true"
+            },
+            signal: ctrl ? ctrl.signal : undefined,
+            body: JSON.stringify({
+                model: modelo,
+                max_tokens: 4096,
+                temperature: 0.2,
+                messages: [{ role: "user", content: content }]
+            })
+        });
+        if (!resp.ok) {
+            var errMsg = "";
+            try { var ej = await resp.json(); errMsg = ej && ej.error && ej.error.message ? ej.error.message : ""; } catch(eJ) {}
+            var eH = new Error("Claude HTTP " + resp.status + " (" + modelo + "): " + _sanitizarTextoSemChaves(errMsg));
+            eH.httpStatus = resp.status;
+            eH.rawMsg = errMsg;
+            throw eH;
+        }
+        var data = await resp.json();
+        var blocks = (data && Array.isArray(data.content)) ? data.content : [];
+        var txt = blocks.filter(function(b){ return b && b.type === "text" && b.text; }).map(function(b){ return b.text; }).join("\n");
+        if (!txt) {
+            var eEmpty = new Error("Claude retornou vazio (" + modelo + ")");
+            eEmpty.httpStatus = 204;
+            throw eEmpty;
+        }
+        return txt;
+    } finally {
+        if (timer) clearTimeout(timer);
+    }
+}
+
+async function executarEsteiraUniversalIA(prompt, partsArray, jsonMode, opts) {
+    opts = opts || {};
+    if (!temMotorIAConfigurado()) {
+        var eKey = new Error("CHAVE_GOOGLE_NAO_CONFIGURADA");
+        eKey.technicalDetail = "Nenhuma chave configurada no Cofre Multi-API (Configurações).";
+        throw eKey;
+    }
+
+    var timeoutMs = (Number(opts.timeoutMs) > 0) ? Number(opts.timeoutMs) : 60000;
+    var normParts = _normalizarPartsParaProvedores(partsArray);
+    var hasPdfBinary = normParts.images.some(function(im){ return im.mimeType === "application/pdf"; });
+    var hasRasterImage = normParts.images.some(function(im){ return String(im.mimeType).indexOf("image/") === 0; });
+    var promptComExtras = [String(prompt || "")].concat(normParts.extraTexts).filter(Boolean).join("\n\n");
+    var promptFinal = _prepararPromptFinalIA(promptComExtras, !!jsonMode);
+
+    var geminiKey = getGoogleGeminiKey();
+    var grokKey = getVaultGrokKey();
+    var claudeKey = getVaultClaudeKey();
+    var extraKey = getVaultExtraKey();
+
+    var round = opts._round || 1;
+    var erros = [];
+    var saw429 = false;
+    var sawAuth = false;
+    var sawTimeout = false;
+
+    function _registrarErro(etapa, err) {
+        var st = err && err.httpStatus ? err.httpStatus : 0;
+        var msg = String((err && (err.technicalDetail || err.message)) || err || "");
+        if (st === 429 || /429|quota|rate limit|resource exhausted|too many/i.test(msg)) saw429 = true;
+        if (st === 401 || st === 403 || /api key|permission|unauth|forbidden/i.test(msg)) sawAuth = true;
+        if (err && err.name === "AbortError") sawTimeout = true;
+        var safeLine = etapa + ": " + _sanitizarTextoSemChaves(msg);
+        erros.push(safeLine);
+        console.warn("LocalShelf Esteira IA (" + etapa + "):", _sanitizarTextoSemChaves(msg));
+    }
+
+    // ETAPA 1: Google Gemini (descoberta dinâmica via GET /v1beta/models + rodízio sem google_search)
+    if (geminiKey) {
+        var gemMask = mascararChaveAPI(geminiKey);
+        try {
+            var gemModels = await listarModelosGeminiAtivosParaRodizio(geminiKey);
+            for (var gi = 0; gi < Math.min(gemModels.length, 5); gi++) {
+                var mGem = gemModels[gi];
+                try {
+                    return await _chamarGeminiUnicoModelo(geminiKey, mGem, partsArray, promptFinal, timeoutMs);
+                } catch(eGemModel) {
+                    _registrarErro("Gemini[" + gemMask + "/" + mGem + "]", eGemModel);
+                    if (eGemModel && eGemModel.httpStatus === 404) {
+                        _geminiDeadModels404[mGem.toLowerCase()] = true;
+                        continue;
+                    }
+                    if (eGemModel && (eGemModel.httpStatus === 401 || eGemModel.httpStatus === 403)) {
+                        break; // chave Gemini rejeitada -> salta direto para Grok
+                    }
+                }
+            }
+        } catch(eGemStage) {
+            _registrarErro("Gemini[" + gemMask + "]", eGemStage);
+        }
+    }
+
+    // ETAPA 2: Grok / xAI (API direta OpenAI-compatível)
+    if (grokKey && !hasPdfBinary) {
+        var grokMask = mascararChaveAPI(grokKey);
+        var grokCfg = { nome: "Grok", baseUrl: "https://api.x.ai/v1" };
+        var grokModels = hasRasterImage ? ["grok-2-vision-1212", "grok-3-latest"] : ["grok-3-mini", "grok-3-latest"];
+        for (var xi = 0; xi < grokModels.length; xi++) {
+            var mGrok = grokModels[xi];
+            try {
+                return await _chamarOpenAICompatUnicoModelo(grokCfg, grokKey, mGrok, normParts, promptFinal, timeoutMs);
+            } catch(eGrok) {
+                _registrarErro("Grok[" + grokMask + "/" + mGrok + "]", eGrok);
+                if (eGrok && (eGrok.httpStatus === 401 || eGrok.httpStatus === 403)) break;
+            }
+        }
+    }
+
+    // ETAPA 3: Claude / Anthropic
+    if (claudeKey && !hasPdfBinary) {
+        var claudeMask = mascararChaveAPI(claudeKey);
+        var claudeModels = ["claude-haiku-4-5", "claude-sonnet-4-5"];
+        for (var ci = 0; ci < claudeModels.length; ci++) {
+            var mClaude = claudeModels[ci];
+            try {
+                return await _chamarClaudeUnicoModelo(claudeKey, mClaude, normParts, promptFinal, timeoutMs);
+            } catch(eClaude) {
+                _registrarErro("Claude[" + claudeMask + "/" + mClaude + "]", eClaude);
+                if (eClaude && (eClaude.httpStatus === 401 || eClaude.httpStatus === 403)) break;
+            }
+        }
+    }
+
+    // ETAPA 4: Chave Extra Compatível OpenAI (Groq, OpenRouter, xAI, OpenAI)
+    if (extraKey && !hasPdfBinary) {
+        var extraMask = mascararChaveAPI(extraKey);
+        var provExtra = detectarProvedorExtraPorPrefixo(extraKey);
+        if (provExtra) {
+            var extraModels = hasRasterImage ? provExtra.visionModels : provExtra.textModels;
+            for (var ei = 0; ei < extraModels.length; ei++) {
+                var mEx = extraModels[ei];
+                try {
+                    if (provExtra.isAnthropic) {
+                        return await _chamarClaudeUnicoModelo(extraKey, mEx, normParts, promptFinal, timeoutMs);
+                    }
+                    return await _chamarOpenAICompatUnicoModelo(provExtra, extraKey, mEx, normParts, promptFinal, timeoutMs);
+                } catch(eEx) {
+                    _registrarErro(provExtra.nome + "[" + extraMask + "/" + mEx + "]", eEx);
+                    if (eEx && (eEx.httpStatus === 401 || eEx.httpStatus === 403)) break;
+                }
+            }
+        }
+    }
+
+    // RECUPERAÇÃO 429 EM SEGUNDO PLANO: aguarda 15s e executa Rodada 2 completa por toda a esteira
+    if (round === 1 && saw429) {
+        if (typeof _bgTaskState !== "undefined" && _bgTaskState.status === "running" && typeof atualizarProgressoTarefa === "function") {
+            atualizarProgressoTarefa(
+                _bgTaskState.titulo || "Rodízio Multi-API...",
+                "Cota 429 atingida — aguardando 15s em segundo plano para Rodada 2...",
+                Math.max(1, Math.round((_bgTaskState.pct || 20) / 10)),
+                10
+            );
+        }
+        await _aguardarBackoffMs(15000);
+        return await executarEsteiraUniversalIA(prompt, partsArray, jsonMode, Object.assign({}, opts, { _round: 2 }));
+    }
+
+    var finalErrMsg = saw429
+        ? "Limite 429 atingido em todos os motores conectados."
+        : (sawTimeout
+            ? ("Tempo esgotado (" + Math.round(timeoutMs / 1000) + "s) nos motores de IA.")
+            : (sawAuth && erros.length === 1
+                ? "Chave de API inválida ou sem permissão no Cofre."
+                : "Nenhum motor do Cofre Multi-API conseguiu responder agora."));
+    var finalErr = new Error(finalErrMsg);
+    finalErr.technicalDetail = _sanitizarTextoSemChaves(erros.slice(-4).join(" | "));
+    throw finalErr;
+}
+
+async function chamarGoogleGeminiFlash(prompt, partsArray, jsonMode, _state, opts) {
+    var finalOpts = Object.assign({}, (opts && typeof opts === "object") ? opts : {});
+    if (!finalOpts.timeoutMs && _state && _state.opts && _state.opts.timeoutMs) {
+        finalOpts.timeoutMs = _state.opts.timeoutMs;
+    }
+    return await executarEsteiraUniversalIA(prompt, partsArray || [], !!jsonMode, finalOpts);
 }
 function parseGeminiJSON(text) {
     var raw = String(text || "").trim();
@@ -5303,10 +5755,9 @@ async function buscarClienteSupabasePrimeiro(query, ctx) {
 }
 
 async function buscarLojasGeminiFlash(query, ctx) {
-    var key = getGoogleGeminiKey();
-    if (!key) {
+    if (!temMotorIAConfigurado()) {
         var eK = new Error("CHAVE_GOOGLE_NAO_CONFIGURADA");
-        eK.technicalDetail = "CHAVE_GOOGLE_NAO_CONFIGURADA (adicione sua chave AIza... em Configurações)";
+        eK.technicalDetail = "Nenhuma chave configurada no Cofre Multi-API (Configurações).";
         throw eK;
     }
     ctx = ctx || _obterUfContextoDispositivo();
@@ -5433,7 +5884,7 @@ async function enriquecerDossieLojaCascata(item, ctx, opts) {
 
     // Camada 3: Gemini padrão (timeout 25s) para complementar dados faltantes
     var precisaIA = !enriched.razaoSocial || !enriched.checkoutsEstimado || !enriched.canalSugerido || !enriched.cnae || !enriched.bairro || !enriched.cep || String(enriched.cnpj || "").replace(/\D/g, "").length !== 14;
-    if (precisaIA && getGoogleGeminiKey()) {
+    if (precisaIA && temMotorIAConfigurado()) {
         try {
             var ufDesc = (ctx.cidade ? ctx.cidade + " / " : "") + (ufCtx || "Brasil");
             var prompt2 = "Com base nos dados abaixo, identifique os dados comerciais e fiscais desta loja no Brasil:\n" +
@@ -5866,7 +6317,7 @@ async function buscarLojaInteligente() {
             if (st) st.textContent = "Consultando CNPJ " + formatarCNPJ(digits) + "...";
             atualizarProgressoTarefa("Camada 2: consultando cadastro oficial...", formatarCNPJ(digits), 1, 3);
             var cnpjRes = await consultarBrasilApiCnpj(digits, { timeoutMs: 6000 });
-            if (getGoogleGeminiKey()) {
+            if (temMotorIAConfigurado()) {
                 atualizarProgressoTarefa("Camada 3: completando canal e perfil...", cnpjRes.nome, 2, 3);
                 var cascCnpj = await enriquecerDossieLojaCascata(cnpjRes, ctx, { fastTimeoutMs: 4000, geminiTimeoutMs: 25000 });
                 await aplicarDadosLojaNoFormulario(cascCnpj.item, true, { onlyEmpty: false });
@@ -6093,8 +6544,8 @@ async function processarEspelhoPedidoGemini(input) {
     var file = input && input.files && input.files[0];
     if (!file) return;
     var st = document.getElementById("pluEspelhoStatus");
-    if (!getGoogleGeminiKey()) {
-        alert("Configure sua chave de acesso nas Configurações para ler espelhos de pedido automaticamente.");
+    if (!temMotorIAConfigurado()) {
+        alert("Configure pelo menos 1 chave no Cofre Multi-API nas Configurações para ler espelhos de pedido automaticamente.");
         input.value = "";
         return;
     }
@@ -6511,7 +6962,7 @@ async function importarPortfolioInteligente(input) {
     var nameLower = (file.name || "").toLowerCase();
     var isPdf = file.type === "application/pdf" || /\.pdf$/i.test(nameLower);
     var isSheet = /\.(xlsx|xls|csv|tsv|txt)$/i.test(nameLower);
-    var geminiKey = getGoogleGeminiKey();
+    var geminiKey = temMotorIAConfigurado();
 
     if (stEl) { stEl.style.display = "block"; stEl.style.color = "#4c1d95"; stEl.textContent = "⏳ Analisando arquivo " + file.name + "..."; }
     iniciarTarefaGuardiao({
@@ -6795,7 +7246,7 @@ async function buscarMiniaturasPortfolioAuto() {
         } else if (typeof _lerGuiaPages === "function") {
             guiaPages = _lerGuiaPages();
         }
-        var geminiKey = getGoogleGeminiKey();
+        var geminiKey = temMotorIAConfigurado();
         if (geminiKey && guiaPages.length) {
             var listaAlvo = tempCompanyProducts.filter(function(p){ return !p.thumb; }).map(function(p, i){
                 return i + ": " + p.name + " " + p.gramatura + (p.code ? " (" + p.code + ")" : "");
@@ -8851,8 +9302,7 @@ var _graficoAuditoriaInstance = null;
 
 async function gerarGraficoAuditoria() {
     if (!currentClient) return;
-    var apiKey = getGoogleGeminiKey() || getApiKey() || "";
-    if (!apiKey) { alert("Configure a chave de acesso nas Configurações para usar esta funcionalidade."); return; }
+    if (!temMotorIAConfigurado()) { alert("Configure pelo menos 1 chave no Cofre Multi-API nas Configurações para usar esta funcionalidade."); return; }
 
     var statusEl = document.getElementById("graficoAuditoriaStatus");
     var canvasEl = document.getElementById("graficoAuditoriaCanvas");
@@ -8938,6 +9388,7 @@ async function gerarGraficoAuditoria() {
         }
         statusEl.textContent = "Analise concluida";
         statusEl.style.color = "#16a34a";
+        tocarBeepDiscreto();
     } catch(e) {
         statusEl.textContent = "Erro: " + e.message;
         statusEl.style.color = "#dc2626";
@@ -9041,8 +9492,7 @@ var _graficoEvolutivoInstance = null;
 
 async function gerarGraficoEvolutivo() {
     if (!currentClient) return;
-    var apiKey = getGoogleGeminiKey() || getApiKey() || "";
-    if (!apiKey) { alert("Configure a chave de acesso nas Configurações para usar esta funcionalidade."); return; }
+    if (!temMotorIAConfigurado()) { alert("Configure pelo menos 1 chave no Cofre Multi-API nas Configurações para usar esta funcionalidade."); return; }
 
     var statusEl  = document.getElementById("graficoEvolutivoStatus");
     var canvasEl  = document.getElementById("graficoEvolutivoCanvas");
@@ -9132,6 +9582,7 @@ async function gerarGraficoEvolutivo() {
 
         statusEl.textContent = "✅ Análise concluída";
         statusEl.style.color = "#16a34a";
+        tocarBeepDiscreto();
     } catch(e) {
         statusEl.textContent = "❌ Erro: " + e.message;
         statusEl.style.color = "#dc2626";
@@ -11264,13 +11715,12 @@ setInterval(atualizarTituloAlertas, 60000);
 // Aguardando chave API Gemini para ativação completa
 // ═══════════════════════════════════════════════════════════════════
 
-var LS23_API_KEY = getApiKey() || "";
 var _importacaoIATipo = "empresa";
 var _fotosImportacaoIA = [];
 var _itensRevisaoIA = [];
 var _fotosAuditoriaIA = [];
 
-// ─── UTILITÁRIO: Chamar API Gemini ───────────────────────────────
+// ─── UTILITÁRIO: Compressão & Motor Unificado ───────────────────────────
 async function comprimirImagemParaIA(base64, mime) {
     if (!base64 || mime === "application/pdf") return { data: base64, mime: mime };
     return new Promise(function(resolve) {
@@ -11293,77 +11743,19 @@ async function comprimirImagemParaIA(base64, mime) {
     });
 }
 
-// ── GUARDIÃO & IA UNIFICADA: Motor Aberto Google Gemini (gemini-3.8-flash + Fallback) ───
+// ── GUARDIÃO & IA UNIFICADA: Esteira Multi-API Universal ─────────────────
 async function chamarGuardiaoGemini(prompt, partsArray, jsonMode) {
-    if (getGoogleGeminiKey()) {
-        return await chamarGoogleGeminiFlash(prompt, partsArray || [], !!jsonMode, null, { timeoutMs: 60000 });
-    }
-    throw new Error("CHAVE_GOOGLE_NAO_CONFIGURADA");
+    return await executarEsteiraUniversalIA(prompt, partsArray || [], !!jsonMode, { timeoutMs: 60000 });
 }
 
 async function chamarClaudeWorker(prompt, imagemBase64, mimeType, modo) {
-    if (getGoogleGeminiKey()) {
-        var parts = imagemBase64 ? [{ mimeType: mimeType || "image/jpeg", data: imagemBase64 }] : [];
-        return await chamarGoogleGeminiFlash(prompt, parts, false, null, { timeoutMs: 60000 });
-    }
-    return await chamarGeminiIA(prompt, imagemBase64, mimeType);
+    var parts = imagemBase64 ? [{ mimeType: mimeType || "image/jpeg", data: imagemBase64 }] : [];
+    return await executarEsteiraUniversalIA(prompt, parts, false, { timeoutMs: 60000 });
 }
 
 async function chamarGeminiIA(prompt, imagemBase64, mimeType) {
-    if (getGoogleGeminiKey()) {
-        var gParts = imagemBase64 ? [{ mimeType: mimeType || "image/jpeg", data: imagemBase64 }] : [];
-        return await chamarGoogleGeminiFlash(prompt, gParts, false, null, { timeoutMs: 60000 });
-    }
-    var apiKey = getApiKey() || "";
-    if (!apiKey) {
-        throw new Error("CHAVE_NAO_CONFIGURADA");
-    }
-    // Endpoint aberto compatível com OpenAI / Grok (xAI) / OpenRouter / Groq
-    var customUrl = "";
-    var customModel = "";
-    try {
-        customUrl = (localStorage.getItem(LS_SEC_ENDPOINT_KEY) || "").trim();
-        customModel = (localStorage.getItem(LS_SEC_MODEL_KEY) || "").trim();
-    } catch(e) {}
-    var url = customUrl || "https://api.groq.com/openai/v1/chat/completions";
-    var mensagens = [];
-    if (imagemBase64) {
-        mensagens = [{ role: "user", content: [
-            { type: "image_url", image_url: { url: "data:" + (mimeType || "image/jpeg") + ";base64," + imagemBase64 } },
-            { type: "text", text: prompt }
-        ]}];
-    } else {
-        mensagens = [{ role: "user", content: prompt }];
-    }
-    var modelo = customModel;
-    if (!modelo) {
-        if (url.indexOf("api.openai.com") >= 0) modelo = "gpt-4o-mini";
-        else if (url.indexOf("api.x.ai") >= 0) modelo = imagemBase64 ? "grok-2-vision-1212" : "grok-3-mini";
-        else if (url.indexOf("openrouter.ai") >= 0) modelo = "google/" + getGeminiModel();
-        else modelo = imagemBase64 ? "meta-llama/llama-4-scout-17b-16e-instruct" : "llama-3.3-70b-versatile";
-    }
-    var headers = {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer " + apiKey
-    };
-    if (url.indexOf("openrouter.ai") >= 0) {
-        headers["HTTP-Referer"] = (typeof location !== "undefined" && location.origin) ? location.origin : "https://localshelf.app";
-        headers["X-Title"] = "LocalShelf";
-    }
-    var resp = await fetch(url, {
-        method: "POST",
-        headers: headers,
-        body: JSON.stringify({ model: modelo, messages: mensagens, max_tokens: 2048 })
-    });
-    if (!resp.ok) {
-        var errBody = "";
-        try { var errJson = await resp.json(); errBody = errJson.error ? errJson.error.message : JSON.stringify(errJson).substring(0,100); } catch(e2) {}
-        throw new Error("Erro API: " + resp.status + (errBody ? " - " + errBody : ""));
-    }
-    var data = await resp.json();
-    var txt = "";
-    try { txt = data.choices[0].message.content; } catch(e) { throw new Error("Resposta inesperada da API"); }
-    return txt;
+    var parts = imagemBase64 ? [{ mimeType: mimeType || "image/jpeg", data: imagemBase64 }] : [];
+    return await executarEsteiraUniversalIA(prompt, parts, false, { timeoutMs: 60000 });
 }
 
 // ─── BLOCO 1: IMPORTAÇÃO INTELIGENTE DE PRODUTOS ─────────────────
@@ -11389,8 +11781,7 @@ function abrirImportacaoIA(tipo) {
         switchTabIA("texto");
         modal.style.display = "block";
         if (typeof _pushAppHistoryState === "function") _pushAppHistoryState("modal_importacao_ia");
-        var apiKey = getGoogleGeminiKey() || getApiKey() || "";
-        document.getElementById("msgChaveIA").style.display = apiKey ? "none" : "block";
+        document.getElementById("msgChaveIA").style.display = temMotorIAConfigurado() ? "none" : "block";
     } catch(e) {
         alert("Erro ao abrir importação: " + e.message);
     }
@@ -11448,9 +11839,8 @@ function renderGridFotosImportIA() {
 }
 
 async function processarImportacaoIA() {
-    var apiKey = getGoogleGeminiKey() || getApiKey() || "";
-    if (!apiKey) {
-        alert("Configure sua chave de acesso nas Configurações antes de usar esta funcionalidade.");
+    if (!temMotorIAConfigurado()) {
+        alert("Configure pelo menos 1 chave no Cofre Multi-API nas Configurações antes de usar esta funcionalidade.");
         return;
     }
     var texto = document.getElementById("textoImportacaoIA").value.trim();
@@ -11633,9 +12023,8 @@ function confirmarImportacaoIA() {
 // ─── BLOCO 2: GUIA DE EXECUÇÃO POR CLIENTE ───────────────────────
 
 function abrirGuiaExecucao() {
-    var apiKey = getGoogleGeminiKey() || getApiKey() || "";
-    if (!apiKey) {
-        alert("Configure sua chave de acesso nas Configurações para usar esta funcionalidade.");
+    if (!temMotorIAConfigurado()) {
+        alert("Configure pelo menos 1 chave no Cofre Multi-API nas Configurações para usar esta funcionalidade.");
         return;
     }
     if (!currentClient) { alert("Nenhum cliente selecionado."); return; }
@@ -11675,6 +12064,7 @@ async function gerarGuiaExecucaoIA(perfil, guia) {
         var key = "ls23_guia_execucao_" + currentClient.companyId + "_" + currentClient.id;
         localStorage.setItem(key, JSON.stringify({ checklist: checklist, data: new Date().toLocaleString("pt-BR"), perfil: perfil }));
         document.getElementById("guiaExecucaoData").textContent = "Gerado em: " + new Date().toLocaleString("pt-BR") + " | Perfil: " + perfil;
+        tocarBeepDiscreto();
     } catch(e) {
         document.getElementById("guiaExecucaoConteudo").innerHTML = "<div style='color:#ef4444;font-size:12px'>Erro ao gerar guia: " + e.message + "</div>";
     }
@@ -11850,8 +12240,7 @@ function renderGridFotosAudIA() {
 
 
 async function analisarAuditoriaIA() {
-    var apiKey = getGoogleGeminiKey() || getApiKey() || "";
-    if (!apiKey) { alert("Configure sua chave de acesso em Configurações."); return; }
+    if (!temMotorIAConfigurado()) { alert("Configure pelo menos 1 chave no Cofre Multi-API em Configurações."); return; }
     if (!_fotosAuditoriaIA.length) { alert("Adicione pelo menos uma foto da loja."); return; }
     document.getElementById("btnAnalisarAudIA").style.display = "none";
     document.getElementById("loadingAudIA").style.display = "block";
@@ -11927,9 +12316,7 @@ async function analisarAuditoriaIA() {
             }
         }
         atualizarProgressoTarefa("Avaliando execução nas fotos...", "Calculando SOD, SOE e ofensores", 1, 2);
-        var resultado = getGoogleGeminiKey()
-            ? await chamarGoogleGeminiFlash(prompt, parts, true, null, { timeoutMs: 60000 })
-            : await chamarGeminiIA(prompt, parts[0].data, parts[0].mimeType);
+        var resultado = await chamarGoogleGeminiFlash(prompt, parts, true, null, { timeoutMs: 60000 });
         var analise = extrairJsonGemini(resultado);
         var sc = Number(analise.score) || 0;
         var msg_aud = sc >= 80 ? "✅ Loja Perfeita! " + sc + "% (Meta 80%+)" : "📋 Índice Loja Perfeita: " + sc + "% (Meta 80%)";
@@ -12242,60 +12629,37 @@ function exportarAuditoriaIAPdf() {
 }
 
 function salvarConfigIA() {
-    var keyEl = document.getElementById("geminiKeyInput");
-    var epEl = document.getElementById("secAiEndpointInput");
-    var modEl = document.getElementById("secAiModelInput");
-    var key = keyEl ? keyEl.value.trim() : "";
-    // Ignorar se o campo mostra placeholder de dots (já salvo antes)
-    if (key && key.indexOf("•") >= 0) key = "";
-    if (key) {
-        lsSet("ls23_gemini_key", key);
-        LS23_API_KEY = key;
-    }
-    if (epEl) {
-        var epVal = epEl.value.trim();
-        if (epVal) lsSet(LS_SEC_ENDPOINT_KEY, epVal);
-        else { try { localStorage.removeItem(LS_SEC_ENDPOINT_KEY); } catch(e) {} }
-    }
-    if (modEl) {
-        var modVal = modEl.value.trim();
-        if (modVal) lsSet(LS_SEC_MODEL_KEY, modVal);
-        else { try { localStorage.removeItem(LS_SEC_MODEL_KEY); } catch(e) {} }
-    }
-    var el = document.getElementById("msgConfigIA");
-    if (el) {
-        var ativo = key || localStorage.getItem("ls23_gemini_key") || "";
-        el.style.color = ativo ? "#16a34a" : "#ef4444";
-        el.textContent = ativo ? "Configuração API secundária salva ✓" : "Nenhuma chave inserida.";
-    }
+    return salvarCofreMultiAPI();
 }
 
 function carregarConfigIA() {
-    var gKey = getGoogleGeminiKey() || "";
-    var gEl = document.getElementById("googleGeminiKeyInput");
-    if (gEl) gEl.value = gKey ? "••••••••" : "";
-    var gModEl = document.getElementById("googleGeminiModelInput");
-    var gMod = getGeminiModel();
-    if (gModEl) gModEl.value = gMod;
+    _migrarChavesCofreLegado();
+    var mapSlots = [
+        { id: "vaultGeminiKeyInput", getter: getGoogleGeminiKey },
+        { id: "vaultGrokKeyInput",   getter: getVaultGrokKey },
+        { id: "vaultClaudeKeyInput", getter: getVaultClaudeKey },
+        { id: "vaultExtraKeyInput",  getter: getVaultExtraKey }
+    ];
+    mapSlots.forEach(function(s) {
+        var el = document.getElementById(s.id);
+        var val = s.getter();
+        if (el) {
+            el.type = "password";
+            el.value = val ? "••••••••••••" : "";
+        }
+    });
+    atualizarBadgesCofreUI();
+    var ativos = contarMotoresConectados();
     var gMsg = document.getElementById("msgConfigGemini");
     if (gMsg) {
-        if (gKey) {
+        if (ativos.length) {
             gMsg.style.color = "#16a34a";
-            gMsg.textContent = "Chave Google Gemini configurada neste aparelho ✓ (" + gMod + " ativo)";
+            gMsg.textContent = "Motores ativos no Cofre: " + ativos.join(" → ") + " ✓";
         } else {
             gMsg.style.color = "#64748b";
-            gMsg.textContent = "Nenhuma chave Google Gemini configurada ainda. Modelo padrão: " + gMod;
+            gMsg.textContent = "Nenhuma chave configurada ainda. Cole pelo menos 1 chave acima.";
         }
     }
-    var key = getApiKey() || "";
-    var el = document.getElementById("geminiKeyInput");
-    if (el) el.value = key ? "\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022" : "";
-    var epEl = document.getElementById("secAiEndpointInput");
-    if (epEl) epEl.value = localStorage.getItem(LS_SEC_ENDPOINT_KEY) || "";
-    var modEl = document.getElementById("secAiModelInput");
-    if (modEl) modEl.value = localStorage.getItem(LS_SEC_MODEL_KEY) || "";
-    var msg = document.getElementById("msgConfigIA");
-    if (msg && key) { msg.style.color = "#16a34a"; msg.textContent = "Chave API secundária configurada \u2713"; }
 
     if (typeof getSupabaseConfig === "function") {
         var sb = getSupabaseConfig();
@@ -12627,7 +12991,7 @@ async function adicionarPilulaInput(input, origem) {
         var tags = [];
         var tituloAuto = tituloUsuario || file.name.replace(/\.[^.]+$/, "");
 
-        if (getGoogleGeminiKey()) {
+        if (temMotorIAConfigurado()) {
             setStatus("⚙️ Interpretando atualização da pílula...", "#a5b4fc");
             var parts = [];
             for (var i = 0; i < Math.min(imgs.length, 3); i++) {
@@ -12668,6 +13032,7 @@ async function adicionarPilulaInput(input, origem) {
             setStatus("Pílula salva sem imagem (storage cheio).", "#f59e0b");
         } else {
             setStatus("✅ Pílula salva com prioridade máxima!", "#16a34a");
+            tocarBeepDiscreto();
         }
         if (tituloEl) tituloEl.value = "";
         renderPilulasLista("compPilulasLista", compId);
@@ -12734,7 +13099,7 @@ function _parseGuiaResposta(texto) {
 async function reclassificarTagsGuia() {
     var paginas = _lerGuiaPages();
     if (!paginas.length) { alert("Nenhuma página processada para reclassificar."); return; }
-    if (!(getGoogleGeminiKey() || getApiKey())) { alert("Configure sua chave de acesso em Configurações."); return; }
+    if (!temMotorIAConfigurado()) { alert("Configure pelo menos 1 chave no Cofre Multi-API em Configurações."); return; }
     if (!confirm("Isso vai atualizar as tags de " + paginas.length + " página(s) já processadas, usando a descrição salva. Continuar?")) return;
 
     var btn = document.getElementById("btnReclassificarTags");
@@ -12819,16 +13184,12 @@ async function _lerPaginaGuiaCompleta(fotoItem, fi, totalGeral, promptBase) {
     var promptFinal = promptBase + " (Pagina " + pageNum + " de " + totalGeral + ".)" + txtPdfExtra;
     var resp;
     try {
-        resp = getGoogleGeminiKey()
-            ? await _comTimeout(chamarGoogleGeminiFlash(promptFinal, [{ mimeType: comp.mime, data: comp.data }], false, null, { timeoutMs: 60000 }), 65000, "Tempo esgotado na leitura da página " + pageNum + ". Verifique sua conexão.")
-            : await _comTimeout(chamarClaudeWorker(promptFinal, comp.data, comp.mime, "classificar"), 60000, "Tempo esgotado na leitura da página " + pageNum + ". Verifique sua conexão.");
+        resp = await _comTimeout(chamarGoogleGeminiFlash(promptFinal, [{ mimeType: comp.mime, data: comp.data }], false, null, { timeoutMs: 60000 }), 65000, "Tempo esgotado na leitura da página " + pageNum + ". Verifique sua conexão.");
     } catch(err1) {
         var errMsgLow = String((err1 && (err1.technicalDetail || err1.message)) || "").toLowerCase();
         if (/429|503|congestionado|limite|quota|overloaded|high demand/.test(errMsgLow)) {
             await _aguardarBackoffMs(4500);
-            resp = getGoogleGeminiKey()
-                ? await _comTimeout(chamarGoogleGeminiFlash(promptFinal, [{ mimeType: comp.mime, data: comp.data }], false, null, { timeoutMs: 60000 }), 65000, "Tempo esgotado na leitura da página " + pageNum + ".")
-                : await _comTimeout(chamarClaudeWorker(promptFinal, comp.data, comp.mime, "classificar"), 60000, "Tempo esgotado na leitura da página " + pageNum + ".");
+            resp = await _comTimeout(chamarGoogleGeminiFlash(promptFinal, [{ mimeType: comp.mime, data: comp.data }], false, null, { timeoutMs: 60000 }), 65000, "Tempo esgotado na leitura da página " + pageNum + ".");
         } else {
             throw err1;
         }
@@ -12848,8 +13209,7 @@ async function _lerPaginaGuiaCompleta(fotoItem, fi, totalGeral, promptBase) {
 }
 
 async function processarGuiaFotos() {
-    var apiKey = getGoogleGeminiKey() || getApiKey() || "";
-    if (!apiKey) { alert("Configure sua chave de acesso em Configurações para usar esta funcionalidade."); return; }
+    if (!temMotorIAConfigurado()) { alert("Configure pelo menos 1 chave no Cofre Multi-API em Configurações para usar esta funcionalidade."); return; }
     if (!_fotosGuia.length) { alert("Adicione pelo menos uma foto ou PDF do guia."); return; }
 
     var btn = document.getElementById("btnProcessarGuia");
@@ -13272,7 +13632,7 @@ async function retroalimentarCatalogoPeloGuia(opts) {
             if (pg && pg.imagemBase64) paginasComImg.push(pg);
         });
 
-        if (getGoogleGeminiKey() && (pendentes.length > 0 || pages.length > 0 || guiaTexto.length > 40)) {
+        if (temMotorIAConfigurado() && (pendentes.length > 0 || pages.length > 0 || guiaTexto.length > 40)) {
             var catalogoExistente = prods.slice(0, 60).map(function(p){ return p.name + (p.gramatura ? " " + p.gramatura : ""); });
             var resumoPaginas = (pages || []).slice(0, 12).map(function(pg) {
                 var txtP = String(pg.descricao || pg.pdfText || "").substring(0, 1400);
@@ -13444,28 +13804,51 @@ function solicitarPermissaoNotificacao() {
     } catch(e) {}
 }
 
+var _lsAudioCtx = null;
+function _desbloquearAudioCtx() {
+    try {
+        var AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return null;
+        if (!_lsAudioCtx) _lsAudioCtx = new AudioCtx();
+        if (_lsAudioCtx.state === "suspended" && typeof _lsAudioCtx.resume === "function") {
+            _lsAudioCtx.resume().catch(function(){});
+        }
+        return _lsAudioCtx;
+    } catch(e) { return null; }
+}
+if (typeof document !== "undefined") {
+    ["pointerdown", "touchstart", "keydown"].forEach(function(ev) {
+        document.addEventListener(ev, _desbloquearAudioCtx, { passive: true, once: false });
+    });
+}
+
 function tocarBeepDiscreto() {
     try {
         if (typeof navigator !== "undefined" && typeof navigator.vibrate === "function") {
-            navigator.vibrate([120, 60, 120]);
+            navigator.vibrate([300, 150, 300]);
         }
     } catch(e) {}
     try {
-        var AudioCtx = window.AudioContext || window.webkitAudioContext;
-        if (!AudioCtx) return;
-        var ctx = new AudioCtx();
+        var ctx = _desbloquearAudioCtx();
+        if (!ctx) return;
         var now = ctx.currentTime;
-        var osc = ctx.createOscillator();
-        var gain = ctx.createGain();
-        osc.type = "sine";
-        osc.frequency.setValueAtTime(587.33, now);
-        osc.frequency.setValueAtTime(880, now + 0.11);
-        gain.gain.setValueAtTime(0.06, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.start(now);
-        osc.stop(now + 0.31);
+        // Bip duplo sintetizado via AudioContext
+        [
+            { start: 0.00, dur: 0.11, freq: 784.0 },
+            { start: 0.17, dur: 0.15, freq: 1046.5 }
+        ].forEach(function(tone) {
+            var osc = ctx.createOscillator();
+            var gain = ctx.createGain();
+            osc.type = "sine";
+            osc.frequency.setValueAtTime(tone.freq, now + tone.start);
+            gain.gain.setValueAtTime(0.001, now + tone.start);
+            gain.gain.linearRampToValueAtTime(0.09, now + tone.start + 0.015);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + tone.start + tone.dur);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start(now + tone.start);
+            osc.stop(now + tone.start + tone.dur + 0.01);
+        });
     } catch(eAudio) {}
 }
 
@@ -13543,14 +13926,16 @@ function fecharBgTaskBar() {
 function iniciarTarefaGuardiao(opts) {
     opts = opts || {};
     if (_bgTaskState.autoHideTimer) { clearTimeout(_bgTaskState.autoHideTimer); _bgTaskState.autoHideTimer = null; }
+    var canBg = opts.canBackground !== false;
+    var startBg = (opts.forceOverlay === true) ? false : canBg;
     _bgTaskState = {
         id: opts.id || ("task_" + Date.now()),
         titulo: opts.titulo || "Buscando dados...",
         sub: opts.sub || "",
         pct: Number(opts.pct) || 5,
         status: "running",
-        isBackground: false,
-        canBackground: opts.canBackground !== false,
+        isBackground: startBg,
+        canBackground: canBg,
         pageTarget: opts.pageTarget || window._currentPage || "",
         onReturn: opts.onReturn || null,
         autoHideTimer: null
@@ -13570,7 +13955,11 @@ function iniciarTarefaGuardiao(opts) {
     if (progBar) progBar.style.width = _bgTaskState.pct + "%";
     if (progTxt) progTxt.textContent = opts.totalSteps ? ("Etapa 1 de " + opts.totalSteps) : "";
 
-    guardiaoMostrar("processando", _bgTaskState.titulo, _bgTaskState.sub);
+    if (startBg) {
+        guardiaoEsconder();
+    } else {
+        guardiaoMostrar("processando", _bgTaskState.titulo, _bgTaskState.sub);
+    }
     if (_bgTaskState.canBackground) solicitarPermissaoNotificacao();
 }
 
@@ -13653,11 +14042,7 @@ function concluirTarefaGuardiao(tituloDone, subDone, opts) {
         _bgTaskState.isBackground = false;
         _persistirBgTaskState();
         fecharBgTaskBar();
-        try {
-            if (typeof navigator !== "undefined" && typeof navigator.vibrate === "function") {
-                navigator.vibrate([80, 40, 80]);
-            }
-        } catch(eVib) {}
+        tocarBeepDiscreto();
         guardiaoMostrar("confirmacao", tituloDone, subDone);
         if (opts.keepOverlayMs !== 0) {
             guardiaoEsconder(opts.keepOverlayMs || 1800);
@@ -14536,8 +14921,8 @@ function renderRelatorioGerencialGuardiao(dias) {
 async function analisarRelatorioComGemini(dias) {
     var outEl = document.getElementById("gchatRelGeminiOut");
     if (!outEl) return;
-    if (!getGoogleGeminiKey()) {
-        outEl.innerHTML = "<div class='gchat-card' style='color:#fca5a5'>Configure sua chave de acesso nas Configurações para gerar a análise executiva.</div>";
+    if (!temMotorIAConfigurado()) {
+        outEl.innerHTML = "<div class='gchat-card' style='color:#fca5a5'>Configure pelo menos 1 chave no Cofre Multi-API nas Configurações para gerar a análise executiva.</div>";
         return;
     }
     var dados = gerarDadosRelatorioGerencial(dias);
@@ -14547,6 +14932,7 @@ async function analisarRelatorioComGemini(dias) {
         var prompt = "Voce e o Guardiao LocalShelf. Gere um resumo gerencial executivo direto (maximo 6 topicos curtos) de " + dados.dias + " dias para a loja '" + dados.loja + "' (perfil: " + dados.perfil + "), destacando top SKUs, giro diario, rupturas, trocas, riscos FEFO e evolucao de auditoria.\nDADOS REAIS:\n" + JSON.stringify(dados);
         var resp = await chamarGoogleGeminiFlash(prompt, [], false, null, { timeoutMs: 60000 });
         outEl.innerHTML = "<div class='gchat-card' style='white-space:pre-wrap;line-height:1.45'>" + escHtml(resp.trim()) + "</div>";
+        tocarBeepDiscreto();
     } catch(e) {
         outEl.innerHTML = "<div class='gchat-card' style='color:#fca5a5'>Erro: " + escHtml((typeof _traduzirErroAmigavelIA === "function") ? _traduzirErroAmigavelIA(e) : e.message) + "</div>";
     }
@@ -15067,10 +15453,8 @@ async function enviarGuardiaoChat() {
     var pergunta = input.value.trim();
     if (!pergunta) return;
 
-    var gKey = getGoogleGeminiKey();
-    var legadoKey = getApiKey() || "";
-    if (!gKey && !legadoKey) {
-        adicionarMsgChat("bot", "Configure sua chave de acesso em Configurações para conversar com o Guardião.");
+    if (!temMotorIAConfigurado()) {
+        adicionarMsgChat("bot", "Configure pelo menos 1 chave no Cofre Multi-API nas Configurações para conversar com o Guardião.");
         return;
     }
 
@@ -15129,9 +15513,7 @@ async function enviarGuardiaoChat() {
             "\n=== CONTEXTO COMPLETO LOCALSHELF ===\n" + contexto +
             "\n=== PERGUNTA DO PROMOTOR ===\n" + pergunta;
 
-        var resposta = gKey
-            ? await chamarGoogleGeminiFlash(prompt, parts, false, null, { timeoutMs: 60000 })
-            : await chamarGeminiIA(prompt, parts.length ? parts[0].data : null, parts.length ? parts[0].mimeType : null);
+        var resposta = await chamarGoogleGeminiFlash(prompt, parts, false, null, { timeoutMs: 60000 });
 
         typing.remove();
         var rawResp = String(resposta || "").trim();
@@ -15150,6 +15532,7 @@ async function enviarGuardiaoChat() {
             adicionarImagemChat(visual.src, visual.legenda);
         }
         _gchatHistorico.push({ pergunta: pergunta, resposta: rawResp });
+        tocarBeepDiscreto();
     } catch(e) {
         typing.remove();
         adicionarMsgChat("bot", "Desculpe, não foi possível concluir agora: " + _traduzirErroAmigavelIA(e));
@@ -17643,7 +18026,7 @@ function onCompanyNameSmartInput() {
     var q = nameEl ? nameEl.value.trim() : "";
     if (_smartCompanyTimer) clearTimeout(_smartCompanyTimer);
     if (currentCompany && currentCompany.id && currentCompany.name && normProdKey(currentCompany.name) === normProdKey(q)) return;
-    if (q.length < 4 || !getGoogleGeminiKey()) return;
+    if (q.length < 4 || !temMotorIAConfigurado()) return;
     if (normProdKey(q) === normProdKey(_smartCompanyLastAutoQuery)) return;
     _smartCompanyTimer = setTimeout(function() {
         var sq = document.getElementById("smartCompanyQuery");
@@ -17962,9 +18345,9 @@ function selecionarUnidadeEmpresa(idx) {
 }
 
 async function buscarBasesEmpresaGemini(query, ctx) {
-    if (!getGoogleGeminiKey()) {
+    if (!temMotorIAConfigurado()) {
         var eK = new Error("CHAVE_GOOGLE_NAO_CONFIGURADA");
-        eK.technicalDetail = "CHAVE_GOOGLE_NAO_CONFIGURADA (adicione sua chave AIza... em Configurações)";
+        eK.technicalDetail = "Nenhuma chave configurada no Cofre Multi-API (Configurações).";
         throw eK;
     }
     var ufCtx = (ctx && ctx.uf && ctx.uf !== "Brasil" && _isValidBrUf(ctx.uf)) ? ctx.uf.toUpperCase() : "";
@@ -18547,8 +18930,8 @@ async function gerarCatalogoAutomaticoEmpresaIA() {
             : [];
 
         var finalList = offProds.slice();
-        // CAMADA 3: Gemini padrão (SEM google_search) para complementar ou gerar quando a base pública tiver poucos itens
-        if (finalList.length < 10 && getGoogleGeminiKey()) {
+        // CAMADA 3: Esteira Multi-API (SEM google_search) para complementar ou gerar quando a base pública tiver poucos itens
+        if (finalList.length < 10 && temMotorIAConfigurado()) {
             atualizarProgressoTarefa("Camada 3: montando mix regional (" + ctx.uf + ")...", razao, 2, 3);
             try {
                 var prompt = "Trade marketing Brasil. Indústria: " + razao + " (" + compName + ")" + (segmento ? " | " + segmento : "") + " | Região: " + ctx.uf + " (" + ctx.regional + ").\n" +
@@ -18585,8 +18968,8 @@ async function gerarCatalogoAutomaticoEmpresaIA() {
             } catch(eGemCat) {
                 if (!finalList.length) throw eGemCat;
             }
-        } else if (!finalList.length && !getGoogleGeminiKey()) {
-            falharTarefaGuardiao("Chave necessária", "Configure sua chave de acesso nas Configurações para gerar o catálogo.");
+        } else if (!finalList.length && !temMotorIAConfigurado()) {
+            falharTarefaGuardiao("Chave necessária", "Configure pelo menos 1 chave no Cofre Multi-API nas Configurações para gerar o catálogo.");
             return;
         }
 
@@ -18672,7 +19055,7 @@ function confirmarSalvarCatalogoIA() {
 </script>
 
 <!-- GUARDIÃO LOCALSHELF -->
-<div id="guardiao-overlay">
+<div id="guardiao-overlay" onclick="if(event.target===this){ if(typeof _bgTaskState!=='undefined'&&_bgTaskState.status==='running'&&_bgTaskState.canBackground){minimizarTarefaParaSegundoPlano();}else{guardiaoEsconder();} }">
   <div class="guardiao-label-topo">GUARDIÃO LOCALSHELF</div>
   <div class="guardiao-esfera-wrap"><img id="guardiao-img" class="guardiao-esfera processando"
        data-lcs-asset="guardiao-lg" alt="Guardião LocalShelf"><div id="guardiao-face-icon" class="guardiao-face-icon">⚙️</div></div>
