@@ -1384,7 +1384,7 @@ body.dark-mode .relp-pill.ativo{background:#2563eb!important;color:#fff!importan
     <span id="compMixCounter" style="font-size:11px;color:#475569;font-weight:600"></span>
   </div>
   <div class="comp-batch-bar">
-    <button type="button" class="comp-batch-btn" onclick="selecionarTodosEmpresa(true)">&#9989; Selecionar Todos</button>
+    <button type="button" class="comp-batch-btn" onclick="selecionarTodosEmpresa(true)">&#9989; Marcar Todos</button>
     <button type="button" class="comp-batch-btn" onclick="selecionarTodosEmpresa(false)">&#10060; Desmarcar Todos</button>
     <button type="button" class="comp-batch-btn" onclick="inverterSelecaoEmpresa()">&#128260; Inverter Sele&ccedil;&atilde;o</button>
   </div>
@@ -17884,9 +17884,7 @@ async function buscarEmpresaComIA(manualTrigger) {
 
         if (isCnpjDirect && layer1Sug) {
             _smartCompanyUnits = [layer1Sug];
-            _ultimaSugestaoEmpresaIA = layer1Sug;
-            renderSmartCompanyUnitsList(ufTag);
-            _aplicarStatusEmpresaCompletude(stEl, layer1Sug.cnpj, layer1Sug.source, layer1Sug.cnpjRaiz);
+            selecionarUnidadeEmpresa(0);
             if (manualTrigger) {
                 concluirTarefaGuardiao("⚡ Empresa encontrada!", layer1Sug.razaoSocial, { keepOverlayMs: 900, onReturn: function(){ showPage("pageCompany"); } });
             }
