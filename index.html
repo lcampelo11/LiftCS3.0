@@ -843,6 +843,8 @@ body.dark-mode .gemini-model-chip.ativo{background:#2563eb!important;color:#fff!
 .vault-row-title{font-size:12px;font-weight:800;color:#1e293b;display:flex;align-items:center;gap:6px}
 .vault-pill{font-size:10px;font-weight:800;padding:2px 8px;border-radius:999px;font-family:monospace}
 .vault-pill.on{background:#dcfce7;color:#15803d;border:1px solid #86efac}
+.vault-pill.warn{background:#fef3c7;color:#92400e;border:1px solid #fcd34d}
+.vault-pill.err{background:#fee2e2;color:#b91c1c;border:1px solid #fca5a5}
 .vault-pill.off{background:#f1f5f9;color:#64748b;border:1px solid #cbd5e1}
 .vault-extra-hint{font-size:10px;color:#4f46e5;font-weight:700;margin-top:4px;min-height:14px}
 body.dark-mode .vault-card{background:linear-gradient(180deg,#0f172a 0%,#1e293b 100%)!important;border-color:#3b82f6!important}
@@ -2096,61 +2098,73 @@ body.dark-mode .relp-pill.ativo{background:#2563eb!important;color:#fff!importan
   <div class="vault-card" id="cfgVaultCard">
     <div class="vault-header">
       <div style="font-weight:800;color:#1e3a8a;font-size:14px" data-i18n="cfg_gemini_title">&#128272; Motores de IA Conectados (Rod&iacute;zio Autom&aacute;tico)</div>
-      <span class="vault-total-pill" id="vaultTotalStatus">0 motores conectados</span>
+      <span class="vault-total-pill" id="vaultTotalStatus">0 motores configurados</span>
     </div>
-    <div style="font-size:11px;color:#475569;margin-bottom:10px;line-height:1.45" data-i18n="cfg_gemini_desc">Cole todas as chaves que possuir (todas s&atilde;o opcionais e protegidas por ofusca&ccedil;&atilde;o local no <b>localStorage</b>). Quando um motor atingir cota (429) ou falhar, o sistema salta automaticamente para o pr&oacute;ximo sem travar a busca.</div>
+    <div style="font-size:11px;color:#475569;margin-bottom:10px;line-height:1.45" data-i18n="cfg_gemini_desc">Cole todas as chaves que possuir (todas s&atilde;o opcionais, aceitas sem bloqueio de formato e salvas com ofusca&ccedil;&atilde;o no <b>localStorage</b>). Ao clicar em Salvar Motores, cada API &eacute; testada diretamente na listagem de modelos oficial.</div>
 
     <!-- 1. Google Gemini -->
     <div class="vault-row">
       <div class="vault-row-head">
-        <span class="vault-row-title">&#10024; 1. Google Gemini <span style="font-weight:500;color:#64748b">(AIza...)</span></span>
+        <span class="vault-row-title">&#10024; 1. Google Gemini</span>
         <span class="vault-pill off" id="vaultStatusGemini">Inativo</span>
       </div>
       <div class="cfg-key-row" style="margin-bottom:0">
-        <input type="password" id="vaultGeminiKeyInput" placeholder="Cole sua chave AIza... do Google AI Studio" autocomplete="off" style="padding:9px;border:1px solid #93c5fd;border-radius:8px;font-size:12px">
+        <input type="password" id="vaultGeminiKeyInput" placeholder="Cole sua chave Google AI Studio / Cloud (ex: AQ.A... ou AIza...)" autocomplete="off" style="padding:9px;border:1px solid #93c5fd;border-radius:8px;font-size:12px">
         <button type="button" class="cfg-key-toggle" onclick="toggleMostrarVaultKey('gemini')" title="Mostrar ou ocultar chave">&#128065;&#65039;</button>
       </div>
     </div>
 
-    <!-- 2. Grok / xAI -->
+    <!-- 2. Groq -->
     <div class="vault-row">
       <div class="vault-row-head">
-        <span class="vault-row-title">&#9889; 2. Grok / xAI <span style="font-weight:500;color:#64748b">(xai-...)</span></span>
+        <span class="vault-row-title">&#9889; 2. Groq</span>
+        <span class="vault-pill off" id="vaultStatusGroq">Inativo</span>
+      </div>
+      <div class="cfg-key-row" style="margin-bottom:0">
+        <input type="password" id="vaultGroqKeyInput" placeholder="Cole sua chave Groq (ex: gsk_...)" autocomplete="off" style="padding:9px;border:1px solid #cbd5e1;border-radius:8px;font-size:12px">
+        <button type="button" class="cfg-key-toggle" onclick="toggleMostrarVaultKey('groq')" title="Mostrar ou ocultar chave">&#128065;&#65039;</button>
+      </div>
+    </div>
+
+    <!-- 3. Grok / xAI -->
+    <div class="vault-row">
+      <div class="vault-row-head">
+        <span class="vault-row-title">&#128640; 3. Grok / xAI</span>
         <span class="vault-pill off" id="vaultStatusGrok">Inativo</span>
       </div>
       <div class="cfg-key-row" style="margin-bottom:0">
-        <input type="password" id="vaultGrokKeyInput" placeholder="Cole sua chave xai-... do console xAI" autocomplete="off" style="padding:9px;border:1px solid #cbd5e1;border-radius:8px;font-size:12px">
+        <input type="password" id="vaultGrokKeyInput" placeholder="Cole sua chave xAI (ex: xai-...)" autocomplete="off" style="padding:9px;border:1px solid #cbd5e1;border-radius:8px;font-size:12px">
         <button type="button" class="cfg-key-toggle" onclick="toggleMostrarVaultKey('grok')" title="Mostrar ou ocultar chave">&#128065;&#65039;</button>
       </div>
     </div>
 
-    <!-- 3. Claude / Anthropic -->
+    <!-- 4. Claude / Anthropic -->
     <div class="vault-row">
       <div class="vault-row-head">
-        <span class="vault-row-title">&#129504; 3. Claude / Anthropic <span style="font-weight:500;color:#64748b">(sk-ant-...)</span></span>
+        <span class="vault-row-title">&#129504; 4. Claude / Anthropic</span>
         <span class="vault-pill off" id="vaultStatusClaude">Inativo</span>
       </div>
       <div class="cfg-key-row" style="margin-bottom:0">
-        <input type="password" id="vaultClaudeKeyInput" placeholder="Cole sua chave sk-ant-... da Anthropic" autocomplete="off" style="padding:9px;border:1px solid #cbd5e1;border-radius:8px;font-size:12px">
+        <input type="password" id="vaultClaudeKeyInput" placeholder="Cole sua chave Anthropic (ex: sk-ant-...)" autocomplete="off" style="padding:9px;border:1px solid #cbd5e1;border-radius:8px;font-size:12px">
         <button type="button" class="cfg-key-toggle" onclick="toggleMostrarVaultKey('claude')" title="Mostrar ou ocultar chave">&#128065;&#65039;</button>
       </div>
     </div>
 
-    <!-- 4. Chave Extra OpenAI-Compatível -->
+    <!-- 5. Chave Extra OpenAI-Compatível -->
     <div class="vault-row">
       <div class="vault-row-head">
-        <span class="vault-row-title">&#128268; 4. Chave Extra Compat&iacute;vel OpenAI <span style="font-weight:500;color:#64748b">(Groq / OpenRouter / OpenAI)</span></span>
+        <span class="vault-row-title">&#128268; 5. Extra Compat&iacute;vel OpenAI <span style="font-weight:500;color:#64748b">(OpenRouter / OpenAI / Outros)</span></span>
         <span class="vault-pill off" id="vaultStatusExtra">Inativo</span>
       </div>
       <div class="cfg-key-row" style="margin-bottom:0">
-        <input type="password" id="vaultExtraKeyInput" oninput="atualizarPreviewProvedorExtra()" placeholder="gsk_... (Groq), sk-or-... (OpenRouter), sk-... (OpenAI)" autocomplete="off" style="padding:9px;border:1px solid #cbd5e1;border-radius:8px;font-size:12px">
+        <input type="password" id="vaultExtraKeyInput" oninput="atualizarPreviewProvedorExtra()" placeholder="Cole sua chave compatível OpenAI (ex: sk-or-..., sk-...)" autocomplete="off" style="padding:9px;border:1px solid #cbd5e1;border-radius:8px;font-size:12px">
         <button type="button" class="cfg-key-toggle" onclick="toggleMostrarVaultKey('extra')" title="Mostrar ou ocultar chave">&#128065;&#65039;</button>
       </div>
-      <div class="vault-extra-hint" id="vaultExtraDetectedHint">Detec&ccedil;&atilde;o autom&aacute;tica por prefixo: gsk_ &bull; sk-or- &bull; xai- &bull; sk-</div>
+      <div class="vault-extra-hint" id="vaultExtraDetectedHint">Compat&iacute;vel com OpenRouter, OpenAI ou endpoint customizado (aceita qualquer chave)</div>
     </div>
 
     <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
-      <button type="button" onclick="salvarCofreMultiAPI()" data-i18n="cfg_btn_save_gemini" style="flex:1;min-width:170px;background:#1e40af;color:#fff;border:none;border-radius:8px;padding:10px 16px;cursor:pointer;font-size:13px;font-weight:700;margin:0">&#128190; Salvar Cofre Multi-API</button>
+      <button type="button" id="btnSalvarMotores" onclick="salvarCofreMultiAPI()" data-i18n="cfg_btn_save_gemini" style="flex:1;min-width:170px;background:#1e40af;color:#fff;border:none;border-radius:8px;padding:10px 16px;cursor:pointer;font-size:13px;font-weight:700;margin:0">&#128190; Salvar Motores</button>
       <button type="button" onclick="limparCofreMultiAPI()" class="sec" data-i18n="btn_remove" style="border:none;border-radius:8px;padding:10px 14px;cursor:pointer;font-size:12px;font-weight:600;margin:0">Limpar Tudo</button>
     </div>
     <div id="msgConfigGemini" style="font-size:11px;margin-top:8px;font-weight:600"></div>
@@ -2518,8 +2532,8 @@ var LS_I18N = {
         cfg_danger_zone: "⚠️ Zona de Risco",
         cfg_danger_desc: "Excluir uma empresa remove permanentemente a empresa, todos os seus clientes e todos os dados vinculados (pedidos, estoque, auditorias, etc.). Esta ação não pode ser desfeita.",
         cfg_gemini_title: "🔐 Motores de IA Conectados (Rodízio Automático)",
-        cfg_gemini_desc: "Todas as chaves são opcionais e armazenadas com ofuscação local neste dispositivo. O sistema alterna automaticamente entre Gemini, Grok, Claude e OpenAI/Groq/OpenRouter.",
-        cfg_btn_save_gemini: "💾 Salvar Cofre Multi-API",
+        cfg_gemini_desc: "Todas as chaves são opcionais, aceitas sem bloqueio de formato e salvas com ofuscação local. Ao clicar em Salvar Motores, cada API é validada diretamente na listagem de modelos.",
+        cfg_btn_save_gemini: "💾 Salvar Motores",
         cfg_supabase_title: "☁️ Nuvem Supabase (Banco + Fotos HD)",
         cfg_supabase_desc: "Opcional e 100% offline-first: sem sinal no PDV, salva localmente (localStorage + IndexedDB) e sincroniza automaticamente ao reconectar.",
         cfg_promotor_label: "Identificador do Promotor (Nome ou Matrícula)",
@@ -2659,8 +2673,8 @@ var LS_I18N = {
         cfg_danger_zone: "⚠️ Danger Zone",
         cfg_danger_desc: "Deleting a company permanently removes the company, all its stores and all linked records (orders, stock, audits, etc.). This action cannot be undone.",
         cfg_gemini_title: "🔐 Connected AI Engines (Auto-Rotation)",
-        cfg_gemini_desc: "All keys are optional and obfuscated locally on this device. When one provider hits quota or fails, the app automatically rotates to the next.",
-        cfg_btn_save_gemini: "💾 Save Multi-API Vault",
+        cfg_gemini_desc: "All keys are optional, accepted without prefix locks, and obfuscated locally. Clicking Save Engines verifies each key directly against its provider models API.",
+        cfg_btn_save_gemini: "💾 Save Engines",
         cfg_supabase_title: "☁️ Supabase Cloud (DB + HD Photos)",
         cfg_supabase_desc: "Optional & 100% offline-first: with no signal in-store, saves locally (localStorage + IndexedDB) and auto-syncs once online.",
         cfg_promotor_label: "Merchandiser ID (Name or Badge)",
@@ -2800,8 +2814,8 @@ var LS_I18N = {
         cfg_danger_zone: "⚠️ Zona de Riesgo",
         cfg_danger_desc: "Eliminar una empresa borra permanentemente la empresa, todas sus tiendas y todos los datos vinculados (pedidos, stock, auditorías, etc.). Esta acción no se puede deshacer.",
         cfg_gemini_title: "🔐 Motores de IA Conectados (Rotación Automática)",
-        cfg_gemini_desc: "Todas las claves son opcionales y se almacenan ofuscadas en este dispositivo. Si un motor alcanza su cuota o falla, pasa automáticamente al siguiente.",
-        cfg_btn_save_gemini: "💾 Guardar Bóveda Multi-API",
+        cfg_gemini_desc: "Todas las claves son opcionales, aceptadas sin bloqueo de formato y ofuscadas localmente. Al guardar, cada API se verifica directamente en su listado oficial de modelos.",
+        cfg_btn_save_gemini: "💾 Guardar Motores",
         cfg_supabase_title: "☁️ Nube Supabase (BD + Fotos HD)",
         cfg_supabase_desc: "Opcional y 100% offline-first: sin señal en tienda, guarda localmente (localStorage + IndexedDB) y sincroniza automáticamente al reconectar.",
         cfg_promotor_label: "Identificador del Promotor (Nombre o Matrícula)",
@@ -3509,17 +3523,26 @@ var LS_GEMINI_MODEL_KEY = "ls23_gemini_model";
 var LS_GEMINI_MODEL_DEFAULT = "gemini-3.8-flash";
 var LS_GEMINI_FALLBACK_CHAIN = ["gemini-3.8-flash", "gemini-3.7-flash", "gemini-flash-latest", "gemini-3.5-flash-lite", "gemini-3.1-flash-lite"];
 var LS_VAULT_GEMINI_KEY = "ls23_google_gemini_key";
-var LS_VAULT_GROK_KEY = "ls23_vault_grok_key";
+var LS_VAULT_GROQ_KEY   = "ls23_vault_groq_key";
+var LS_VAULT_GROK_KEY   = "ls23_vault_grok_key";
 var LS_VAULT_CLAUDE_KEY = "ls23_vault_claude_key";
-var LS_VAULT_EXTRA_KEY = "ls23_vault_extra_key";
+var LS_VAULT_EXTRA_KEY  = "ls23_vault_extra_key";
+var LS_VAULT_HEALTH_KEY = "ls23_vault_health_cache";
 var LS_SEC_ENDPOINT_KEY = "ls23_sec_ai_endpoint";
-var LS_SEC_MODEL_KEY = "ls23_sec_ai_model";
-var _VAULT_XOR_SECRET = "LocalShelf::CofreMultiAPI::2026::RJ";
+var LS_SEC_MODEL_KEY    = "ls23_sec_ai_model";
+var _VAULT_XOR_SECRET   = "LocalShelf::CofreMultiAPI::2026::RJ";
 
 var _geminiDynamicModelsCache = { keyMask: "", ts: 0, models: [] };
 var _geminiDeadModels404 = {};
-var _groqDynamicModelsCache = { keyMask: "", ts: 0, models: [] };
-var _groqDeadModels404 = {};
+var _groqDynamicModelsCache   = { keyMask: "", ts: 0, models: [] };
+var _groqDeadModels404   = {};
+var _grokDynamicModelsCache   = { keyMask: "", ts: 0, models: [] };
+var _grokDeadModels404   = {};
+var _claudeDynamicModelsCache = { keyMask: "", ts: 0, models: [] };
+var _claudeDeadModels404 = {};
+var _extraDynamicModelsCache  = { keyMask: "", ts: 0, models: [] };
+var _extraDeadModels404  = {};
+var _vaultHealthStatusCache = {};
 
 function _ofuscarCredencial(plain) {
     var s = String(plain || "").trim();
@@ -3605,21 +3628,33 @@ function _migrarChavesCofreLegado() {
         if (legRaw) {
             var legPlain = _revelarCredencial(legRaw);
             if (legPlain) {
-                if (legPlain.indexOf("AIza") === 0) {
-                    if (!localStorage.getItem(LS_VAULT_GEMINI_KEY)) _gravarCredencialCofre(LS_VAULT_GEMINI_KEY, legPlain);
+                if (legPlain.indexOf("gsk_") === 0) {
+                    if (!localStorage.getItem(LS_VAULT_GROQ_KEY)) _gravarCredencialCofre(LS_VAULT_GROQ_KEY, legPlain);
                 } else if (legPlain.indexOf("xai-") === 0) {
                     if (!localStorage.getItem(LS_VAULT_GROK_KEY)) _gravarCredencialCofre(LS_VAULT_GROK_KEY, legPlain);
                 } else if (legPlain.indexOf("sk-ant-") === 0) {
                     if (!localStorage.getItem(LS_VAULT_CLAUDE_KEY)) _gravarCredencialCofre(LS_VAULT_CLAUDE_KEY, legPlain);
-                } else if (!localStorage.getItem(LS_VAULT_EXTRA_KEY)) {
-                    _gravarCredencialCofre(LS_VAULT_EXTRA_KEY, legPlain);
+                } else if (legPlain.indexOf("sk-") === 0) {
+                    if (!localStorage.getItem(LS_VAULT_EXTRA_KEY)) _gravarCredencialCofre(LS_VAULT_EXTRA_KEY, legPlain);
+                } else {
+                    if (!localStorage.getItem(LS_VAULT_GEMINI_KEY)) _gravarCredencialCofre(LS_VAULT_GEMINI_KEY, legPlain);
                 }
             }
             localStorage.removeItem("ls23_gemini_key");
         }
-        [LS_VAULT_GEMINI_KEY, LS_VAULT_GROK_KEY, LS_VAULT_CLAUDE_KEY, LS_VAULT_EXTRA_KEY].forEach(function(k) {
+        // Migra chave Groq salva anteriormente no slot Extra (se o slot Groq dedicado estiver vazio)
+        var extraSaved = _lerCredencialCofre(LS_VAULT_EXTRA_KEY);
+        if (extraSaved && extraSaved.indexOf("gsk_") === 0 && !localStorage.getItem(LS_VAULT_GROQ_KEY)) {
+            _gravarCredencialCofre(LS_VAULT_GROQ_KEY, extraSaved);
+            localStorage.removeItem(LS_VAULT_EXTRA_KEY);
+        }
+        [LS_VAULT_GEMINI_KEY, LS_VAULT_GROQ_KEY, LS_VAULT_GROK_KEY, LS_VAULT_CLAUDE_KEY, LS_VAULT_EXTRA_KEY].forEach(function(k) {
             _lerCredencialCofre(k);
         });
+        try {
+            var hRaw = localStorage.getItem(LS_VAULT_HEALTH_KEY);
+            if (hRaw) _vaultHealthStatusCache = JSON.parse(hRaw) || {};
+        } catch(eH) {}
     } catch(e) {}
 }
 _migrarChavesCofreLegado();
@@ -3632,114 +3667,91 @@ function mascararChaveAPI(key) {
 }
 
 function _sanitizarTextoSemChaves(txt) {
-    return String(txt || "").replace(/\b(AIza[0-9A-Za-z_-]{12,}|sk-ant-[0-9A-Za-z_-]{8,}|xai-[0-9A-Za-z_-]{8,}|gsk_[0-9A-Za-z_-]{8,}|sk-(?:or-|proj-)?[0-9A-Za-z_-]{10,})/g, function(m) {
+    var out = String(txt || "").replace(/\b(AQ\.[0-9A-Za-z._-]{10,}|AIza[0-9A-Za-z_-]{12,}|sk-ant-[0-9A-Za-z_-]{8,}|xai-[0-9A-Za-z_-]{8,}|gsk_[0-9A-Za-z_-]{8,}|sk-(?:or-|proj-)?[0-9A-Za-z_-]{10,})/g, function(m) {
         return mascararChaveAPI(m);
     });
-}
-
-function _validarFormatoChaveSlot(slot, key) {
-    var k = String(key || "").trim();
-    if (!k || /\s/.test(k)) return false;
-    if (slot === "gemini") return /^AIza[0-9A-Za-z_-]{16,}$/.test(k);
-    if (slot === "grok") return /^xai-[0-9A-Za-z_-]{12,}$/.test(k);
-    if (slot === "claude") return /^sk-ant-[0-9A-Za-z_-]{12,}$/.test(k);
-    if (slot === "extra") {
-        if (/^gsk_[0-9A-Za-z_-]{12,}$/.test(k)) return true;
-        if (/^sk-or-[0-9A-Za-z_-]{12,}$/.test(k)) return true;
-        if (/^xai-[0-9A-Za-z_-]{12,}$/.test(k)) return true;
-        if (/^sk-ant-[0-9A-Za-z_-]{12,}$/.test(k)) return true;
-        if (/^sk-[0-9A-Za-z_-]{16,}$/.test(k)) return true;
-        var customEp = "";
-        try { customEp = (localStorage.getItem(LS_SEC_ENDPOINT_KEY) || "").trim(); } catch(e) {}
-        return !!(customEp && k.length >= 12);
-    }
-    return false;
+    [getGoogleGeminiKey(), getVaultGroqKey(), getVaultGrokKey(), getVaultClaudeKey(), getVaultExtraKey()].forEach(function(saved) {
+        if (saved && saved.length > 6 && out.indexOf(saved) >= 0) {
+            out = out.split(saved).join(mascararChaveAPI(saved));
+        }
+    });
+    return out;
 }
 
 function getGoogleGeminiKey() { return _lerCredencialCofre(LS_VAULT_GEMINI_KEY); }
-function getVaultGrokKey() { return _lerCredencialCofre(LS_VAULT_GROK_KEY); }
+function getVaultGroqKey()   { return _lerCredencialCofre(LS_VAULT_GROQ_KEY); }
+function getVaultGrokKey()   { return _lerCredencialCofre(LS_VAULT_GROK_KEY); }
 function getVaultClaudeKey() { return _lerCredencialCofre(LS_VAULT_CLAUDE_KEY); }
-function getVaultExtraKey() { return _lerCredencialCofre(LS_VAULT_EXTRA_KEY); }
+function getVaultExtraKey()  { return _lerCredencialCofre(LS_VAULT_EXTRA_KEY); }
 function getApiKey() {
-    var g = getGoogleGeminiKey(); if (_validarFormatoChaveSlot("gemini", g)) return g;
-    var x = getVaultGrokKey();   if (_validarFormatoChaveSlot("grok", x)) return x;
-    var c = getVaultClaudeKey(); if (_validarFormatoChaveSlot("claude", c)) return c;
-    var e = getVaultExtraKey();  if (_validarFormatoChaveSlot("extra", e)) return e;
-    return "";
+    return getGoogleGeminiKey() || getVaultGroqKey() || getVaultGrokKey() || getVaultClaudeKey() || getVaultExtraKey() || "";
 }
 
+// Roteamento leve por endpoint para o slot Extra — JAMAIS rejeita qualquer formato de chave
 function detectarProvedorExtraPorPrefixo(key) {
     var k = String(key || "").trim();
     if (!k) return null;
-    if (/^gsk_[0-9A-Za-z_-]{12,}$/.test(k)) {
+    if (k.indexOf("gsk_") === 0) {
         return {
             id: "groq",
             nome: "Groq",
             baseUrl: "https://api.groq.com/openai/v1",
-            useDynamicGroqModels: true,
-            textModels: [],
-            visionModels: []
+            useDynamicModelsEndpoint: true,
+            fallbackTextModels: [],
+            fallbackVisionModels: []
         };
     }
-    if (/^sk-or-[0-9A-Za-z_-]{12,}$/.test(k)) {
+    if (k.indexOf("sk-or-") === 0) {
         return {
             id: "openrouter",
             nome: "OpenRouter",
             baseUrl: "https://openrouter.ai/api/v1",
-            textModels: ["google/gemini-3.8-flash", "openai/gpt-4o-mini"],
-            visionModels: ["google/gemini-3.8-flash", "openai/gpt-4o-mini"]
+            useDynamicModelsEndpoint: true,
+            fallbackTextModels: ["google/gemini-3.8-flash", "openai/gpt-4o-mini"],
+            fallbackVisionModels: ["google/gemini-3.8-flash", "openai/gpt-4o-mini"]
         };
     }
-    if (/^xai-[0-9A-Za-z_-]{12,}$/.test(k)) {
+    if (k.indexOf("xai-") === 0) {
         return {
             id: "grok",
             nome: "Grok / xAI",
             baseUrl: "https://api.x.ai/v1",
-            textModels: ["grok-3-mini", "grok-3-latest"],
-            visionModels: ["grok-2-vision-1212", "grok-3-latest"]
+            useDynamicModelsEndpoint: true,
+            fallbackTextModels: ["grok-3-mini", "grok-3-latest"],
+            fallbackVisionModels: ["grok-2-vision-1212", "grok-3-latest"]
         };
     }
-    if (/^sk-ant-[0-9A-Za-z_-]{12,}$/.test(k)) {
+    if (k.indexOf("sk-ant-") === 0) {
         return {
             id: "claude",
             nome: "Claude / Anthropic",
             isAnthropic: true,
             baseUrl: "https://api.anthropic.com/v1",
-            textModels: ["claude-haiku-4-5", "claude-sonnet-4-5"],
-            visionModels: ["claude-haiku-4-5", "claude-sonnet-4-5"]
-        };
-    }
-    if (/^sk-[0-9A-Za-z_-]{16,}$/.test(k)) {
-        return {
-            id: "openai",
-            nome: "OpenAI",
-            baseUrl: "https://api.openai.com/v1",
-            textModels: ["gpt-4o-mini", "gpt-4.1-mini"],
-            visionModels: ["gpt-4o-mini", "gpt-4.1-mini"]
+            useDynamicModelsEndpoint: true,
+            fallbackTextModels: ["claude-haiku-4-5", "claude-sonnet-4-5"],
+            fallbackVisionModels: ["claude-haiku-4-5", "claude-sonnet-4-5"]
         };
     }
     var customEp = "";
     try { customEp = (localStorage.getItem(LS_SEC_ENDPOINT_KEY) || "").trim().replace(/\/chat\/completions\/?$/i, ""); } catch(e) {}
-    if (customEp && k.length >= 12) {
-        return {
-            id: "openai_compat",
-            nome: "OpenAI-Compatível",
-            baseUrl: customEp,
-            textModels: ["gpt-4o-mini"],
-            visionModels: ["gpt-4o-mini"]
-        };
-    }
-    return null;
+    return {
+        id: customEp ? "openai_compat" : "openai",
+        nome: customEp ? "OpenAI-Compatível" : "OpenAI",
+        baseUrl: customEp || "https://api.openai.com/v1",
+        useDynamicModelsEndpoint: true,
+        fallbackTextModels: ["gpt-4o-mini", "gpt-4.1-mini"],
+        fallbackVisionModels: ["gpt-4o-mini", "gpt-4.1-mini"]
+    };
 }
 
 function contarMotoresConectados() {
     var lista = [];
-    if (_validarFormatoChaveSlot("gemini", getGoogleGeminiKey())) lista.push("Gemini");
-    if (_validarFormatoChaveSlot("grok", getVaultGrokKey())) lista.push("Grok");
-    if (_validarFormatoChaveSlot("claude", getVaultClaudeKey())) lista.push("Claude");
-    var ex = getVaultExtraKey();
-    if (_validarFormatoChaveSlot("extra", ex)) {
-        var p = detectarProvedorExtraPorPrefixo(ex);
+    if (getGoogleGeminiKey()) lista.push("Gemini");
+    if (getVaultGroqKey())   lista.push("Groq");
+    if (getVaultGrokKey())   lista.push("Grok");
+    if (getVaultClaudeKey()) lista.push("Claude");
+    if (getVaultExtraKey()) {
+        var p = detectarProvedorExtraPorPrefixo(getVaultExtraKey());
         lista.push(p ? p.nome : "Extra");
     }
     return lista;
@@ -3806,6 +3818,7 @@ async function listarModelosGeminiAPI(apiKey) {
             try { var emj = await resp.json(); errModTxt = emj && emj.error && emj.error.message ? emj.error.message : ""; } catch(eM) {}
             var eMod = new Error("GET /v1beta/models HTTP " + resp.status);
             eMod.httpStatus = resp.status;
+            eMod.rawMsg = errModTxt;
             eMod.technicalDetail = _sanitizarTextoSemChaves("GET /v1beta/models (" + mascararChaveAPI(key) + ") -> HTTP " + resp.status + (errModTxt ? (": " + errModTxt) : ""));
             throw eMod;
         }
@@ -3858,10 +3871,10 @@ async function listarModelosGeminiAtivosParaRodizio(apiKey) {
         var low = clean.toLowerCase();
         if (!seen[low]) { seen[low] = true; out.push(clean); }
     });
-    // Ordena por prioridade e aplica jitter leve nos Flash equivalentes para não travar no mesmo 503
     out.sort(function(a, b) { return _scoreFlashModelPriority(b) - _scoreFlashModelPriority(a); });
+    // Embaralha os modelos Flash mais rápidos equivalentes para distribuir carga em 503
     if (out.length > 2) {
-        var topGroup = out.slice(0, Math.min(4, out.length));
+        var topGroup = out.slice(0, Math.min(5, out.length));
         for (var i = topGroup.length - 1; i > 0; i--) {
             var j = Math.floor(Math.random() * (i + 1));
             var tmp = topGroup[i]; topGroup[i] = topGroup[j]; topGroup[j] = tmp;
@@ -3892,43 +3905,157 @@ function _scoreModeloGroq(modelId, requireVision) {
     return score;
 }
 
-async function listarModelosGroqAtivos(apiKey, requireVision) {
+async function listarModelosOpenAICompatAtivos(baseUrl, apiKey, cacheObj, deadMap, filterFn, scoreFn) {
     var key = String(apiKey || "").trim();
     if (!key) return [];
-    var mask = mascararChaveAPI(key);
+    var cleanBase = String(baseUrl || "").replace(/\/+$/, "");
+    var mask = cleanBase + "|" + mascararChaveAPI(key);
     var now = Date.now();
     var ids = [];
-    if (_groqDynamicModelsCache.keyMask === mask && (now - _groqDynamicModelsCache.ts) < 300000 && _groqDynamicModelsCache.models.length) {
-        ids = _groqDynamicModelsCache.models.slice();
+    if (cacheObj && cacheObj.keyMask === mask && (now - cacheObj.ts) < 300000 && cacheObj.models.length) {
+        ids = cacheObj.models.slice();
     } else {
         var ctrl = (typeof AbortController !== "undefined") ? new AbortController() : null;
         var timer = ctrl ? setTimeout(function(){ ctrl.abort(); }, 9000) : null;
         try {
-            var resp = await fetch("https://api.groq.com/openai/v1/models", {
+            var headers = { "Authorization": "Bearer " + key };
+            if (cleanBase.indexOf("openrouter.ai") >= 0) {
+                headers["HTTP-Referer"] = (typeof location !== "undefined" && location.origin) ? location.origin : "https://localshelf.app";
+                headers["X-Title"] = "LocalShelf";
+            }
+            var resp = await fetch(cleanBase + "/models", {
                 method: "GET",
-                headers: { "Authorization": "Bearer " + key },
+                headers: headers,
                 signal: ctrl ? ctrl.signal : undefined
             });
             if (!resp.ok) {
-                var eG = new Error("Groq GET /models HTTP " + resp.status);
-                eG.httpStatus = resp.status;
-                throw eG;
+                var errTxt = "";
+                try { var ej = await resp.json(); errTxt = ej && ej.error && ej.error.message ? ej.error.message : ""; } catch(eJ) {}
+                var eL = new Error("GET " + cleanBase + "/models HTTP " + resp.status);
+                eL.httpStatus = resp.status;
+                eL.rawMsg = errTxt;
+                throw eL;
             }
             var data = await resp.json();
             var arr = (data && Array.isArray(data.data)) ? data.data : [];
             ids = arr.map(function(m){ return String((m && m.id) || "").trim(); }).filter(Boolean);
-            if (ids.length) {
-                _groqDynamicModelsCache = { keyMask: mask, ts: now, models: ids.slice() };
+            if (cacheObj && ids.length) {
+                cacheObj.keyMask = mask;
+                cacheObj.ts = now;
+                cacheObj.models = ids.slice();
             }
         } finally {
             if (timer) clearTimeout(timer);
         }
     }
-    var validos = ids.filter(_ehModeloChatGroqValido);
-    validos.sort(function(a, b) {
-        return _scoreModeloGroq(b, requireVision) - _scoreModeloGroq(a, requireVision);
+    var validos = ids.filter(function(id) {
+        var low = id.toLowerCase();
+        if (deadMap && deadMap[low]) return false;
+        return typeof filterFn === "function" ? filterFn(id) : true;
     });
+    if (typeof scoreFn === "function") {
+        validos.sort(function(a, b) { return scoreFn(b) - scoreFn(a); });
+    }
     return validos;
+}
+
+async function listarModelosGroqAtivos(apiKey, requireVision) {
+    return await listarModelosOpenAICompatAtivos(
+        "https://api.groq.com/openai/v1",
+        apiKey,
+        _groqDynamicModelsCache,
+        _groqDeadModels404,
+        _ehModeloChatGroqValido,
+        function(id) { return _scoreModeloGroq(id, requireVision); }
+    );
+}
+
+async function listarModelosGrokAtivos(apiKey, requireVision) {
+    return await listarModelosOpenAICompatAtivos(
+        "https://api.x.ai/v1",
+        apiKey,
+        _grokDynamicModelsCache,
+        _grokDeadModels404,
+        function(id) {
+            var low = id.toLowerCase();
+            return !/image|imagine|embed|tts|audio/.test(low);
+        },
+        function(id) {
+            var low = id.toLowerCase();
+            var s = 1000;
+            if (requireVision && /vision/.test(low)) s += 3000;
+            if (/grok-3-mini|fast/.test(low)) s += 500;
+            else if (/grok-4|grok-3/.test(low)) s += 400;
+            return s;
+        }
+    );
+}
+
+async function listarModelosClaudeAtivos(apiKey) {
+    var key = String(apiKey || "").trim();
+    if (!key) return [];
+    var mask = mascararChaveAPI(key);
+    var now = Date.now();
+    var ids = [];
+    if (_claudeDynamicModelsCache.keyMask === mask && (now - _claudeDynamicModelsCache.ts) < 300000 && _claudeDynamicModelsCache.models.length) {
+        ids = _claudeDynamicModelsCache.models.slice();
+    } else {
+        var ctrl = (typeof AbortController !== "undefined") ? new AbortController() : null;
+        var timer = ctrl ? setTimeout(function(){ ctrl.abort(); }, 9000) : null;
+        try {
+            var resp = await fetch("https://api.anthropic.com/v1/models", {
+                method: "GET",
+                headers: {
+                    "x-api-key": key,
+                    "anthropic-version": "2023-06-01",
+                    "anthropic-dangerous-direct-browser-access": "true"
+                },
+                signal: ctrl ? ctrl.signal : undefined
+            });
+            if (!resp.ok) {
+                var errTxt = "";
+                try { var ej = await resp.json(); errTxt = ej && ej.error && ej.error.message ? ej.error.message : ""; } catch(eJ) {}
+                var eC = new Error("Anthropic GET /v1/models HTTP " + resp.status);
+                eC.httpStatus = resp.status;
+                eC.rawMsg = errTxt;
+                throw eC;
+            }
+            var data = await resp.json();
+            var arr = (data && Array.isArray(data.data)) ? data.data : [];
+            ids = arr.map(function(m){ return String((m && m.id) || "").trim(); }).filter(Boolean);
+            if (ids.length) {
+                _claudeDynamicModelsCache = { keyMask: mask, ts: now, models: ids.slice() };
+            }
+        } finally {
+            if (timer) clearTimeout(timer);
+        }
+    }
+    return ids.filter(function(id){ return !_claudeDeadModels404[id.toLowerCase()]; });
+}
+
+function _resumirMotivoErroServidor(err) {
+    var st = err && err.httpStatus ? err.httpStatus : 0;
+    var raw = String((err && (err.rawMsg || err.message)) || "").toLowerCase();
+    if (st === 402 || /credit balance|insufficient_quota|billing|quota exceeded|payment/.test(raw)) return { cls: "warn", label: "Sem saldo" };
+    if (st === 429 || /rate limit|too many|resource exhausted/.test(raw)) return { cls: "warn", label: "Limite 429" };
+    if (st === 401 || /invalid_api_key|api key not valid|incorrect api key|authentication|unauth/.test(raw)) return { cls: "err", label: "Chave inválida" };
+    if (st === 403 || /forbidden|permission/.test(raw)) return { cls: "err", label: "Sem permissão" };
+    if (st === 400 && /api key/.test(raw)) return { cls: "err", label: "Chave inválida" };
+    if (err && err.name === "AbortError") return { cls: "warn", label: "Timeout no teste" };
+    if (st > 0) return { cls: "err", label: "Erro HTTP " + st };
+    return { cls: "warn", label: "Falha de rede" };
+}
+
+function _salvarEstadoSaudeCofre(slot, key, infoObj) {
+    var mask = mascararChaveAPI(key);
+    _vaultHealthStatusCache[slot] = Object.assign({ mask: mask, ts: Date.now() }, infoObj || {});
+    try { localStorage.setItem(LS_VAULT_HEALTH_KEY, JSON.stringify(_vaultHealthStatusCache)); } catch(e) {}
+}
+
+function _obterEstadoSaudeCofre(slot, key) {
+    var entry = _vaultHealthStatusCache[slot];
+    if (!entry || entry.mask !== mascararChaveAPI(key)) return null;
+    return entry;
 }
 
 function atualizarPreviewProvedorExtra() {
@@ -3936,56 +4063,45 @@ function atualizarPreviewProvedorExtra() {
     var hint = document.getElementById("vaultExtraDetectedHint");
     if (!inp || !hint) return;
     var val = inp.value.trim();
-    if (!val || val.indexOf("•") >= 0) {
-        var savedExtra = getVaultExtraKey();
-        if (savedExtra) {
-            if (!_validarFormatoChaveSlot("extra", savedExtra)) {
-                hint.textContent = "Formato inválido no slot Extra (use prefixo gsk_, sk-or-, xai- ou sk-)";
-            } else {
-                var pSaved = detectarProvedorExtraPorPrefixo(savedExtra);
-                hint.textContent = "Provedor detectado: " + (pSaved ? (pSaved.nome + " (" + pSaved.baseUrl.replace(/^https?:\/\//, "") + ")") : "OpenAI-Compatível");
-            }
-        } else {
-            hint.textContent = "Detecção automática por prefixo: gsk_ • sk-or- • xai- • sk-";
-        }
+    var targetKey = (!val || val.indexOf("•") >= 0) ? getVaultExtraKey() : val;
+    if (!targetKey) {
+        hint.textContent = "Compatível com OpenRouter, OpenAI ou endpoint customizado (aceita qualquer chave)";
         return;
     }
-    var p = detectarProvedorExtraPorPrefixo(val);
+    var p = detectarProvedorExtraPorPrefixo(targetKey);
     hint.textContent = p
-        ? ("Detectado agora: " + p.nome + " (" + p.baseUrl.replace(/^https?:\/\//, "") + ")")
-        : "Prefixo não reconhecido — use gsk_ (Groq), sk-or- (OpenRouter), xai- ou sk-";
+        ? ("Endpoint alvo: " + p.nome + " (" + p.baseUrl.replace(/^https?:\/\//, "") + ")")
+        : "Endpoint padrão: api.openai.com/v1";
 }
 
 function atualizarBadgesCofreUI() {
     var slots = [
-        { id: "vaultStatusGemini", slot: "gemini", key: getGoogleGeminiKey() },
-        { id: "vaultStatusGrok",   slot: "grok",   key: getVaultGrokKey() },
-        { id: "vaultStatusClaude", slot: "claude", key: getVaultClaudeKey() },
-        { id: "vaultStatusExtra",  slot: "extra",  key: getVaultExtraKey() }
+        { slot: "gemini", id: "vaultStatusGemini", key: getGoogleGeminiKey() },
+        { slot: "groq",   id: "vaultStatusGroq",   key: getVaultGroqKey() },
+        { slot: "grok",   id: "vaultStatusGrok",   key: getVaultGrokKey() },
+        { slot: "claude", id: "vaultStatusClaude", key: getVaultClaudeKey() },
+        { slot: "extra",  id: "vaultStatusExtra",  key: getVaultExtraKey() }
     ];
     var ativos = 0;
     slots.forEach(function(s) {
         var pill = document.getElementById(s.id);
         if (!pill) return;
-        if (s.key && _validarFormatoChaveSlot(s.slot, s.key)) {
-            ativos++;
-            pill.classList.remove("off");
-            pill.classList.add("on");
-            pill.style.background = "";
-            pill.style.color = "";
-            pill.textContent = "Ativo (" + mascararChaveAPI(s.key) + ")";
-        } else if (s.key) {
-            pill.classList.remove("on");
+        pill.classList.remove("on", "off", "warn", "err");
+        pill.style.background = "";
+        pill.style.color = "";
+        if (!s.key) {
             pill.classList.add("off");
-            pill.style.background = "#fef3c7";
-            pill.style.color = "#92400e";
-            pill.textContent = "Formato inválido (" + mascararChaveAPI(s.key) + ")";
-        } else {
-            pill.classList.remove("on");
-            pill.classList.add("off");
-            pill.style.background = "";
-            pill.style.color = "";
             pill.textContent = "Inativo";
+            return;
+        }
+        ativos++;
+        var health = _obterEstadoSaudeCofre(s.slot, s.key);
+        if (health && health.label) {
+            pill.classList.add(health.cls || "warn");
+            pill.textContent = health.label;
+        } else {
+            pill.classList.add("warn");
+            pill.textContent = "Aguardando teste (" + mascararChaveAPI(s.key) + ")";
         }
     });
     var totalEl = document.getElementById("vaultTotalStatus");
@@ -3993,7 +4109,7 @@ function atualizarBadgesCofreUI() {
         totalEl.classList.toggle("ready", ativos > 0);
         totalEl.textContent = ativos === 0
             ? "Nenhum motor configurado"
-            : (ativos === 1 ? "1 motor pronto para uso" : (ativos + " motores prontos para rodízio automático"));
+            : (ativos === 1 ? "1 motor configurado" : (ativos + " motores no rodízio"));
     }
     atualizarPreviewProvedorExtra();
 }
@@ -4001,6 +4117,7 @@ function atualizarBadgesCofreUI() {
 function toggleMostrarVaultKey(slot) {
     var map = {
         gemini: { id: "vaultGeminiKeyInput", getter: getGoogleGeminiKey },
+        groq:   { id: "vaultGroqKeyInput",   getter: getVaultGroqKey },
         grok:   { id: "vaultGrokKeyInput",   getter: getVaultGrokKey },
         claude: { id: "vaultClaudeKeyInput", getter: getVaultClaudeKey },
         extra:  { id: "vaultExtraKeyInput",  getter: getVaultExtraKey }
@@ -4019,63 +4136,167 @@ function toggleMostrarVaultKey(slot) {
     }
 }
 
-function salvarCofreMultiAPI() {
+async function testarMotoresCofre(specsSalvos) {
+    var checks = specsSalvos.filter(function(s){ return !!s.key; }).map(async function(sp) {
+        var pill = document.getElementById(sp.statusId);
+        if (pill) {
+            pill.classList.remove("on", "off", "err");
+            pill.classList.add("warn");
+            pill.textContent = "Testando...";
+        }
+        try {
+            var count = 0;
+            if (sp.slot === "gemini") {
+                var gList = await listarModelosGeminiAPI(sp.key);
+                count = gList.length;
+                if (count) _geminiDynamicModelsCache = { keyMask: mascararChaveAPI(sp.key), ts: Date.now(), models: gList.map(function(m){ return m.id; }) };
+            } else if (sp.slot === "groq") {
+                var qList = await listarModelosGroqAtivos(sp.key, false);
+                count = qList.length;
+            } else if (sp.slot === "grok") {
+                var xList = await listarModelosGrokAtivos(sp.key, false);
+                count = xList.length;
+            } else if (sp.slot === "claude") {
+                var cList = await listarModelosClaudeAtivos(sp.key);
+                count = cList.length;
+            } else if (sp.slot === "extra") {
+                var prov = detectarProvedorExtraPorPrefixo(sp.key);
+                if (prov && prov.isAnthropic) {
+                    var ceList = await listarModelosClaudeAtivos(sp.key);
+                    count = ceList.length;
+                } else {
+                    var eList = await listarModelosOpenAICompatAtivos(
+                        prov ? prov.baseUrl : "https://api.openai.com/v1",
+                        sp.key,
+                        _extraDynamicModelsCache,
+                        _extraDeadModels404,
+                        function(id) { return !/embed|tts|whisper|dall-e|moderation|audio/.test(id.toLowerCase()); },
+                        null
+                    );
+                    count = eList.length;
+                }
+            }
+            var infoOk = { cls: "on", label: "Ativo • " + count + (count === 1 ? " modelo pronto" : " modelos prontos"), count: count };
+            _salvarEstadoSaudeCofre(sp.slot, sp.key, infoOk);
+            return { slot: sp.slot, ok: true, count: count };
+        } catch(errTest) {
+            var infoErr = _resumirMotivoErroServidor(errTest);
+            _salvarEstadoSaudeCofre(sp.slot, sp.key, infoErr);
+            return { slot: sp.slot, ok: false, label: infoErr.label };
+        }
+    });
+
+    var res = await Promise.allSettled(checks);
+    atualizarBadgesCofreUI();
+    var okCount = 0;
+    var errLabels = [];
+    res.forEach(function(r) {
+        if (r.status === "fulfilled" && r.value) {
+            if (r.value.ok) okCount++;
+            else errLabels.push(r.value.slot.toUpperCase() + ": " + r.value.label);
+        }
+    });
+    var msgEl = document.getElementById("msgConfigGemini");
+    if (msgEl && checks.length) {
+        if (okCount === checks.length) {
+            msgEl.style.color = "#16a34a";
+            msgEl.textContent = "Motores salvos e validados com sucesso ✓ (" + okCount + " ativo" + (okCount > 1 ? "s" : "") + ")";
+        } else if (okCount > 0) {
+            msgEl.style.color = "#b45309";
+            msgEl.textContent = okCount + " motor(es) pronto(s) ✓ | Atenção em: " + errLabels.join(" • ");
+        } else {
+            msgEl.style.color = "#dc2626";
+            msgEl.textContent = "Chaves salvas, mas os provedores retornaram: " + errLabels.join(" • ");
+        }
+    }
+}
+
+async function salvarCofreMultiAPI() {
     var specs = [
-        { id: "vaultGeminiKeyInput", slot: "gemini", label: "Google Gemini (AIza...)", lsKey: LS_VAULT_GEMINI_KEY, getter: getGoogleGeminiKey },
-        { id: "vaultGrokKeyInput",   slot: "grok",   label: "Grok / xAI (xai-...)",    lsKey: LS_VAULT_GROK_KEY,   getter: getVaultGrokKey },
-        { id: "vaultClaudeKeyInput", slot: "claude", label: "Claude (sk-ant-...)",     lsKey: LS_VAULT_CLAUDE_KEY, getter: getVaultClaudeKey },
-        { id: "vaultExtraKeyInput",  slot: "extra",  label: "Chave Extra",             lsKey: LS_VAULT_EXTRA_KEY,  getter: getVaultExtraKey }
+        { id: "vaultGeminiKeyInput", statusId: "vaultStatusGemini", slot: "gemini", lsKey: LS_VAULT_GEMINI_KEY, getter: getGoogleGeminiKey },
+        { id: "vaultGroqKeyInput",   statusId: "vaultStatusGroq",   slot: "groq",   lsKey: LS_VAULT_GROQ_KEY,   getter: getVaultGroqKey },
+        { id: "vaultGrokKeyInput",   statusId: "vaultStatusGrok",   slot: "grok",   lsKey: LS_VAULT_GROK_KEY,   getter: getVaultGrokKey },
+        { id: "vaultClaudeKeyInput", statusId: "vaultStatusClaude", slot: "claude", lsKey: LS_VAULT_CLAUDE_KEY, getter: getVaultClaudeKey },
+        { id: "vaultExtraKeyInput",  statusId: "vaultStatusExtra",  slot: "extra",  lsKey: LS_VAULT_EXTRA_KEY,  getter: getVaultExtraKey }
     ];
-    var avisosFormato = [];
+
+    var specsSalvos = [];
     specs.forEach(function(sp) {
         var el = document.getElementById(sp.id);
-        if (!el) return;
-        var val = el.value.trim();
-        if (val.indexOf("•") >= 0) return;
-        if (val && !_validarFormatoChaveSlot(sp.slot, val)) {
-            avisosFormato.push(sp.label);
+        var finalKey = sp.getter();
+        if (el) {
+            var val = el.value.trim();
+            if (val.indexOf("•") < 0) {
+                _gravarCredencialCofre(sp.lsKey, val);
+                finalKey = val;
+                el.type = "password";
+                el.value = val ? "••••••••••••" : "";
+            }
         }
-        _gravarCredencialCofre(sp.lsKey, val);
-        el.type = "password";
-        el.value = val ? "••••••••••••" : "";
+        if (!finalKey) {
+            delete _vaultHealthStatusCache[sp.slot];
+        } else if (!_obterEstadoSaudeCofre(sp.slot, finalKey)) {
+            _salvarEstadoSaudeCofre(sp.slot, finalKey, { cls: "warn", label: "Testando..." });
+        }
+        specsSalvos.push({ slot: sp.slot, statusId: sp.statusId, key: finalKey });
     });
+
+    try { localStorage.setItem(LS_VAULT_HEALTH_KEY, JSON.stringify(_vaultHealthStatusCache)); } catch(e) {}
     _geminiDynamicModelsCache = { keyMask: "", ts: 0, models: [] };
     _geminiDeadModels404 = {};
-    _groqDynamicModelsCache = { keyMask: "", ts: 0, models: [] };
-    _groqDeadModels404 = {};
+    _groqDynamicModelsCache   = { keyMask: "", ts: 0, models: [] };
+    _groqDeadModels404   = {};
+    _grokDynamicModelsCache   = { keyMask: "", ts: 0, models: [] };
+    _grokDeadModels404   = {};
+    _claudeDynamicModelsCache = { keyMask: "", ts: 0, models: [] };
+    _claudeDeadModels404 = {};
+    _extraDynamicModelsCache  = { keyMask: "", ts: 0, models: [] };
+    _extraDeadModels404  = {};
+
     atualizarBadgesCofreUI();
     var ativos = contarMotoresConectados();
     var msgEl = document.getElementById("msgConfigGemini");
-    if (msgEl) {
-        if (ativos.length && !avisosFormato.length) {
-            msgEl.style.color = "#16a34a";
-            msgEl.textContent = "Cofre salvo com ofuscação local ✓ (" + ativos.join(" → ") + ")";
-        } else if (ativos.length && avisosFormato.length) {
-            msgEl.style.color = "#b45309";
-            msgEl.textContent = "Cofre ativo (" + ativos.join(" → ") + "), porém ignorado por formato inválido em: " + avisosFormato.join(", ");
-        } else if (avisosFormato.length) {
-            msgEl.style.color = "#dc2626";
-            msgEl.textContent = "Prefixo inválido em: " + avisosFormato.join(", ") + ". Verifique a chave colada.";
-        } else {
+    if (!ativos.length) {
+        if (msgEl) {
             msgEl.style.color = "#64748b";
-            msgEl.textContent = "Cofre vazio. Você pode buscar Empresas e Lojas via bases públicas mesmo sem chave.";
+            msgEl.textContent = "Nenhuma chave salva. A busca de Empresas e Lojas continua funcionando via bases públicas.";
         }
+        return;
+    }
+
+    if (msgEl) {
+        msgEl.style.color = "#1e40af";
+        msgEl.textContent = "Chaves salvas com ofuscação local ✓ Testando listagem oficial de modelos...";
+    }
+    var btnSave = document.getElementById("btnSalvarMotores");
+    if (btnSave) btnSave.disabled = true;
+    try {
+        await testarMotoresCofre(specsSalvos);
+    } finally {
+        if (btnSave) btnSave.disabled = false;
     }
 }
 
 function limparCofreMultiAPI() {
     if (!confirm("Remover todas as chaves do Cofre Multi-API deste aparelho?")) return;
-    [LS_VAULT_GEMINI_KEY, LS_VAULT_GROK_KEY, LS_VAULT_CLAUDE_KEY, LS_VAULT_EXTRA_KEY, "ls23_gemini_key"].forEach(function(k) {
+    [LS_VAULT_GEMINI_KEY, LS_VAULT_GROQ_KEY, LS_VAULT_GROK_KEY, LS_VAULT_CLAUDE_KEY, LS_VAULT_EXTRA_KEY, LS_VAULT_HEALTH_KEY, "ls23_gemini_key"].forEach(function(k) {
         try { localStorage.removeItem(k); } catch(e) {}
     });
-    ["vaultGeminiKeyInput", "vaultGrokKeyInput", "vaultClaudeKeyInput", "vaultExtraKeyInput"].forEach(function(id) {
+    ["vaultGeminiKeyInput", "vaultGroqKeyInput", "vaultGrokKeyInput", "vaultClaudeKeyInput", "vaultExtraKeyInput"].forEach(function(id) {
         var el = document.getElementById(id);
         if (el) { el.type = "password"; el.value = ""; }
     });
+    _vaultHealthStatusCache = {};
     _geminiDynamicModelsCache = { keyMask: "", ts: 0, models: [] };
     _geminiDeadModels404 = {};
-    _groqDynamicModelsCache = { keyMask: "", ts: 0, models: [] };
-    _groqDeadModels404 = {};
+    _groqDynamicModelsCache   = { keyMask: "", ts: 0, models: [] };
+    _groqDeadModels404   = {};
+    _grokDynamicModelsCache   = { keyMask: "", ts: 0, models: [] };
+    _grokDeadModels404   = {};
+    _claudeDynamicModelsCache = { keyMask: "", ts: 0, models: [] };
+    _claudeDeadModels404 = {};
+    _extraDynamicModelsCache  = { keyMask: "", ts: 0, models: [] };
+    _extraDeadModels404  = {};
     atualizarBadgesCofreUI();
     var msgEl = document.getElementById("msgConfigGemini");
     if (msgEl) { msgEl.style.color = "#64748b"; msgEl.textContent = "Todas as chaves foram removidas deste aparelho."; }
@@ -4093,7 +4314,7 @@ function _traduzirErroAmigavelIA(err) {
     var msg = String((err && err.message) ? err.message : (err || "")).trim();
     if (!msg) return "Não foi possível completar a consulta agora. Tente novamente.";
     if (msg === "CHAVE_GOOGLE_NAO_CONFIGURADA" || msg === "CHAVE_NAO_CONFIGURADA") {
-        return "Nenhum motor de IA válido no Cofre Multi-API.";
+        return "Nenhum motor de IA configurado nas Configurações.";
     }
     if (/high demand|overloaded|unavailable|503|service unavailable/i.test(msg)) {
         return "Motores de IA congestionados no momento.";
@@ -4324,20 +4545,16 @@ async function _chamarClaudeUnicoModelo(apiKey, modelo, normParts, promptFinal, 
 
 async function executarEsteiraUniversalIA(prompt, partsArray, jsonMode, opts) {
     opts = opts || {};
-    var geminiKeyRaw = getGoogleGeminiKey();
-    var grokKeyRaw = getVaultGrokKey();
-    var claudeKeyRaw = getVaultClaudeKey();
-    var extraKeyRaw = getVaultExtraKey();
+    // ZERO bloqueio por prefixo ou versão: toda chave salva é testada diretamente no provedor
+    var geminiKey = getGoogleGeminiKey().trim();
+    var groqKey   = getVaultGroqKey().trim();
+    var grokKey   = getVaultGrokKey().trim();
+    var claudeKey = getVaultClaudeKey().trim();
+    var extraKey  = getVaultExtraKey().trim();
 
-    // Validação silenciosa por prefixo antes de qualquer HTTP (ex: apik... ignorada silenciosamente)
-    var geminiKey = _validarFormatoChaveSlot("gemini", geminiKeyRaw) ? geminiKeyRaw.trim() : "";
-    var grokKey   = _validarFormatoChaveSlot("grok", grokKeyRaw)     ? grokKeyRaw.trim()   : "";
-    var claudeKey = _validarFormatoChaveSlot("claude", claudeKeyRaw) ? claudeKeyRaw.trim() : "";
-    var extraKey  = _validarFormatoChaveSlot("extra", extraKeyRaw)   ? extraKeyRaw.trim()  : "";
-
-    if (!geminiKey && !grokKey && !claudeKey && !extraKey) {
+    if (!geminiKey && !groqKey && !grokKey && !claudeKey && !extraKey) {
         var eKey = new Error("CHAVE_GOOGLE_NAO_CONFIGURADA");
-        eKey.technicalDetail = "Nenhuma chave com prefixo válido configurada no Cofre Multi-API.";
+        eKey.technicalDetail = "Nenhuma chave configurada no Cofre Multi-API.";
         throw eKey;
     }
 
@@ -4357,7 +4574,7 @@ async function executarEsteiraUniversalIA(prompt, partsArray, jsonMode, opts) {
     function _ehErroSemSaldoOuAuth(err) {
         var st = err && err.httpStatus ? err.httpStatus : 0;
         var raw = String((err && (err.rawMsg || err.message)) || "").toLowerCase();
-        return st === 401 || st === 402 || st === 403 || /credit balance|insufficient_quota|billing|invalid_api_key|authentication_error|permission/.test(raw);
+        return st === 401 || st === 402 || st === 403 || /credit balance|insufficient_quota|billing|invalid_api_key|api key not valid|authentication_error|permission/.test(raw);
     }
 
     function _registrarErro(etapa, err) {
@@ -4371,7 +4588,7 @@ async function executarEsteiraUniversalIA(prompt, partsArray, jsonMode, opts) {
         console.warn("LocalShelf Esteira IA (" + etapa + "):", _sanitizarTextoSemChaves(msg));
     }
 
-    // ETAPA 1: Google Gemini — varredura COMPLETA por todos os modelos ativos (sem limite de 5 e sem google_search)
+    // ETAPA 1: Google Gemini — varredura por TODOS os modelos ativos retornados por /v1beta/models
     if (geminiKey) {
         var gemMask = mascararChaveAPI(geminiKey);
         try {
@@ -4386,9 +4603,7 @@ async function executarEsteiraUniversalIA(prompt, partsArray, jsonMode, opts) {
                         _geminiDeadModels404[mGem.toLowerCase()] = true;
                         continue;
                     }
-                    if (_ehErroSemSaldoOuAuth(eGemModel)) {
-                        break;
-                    }
+                    if (_ehErroSemSaldoOuAuth(eGemModel)) break;
                 }
             }
         } catch(eGemStage) {
@@ -4396,73 +4611,145 @@ async function executarEsteiraUniversalIA(prompt, partsArray, jsonMode, opts) {
         }
     }
 
-    // ETAPA 2: Grok / xAI
+    // ETAPA 2: Groq — descoberta 100% dinâmica em GET /openai/v1/models (zero nomes hardcoded obsoletos)
+    if (groqKey && !hasPdfBinary) {
+        var groqMask = mascararChaveAPI(groqKey);
+        var groqCfg = { nome: "Groq", baseUrl: "https://api.groq.com/openai/v1" };
+        try {
+            var groqModels = await listarModelosGroqAtivos(groqKey, hasRasterImage);
+            for (var qi = 0; qi < groqModels.length; qi++) {
+                var mGroq = groqModels[qi];
+                try {
+                    return await _chamarOpenAICompatUnicoModelo(groqCfg, groqKey, mGroq, normParts, promptFinal, timeoutMs);
+                } catch(eGroqModel) {
+                    _registrarErro("Groq[" + groqMask + "/" + mGroq + "]", eGroqModel);
+                    if (eGroqModel && eGroqModel.httpStatus === 404) {
+                        _groqDeadModels404[mGroq.toLowerCase()] = true;
+                        continue;
+                    }
+                    if (_ehErroSemSaldoOuAuth(eGroqModel)) break;
+                }
+            }
+        } catch(eGroqList) {
+            _registrarErro("Groq[" + groqMask + "/models]", eGroqList);
+        }
+    }
+
+    // ETAPA 3: Grok / xAI — descoberta dinâmica em GET /v1/models
     if (grokKey && !hasPdfBinary) {
         var grokMask = mascararChaveAPI(grokKey);
         var grokCfg = { nome: "Grok", baseUrl: "https://api.x.ai/v1" };
-        var grokModels = hasRasterImage ? ["grok-2-vision-1212", "grok-3-latest"] : ["grok-3-mini", "grok-3-latest"];
+        var grokModels = [];
+        try {
+            grokModels = await listarModelosGrokAtivos(grokKey, hasRasterImage);
+        } catch(eGrokList) {
+            _registrarErro("Grok[" + grokMask + "/models]", eGrokList);
+            if (!_ehErroSemSaldoOuAuth(eGrokList)) {
+                grokModels = hasRasterImage ? ["grok-2-vision-1212", "grok-3-latest"] : ["grok-3-mini", "grok-3-latest"];
+            }
+        }
         for (var xi = 0; xi < grokModels.length; xi++) {
             var mGrok = grokModels[xi];
             try {
                 return await _chamarOpenAICompatUnicoModelo(grokCfg, grokKey, mGrok, normParts, promptFinal, timeoutMs);
             } catch(eGrok) {
                 _registrarErro("Grok[" + grokMask + "/" + mGrok + "]", eGrok);
+                if (eGrok && eGrok.httpStatus === 404) {
+                    _grokDeadModels404[mGrok.toLowerCase()] = true;
+                    continue;
+                }
                 if (_ehErroSemSaldoOuAuth(eGrok)) break;
             }
         }
     }
 
-    // ETAPA 3: Claude / Anthropic
+    // ETAPA 4: Claude / Anthropic — header obrigatório anthropic-dangerous-direct-browser-access + /v1/models
     if (claudeKey && !hasPdfBinary) {
         var claudeMask = mascararChaveAPI(claudeKey);
-        var claudeModels = ["claude-haiku-4-5", "claude-sonnet-4-5"];
+        var claudeModels = [];
+        try {
+            claudeModels = await listarModelosClaudeAtivos(claudeKey);
+        } catch(eClaudeList) {
+            _registrarErro("Claude[" + claudeMask + "/models]", eClaudeList);
+            if (!_ehErroSemSaldoOuAuth(eClaudeList)) {
+                claudeModels = ["claude-haiku-4-5", "claude-sonnet-4-5"];
+            }
+        }
         for (var ci = 0; ci < claudeModels.length; ci++) {
             var mClaude = claudeModels[ci];
             try {
                 return await _chamarClaudeUnicoModelo(claudeKey, mClaude, normParts, promptFinal, timeoutMs);
             } catch(eClaude) {
                 _registrarErro("Claude[" + claudeMask + "/" + mClaude + "]", eClaude);
+                if (eClaude && eClaude.httpStatus === 404) {
+                    _claudeDeadModels404[mClaude.toLowerCase()] = true;
+                    continue;
+                }
                 if (_ehErroSemSaldoOuAuth(eClaude)) break;
             }
         }
     }
 
-    // ETAPA 4: Chave Extra (Groq com descoberta dinâmica /models, OpenRouter, xAI, OpenAI)
+    // ETAPA 5: Chave Extra Compatível OpenAI (OpenRouter / OpenAI / Endpoint customizado)
     if (extraKey && !hasPdfBinary) {
         var extraMask = mascararChaveAPI(extraKey);
         var provExtra = detectarProvedorExtraPorPrefixo(extraKey);
         if (provExtra) {
-            var extraModels = [];
-            if (provExtra.useDynamicGroqModels) {
-                try {
-                    extraModels = await listarModelosGroqAtivos(extraKey, hasRasterImage);
-                } catch(eGroqList) {
-                    _registrarErro("Groq[" + extraMask + "/models]", eGroqList);
+            if (provExtra.isAnthropic) {
+                var ceModels = [];
+                try { ceModels = await listarModelosClaudeAtivos(extraKey); } catch(eCe) { if (!_ehErroSemSaldoOuAuth(eCe)) ceModels = provExtra.fallbackTextModels; }
+                for (var cei = 0; cei < ceModels.length; cei++) {
+                    try {
+                        return await _chamarClaudeUnicoModelo(extraKey, ceModels[cei], normParts, promptFinal, timeoutMs);
+                    } catch(eCeRun) {
+                        _registrarErro("ClaudeExtra[" + extraMask + "/" + ceModels[cei] + "]", eCeRun);
+                        if (_ehErroSemSaldoOuAuth(eCeRun)) break;
+                    }
                 }
             } else {
-                extraModels = hasRasterImage ? provExtra.visionModels : provExtra.textModels;
-            }
-
-            for (var ei = 0; ei < extraModels.length; ei++) {
-                var mEx = extraModels[ei];
+                var extraModels = [];
                 try {
-                    if (provExtra.isAnthropic) {
-                        return await _chamarClaudeUnicoModelo(extraKey, mEx, normParts, promptFinal, timeoutMs);
+                    extraModels = await listarModelosOpenAICompatAtivos(
+                        provExtra.baseUrl,
+                        extraKey,
+                        _extraDynamicModelsCache,
+                        _extraDeadModels404,
+                        function(id) {
+                            var low = id.toLowerCase();
+                            return !/embed|tts|whisper|audio|dall-e|moderation|guard|speech/.test(low);
+                        },
+                        function(id) {
+                            var low = id.toLowerCase();
+                            var s = 1000;
+                            if (hasRasterImage && /vision|4o|gemini|flash|scout|maverick|claude/.test(low)) s += 1500;
+                            if (/flash|mini|instant|nano/.test(low)) s += 300;
+                            return s;
+                        }
+                    );
+                } catch(eExList) {
+                    _registrarErro(provExtra.nome + "[" + extraMask + "/models]", eExList);
+                    if (!_ehErroSemSaldoOuAuth(eExList)) {
+                        extraModels = hasRasterImage ? provExtra.fallbackVisionModels : provExtra.fallbackTextModels;
                     }
-                    return await _chamarOpenAICompatUnicoModelo(provExtra, extraKey, mEx, normParts, promptFinal, timeoutMs);
-                } catch(eEx) {
-                    _registrarErro(provExtra.nome + "[" + extraMask + "/" + mEx + "]", eEx);
-                    if (provExtra.id === "groq" && eEx && eEx.httpStatus === 404) {
-                        _groqDeadModels404[mEx.toLowerCase()] = true;
-                        continue;
+                }
+                for (var ei = 0; ei < extraModels.length; ei++) {
+                    var mEx = extraModels[ei];
+                    try {
+                        return await _chamarOpenAICompatUnicoModelo(provExtra, extraKey, mEx, normParts, promptFinal, timeoutMs);
+                    } catch(eEx) {
+                        _registrarErro(provExtra.nome + "[" + extraMask + "/" + mEx + "]", eEx);
+                        if (eEx && eEx.httpStatus === 404) {
+                            _extraDeadModels404[mEx.toLowerCase()] = true;
+                            continue;
+                        }
+                        if (_ehErroSemSaldoOuAuth(eEx)) break;
                     }
-                    if (_ehErroSemSaldoOuAuth(eEx)) break;
                 }
             }
         }
     }
 
-    // RECUPERAÇÃO 429 EM SEGUNDO PLANO: aguarda 15s e executa Rodada 2
+    // RECUPERAÇÃO 429 EM SEGUNDO PLANO: aguarda 15s e executa Rodada 2 completa
     if (round === 1 && saw429) {
         if (typeof _bgTaskState !== "undefined" && _bgTaskState.status === "running" && typeof atualizarProgressoTarefa === "function") {
             atualizarProgressoTarefa(
@@ -13054,6 +13341,7 @@ function carregarConfigIA() {
     _migrarChavesCofreLegado();
     var mapSlots = [
         { id: "vaultGeminiKeyInput", getter: getGoogleGeminiKey },
+        { id: "vaultGroqKeyInput",   getter: getVaultGroqKey },
         { id: "vaultGrokKeyInput",   getter: getVaultGrokKey },
         { id: "vaultClaudeKeyInput", getter: getVaultClaudeKey },
         { id: "vaultExtraKeyInput",  getter: getVaultExtraKey }
@@ -13072,10 +13360,10 @@ function carregarConfigIA() {
     if (gMsg) {
         if (ativos.length) {
             gMsg.style.color = "#16a34a";
-            gMsg.textContent = "Motores ativos no Cofre: " + ativos.join(" → ") + " ✓";
+            gMsg.textContent = "Motores configurados no Cofre: " + ativos.join(" → ") + " ✓";
         } else {
             gMsg.style.color = "#64748b";
-            gMsg.textContent = "Nenhuma chave configurada ainda. Cole pelo menos 1 chave acima.";
+            gMsg.textContent = "Nenhuma chave configurada ainda. Cole suas chaves acima ou busque Empresas/Lojas via bases públicas.";
         }
     }
 
