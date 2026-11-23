@@ -3518,6 +3518,8 @@ var _VAULT_XOR_SECRET = "LocalShelf::CofreMultiAPI::2026::RJ";
 
 var _geminiDynamicModelsCache = { keyMask: "", ts: 0, models: [] };
 var _geminiDeadModels404 = {};
+var _groqDynamicModelsCache = { keyMask: "", ts: 0, models: [] };
+var _groqDeadModels404 = {};
 
 function _ofuscarCredencial(plain) {
     var s = String(plain || "").trim();
@@ -3635,25 +3637,51 @@ function _sanitizarTextoSemChaves(txt) {
     });
 }
 
+function _validarFormatoChaveSlot(slot, key) {
+    var k = String(key || "").trim();
+    if (!k || /\s/.test(k)) return false;
+    if (slot === "gemini") return /^AIza[0-9A-Za-z_-]{16,}$/.test(k);
+    if (slot === "grok") return /^xai-[0-9A-Za-z_-]{12,}$/.test(k);
+    if (slot === "claude") return /^sk-ant-[0-9A-Za-z_-]{12,}$/.test(k);
+    if (slot === "extra") {
+        if (/^gsk_[0-9A-Za-z_-]{12,}$/.test(k)) return true;
+        if (/^sk-or-[0-9A-Za-z_-]{12,}$/.test(k)) return true;
+        if (/^xai-[0-9A-Za-z_-]{12,}$/.test(k)) return true;
+        if (/^sk-ant-[0-9A-Za-z_-]{12,}$/.test(k)) return true;
+        if (/^sk-[0-9A-Za-z_-]{16,}$/.test(k)) return true;
+        var customEp = "";
+        try { customEp = (localStorage.getItem(LS_SEC_ENDPOINT_KEY) || "").trim(); } catch(e) {}
+        return !!(customEp && k.length >= 12);
+    }
+    return false;
+}
+
 function getGoogleGeminiKey() { return _lerCredencialCofre(LS_VAULT_GEMINI_KEY); }
 function getVaultGrokKey() { return _lerCredencialCofre(LS_VAULT_GROK_KEY); }
 function getVaultClaudeKey() { return _lerCredencialCofre(LS_VAULT_CLAUDE_KEY); }
 function getVaultExtraKey() { return _lerCredencialCofre(LS_VAULT_EXTRA_KEY); }
-function getApiKey() { return getGoogleGeminiKey() || getVaultGrokKey() || getVaultClaudeKey() || getVaultExtraKey() || ""; }
+function getApiKey() {
+    var g = getGoogleGeminiKey(); if (_validarFormatoChaveSlot("gemini", g)) return g;
+    var x = getVaultGrokKey();   if (_validarFormatoChaveSlot("grok", x)) return x;
+    var c = getVaultClaudeKey(); if (_validarFormatoChaveSlot("claude", c)) return c;
+    var e = getVaultExtraKey();  if (_validarFormatoChaveSlot("extra", e)) return e;
+    return "";
+}
 
 function detectarProvedorExtraPorPrefixo(key) {
     var k = String(key || "").trim();
     if (!k) return null;
-    if (k.indexOf("gsk_") === 0) {
+    if (/^gsk_[0-9A-Za-z_-]{12,}$/.test(k)) {
         return {
             id: "groq",
             nome: "Groq",
             baseUrl: "https://api.groq.com/openai/v1",
-            textModels: ["llama-3.3-70b-versatile", "llama-3.1-8b-instant"],
-            visionModels: ["meta-llama/llama-4-scout-17b-16e-instruct"]
+            useDynamicGroqModels: true,
+            textModels: [],
+            visionModels: []
         };
     }
-    if (k.indexOf("sk-or-") === 0) {
+    if (/^sk-or-[0-9A-Za-z_-]{12,}$/.test(k)) {
         return {
             id: "openrouter",
             nome: "OpenRouter",
@@ -3662,7 +3690,7 @@ function detectarProvedorExtraPorPrefixo(key) {
             visionModels: ["google/gemini-3.8-flash", "openai/gpt-4o-mini"]
         };
     }
-    if (k.indexOf("xai-") === 0) {
+    if (/^xai-[0-9A-Za-z_-]{12,}$/.test(k)) {
         return {
             id: "grok",
             nome: "Grok / xAI",
@@ -3671,7 +3699,7 @@ function detectarProvedorExtraPorPrefixo(key) {
             visionModels: ["grok-2-vision-1212", "grok-3-latest"]
         };
     }
-    if (k.indexOf("sk-ant-") === 0) {
+    if (/^sk-ant-[0-9A-Za-z_-]{12,}$/.test(k)) {
         return {
             id: "claude",
             nome: "Claude / Anthropic",
@@ -3681,7 +3709,7 @@ function detectarProvedorExtraPorPrefixo(key) {
             visionModels: ["claude-haiku-4-5", "claude-sonnet-4-5"]
         };
     }
-    if (k.indexOf("sk-") === 0) {
+    if (/^sk-[0-9A-Za-z_-]{16,}$/.test(k)) {
         return {
             id: "openai",
             nome: "OpenAI",
@@ -3692,22 +3720,26 @@ function detectarProvedorExtraPorPrefixo(key) {
     }
     var customEp = "";
     try { customEp = (localStorage.getItem(LS_SEC_ENDPOINT_KEY) || "").trim().replace(/\/chat\/completions\/?$/i, ""); } catch(e) {}
-    return {
-        id: "openai_compat",
-        nome: "OpenAI-Compatível",
-        baseUrl: customEp || "https://api.openai.com/v1",
-        textModels: ["gpt-4o-mini"],
-        visionModels: ["gpt-4o-mini"]
-    };
+    if (customEp && k.length >= 12) {
+        return {
+            id: "openai_compat",
+            nome: "OpenAI-Compatível",
+            baseUrl: customEp,
+            textModels: ["gpt-4o-mini"],
+            visionModels: ["gpt-4o-mini"]
+        };
+    }
+    return null;
 }
 
 function contarMotoresConectados() {
     var lista = [];
-    if (getGoogleGeminiKey()) lista.push("Gemini");
-    if (getVaultGrokKey()) lista.push("Grok");
-    if (getVaultClaudeKey()) lista.push("Claude");
-    if (getVaultExtraKey()) {
-        var p = detectarProvedorExtraPorPrefixo(getVaultExtraKey());
+    if (_validarFormatoChaveSlot("gemini", getGoogleGeminiKey())) lista.push("Gemini");
+    if (_validarFormatoChaveSlot("grok", getVaultGrokKey())) lista.push("Grok");
+    if (_validarFormatoChaveSlot("claude", getVaultClaudeKey())) lista.push("Claude");
+    var ex = getVaultExtraKey();
+    if (_validarFormatoChaveSlot("extra", ex)) {
+        var p = detectarProvedorExtraPorPrefixo(ex);
         lista.push(p ? p.nome : "Extra");
     }
     return lista;
@@ -3766,7 +3798,7 @@ async function listarModelosGeminiAPI(apiKey) {
     if (!key) throw new Error("CHAVE_GOOGLE_NAO_CONFIGURADA");
     var url = "https://generativelanguage.googleapis.com/v1beta/models?key=" + encodeURIComponent(key);
     var ctrl = (typeof AbortController !== "undefined") ? new AbortController() : null;
-    var timer = ctrl ? setTimeout(function(){ ctrl.abort(); }, 12000) : null;
+    var timer = ctrl ? setTimeout(function(){ ctrl.abort(); }, 10000) : null;
     try {
         var resp = await fetch(url, { method: "GET", signal: ctrl ? ctrl.signal : undefined });
         if (!resp.ok) {
@@ -3826,8 +3858,77 @@ async function listarModelosGeminiAtivosParaRodizio(apiKey) {
         var low = clean.toLowerCase();
         if (!seen[low]) { seen[low] = true; out.push(clean); }
     });
+    // Ordena por prioridade e aplica jitter leve nos Flash equivalentes para não travar no mesmo 503
     out.sort(function(a, b) { return _scoreFlashModelPriority(b) - _scoreFlashModelPriority(a); });
+    if (out.length > 2) {
+        var topGroup = out.slice(0, Math.min(4, out.length));
+        for (var i = topGroup.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = topGroup[i]; topGroup[i] = topGroup[j]; topGroup[j] = tmp;
+        }
+        out = topGroup.concat(out.slice(topGroup.length));
+    }
     return out;
+}
+
+function _ehModeloChatGroqValido(modelId) {
+    var low = String(modelId || "").trim().toLowerCase();
+    if (!low) return false;
+    if (/whisper|tts|audio|speech|guard|safeguard|prompt-guard|embed|moderation|orpheus|distil-whisper/.test(low)) return false;
+    if (_groqDeadModels404[low]) return false;
+    return true;
+}
+
+function _scoreModeloGroq(modelId, requireVision) {
+    var low = String(modelId || "").toLowerCase();
+    var isVision = /vision|scout|maverick|llama-4/.test(low);
+    var score = 1000;
+    if (requireVision) score += isVision ? 4000 : -3000;
+    if (/llama-4|maverick|scout/.test(low)) score += 900;
+    else if (/llama-3\.3|llama-3\.2|qwen|compound/.test(low)) score += 750;
+    else if (/gemma|mixtral|deepseek/.test(low)) score += 500;
+    if (/70b|90b|32b|versatile|instruct/.test(low)) score += 150;
+    if (/instant|8b|17b/.test(low)) score += 90;
+    return score;
+}
+
+async function listarModelosGroqAtivos(apiKey, requireVision) {
+    var key = String(apiKey || "").trim();
+    if (!key) return [];
+    var mask = mascararChaveAPI(key);
+    var now = Date.now();
+    var ids = [];
+    if (_groqDynamicModelsCache.keyMask === mask && (now - _groqDynamicModelsCache.ts) < 300000 && _groqDynamicModelsCache.models.length) {
+        ids = _groqDynamicModelsCache.models.slice();
+    } else {
+        var ctrl = (typeof AbortController !== "undefined") ? new AbortController() : null;
+        var timer = ctrl ? setTimeout(function(){ ctrl.abort(); }, 9000) : null;
+        try {
+            var resp = await fetch("https://api.groq.com/openai/v1/models", {
+                method: "GET",
+                headers: { "Authorization": "Bearer " + key },
+                signal: ctrl ? ctrl.signal : undefined
+            });
+            if (!resp.ok) {
+                var eG = new Error("Groq GET /models HTTP " + resp.status);
+                eG.httpStatus = resp.status;
+                throw eG;
+            }
+            var data = await resp.json();
+            var arr = (data && Array.isArray(data.data)) ? data.data : [];
+            ids = arr.map(function(m){ return String((m && m.id) || "").trim(); }).filter(Boolean);
+            if (ids.length) {
+                _groqDynamicModelsCache = { keyMask: mask, ts: now, models: ids.slice() };
+            }
+        } finally {
+            if (timer) clearTimeout(timer);
+        }
+    }
+    var validos = ids.filter(_ehModeloChatGroqValido);
+    validos.sort(function(a, b) {
+        return _scoreModeloGroq(b, requireVision) - _scoreModeloGroq(a, requireVision);
+    });
+    return validos;
 }
 
 function atualizarPreviewProvedorExtra() {
@@ -3838,36 +3939,52 @@ function atualizarPreviewProvedorExtra() {
     if (!val || val.indexOf("•") >= 0) {
         var savedExtra = getVaultExtraKey();
         if (savedExtra) {
-            var pSaved = detectarProvedorExtraPorPrefixo(savedExtra);
-            hint.textContent = "Provedor detectado: " + (pSaved ? (pSaved.nome + " (" + pSaved.baseUrl.replace(/^https?:\/\//, "") + ")") : "OpenAI-Compatível");
+            if (!_validarFormatoChaveSlot("extra", savedExtra)) {
+                hint.textContent = "Formato inválido no slot Extra (use prefixo gsk_, sk-or-, xai- ou sk-)";
+            } else {
+                var pSaved = detectarProvedorExtraPorPrefixo(savedExtra);
+                hint.textContent = "Provedor detectado: " + (pSaved ? (pSaved.nome + " (" + pSaved.baseUrl.replace(/^https?:\/\//, "") + ")") : "OpenAI-Compatível");
+            }
         } else {
             hint.textContent = "Detecção automática por prefixo: gsk_ • sk-or- • xai- • sk-";
         }
         return;
     }
     var p = detectarProvedorExtraPorPrefixo(val);
-    hint.textContent = p ? ("Detectado agora: " + p.nome + " (" + p.baseUrl.replace(/^https?:\/\//, "") + ")") : "Detecção automática por prefixo";
+    hint.textContent = p
+        ? ("Detectado agora: " + p.nome + " (" + p.baseUrl.replace(/^https?:\/\//, "") + ")")
+        : "Prefixo não reconhecido — use gsk_ (Groq), sk-or- (OpenRouter), xai- ou sk-";
 }
 
 function atualizarBadgesCofreUI() {
     var slots = [
-        { id: "vaultStatusGemini", key: getGoogleGeminiKey() },
-        { id: "vaultStatusGrok",   key: getVaultGrokKey() },
-        { id: "vaultStatusClaude", key: getVaultClaudeKey() },
-        { id: "vaultStatusExtra",  key: getVaultExtraKey() }
+        { id: "vaultStatusGemini", slot: "gemini", key: getGoogleGeminiKey() },
+        { id: "vaultStatusGrok",   slot: "grok",   key: getVaultGrokKey() },
+        { id: "vaultStatusClaude", slot: "claude", key: getVaultClaudeKey() },
+        { id: "vaultStatusExtra",  slot: "extra",  key: getVaultExtraKey() }
     ];
     var ativos = 0;
     slots.forEach(function(s) {
         var pill = document.getElementById(s.id);
         if (!pill) return;
-        if (s.key) {
+        if (s.key && _validarFormatoChaveSlot(s.slot, s.key)) {
             ativos++;
             pill.classList.remove("off");
             pill.classList.add("on");
+            pill.style.background = "";
+            pill.style.color = "";
             pill.textContent = "Ativo (" + mascararChaveAPI(s.key) + ")";
+        } else if (s.key) {
+            pill.classList.remove("on");
+            pill.classList.add("off");
+            pill.style.background = "#fef3c7";
+            pill.style.color = "#92400e";
+            pill.textContent = "Formato inválido (" + mascararChaveAPI(s.key) + ")";
         } else {
             pill.classList.remove("on");
             pill.classList.add("off");
+            pill.style.background = "";
+            pill.style.color = "";
             pill.textContent = "Inativo";
         }
     });
@@ -3904,32 +4021,44 @@ function toggleMostrarVaultKey(slot) {
 
 function salvarCofreMultiAPI() {
     var specs = [
-        { id: "vaultGeminiKeyInput", lsKey: LS_VAULT_GEMINI_KEY, getter: getGoogleGeminiKey },
-        { id: "vaultGrokKeyInput",   lsKey: LS_VAULT_GROK_KEY,   getter: getVaultGrokKey },
-        { id: "vaultClaudeKeyInput", lsKey: LS_VAULT_CLAUDE_KEY, getter: getVaultClaudeKey },
-        { id: "vaultExtraKeyInput",  lsKey: LS_VAULT_EXTRA_KEY,  getter: getVaultExtraKey }
+        { id: "vaultGeminiKeyInput", slot: "gemini", label: "Google Gemini (AIza...)", lsKey: LS_VAULT_GEMINI_KEY, getter: getGoogleGeminiKey },
+        { id: "vaultGrokKeyInput",   slot: "grok",   label: "Grok / xAI (xai-...)",    lsKey: LS_VAULT_GROK_KEY,   getter: getVaultGrokKey },
+        { id: "vaultClaudeKeyInput", slot: "claude", label: "Claude (sk-ant-...)",     lsKey: LS_VAULT_CLAUDE_KEY, getter: getVaultClaudeKey },
+        { id: "vaultExtraKeyInput",  slot: "extra",  label: "Chave Extra",             lsKey: LS_VAULT_EXTRA_KEY,  getter: getVaultExtraKey }
     ];
+    var avisosFormato = [];
     specs.forEach(function(sp) {
         var el = document.getElementById(sp.id);
         if (!el) return;
         var val = el.value.trim();
         if (val.indexOf("•") >= 0) return;
+        if (val && !_validarFormatoChaveSlot(sp.slot, val)) {
+            avisosFormato.push(sp.label);
+        }
         _gravarCredencialCofre(sp.lsKey, val);
         el.type = "password";
         el.value = val ? "••••••••••••" : "";
     });
     _geminiDynamicModelsCache = { keyMask: "", ts: 0, models: [] };
     _geminiDeadModels404 = {};
+    _groqDynamicModelsCache = { keyMask: "", ts: 0, models: [] };
+    _groqDeadModels404 = {};
     atualizarBadgesCofreUI();
     var ativos = contarMotoresConectados();
     var msgEl = document.getElementById("msgConfigGemini");
     if (msgEl) {
-        if (ativos.length) {
+        if (ativos.length && !avisosFormato.length) {
             msgEl.style.color = "#16a34a";
             msgEl.textContent = "Cofre salvo com ofuscação local ✓ (" + ativos.join(" → ") + ")";
-        } else {
+        } else if (ativos.length && avisosFormato.length) {
+            msgEl.style.color = "#b45309";
+            msgEl.textContent = "Cofre ativo (" + ativos.join(" → ") + "), porém ignorado por formato inválido em: " + avisosFormato.join(", ");
+        } else if (avisosFormato.length) {
             msgEl.style.color = "#dc2626";
-            msgEl.textContent = "Nenhuma chave salva. Cole pelo menos 1 chave para ativar o rodízio automático.";
+            msgEl.textContent = "Prefixo inválido em: " + avisosFormato.join(", ") + ". Verifique a chave colada.";
+        } else {
+            msgEl.style.color = "#64748b";
+            msgEl.textContent = "Cofre vazio. Você pode buscar Empresas e Lojas via bases públicas mesmo sem chave.";
         }
     }
 }
@@ -3945,6 +4074,8 @@ function limparCofreMultiAPI() {
     });
     _geminiDynamicModelsCache = { keyMask: "", ts: 0, models: [] };
     _geminiDeadModels404 = {};
+    _groqDynamicModelsCache = { keyMask: "", ts: 0, models: [] };
+    _groqDeadModels404 = {};
     atualizarBadgesCofreUI();
     var msgEl = document.getElementById("msgConfigGemini");
     if (msgEl) { msgEl.style.color = "#64748b"; msgEl.textContent = "Todas as chaves foram removidas deste aparelho."; }
@@ -3962,22 +4093,22 @@ function _traduzirErroAmigavelIA(err) {
     var msg = String((err && err.message) ? err.message : (err || "")).trim();
     if (!msg) return "Não foi possível completar a consulta agora. Tente novamente.";
     if (msg === "CHAVE_GOOGLE_NAO_CONFIGURADA" || msg === "CHAVE_NAO_CONFIGURADA") {
-        return "Configure pelo menos 1 chave no Cofre Multi-API nas Configurações para usar os recursos de IA.";
+        return "Nenhum motor de IA válido no Cofre Multi-API.";
     }
     if (/high demand|overloaded|unavailable|503|service unavailable/i.test(msg)) {
-        return "Todos os motores conectados estão congestionados no momento. Tente novamente em instantes.";
+        return "Motores de IA congestionados no momento.";
     }
     if (/429|quota|rate limit|resource exhausted|too many requests/i.test(msg)) {
-        return "Limite de cota atingido em todos os motores conectados mesmo após nova tentativa. Aguarde alguns instantes.";
+        return "Limite de cota atingido nos motores de IA conectados.";
     }
     if (/failed to fetch|networkerror|load failed|offline|network/i.test(msg)) {
         return "Falha de conexão. Verifique sua internet e tente novamente.";
     }
     if (/abort|timeout|tempo esgotado/i.test(msg)) {
-        return "A consulta demorou mais que o esperado. Tente novamente.";
+        return "A consulta demorou mais que o esperado.";
     }
     if (/api key|permission|unauth|forbidden|401|403/i.test(msg)) {
-        return "Chave de acesso inválida ou sem permissão nas Configurações.";
+        return "Chave de acesso inválida ou sem saldo/permissão nas Configurações.";
     }
     return _sanitizarTextoSemChaves(msg);
 }
@@ -4193,23 +4324,29 @@ async function _chamarClaudeUnicoModelo(apiKey, modelo, normParts, promptFinal, 
 
 async function executarEsteiraUniversalIA(prompt, partsArray, jsonMode, opts) {
     opts = opts || {};
-    if (!temMotorIAConfigurado()) {
+    var geminiKeyRaw = getGoogleGeminiKey();
+    var grokKeyRaw = getVaultGrokKey();
+    var claudeKeyRaw = getVaultClaudeKey();
+    var extraKeyRaw = getVaultExtraKey();
+
+    // Validação silenciosa por prefixo antes de qualquer HTTP (ex: apik... ignorada silenciosamente)
+    var geminiKey = _validarFormatoChaveSlot("gemini", geminiKeyRaw) ? geminiKeyRaw.trim() : "";
+    var grokKey   = _validarFormatoChaveSlot("grok", grokKeyRaw)     ? grokKeyRaw.trim()   : "";
+    var claudeKey = _validarFormatoChaveSlot("claude", claudeKeyRaw) ? claudeKeyRaw.trim() : "";
+    var extraKey  = _validarFormatoChaveSlot("extra", extraKeyRaw)   ? extraKeyRaw.trim()  : "";
+
+    if (!geminiKey && !grokKey && !claudeKey && !extraKey) {
         var eKey = new Error("CHAVE_GOOGLE_NAO_CONFIGURADA");
-        eKey.technicalDetail = "Nenhuma chave configurada no Cofre Multi-API (Configurações).";
+        eKey.technicalDetail = "Nenhuma chave com prefixo válido configurada no Cofre Multi-API.";
         throw eKey;
     }
 
-    var timeoutMs = (Number(opts.timeoutMs) > 0) ? Number(opts.timeoutMs) : 60000;
+    var timeoutMs = (Number(opts.timeoutMs) > 0) ? Number(opts.timeoutMs) : 25000;
     var normParts = _normalizarPartsParaProvedores(partsArray);
     var hasPdfBinary = normParts.images.some(function(im){ return im.mimeType === "application/pdf"; });
     var hasRasterImage = normParts.images.some(function(im){ return String(im.mimeType).indexOf("image/") === 0; });
     var promptComExtras = [String(prompt || "")].concat(normParts.extraTexts).filter(Boolean).join("\n\n");
     var promptFinal = _prepararPromptFinalIA(promptComExtras, !!jsonMode);
-
-    var geminiKey = getGoogleGeminiKey();
-    var grokKey = getVaultGrokKey();
-    var claudeKey = getVaultClaudeKey();
-    var extraKey = getVaultExtraKey();
 
     var round = opts._round || 1;
     var erros = [];
@@ -4217,23 +4354,29 @@ async function executarEsteiraUniversalIA(prompt, partsArray, jsonMode, opts) {
     var sawAuth = false;
     var sawTimeout = false;
 
+    function _ehErroSemSaldoOuAuth(err) {
+        var st = err && err.httpStatus ? err.httpStatus : 0;
+        var raw = String((err && (err.rawMsg || err.message)) || "").toLowerCase();
+        return st === 401 || st === 402 || st === 403 || /credit balance|insufficient_quota|billing|invalid_api_key|authentication_error|permission/.test(raw);
+    }
+
     function _registrarErro(etapa, err) {
         var st = err && err.httpStatus ? err.httpStatus : 0;
         var msg = String((err && (err.technicalDetail || err.message)) || err || "");
         if (st === 429 || /429|quota|rate limit|resource exhausted|too many/i.test(msg)) saw429 = true;
-        if (st === 401 || st === 403 || /api key|permission|unauth|forbidden/i.test(msg)) sawAuth = true;
+        if (_ehErroSemSaldoOuAuth(err)) sawAuth = true;
         if (err && err.name === "AbortError") sawTimeout = true;
         var safeLine = etapa + ": " + _sanitizarTextoSemChaves(msg);
         erros.push(safeLine);
         console.warn("LocalShelf Esteira IA (" + etapa + "):", _sanitizarTextoSemChaves(msg));
     }
 
-    // ETAPA 1: Google Gemini (descoberta dinâmica via GET /v1beta/models + rodízio sem google_search)
+    // ETAPA 1: Google Gemini — varredura COMPLETA por todos os modelos ativos (sem limite de 5 e sem google_search)
     if (geminiKey) {
         var gemMask = mascararChaveAPI(geminiKey);
         try {
             var gemModels = await listarModelosGeminiAtivosParaRodizio(geminiKey);
-            for (var gi = 0; gi < Math.min(gemModels.length, 5); gi++) {
+            for (var gi = 0; gi < gemModels.length; gi++) {
                 var mGem = gemModels[gi];
                 try {
                     return await _chamarGeminiUnicoModelo(geminiKey, mGem, partsArray, promptFinal, timeoutMs);
@@ -4243,8 +4386,8 @@ async function executarEsteiraUniversalIA(prompt, partsArray, jsonMode, opts) {
                         _geminiDeadModels404[mGem.toLowerCase()] = true;
                         continue;
                     }
-                    if (eGemModel && (eGemModel.httpStatus === 401 || eGemModel.httpStatus === 403)) {
-                        break; // chave Gemini rejeitada -> salta direto para Grok
+                    if (_ehErroSemSaldoOuAuth(eGemModel)) {
+                        break;
                     }
                 }
             }
@@ -4253,7 +4396,7 @@ async function executarEsteiraUniversalIA(prompt, partsArray, jsonMode, opts) {
         }
     }
 
-    // ETAPA 2: Grok / xAI (API direta OpenAI-compatível)
+    // ETAPA 2: Grok / xAI
     if (grokKey && !hasPdfBinary) {
         var grokMask = mascararChaveAPI(grokKey);
         var grokCfg = { nome: "Grok", baseUrl: "https://api.x.ai/v1" };
@@ -4264,7 +4407,7 @@ async function executarEsteiraUniversalIA(prompt, partsArray, jsonMode, opts) {
                 return await _chamarOpenAICompatUnicoModelo(grokCfg, grokKey, mGrok, normParts, promptFinal, timeoutMs);
             } catch(eGrok) {
                 _registrarErro("Grok[" + grokMask + "/" + mGrok + "]", eGrok);
-                if (eGrok && (eGrok.httpStatus === 401 || eGrok.httpStatus === 403)) break;
+                if (_ehErroSemSaldoOuAuth(eGrok)) break;
             }
         }
     }
@@ -4279,17 +4422,27 @@ async function executarEsteiraUniversalIA(prompt, partsArray, jsonMode, opts) {
                 return await _chamarClaudeUnicoModelo(claudeKey, mClaude, normParts, promptFinal, timeoutMs);
             } catch(eClaude) {
                 _registrarErro("Claude[" + claudeMask + "/" + mClaude + "]", eClaude);
-                if (eClaude && (eClaude.httpStatus === 401 || eClaude.httpStatus === 403)) break;
+                if (_ehErroSemSaldoOuAuth(eClaude)) break;
             }
         }
     }
 
-    // ETAPA 4: Chave Extra Compatível OpenAI (Groq, OpenRouter, xAI, OpenAI)
+    // ETAPA 4: Chave Extra (Groq com descoberta dinâmica /models, OpenRouter, xAI, OpenAI)
     if (extraKey && !hasPdfBinary) {
         var extraMask = mascararChaveAPI(extraKey);
         var provExtra = detectarProvedorExtraPorPrefixo(extraKey);
         if (provExtra) {
-            var extraModels = hasRasterImage ? provExtra.visionModels : provExtra.textModels;
+            var extraModels = [];
+            if (provExtra.useDynamicGroqModels) {
+                try {
+                    extraModels = await listarModelosGroqAtivos(extraKey, hasRasterImage);
+                } catch(eGroqList) {
+                    _registrarErro("Groq[" + extraMask + "/models]", eGroqList);
+                }
+            } else {
+                extraModels = hasRasterImage ? provExtra.visionModels : provExtra.textModels;
+            }
+
             for (var ei = 0; ei < extraModels.length; ei++) {
                 var mEx = extraModels[ei];
                 try {
@@ -4299,18 +4452,22 @@ async function executarEsteiraUniversalIA(prompt, partsArray, jsonMode, opts) {
                     return await _chamarOpenAICompatUnicoModelo(provExtra, extraKey, mEx, normParts, promptFinal, timeoutMs);
                 } catch(eEx) {
                     _registrarErro(provExtra.nome + "[" + extraMask + "/" + mEx + "]", eEx);
-                    if (eEx && (eEx.httpStatus === 401 || eEx.httpStatus === 403)) break;
+                    if (provExtra.id === "groq" && eEx && eEx.httpStatus === 404) {
+                        _groqDeadModels404[mEx.toLowerCase()] = true;
+                        continue;
+                    }
+                    if (_ehErroSemSaldoOuAuth(eEx)) break;
                 }
             }
         }
     }
 
-    // RECUPERAÇÃO 429 EM SEGUNDO PLANO: aguarda 15s e executa Rodada 2 completa por toda a esteira
+    // RECUPERAÇÃO 429 EM SEGUNDO PLANO: aguarda 15s e executa Rodada 2
     if (round === 1 && saw429) {
         if (typeof _bgTaskState !== "undefined" && _bgTaskState.status === "running" && typeof atualizarProgressoTarefa === "function") {
             atualizarProgressoTarefa(
                 _bgTaskState.titulo || "Rodízio Multi-API...",
-                "Cota 429 atingida — aguardando 15s em segundo plano para Rodada 2...",
+                "Cota 429 atingida — aguardando 15s para Rodada 2...",
                 Math.max(1, Math.round((_bgTaskState.pct || 20) / 10)),
                 10
             );
@@ -4324,7 +4481,7 @@ async function executarEsteiraUniversalIA(prompt, partsArray, jsonMode, opts) {
         : (sawTimeout
             ? ("Tempo esgotado (" + Math.round(timeoutMs / 1000) + "s) nos motores de IA.")
             : (sawAuth && erros.length === 1
-                ? "Chave de API inválida ou sem permissão no Cofre."
+                ? "Chave de API inválida ou sem saldo no Cofre."
                 : "Nenhum motor do Cofre Multi-API conseguiu responder agora."));
     var finalErr = new Error(finalErrMsg);
     finalErr.technicalDetail = _sanitizarTextoSemChaves(erros.slice(-4).join(" | "));
@@ -5503,40 +5660,261 @@ async function consultarBrasilApiCnpj(cnpjDigits, opts) {
     }
     throw (lastErr || new Error("Consulta cadastral indisponível no momento."));
 }
-async function buscarOpenStreetMapNominatim(query, ctx) {
+async function buscarWikipediaWikidataEmpresa(query, ctx) {
+    var q = String(query || "").trim();
+    if (!q || q.length < 2) return null;
+    var urlWiki = "https://pt.wikipedia.org/w/api.php?action=query&list=search&srsearch=" + encodeURIComponent(q) + "&srlimit=4&format=json&origin=*";
+    var urlWd = "https://www.wikidata.org/w/api.php?action=wbsearchentities&search=" + encodeURIComponent(q) + "&format=json&language=pt&limit=5&origin=*";
+
+    async function _fetchJsonTimeout(u, ms) {
+        var c = (typeof AbortController !== "undefined") ? new AbortController() : null;
+        var t = c ? setTimeout(function(){ c.abort(); }, ms) : null;
+        try {
+            var r = await fetch(u, { signal: c ? c.signal : undefined });
+            if (!r.ok) return null;
+            return await r.json();
+        } catch(e) {
+            return null;
+        } finally {
+            if (t) clearTimeout(t);
+        }
+    }
+
+    var settled = await Promise.allSettled([
+        _fetchJsonTimeout(urlWiki, 5500),
+        _fetchJsonTimeout(urlWd, 5500)
+    ]);
+
+    var wikiData = settled[0].status === "fulfilled" ? settled[0].value : null;
+    var wdData   = settled[1].status === "fulfilled" ? settled[1].value : null;
+
+    var wikiHits = (wikiData && wikiData.query && Array.isArray(wikiData.query.search)) ? wikiData.query.search : [];
+    var wdHits   = (wdData && Array.isArray(wdData.search)) ? wdData.search : [];
+    if (!wikiHits.length && !wdHits.length) return null;
+
+    var qNorm = normTextAccent(q).toLowerCase();
+    var qTokens = qNorm.split(/\s+/).filter(function(w){ return w.length >= 2; });
+
+    function _scoreMatchText(txt) {
+        var t = normTextAccent(String(txt || "")).toLowerCase();
+        if (!t) return 0;
+        var s = (t === qNorm) ? 10 : (t.indexOf(qNorm) >= 0 ? 6 : 0);
+        qTokens.forEach(function(tk){ if (t.indexOf(tk) >= 0) s += 2; });
+        return s;
+    }
+
+    var bestWiki = null;
+    if (wikiHits.length) {
+        wikiHits.sort(function(a, b){ return _scoreMatchText(b.title) - _scoreMatchText(a.title); });
+        bestWiki = wikiHits[0];
+    }
+    var bestWd = null;
+    if (wdHits.length) {
+        wdHits.sort(function(a, b){ return _scoreMatchText(b.label) - _scoreMatchText(a.label); });
+        bestWd = wdHits[0];
+    }
+
+    var wikiExtract = "";
+    var wdSite = "";
+    var wdAliases = [];
+    var tasksExtra = [];
+    if (bestWiki && bestWiki.title) {
+        tasksExtra.push(_fetchJsonTimeout(
+            "https://pt.wikipedia.org/api/rest_v1/page/summary/" + encodeURIComponent(bestWiki.title),
+            4500
+        ).then(function(sum){
+            if (sum && sum.extract) wikiExtract = String(sum.extract).trim();
+        }).catch(function(){}));
+    }
+    if (bestWd && bestWd.id) {
+        tasksExtra.push(_fetchJsonTimeout(
+            "https://www.wikidata.org/w/api.php?action=wbgetentities&ids=" + encodeURIComponent(bestWd.id) + "&props=claims|descriptions|aliases&languages=pt|en&format=json&origin=*",
+            4500
+        ).then(function(ent){
+            var entity = ent && ent.entities && ent.entities[bestWd.id];
+            if (!entity) return;
+            var claims = entity.claims || {};
+            if (Array.isArray(claims.P856) && claims.P856[0] && claims.P856[0].mainsnak && claims.P856[0].mainsnak.datavalue) {
+                wdSite = String(claims.P856[0].mainsnak.datavalue.value || "").trim().replace(/^https?:\/\/(www\.)?/i, "").replace(/\/.*$/, "");
+            }
+            var als = (entity.aliases && entity.aliases.pt) || [];
+            als.forEach(function(a){ if (a && a.value) wdAliases.push(String(a.value).trim()); });
+        }).catch(function(){}));
+    }
+    if (tasksExtra.length) await Promise.allSettled(tasksExtra);
+
+    var snippetPlain = String((bestWiki && bestWiki.snippet) || "").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+    var fullTextPool = [wikiExtract, snippetPlain, bestWd && bestWd.description].filter(Boolean).join(" ");
+    var cnpjEncontrado = "";
+    var mCnpj = fullTextPool.match(/\b(\d{2}\.?\d{3}\.?\d{3}\/?\d{4}-?\d{2})\b/);
+    if (mCnpj) {
+        var digW = mCnpj[1].replace(/\D/g, "");
+        if (digW.length === 14) cnpjEncontrado = formatarCNPJ(digW);
+    }
+
+    var nomeBaseWiki = String((bestWd && bestWd.label) || (bestWiki && bestWiki.title) || q).trim();
+    var segDesc = String((bestWd && bestWd.description) || "").trim();
+    var ufCtx = (ctx && ctx.uf && ctx.uf !== "Brasil" && _isValidBrUf(ctx.uf)) ? String(ctx.uf).toUpperCase() : "";
+
+    return {
+        source: "Wikipedia",
+        nomeFantasia: nomeBaseWiki,
+        razaoSocial: (wdAliases.find(function(a){ return /ltda|s\.a|brasil|comercio|industria/i.test(a); }) || nomeBaseWiki),
+        segmento: segDesc || (wikiExtract ? wikiExtract.slice(0, 90).replace(/\.\s*$/, "") : ""),
+        siteDominio: wdSite,
+        cnpj: cnpjEncontrado,
+        cnpjRaiz: cnpjEncontrado ? cnpjEncontrado.replace(/\D/g, "").slice(0, 8) : "",
+        resumo: wikiExtract || snippetPlain,
+        uf: ufCtx,
+        ufLabel: ufCtx || "BR"
+    };
+}
+
+async function buscarOverpassUf(termosArray, uf, modo) {
+    var ufCode = String(uf || "").trim().toUpperCase();
+    if (!ufCode || !_isValidBrUf(ufCode)) return [];
+    var termos = Array.isArray(termosArray) ? termosArray : [termosArray];
+    var limpos = [];
+    termos.forEach(function(t) {
+        var clean = String(t || "").replace(/["\\\[\]()^$.*+?{}|]/g, " ").replace(/\s+/g, " ").trim();
+        if (clean.length >= 3 && limpos.indexOf(clean) < 0) limpos.push(clean);
+    });
+    if (!limpos.length) return [];
+
+    var regexTerm = limpos.slice(0, 3).join("|");
+    var qlBody = '[out:json][timeout:6];area["ISO3166-2"="BR-' + ufCode + '"][admin_level=4]->.ufArea;(' +
+        'nwr["name"~"' + regexTerm + '",i](area.ufArea);' +
+        'nwr["brand"~"' + regexTerm + '",i](area.ufArea);' +
+        'nwr["operator"~"' + regexTerm + '",i](area.ufArea);' +
+        ');out center tags 20;';
+
+    var ctrl = (typeof AbortController !== "undefined") ? new AbortController() : null;
+    var timer = ctrl ? setTimeout(function(){ ctrl.abort(); }, 7000) : null;
+    try {
+        var resp = await fetch("https://overpass-api.de/api/interpreter", {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" },
+            body: "data=" + encodeURIComponent(qlBody),
+            signal: ctrl ? ctrl.signal : undefined
+        });
+        if (!resp.ok) return [];
+        var data = await resp.json();
+        var elements = (data && Array.isArray(data.elements)) ? data.elements : [];
+        if (!elements.length) return [];
+
+        var seen = {};
+        var results = [];
+        elements.forEach(function(el) {
+            var tags = (el && el.tags) || {};
+            var nome = String(tags.name || tags.brand || tags.operator || "").trim();
+            if (!nome) return;
+            var rua = [tags["addr:street"], tags["addr:housenumber"]].filter(Boolean).join(", ");
+            var bairro = String(tags["addr:suburb"] || tags["addr:neighbourhood"] || "").trim();
+            var mun = String(tags["addr:city"] || tags["addr:municipality"] || "").trim();
+            var cep = _formatarCepBR(tags["addr:postcode"] || "");
+            var tel = String(tags.phone || tags["contact:phone"] || "").trim();
+            var site = String(tags.website || tags["contact:website"] || "").trim().replace(/^https?:\/\/(www\.)?/i, "").replace(/\/.*$/, "");
+            var regTxt = [bairro, _formatarCidadeUf(mun, ufCode)].filter(Boolean).join(" - ");
+            var endFull = [rua, regTxt, cep ? ("CEP " + cep) : ""].filter(Boolean).join(" | ");
+            var k = normProdKey(nome) + "|" + normProdKey((endFull || mun).slice(0, 32));
+            if (seen[k]) return;
+            seen[k] = true;
+
+            if (modo === "empresa") {
+                results.push({
+                    source: "OpenStreetMap",
+                    tipo: /warehouse|industrial|office|company|depot/i.test([tags.building, tags.landuse, tags.industrial, tags.office].join(" ")) ? "CD / Unidade" : "Unidade Mapeada",
+                    nomeFantasia: String(tags.brand || nome).trim(),
+                    nomeBase: [bairro, mun].filter(Boolean).join(" — ") || ("Unidade " + ufCode),
+                    razaoSocial: String(tags.operator || nome).trim(),
+                    cnpj: "",
+                    cnpjRaiz: "",
+                    enderecoCd: endFull || (nome + " - " + ufCode),
+                    cidade: mun,
+                    uf: ufCode,
+                    ufLabel: ufCode,
+                    segmento: "",
+                    porte: "",
+                    brasilApiValidado: false,
+                    regionalSugerida: _mapearUfParaRegional(ufCode, ""),
+                    siteDominio: site,
+                    coresBandeira: null,
+                    contatosResumo: [tel, site].filter(Boolean).join(" • "),
+                    logo: ""
+                });
+            } else {
+                results.push({
+                    source: "OpenStreetMap",
+                    nome: nome,
+                    bandeira: String(tags.brand || nome).trim(),
+                    razaoSocial: String(tags.operator || "").trim(),
+                    cnpj: "",
+                    endereco: endFull || (nome + " - " + ufCode),
+                    bairro: bairro,
+                    municipio: mun,
+                    uf: ufCode,
+                    cidadeUf: _formatarCidadeUf(mun, ufCode),
+                    cep: cep,
+                    cnae: "",
+                    porte: "",
+                    siteDominio: site,
+                    telefone: tel,
+                    checkoutsEstimado: null
+                });
+            }
+        });
+        return results.slice(0, 15);
+    } catch(eOv) {
+        return [];
+    } finally {
+        if (timer) clearTimeout(timer);
+    }
+}
+
+async function buscarOpenStreetMapNominatim(query, ctx, extraOpts) {
     var qTexto = String(query || "").trim();
     if (!qTexto) return [];
+    extraOpts = extraOpts || {};
     var ufCtx = (ctx && ctx.uf && ctx.uf !== "Brasil" && _isValidBrUf(ctx.uf)) ? String(ctx.uf).trim().toUpperCase() : "";
     var cidCtx = (ctx && ctx.cidade) ? String(ctx.cidade).trim() : "";
     var stateCtx = (ctx && ctx.stateName) ? String(ctx.stateName).trim() : ((ufCtx && _getUfInfoObj(ufCtx)) ? _getUfInfoObj(ufCtx).nome : "");
-    var qNorm = normTextAccent(qTexto).toLowerCase();
+    var baseTerms = [qTexto];
+    if (Array.isArray(extraOpts.variacoes)) {
+        extraOpts.variacoes.forEach(function(v) {
+            var vt = String(v || "").trim();
+            if (vt && baseTerms.indexOf(vt) < 0) baseTerms.push(vt);
+        });
+    }
     var headers = { "Accept": "application/json", "Accept-Language": "pt-BR" };
 
     var queries = [];
-    if (ufCtx) {
-        if (cidCtx && qNorm.indexOf(normTextAccent(cidCtx).toLowerCase()) < 0) {
-            queries.push(qTexto + ", " + cidCtx + ", " + ufCtx + ", Brasil");
+    baseTerms.slice(0, 3).forEach(function(term) {
+        var tNorm = normTextAccent(term).toLowerCase();
+        if (ufCtx) {
+            if (cidCtx && tNorm.indexOf(normTextAccent(cidCtx).toLowerCase()) < 0 && queries.length === 0) {
+                queries.push(term + ", " + cidCtx + ", " + ufCtx + ", Brasil");
+            }
+            queries.push(term + ", " + (stateCtx || ufCtx) + ", Brasil");
+            if (tNorm.indexOf(ufCtx.toLowerCase()) < 0 && queries.length < 4) {
+                queries.push(term + " " + ufCtx);
+            }
+        } else {
+            queries.push(term + " Brasil");
         }
-        queries.push(qTexto + ", " + (stateCtx || ufCtx) + ", Brasil");
-        if (qNorm.indexOf(ufCtx.toLowerCase()) < 0) {
-            queries.push(qTexto + " " + ufCtx);
-        }
-    } else {
-        queries.push(qTexto + " Brasil");
-    }
+    });
 
     var list = [];
     for (var qi = 0; qi < queries.length; qi++) {
         var url = "https://nominatim.openstreetmap.org/search?format=jsonv2&addressdetails=1&countrycodes=br&limit=15&q=" + encodeURIComponent(queries[qi]);
         var ctrlN = (typeof AbortController !== "undefined") ? new AbortController() : null;
-        var timerN = ctrlN ? setTimeout(function(){ ctrlN.abort(); }, 6000) : null;
+        var timerN = ctrlN ? setTimeout(function(){ ctrlN.abort(); }, 5500) : null;
         try {
             var resp = await fetch(url, { headers: headers, signal: ctrlN ? ctrlN.signal : undefined });
             if (resp.ok) {
                 var arr = await resp.json();
                 if (Array.isArray(arr) && arr.length) {
                     list = list.concat(arr);
-                    if (list.length >= 6) break;
+                    if (list.length >= 10) break;
                 }
             }
         } catch(eNom) {
@@ -6286,14 +6664,14 @@ async function buscarLojaInteligente() {
     iniciarTarefaGuardiao({
         id: "busca_cliente",
         titulo: "Buscando loja" + ufTag + "...",
-        sub: "Camada 1: verificando base local e compartilhada",
+        sub: "Verificando base local, BrasilAPI e fontes abertas",
         canBackground: true,
         totalSteps: 3,
         pageTarget: "pageClient"
     });
 
     try {
-        // CAMADA 1: localStorage + Supabase (filtrados estritamente pela UF ativa)
+        // CAMADA 1: Cache local + Supabase
         var localHits = buscarClienteLocalPrimeiro(q, ctx);
         var sbHits = await buscarClienteSupabasePrimeiro(q, ctx);
         var layer1Hits = [];
@@ -6315,24 +6693,27 @@ async function buscarLojaInteligente() {
 
         if (isCnpjDireto) {
             if (st) st.textContent = "Consultando CNPJ " + formatarCNPJ(digits) + "...";
-            atualizarProgressoTarefa("Camada 2: consultando cadastro oficial...", formatarCNPJ(digits), 1, 3);
-            var cnpjRes = await consultarBrasilApiCnpj(digits, { timeoutMs: 6000 });
+            atualizarProgressoTarefa("Consultando cadastro oficial...", formatarCNPJ(digits), 1, 3);
+            var cnpjRes = await consultarBrasilApiCnpj(digits, { timeoutMs: 7000 });
             if (temMotorIAConfigurado()) {
-                atualizarProgressoTarefa("Camada 3: completando canal e perfil...", cnpjRes.nome, 2, 3);
-                var cascCnpj = await enriquecerDossieLojaCascata(cnpjRes, ctx, { fastTimeoutMs: 4000, geminiTimeoutMs: 25000 });
-                await aplicarDadosLojaNoFormulario(cascCnpj.item, true, { onlyEmpty: false });
-                var avalCnpj = _avaliarEExibirCompletudeCliente({ cnpjRaiz: cascCnpj.cnpjRaiz || digits.slice(0, 8) });
-                concluirTarefaGuardiao(avalCnpj.complete ? "✅ Dados completos!" : "⚠️ CNPJ validado (complete o perfil)", cascCnpj.item.nome, { keepOverlayMs: 1200, onReturn: function(){ showPage("pageClient"); } });
-                if (!cascCnpj.item.logo && typeof buscarLogoInteligenteAuto === "function") {
-                    buscarLogoInteligenteAuto(cascCnpj.item.nome, { siteDominio: cascCnpj.item.siteDominio || "" }).catch(function(){});
+                atualizarProgressoTarefa("Complementando canal e perfil...", cnpjRes.nome, 2, 3);
+                try {
+                    var cascCnpj = await enriquecerDossieLojaCascata(cnpjRes, ctx, { fastTimeoutMs: 4000, geminiTimeoutMs: 25000 });
+                    await aplicarDadosLojaNoFormulario(cascCnpj.item, true, { onlyEmpty: false });
+                    var avalCnpj = _avaliarEExibirCompletudeCliente({ cnpjRaiz: cascCnpj.cnpjRaiz || digits.slice(0, 8) });
+                    concluirTarefaGuardiao(avalCnpj.complete ? "✅ Dados completos!" : "📋 CNPJ carregado!", cascCnpj.item.nome, { keepOverlayMs: 1100, onReturn: function(){ showPage("pageClient"); } });
+                } catch(eCasc) {
+                    await aplicarDadosLojaNoFormulario(cnpjRes, true, { onlyEmpty: false });
+                    _avaliarEExibirCompletudeCliente({ cnpjRaiz: digits.slice(0, 8) });
+                    concluirTarefaGuardiao("📋 Dados do CNPJ carregados", cnpjRes.nome, { keepOverlayMs: 1100, onReturn: function(){ showPage("pageClient"); } });
                 }
             } else {
                 await aplicarDadosLojaNoFormulario(cnpjRes, true, { onlyEmpty: false });
                 _avaliarEExibirCompletudeCliente({ cnpjRaiz: digits.slice(0, 8) });
-                concluirTarefaGuardiao("📋 Dados do CNPJ carregados", cnpjRes.nome, { keepOverlayMs: 1200, onReturn: function(){ showPage("pageClient"); } });
-                if (typeof buscarLogoInteligenteAuto === "function") {
-                    buscarLogoInteligenteAuto(cnpjRes.nome, {}).catch(function(){});
-                }
+                concluirTarefaGuardiao("📋 Dados do CNPJ carregados", cnpjRes.nome, { keepOverlayMs: 1100, onReturn: function(){ showPage("pageClient"); } });
+            }
+            if (typeof buscarLogoInteligenteAuto === "function") {
+                buscarLogoInteligenteAuto(cnpjRes.nome, {}).catch(function(){});
             }
             return;
         }
@@ -6348,27 +6729,63 @@ async function buscarLojaInteligente() {
             return;
         }
 
-        // CAMADA 2 & 3 EM PARALELO (nunca aborta se Nominatim retornar vazio; preserva diagnóstico real se a IA falhar)
-        if (st) _renderSmartStatus(st, "", "Buscando por Bandeira e Razão Social em " + (ufAlvo || "sua região") + "...");
-        atualizarProgressoTarefa("Camada 2 & 3: busca dupla em " + (ufAlvo || "Brasil") + "...", "Bandeira / Fantasia + Razão Social", 2, 3);
+        // ARQUITETURA DESACOPLADA EM 2 CAMADAS INDEPENDENTES (Promise.allSettled):
+        // Camada A: 100% Pública e Gratuita (Nominatim + Overpass UF + Wikipedia/Wikidata)
+        // Camada B: IA Multi-API opcional (só roda se houver chave válida configurada; falha de IA nunca derruba Camada A)
+        if (st) _renderSmartStatus(st, "", "Consultando mapas públicos" + (temMotorIAConfigurado() ? " e motores de IA" : "") + " em " + (ufAlvo || "Brasil") + "...");
+        atualizarProgressoTarefa("Consultando mapas e bases abertas" + ufTag + "...", q, 1, 3);
 
         var queryOsmSep = (parsed.localHint && parsed.redeHint) ? (parsed.redeHint + " " + parsed.localHint) : "";
-        var pNomFull = buscarOpenStreetMapNominatim(q, ctx).then(function(list){ return { ok: true, list: list || [] }; }).catch(function(eN1){ return { ok: false, list: [], err: eN1 }; });
-        var pNomSep = (queryOsmSep && normTextAccent(queryOsmSep).toLowerCase() !== normTextAccent(q).toLowerCase())
-            ? buscarOpenStreetMapNominatim(queryOsmSep, ctx).then(function(list){ return { ok: true, list: list || [] }; }).catch(function(eN2){ return { ok: false, list: [], err: eN2 }; })
-            : Promise.resolve({ ok: true, list: [] });
-        var pGem = buscarLojasGeminiFlash(q, ctx).then(function(list){ return { ok: true, list: list || [] }; }).catch(function(eG){ return { ok: false, list: [], err: eG }; });
+        var termosVariados = [q];
+        if (queryOsmSep && termosVariados.indexOf(queryOsmSep) < 0) termosVariados.push(queryOsmSep);
+        if (parsed.redeHint && parsed.redeHint.length >= 3 && termosVariados.indexOf(parsed.redeHint) < 0) termosVariados.push(parsed.redeHint);
 
-        var resTri = await Promise.all([pNomFull, pNomSep, pGem]);
-        var nomHits = [].concat(resTri[0].list || [], resTri[1].list || []);
-        var gemPack = resTri[2];
-        var gemHits = gemPack.list || [];
-        var gemErr = (!gemPack.ok && gemPack.err) ? gemPack.err : null;
+        var pNom = buscarOpenStreetMapNominatim(q, ctx, { variacoes: termosVariados });
+        var pOv  = ufAlvo ? buscarOverpassUf(termosVariados, ufAlvo, "loja") : Promise.resolve([]);
+        var pWiki = buscarWikipediaWikidataEmpresa(parsed.redeHint || q, ctx);
+        var pGem = temMotorIAConfigurado() ? buscarLojasGeminiFlash(q, ctx) : Promise.resolve([]);
 
+        var settled = await Promise.allSettled([pNom, pOv, pWiki, pGem]);
+        var nomHits = settled[0].status === "fulfilled" && Array.isArray(settled[0].value) ? settled[0].value : [];
+        var ovHits  = settled[1].status === "fulfilled" && Array.isArray(settled[1].value) ? settled[1].value : [];
+        var wikiInfo = settled[2].status === "fulfilled" ? settled[2].value : null;
+        var gemHits = settled[3].status === "fulfilled" && Array.isArray(settled[3].value) ? settled[3].value : [];
+        var gemErr  = settled[3].status === "rejected" ? settled[3].reason : null;
+
+        // Se Wikipedia/Wikidata trouxe dados oficiais da rede (CNPJ/Site/Razão), enriquece itens do mapa sem esses dados
+        var camadaPublica = nomHits.concat(ovHits);
+        if (wikiInfo) {
+            camadaPublica.forEach(function(it) {
+                if (!it.siteDominio && wikiInfo.siteDominio) it.siteDominio = wikiInfo.siteDominio;
+                if (!it.razaoSocial && wikiInfo.razaoSocial && normTextAccent(it.nome).toLowerCase().indexOf(normTextAccent(parsed.redeHint || q).toLowerCase()) >= 0) {
+                    it.razaoSocial = wikiInfo.razaoSocial;
+                }
+            });
+            if (!camadaPublica.length && wikiInfo.nomeFantasia) {
+                camadaPublica.push({
+                    source: "Wikipedia",
+                    nome: wikiInfo.nomeFantasia,
+                    bandeira: wikiInfo.nomeFantasia,
+                    razaoSocial: wikiInfo.razaoSocial || wikiInfo.nomeFantasia,
+                    cnpj: wikiInfo.cnpj || "",
+                    cnpjRaiz: wikiInfo.cnpjRaiz || "",
+                    endereco: ufAlvo ? (parsed.localHint ? (parsed.localHint + " - " + ufAlvo) : ("Atendimento em " + ufAlvo)) : "Brasil",
+                    bairro: parsed.localHint || "",
+                    municipio: ctx.cidade || "",
+                    uf: ufAlvo,
+                    cidadeUf: _formatarCidadeUf(ctx.cidade || "", ufAlvo),
+                    cep: "",
+                    cnae: wikiInfo.segmento || "",
+                    siteDominio: wikiInfo.siteDominio || "",
+                    checkoutsEstimado: null
+                });
+            }
+        }
+
+        // Mescla Layer B (IA, quando disponível) + Layer A (Open Sources) garantindo filtro geográfico UF
         var merged = [];
         var seen = {};
-        // Prioriza itens com Razão Social (Gemini) + resultados do Mapa (Nominatim) na UF ativa
-        gemHits.concat(nomHits).forEach(function(it) {
+        gemHits.concat(camadaPublica).forEach(function(it) {
             if (ufAlvo && !_itemPertenceUf(it, ufAlvo, { strictExternal: false })) return;
             var k = normProdKey(it.bandeira || it.nome) + "|" + normProdKey((it.bairro || it.endereco || "").substring(0, 28));
             if (!seen[k]) {
@@ -6399,28 +6816,29 @@ async function buscarLojaInteligente() {
 
         _smartStoreResults = merged;
         renderSmartStoreResults();
+
         if (merged.length) {
-            var avisoParcial = gemErr ? (" (Aviso IA: " + _traduzirErroAmigavelIA(gemErr) + ")") : "";
             _renderSmartStatus(
                 st,
-                "",
-                merged.length + " unidade(s) encontrada(s)" + ufTag + ". Toque para preencher imediatamente." + avisoParcial,
-                gemErr ? _extrairDetalheTecnicoErro(gemErr) : ""
+                "smart-alert-ok",
+                "✅ " + merged.length + " unidade(s) encontrada(s)" + ufTag + ". Toque em uma opção abaixo para preencher."
             );
-            concluirTarefaGuardiao("✅ " + merged.length + " unidade(s) encontrada(s)" + ufTag, "Toque em uma unidade da lista para preencher.", { keepOverlayMs: 900, onReturn: function(){ showPage("pageClient"); } });
-        } else if (gemErr) {
-            var msgFalhaCli = _traduzirErroAmigavelIA(gemErr);
-            var techCli = _extrairDetalheTecnicoErro(gemErr);
-            _renderSmartStatus(st, "smart-alert-err", msgFalhaCli + " Você pode preencher manualmente enquanto ajusta a conexão/chave.", techCli);
-            falharTarefaGuardiao("Erro na busca de loja", msgFalhaCli);
+            concluirTarefaGuardiao("✅ " + merged.length + " loja(s) encontrada(s)" + ufTag, "Toque na unidade desejada para preencher.", {
+                keepOverlayMs: 900,
+                onReturn: function(){ showPage("pageClient"); }
+            });
         } else {
-            _renderSmartStatus(st, "smart-alert-warn", "Nenhuma loja encontrada em " + (ufAlvo || "sua UF") + " para \"" + q + "\". Você pode preencher os campos manualmente.");
-            falharTarefaGuardiao("Nenhuma unidade encontrada" + ufTag, "Preencha os campos manualmente se desejar.");
+            var msgVaziaCli = "Nenhuma unidade localizada automaticamente em " + (ufAlvo || "sua UF") + " para \"" + q + "\". Você pode preencher os campos manualmente ou buscar pelo CNPJ de 14 dígitos.";
+            _renderSmartStatus(st, "smart-alert-warn", msgVaziaCli, gemErr ? _extrairDetalheTecnicoErro(gemErr) : "");
+            concluirTarefaGuardiao("📋 Busca concluída" + ufTag, "Preencha os campos manualmente ou informe o CNPJ.", {
+                keepOverlayMs: 1100,
+                onReturn: function(){ showPage("pageClient"); }
+            });
         }
     } catch(err) {
-        var msgErrCli = _traduzirErroAmigavelIA(err) + " Preencha os campos manualmente se desejar.";
-        _renderSmartStatus(st, "smart-alert-err", msgErrCli, _extrairDetalheTecnicoErro(err));
-        falharTarefaGuardiao("Erro na busca", _traduzirErroAmigavelIA(err));
+        var msgErrCli = _traduzirErroAmigavelIA(err) + " Você pode preencher os campos manualmente.";
+        _renderSmartStatus(st, "smart-alert-warn", msgErrCli, _extrairDetalheTecnicoErro(err));
+        falharTarefaGuardiao("Aviso na busca", _traduzirErroAmigavelIA(err));
     } finally {
         setClientSearchLoading(false);
         if (btn) { btn.disabled = false; btn.textContent = "Buscar"; }
@@ -13926,8 +14344,9 @@ function fecharBgTaskBar() {
 function iniciarTarefaGuardiao(opts) {
     opts = opts || {};
     if (_bgTaskState.autoHideTimer) { clearTimeout(_bgTaskState.autoHideTimer); _bgTaskState.autoHideTimer = null; }
+    _desbloquearAudioCtx();
     var canBg = opts.canBackground !== false;
-    var startBg = (opts.forceOverlay === true) ? false : canBg;
+    var startBg = opts.startInBackground === true;
     _bgTaskState = {
         id: opts.id || ("task_" + Date.now()),
         titulo: opts.titulo || "Buscando dados...",
@@ -18469,7 +18888,8 @@ async function buscarEmpresaComIA(manualTrigger) {
     _smartCompanyUnits = [];
     if (unitsBox) { unitsBox.innerHTML = ""; unitsBox.classList.remove("ativo"); }
     var ctx = _obterUfContextoDispositivo();
-    var ufTag = (ctx.uf && ctx.uf !== "Brasil") ? ctx.uf : "Brasil";
+    var ufAlvo = (ctx.uf && ctx.uf !== "Brasil" && _isValidBrUf(ctx.uf)) ? ctx.uf.toUpperCase() : "";
+    var ufTag = ufAlvo || "Brasil";
 
     if (stEl) {
         _renderSmartStatus(
@@ -18477,7 +18897,7 @@ async function buscarEmpresaComIA(manualTrigger) {
             "",
             isCnpjDirect
                 ? ("⏳ Consultando dados do CNPJ " + formatarCNPJ(digits) + "...")
-                : ("⏳ Consultando IA para localizar dados e CDs de \"" + query + "\" em " + ufTag + "...")
+                : ("⏳ Localizando \"" + query + "\" em " + ufTag + " via bases públicas" + (temMotorIAConfigurado() ? " e IA..." : "..."))
         );
     }
     if (cardEl) { cardEl.classList.remove("ativo"); cardEl.innerHTML = ""; }
@@ -18487,15 +18907,15 @@ async function buscarEmpresaComIA(manualTrigger) {
         iniciarTarefaGuardiao({
             id: "busca_empresa",
             titulo: "Buscando empresa (" + ufTag + ")...",
-            sub: "Consultando dados oficiais e CDs em " + ufTag,
+            sub: "Verificando base salva, fontes abertas e CDs regionais",
             canBackground: true,
-            totalSteps: 2,
+            totalSteps: 3,
             pageTarget: "pageCompany"
         });
     }
 
     try {
-        // CAMADA 1: localStorage + Supabase (Instantâneo e filtrado por UF)
+        // CAMADA 1: localStorage + Supabase (Instantâneo)
         var localSug = buscarEmpresaLocalPrimeiro(query, ctx);
         var sbSug = await buscarEmpresaSupabasePrimeiro(query, ctx);
         var layer1Sug = (sbSug && (!localSug || (Array.isArray(sbSug.products) && sbSug.products.length >= (localSug.products || []).length))) ? sbSug : localSug;
@@ -18510,7 +18930,7 @@ async function buscarEmpresaComIA(manualTrigger) {
         }
 
         if (isCnpjDirect) {
-            if (manualTrigger) atualizarProgressoTarefa("Consultando CNPJ oficial...", formatarCNPJ(digits), 1, 2);
+            if (manualTrigger) atualizarProgressoTarefa("Consultando BrasilAPI / Receita Federal...", formatarCNPJ(digits), 1, 3);
             var bApiDireta = await consultarBrasilApiCnpj(digits, { timeoutMs: 8000 });
             if (bApiDireta) {
                 var regCnpj = _mapearUfParaRegional(bApiDireta.uf || ctx.uf, "");
@@ -18541,61 +18961,159 @@ async function buscarEmpresaComIA(manualTrigger) {
             }
         }
 
-        // CAMADA DIRETA GEMINI (sem dependência do OpenStreetMap para empresas/CDs)
+        // ARQUITETURA DESACOPLADA EM 2 CAMADAS INDEPENDENTES (Promise.allSettled):
+        // Camada A (100% Pública e Gratuita): Wikipedia/Wikidata + Nominatim + Overpass UF + BrasilAPI
+        // Camada B (Opcional IA Multi-API): só roda se houver chave configurada; falha da IA NUNCA invalida Camada A
         if (manualTrigger) {
-            atualizarProgressoTarefa("Consultando Gemini (" + ufTag + ")...", query, 1, 2);
-        }
-        var gemUnits = [];
-        var gemErr = null;
-        try {
-            gemUnits = await buscarBasesEmpresaGemini(query, ctx);
-        } catch(eGemEmp) {
-            gemErr = eGemEmp;
+            atualizarProgressoTarefa("Consultando Wikipedia, Mapas e bases abertas (" + ufTag + ")...", query, 1, 3);
         }
 
+        var empVars = [query, query + " do Brasil", query + " Distribuidora"];
+        var pWiki = buscarWikipediaWikidataEmpresa(query, ctx);
+        var pNom  = buscarOpenStreetMapNominatim(query, ctx, { variacoes: empVars });
+        var pOv   = ufAlvo ? buscarOverpassUf(empVars, ufAlvo, "empresa") : Promise.resolve([]);
+        var pGem  = temMotorIAConfigurado() ? buscarBasesEmpresaGemini(query, ctx) : Promise.resolve([]);
+
+        var settled = await Promise.allSettled([pWiki, pNom, pOv, pGem]);
+        var wikiInfo = settled[0].status === "fulfilled" ? settled[0].value : null;
+        var nomList  = settled[1].status === "fulfilled" && Array.isArray(settled[1].value) ? settled[1].value : [];
+        var ovList   = settled[2].status === "fulfilled" && Array.isArray(settled[2].value) ? settled[2].value : [];
+        var gemUnits = settled[3].status === "fulfilled" && Array.isArray(settled[3].value) ? settled[3].value : [];
+        var gemErr   = settled[3].status === "rejected" ? settled[3].reason : null;
+
+        // Se Wikipedia/Wikidata descobriu CNPJ de 14 dígitos, enriquece na BrasilAPI gratuitamente
+        var brasilApiExtra = null;
+        if (wikiInfo && wikiInfo.cnpj) {
+            var wikiCnpjDig = wikiInfo.cnpj.replace(/\D/g, "");
+            if (wikiCnpjDig.length === 14) {
+                try {
+                    brasilApiExtra = await consultarBrasilApiCnpj(wikiCnpjDig, { timeoutMs: 5500 });
+                } catch(eBrW) {}
+            }
+        }
+
+        var publicUnits = [];
+        var nomeEmpresaPub = (brasilApiExtra && brasilApiExtra.nomeFantasia) || (wikiInfo && wikiInfo.nomeFantasia) || query;
+        var razaoPub = (brasilApiExtra && brasilApiExtra.razaoSocial) || (wikiInfo && wikiInfo.razaoSocial) || nomeEmpresaPub;
+        var segPub = (brasilApiExtra && brasilApiExtra.cnae) || (wikiInfo && wikiInfo.segmento) || "";
+        var sitePub = (wikiInfo && wikiInfo.siteDominio) || "";
+        var cnpjPub = (brasilApiExtra && brasilApiExtra.cnpj) || (wikiInfo && wikiInfo.cnpj) || "";
+        var raizPub = cnpjPub ? cnpjPub.replace(/\D/g, "").slice(0, 8) : "";
+
+        // Converte resultados físicos do Overpass e Nominatim no formato de unidade da Empresa
+        ovList.forEach(function(u) {
+            if (!u.razaoSocial || u.razaoSocial === u.nomeFantasia) u.razaoSocial = razaoPub;
+            if (!u.segmento) u.segmento = segPub;
+            if (!u.siteDominio) u.siteDominio = sitePub;
+            if (!u.cnpj && cnpjPub && normTextAccent(u.nomeFantasia || "").toLowerCase().indexOf(normTextAccent(query).toLowerCase()) >= 0) {
+                u.cnpj = cnpjPub;
+                u.cnpjRaiz = raizPub;
+            }
+            publicUnits.push(u);
+        });
+
+        nomList.forEach(function(n) {
+            var ufN = String(n.uf || ufAlvo || "").toUpperCase();
+            publicUnits.push({
+                source: "OpenStreetMap",
+                tipo: "Unidade Mapeada",
+                nomeFantasia: String(n.nome || nomeEmpresaPub).trim(),
+                nomeBase: [n.bairro, n.municipio].filter(Boolean).join(" — ") || ("Unidade " + (ufN || ufTag)),
+                razaoSocial: razaoPub,
+                cnpj: (normTextAccent(n.nome || "").toLowerCase().indexOf(normTextAccent(query).toLowerCase()) >= 0) ? cnpjPub : "",
+                cnpjRaiz: raizPub,
+                enderecoCd: String(n.endereco || [n.municipio, ufN].filter(Boolean).join(" - ")).trim(),
+                cidade: n.municipio || "",
+                uf: ufN,
+                ufLabel: ufN || ufTag,
+                segmento: segPub,
+                porte: (brasilApiExtra && brasilApiExtra.porte) || "",
+                brasilApiValidado: !!brasilApiExtra,
+                regionalSugerida: _mapearUfParaRegional(ufN || ctx.uf, ""),
+                siteDominio: sitePub,
+                coresBandeira: null,
+                contatosResumo: [brasilApiExtra && brasilApiExtra.telefone, sitePub].filter(Boolean).join(" • "),
+                logo: ""
+            });
+        });
+
+        // Se Wikipedia/Wikidata ou BrasilAPI retornou dados oficiais mas o mapa não tinha pino específico, cria o registro base da empresa
+        if ((wikiInfo || brasilApiExtra) && !publicUnits.length) {
+            publicUnits.push({
+                source: brasilApiExtra ? "CadastroOficial" : "Wikipedia",
+                tipo: "Cadastro Oficial / Referência",
+                nomeFantasia: nomeEmpresaPub,
+                nomeBase: "Atuação " + ufTag,
+                razaoSocial: razaoPub,
+                cnpj: cnpjPub,
+                cnpjRaiz: raizPub,
+                enderecoCd: (brasilApiExtra && brasilApiExtra.endereco) ? brasilApiExtra.endereco : ("Atendimento Regional — " + ufTag),
+                cidade: (brasilApiExtra && brasilApiExtra.municipio) || (ctx && ctx.cidade) || "",
+                uf: ufAlvo || (brasilApiExtra && brasilApiExtra.uf) || "",
+                ufLabel: ufTag,
+                segmento: segPub,
+                porte: (brasilApiExtra && brasilApiExtra.porte) || "",
+                brasilApiValidado: !!brasilApiExtra,
+                regionalSugerida: _mapearUfParaRegional(ufAlvo || ctx.uf, ""),
+                siteDominio: sitePub,
+                coresBandeira: null,
+                contatosResumo: [brasilApiExtra && brasilApiExtra.telefone, sitePub].filter(Boolean).join(" • "),
+                logo: ""
+            });
+        }
+
+        // Mescla: Layer 1 -> Layer B (CDs/Distribuidores regionais da IA quando disponíveis) -> Layer A (Public)
         var mergedUnits = [];
         var seenU = {};
         function _pushUnit(u) {
             if (!u) return;
-            var k = normProdKey((u.nomeBase || "") + "|" + (u.enderecoCd || "").slice(0, 28) + "|" + (u.cnpj || ""));
+            if (ufAlvo && !_itemPertenceUf(u, ufAlvo, { strictExternal: false })) return;
+            var k = normProdKey((u.nomeFantasia || "") + "|" + (u.nomeBase || "") + "|" + (u.enderecoCd || "").slice(0, 26) + "|" + (u.cnpj || ""));
             if (!k) k = String(mergedUnits.length);
             if (!seenU[k]) { seenU[k] = true; mergedUnits.push(u); }
         }
         if (layer1Sug) _pushUnit(layer1Sug);
         gemUnits.forEach(_pushUnit);
-
-        if (!mergedUnits.length && gemErr) {
-            throw gemErr;
-        }
+        publicUnits.forEach(_pushUnit);
 
         _smartCompanyUnits = mergedUnits;
+
         if (mergedUnits.length === 1) {
             selecionarUnidadeEmpresa(0);
             if (manualTrigger) {
-                concluirTarefaGuardiao("✅ Empresa preenchida!", (mergedUnits[0].razaoSocial || mergedUnits[0].nomeFantasia) + " (" + ufTag + ")", { keepOverlayMs: 900, onReturn: function(){ showPage("pageCompany"); } });
+                concluirTarefaGuardiao("✅ Empresa preenchida!", (mergedUnits[0].razaoSocial || mergedUnits[0].nomeFantasia) + " (" + ufTag + ")", {
+                    keepOverlayMs: 900,
+                    onReturn: function(){ showPage("pageCompany"); }
+                });
             }
         } else if (mergedUnits.length > 1) {
             renderSmartCompanyUnitsList(ufTag);
             _renderSmartStatus(
                 stEl,
                 "smart-alert-ok",
-                "📍 " + mergedUnits.length + " base(s)/CD(s) encontrada(s) em " + ufTag + ". Toque na sua base abaixo para preencher todos os campos."
+                "📍 " + mergedUnits.length + " base(s)/CD(s) encontrada(s) em " + ufTag + ". Toque na opção abaixo para preencher os campos."
             );
             if (manualTrigger) {
-                concluirTarefaGuardiao("📍 " + mergedUnits.length + " unidade(s) em " + ufTag, "Toque na filial/CD desejada na lista.", { keepOverlayMs: 900, onReturn: function(){ showPage("pageCompany"); } });
+                concluirTarefaGuardiao("📍 " + mergedUnits.length + " unidade(s) em " + ufTag, "Toque na filial/distribuidor desejado na lista.", {
+                    keepOverlayMs: 900,
+                    onReturn: function(){ showPage("pageCompany"); }
+                });
             }
         } else {
-            var msgVazia = "Não foi possível obter dados da empresa para \"" + query + "\".";
-            _renderSmartStatus(stEl, "smart-alert-warn", msgVazia, "Retorno vazio sem unidades para " + query + " (" + ufTag + ").");
+            var msgVazia = "Nenhuma base localizada automaticamente para \"" + query + "\" em " + ufTag + ". Preencha os campos manualmente ou pesquise pelo CNPJ de 14 dígitos.";
+            _renderSmartStatus(stEl, "smart-alert-warn", msgVazia, gemErr ? _extrairDetalheTecnicoErro(gemErr) : "");
             if (manualTrigger) {
-                falharTarefaGuardiao("Busca sem retorno", msgVazia);
+                concluirTarefaGuardiao("📋 Busca concluída", "Preencha os campos manualmente ou digite o CNPJ.", {
+                    keepOverlayMs: 1100,
+                    onReturn: function(){ showPage("pageCompany"); }
+                });
             }
         }
     } catch(err) {
         var msgAmig = _traduzirErroAmigavelIA(err);
         var tech = _extrairDetalheTecnicoErro(err);
-        if (manualTrigger) falharTarefaGuardiao("Falha na busca", msgAmig);
-        _renderSmartStatus(stEl, "smart-alert-err", msgAmig + " Você pode preencher os campos manualmente.", tech);
+        if (manualTrigger) falharTarefaGuardiao("Aviso na busca", msgAmig);
+        _renderSmartStatus(stEl, "smart-alert-warn", msgAmig + " Você pode preencher os campos manualmente.", tech);
     } finally {
         if (typeof setCompanySearchLoading === "function") setCompanySearchLoading(false);
         if (btn) { btn.disabled = false; btn.textContent = "Buscar Empresa"; }
@@ -19055,7 +19573,7 @@ function confirmarSalvarCatalogoIA() {
 </script>
 
 <!-- GUARDIÃO LOCALSHELF -->
-<div id="guardiao-overlay" onclick="if(event.target===this){ if(typeof _bgTaskState!=='undefined'&&_bgTaskState.status==='running'&&_bgTaskState.canBackground){minimizarTarefaParaSegundoPlano();}else{guardiaoEsconder();} }">
+<div id="guardiao-overlay" onclick="if(event.target===this && (typeof _bgTaskState==='undefined' || _bgTaskState.status!=='running')){guardiaoEsconder();}">
   <div class="guardiao-label-topo">GUARDIÃO LOCALSHELF</div>
   <div class="guardiao-esfera-wrap"><img id="guardiao-img" class="guardiao-esfera processando"
        data-lcs-asset="guardiao-lg" alt="Guardião LocalShelf"><div id="guardiao-face-icon" class="guardiao-face-icon">⚙️</div></div>
