@@ -623,6 +623,8 @@ body.dark-mode button.sec, body.dark-mode .sec { background: linear-gradient(135
 .smart-status.smart-alert-warn{background:#fffbeb;border:1.5px solid #f59e0b;color:#92400e !important}
 .smart-status.smart-alert-ok{background:#f0fdf4;border:1.5px solid #22c55e;color:#166534 !important}
 .smart-status.smart-alert-err{background:#fef2f2;border:1.5px solid #ef4444;color:#991b1b !important}
+.smart-err-detail{font-size:11px;font-weight:500;font-family:monospace;margin-top:5px;padding-top:5px;border-top:1px dashed rgba(153,27,27,0.28);opacity:0.92;word-break:break-word;line-height:1.35}
+body.dark-mode .smart-err-detail{border-top-color:rgba(248,113,113,0.35);color:#fecaca !important}
 .fg input.field-missing-warn,.fg select.field-missing-warn{border:2px solid #f59e0b !important;background:#fffbeb !important;box-shadow:0 0 0 3px rgba(245,158,11,0.2) !important}
 body.dark-mode .smart-status.smart-alert-warn{background:rgba(120,53,15,0.42) !important;border-color:#f59e0b !important;color:#fde68a !important}
 body.dark-mode .smart-status.smart-alert-ok{background:rgba(6,78,59,0.42) !important;border-color:#22c55e !important;color:#bbf7d0 !important}
@@ -3462,7 +3464,7 @@ var _compProdFilter = "todos";
 // ── ACESSO DIRETO & MOTOR GEMINI ANTI-OBSOLESCÊNCIA (gemini-3.8-flash) ──────
 var LS_GEMINI_MODEL_KEY = "ls23_gemini_model";
 var LS_GEMINI_MODEL_DEFAULT = "gemini-3.8-flash";
-var LS_GEMINI_FALLBACK_CHAIN = ["gemini-3.8-flash", "gemini-2.5-pro", "gemini-2.5-flash"];
+var LS_GEMINI_FALLBACK_CHAIN = ["gemini-3.8-flash", "gemini-2.5-flash", "gemini-2.5-pro"];
 var LS_SEC_ENDPOINT_KEY = "ls23_sec_ai_endpoint";
 var LS_SEC_MODEL_KEY = "ls23_sec_ai_model";
 var _k=["gsk_QsV6XlFuA2","14CquXxKIuWGdy","b3FYwDPFSuCAWK","FYEsInlAlLB7oe"];
@@ -3519,11 +3521,13 @@ function salvarModeloGeminiInput(silent) {
 function _scoreFlashModelPriority(id) {
     var lower = String(id || "").trim().replace(/^models\//i, "").toLowerCase();
     if (!_ehModeloTextoGeminiValido(lower)) return -99999;
-    var score = 1000;
     if (lower === "gemini-3.8-flash") return 5000;
-    if (lower === "gemini-2.5-pro") return 4500;
+    if (lower === "gemini-2.5-flash") return 4600;
+    if (lower === "gemini-3-flash-preview" || lower === "gemini-3-flash") return 4550;
+    if (lower === "gemini-flash-latest") return 4400;
+    var score = 1000;
     if (lower.indexOf("flash") >= 0) {
-        score += 2500;
+        score += 2800;
     } else if (lower.indexOf("pro") >= 0) {
         score += 1800;
     }
@@ -3569,7 +3573,11 @@ async function listarModelosGeminiAPI(apiKey) {
     try {
         var resp = await fetch(url, { method: "GET", signal: ctrl ? ctrl.signal : undefined });
         if (!resp.ok) {
-            throw new Error("Não foi possível consultar os modelos disponíveis (" + resp.status + ").");
+            var errModTxt = "";
+            try { var emj = await resp.json(); errModTxt = emj && emj.error && emj.error.message ? emj.error.message : ""; } catch(eM) {}
+            var eMod = new Error("Não foi possível consultar os modelos disponíveis (" + resp.status + ").");
+            eMod.technicalDetail = "GET /v1beta/models -> HTTP " + resp.status + (errModTxt ? (": " + errModTxt) : "");
+            throw eMod;
         }
         var data = await resp.json();
         var rawList = (data && Array.isArray(data.models)) ? data.models : [];
@@ -3647,7 +3655,7 @@ async function detectarModelosGeminiDisponiveis() {
     } catch(err) {
         if (msgEl) {
             msgEl.style.color = "#dc2626";
-            msgEl.textContent = "Falha ao detectar modelos: " + (err && err.message ? err.message : err);
+            msgEl.textContent = "Falha ao detectar modelos: " + (err && (err.technicalDetail || err.message) ? (err.technicalDetail || err.message) : err);
         }
         return [];
     } finally {
@@ -3700,7 +3708,7 @@ function _traduzirErroAmigavelIA(err) {
     var msg = String((err && err.message) ? err.message : (err || "")).trim();
     if (!msg) return "Não foi possível completar a consulta agora. Tente novamente.";
     if (msg === "CHAVE_GOOGLE_NAO_CONFIGURADA" || msg === "CHAVE_NAO_CONFIGURADA") {
-        return "Configure a chave de acesso nas Configurações para habilitar a busca automática.";
+        return "Configure sua Chave API Google Gemini nas Configurações para usar a busca automática.";
     }
     if (/high demand|overloaded|unavailable|503|service unavailable/i.test(msg)) {
         return "Serviço temporariamente congestionado. Tente novamente em alguns instantes.";
@@ -3719,6 +3727,25 @@ function _traduzirErroAmigavelIA(err) {
     }
     return msg;
 }
+function _extrairDetalheTecnicoErro(err) {
+    if (!err) return "";
+    if (err.technicalDetail) return String(err.technicalDetail).trim();
+    var msg = String(err.message || err || "").trim();
+    if (msg === "CHAVE_GOOGLE_NAO_CONFIGURADA") return "Chave ls23_google_gemini_key vazia nas Configurações.";
+    return msg;
+}
+function _renderSmartStatus(stEl, alertClass, msg, techDetail) {
+    if (!stEl) return;
+    stEl.style.display = "block";
+    stEl.classList.remove("smart-alert-warn", "smart-alert-ok", "smart-alert-err");
+    if (alertClass) stEl.classList.add(alertClass);
+    stEl.style.color = "";
+    var html = "<div>" + escHtml(msg || "") + "</div>";
+    if (techDetail) {
+        html += "<div class='smart-err-detail'>Diagnóstico: " + escHtml(techDetail) + "</div>";
+    }
+    stEl.innerHTML = html;
+}
 async function _escolherProximoModeloTexto(apiKey, state) {
     var modelosDisp = state.modelosCache;
     if (!Array.isArray(modelosDisp)) {
@@ -3726,6 +3753,7 @@ async function _escolherProximoModeloTexto(apiKey, state) {
             modelosDisp = await listarModelosGeminiAPI(apiKey);
             state.modelosCache = modelosDisp;
         } catch(e) {
+            if (e && e.technicalDetail && !state.lastTechnicalError) state.lastTechnicalError = e.technicalDetail;
             modelosDisp = [];
             state.modelosCache = [];
         }
@@ -3736,11 +3764,15 @@ async function _escolherProximoModeloTexto(apiKey, state) {
 }
 async function chamarGoogleGeminiFlash(prompt, partsArray, jsonMode, _state, opts) {
     var apiKey = getGoogleGeminiKey();
-    if (!apiKey) throw new Error("CHAVE_GOOGLE_NAO_CONFIGURADA");
+    if (!apiKey) {
+        var eKey = new Error("CHAVE_GOOGLE_NAO_CONFIGURADA");
+        eKey.technicalDetail = "CHAVE_GOOGLE_NAO_CONFIGURADA (adicione sua chave AIza... em Configurações)";
+        throw eKey;
+    }
 
     var state = (_state && typeof _state === "object")
         ? _state
-        : { modeloAtual: getGeminiModel(), retriesTransient: 0, modelosTentados: [], modelosCache: null, opts: opts || {} };
+        : { modeloAtual: getGeminiModel(), retriesTransient: 0, modelosTentados: [], modelosCache: null, opts: opts || {}, lastTechnicalError: "" };
     if (opts && typeof opts === "object" && !_state) {
         state.opts = Object.assign({}, opts);
     }
@@ -3791,6 +3823,9 @@ async function chamarGoogleGeminiFlash(prompt, partsArray, jsonMode, _state, opt
         if (!resp.ok) {
             var errMsg = "";
             try { var ej = await resp.json(); errMsg = ej.error && ej.error.message ? ej.error.message : ""; } catch(e2) {}
+            var techDetail = "HTTP " + resp.status + " (" + modeloAtivo + ")" + (errMsg ? (": " + errMsg) : "");
+            state.lastTechnicalError = techDetail;
+
             var isTransient = (resp.status === 503 || resp.status === 429) ||
                 /high demand|overloaded|resource exhausted|rate limit|quota|too many requests|temporarily unavailable/i.test(errMsg || "");
             var isModelUnavailable = (resp.status === 404) ||
@@ -3809,10 +3844,11 @@ async function chamarGoogleGeminiFlash(prompt, partsArray, jsonMode, _state, opt
                     await _aguardarBackoffMs(1500);
                     return await chamarGoogleGeminiFlash(prompt, partsArray, jsonMode, state);
                 }
-                if (resp.status === 429) {
-                    throw new Error("Limite temporário de consultas atingido. Aguarde alguns instantes e tente novamente.");
-                }
-                throw new Error("Serviço temporariamente congestionado. Tente novamente em alguns instantes.");
+                var eTrans = new Error(resp.status === 429
+                    ? "Limite temporário de consultas atingido. Aguarde alguns instantes e tente novamente."
+                    : "Serviço temporariamente congestionado. Tente novamente em alguns instantes.");
+                eTrans.technicalDetail = techDetail;
+                throw eTrans;
             }
 
             if (isModelUnavailable) {
@@ -3826,46 +3862,66 @@ async function chamarGoogleGeminiFlash(prompt, partsArray, jsonMode, _state, opt
             }
 
             if (resp.status === 400 || resp.status === 401 || resp.status === 403) {
-                throw new Error("Chave de acesso inválida ou sem permissão nas Configurações.");
+                var eAuth = new Error("Chave de acesso inválida ou sem permissão nas Configurações.");
+                eAuth.technicalDetail = techDetail;
+                throw eAuth;
             }
-            throw new Error("Não foi possível concluir a consulta agora. Tente novamente em instantes.");
+            var eHttp = new Error("Não foi possível concluir a consulta na IA.");
+            eHttp.technicalDetail = techDetail;
+            throw eHttp;
         }
         var data = await resp.json();
         var cand = data && data.candidates && data.candidates[0];
         var txt = cand && cand.content && Array.isArray(cand.content.parts)
             ? cand.content.parts.map(function(p){ return p.text || ""; }).join("")
             : "";
-        if (!txt) throw new Error("Não foi possível extrair os dados solicitados. Tente novamente.");
+        if (!txt) {
+            var blockReason = (cand && cand.finishReason) || (data && data.promptFeedback && data.promptFeedback.blockReason) || "empty_candidates";
+            var eEmpty = new Error("Não foi possível extrair os dados solicitados.");
+            eEmpty.technicalDetail = "Resposta vazia do modelo " + modeloAtivo + " (" + blockReason + ")";
+            throw eEmpty;
+        }
         return txt;
     } catch(err) {
-        if (err && err.name === "AbortError") throw new Error("A consulta demorou mais que o esperado. Tente novamente.");
-        if (err && (err.message === "CHAVE_GOOGLE_NAO_CONFIGURADA")) throw err;
-        throw new Error(_traduzirErroAmigavelIA(err));
+        if (err && err.name === "AbortError") {
+            var eAb = new Error("A consulta demorou mais que o esperado (" + Math.round(timeoutMs / 1000) + "s). Tente novamente.");
+            eAb.technicalDetail = "Timeout (" + timeoutMs + "ms) no modelo " + modeloAtivo + (state.lastTechnicalError ? (" | Anterior: " + state.lastTechnicalError) : "");
+            throw eAb;
+        }
+        if (err && err.message === "CHAVE_GOOGLE_NAO_CONFIGURADA") throw err;
+        var rawTechnical = (err && err.technicalDetail) || state.lastTechnicalError || (err && err.message) || String(err || "");
+        var friendly = new Error(_traduzirErroAmigavelIA(err));
+        friendly.technicalDetail = rawTechnical;
+        throw friendly;
     } finally {
         if (timer) clearTimeout(timer);
     }
 }
 function parseGeminiJSON(text) {
     var raw = String(text || "").trim();
-    if (!raw) throw new Error("Resposta vazia da IA.");
+    if (!raw) {
+        var eEmptyJ = new Error("Resposta vazia da IA.");
+        eEmptyJ.technicalDetail = "parseGeminiJSON: string vazia";
+        throw eEmptyJ;
+    }
     var clean = raw
         .replace(/```(?:json)?\s*/gi, "")
         .replace(/```/g, "")
         .trim();
     try { return JSON.parse(clean); } catch(e0) {}
 
-    var firstObj = clean.indexOf("{");
-    var lastObj = clean.lastIndexOf("}");
-    var firstArr = clean.indexOf("[");
-    var lastArr = clean.lastIndexOf("]");
+    var objMatch = clean.match(/\{[\s\S]*\}/);
+    var arrMatch = clean.match(/\[[\s\S]*\]/);
+    var objStr = objMatch ? objMatch[0] : "";
+    var arrStr = arrMatch ? arrMatch[0] : "";
 
     var candidates = [];
-    if (firstArr >= 0 && lastArr > firstArr && (firstObj < 0 || firstArr < firstObj)) {
-        candidates.push(clean.slice(firstArr, lastArr + 1));
-        if (firstObj >= 0 && lastObj > firstObj) candidates.push(clean.slice(firstObj, lastObj + 1));
+    if (arrStr && (!objStr || clean.indexOf(arrStr) < clean.indexOf(objStr))) {
+        candidates.push(arrStr);
+        if (objStr) candidates.push(objStr);
     } else {
-        if (firstObj >= 0 && lastObj > firstObj) candidates.push(clean.slice(firstObj, lastObj + 1));
-        if (firstArr >= 0 && lastArr > firstArr) candidates.push(clean.slice(firstArr, lastArr + 1));
+        if (objStr) candidates.push(objStr);
+        if (arrStr) candidates.push(arrStr);
     }
 
     for (var i = 0; i < candidates.length; i++) {
@@ -3876,7 +3932,9 @@ function parseGeminiJSON(text) {
             return JSON.parse(repaired);
         } catch(e2) {}
     }
-    throw new Error("Resposta da IA não está em formato JSON válido.");
+    var eJson = new Error("Resposta da IA não veio em JSON válido.");
+    eJson.technicalDetail = "JSON inválido: " + raw.slice(0, 140);
+    throw eJson;
 }
 function extrairJsonGemini(raw) {
     return parseGeminiJSON(raw);
@@ -5257,7 +5315,11 @@ async function buscarClienteSupabasePrimeiro(query, ctx) {
 
 async function buscarLojasGeminiFlash(query, ctx) {
     var key = getGoogleGeminiKey();
-    if (!key) return [];
+    if (!key) {
+        var eK = new Error("CHAVE_GOOGLE_NAO_CONFIGURADA");
+        eK.technicalDetail = "CHAVE_GOOGLE_NAO_CONFIGURADA (adicione sua chave AIza... em Configurações)";
+        throw eK;
+    }
     ctx = ctx || _obterUfContextoDispositivo();
     var ufAlvo = (ctx && ctx.uf && ctx.uf !== "Brasil" && _isValidBrUf(ctx.uf)) ? String(ctx.uf).trim().toUpperCase() : "";
     var ufNome = (ctx && ctx.stateName) ? ctx.stateName : (ufAlvo && _getUfInfoObj(ufAlvo) ? _getUfInfoObj(ufAlvo).nome : ufAlvo);
@@ -5276,19 +5338,24 @@ async function buscarLojasGeminiFlash(query, ctx) {
         "1. Pesquise SIMULTANEAMENTE pela BANDEIRA / NOME FANTASIA e pela RAZÃO SOCIAL da empresa operadora (no varejo brasileiro muitas lojas usam bandeira de rede como Supermarket, Rede Economia, Multi Market, Assaí etc. com razão social própria da loja/associado).\n" +
         "2. Liste até 6 unidades reais correspondentes DENTRO DA UF " + (ufAlvo || "informada") + ", separando claramente endereço, bairro, cidade, UF e CEP.\n" +
         "3. Só informe \"cnpj\" (14 dígitos) se tiver certeza absoluta da filial; se souber apenas a raiz (8 dígitos), preencha \"cnpjRaiz\" e deixe \"cnpj\" vazio.\n" +
-        "Retorne APENAS JSON array:\n" +
-        "[{\"bandeira\":\"Nome Fantasia / Bandeira\",\"nome\":\"Nome da Loja / Unidade\",\"razaoSocial\":\"Razão Social se conhecida\",\"cnpj\":\"\",\"cnpjRaiz\":\"\",\"endereco\":\"Rua/Av, nº\",\"bairro\":\"Bairro\",\"municipio\":\"Cidade\",\"uf\":\"" + (ufAlvo || "") + "\",\"cep\":\"00000-000\",\"cnae\":\"\",\"canalSugerido\":\"Vizinhanca|Super|Hiper|Atacado\",\"perfilSugerido\":\"Vizinhanca|Mercado|Supermercado|Hipermercado|Atacarejo|Conveniencia\",\"porteSugerido\":\"\",\"checkoutsEstimado\":null,\"siteDominio\":\"\"}]";
+        "Retorne APENAS JSON limpo neste formato:\n" +
+        "{\"lojas\":[{\"bandeira\":\"Nome Fantasia / Bandeira\",\"nome\":\"Nome da Loja / Unidade\",\"razaoSocial\":\"Razão Social se conhecida\",\"cnpj\":\"\",\"cnpjRaiz\":\"\",\"endereco\":\"Rua/Av, nº\",\"bairro\":\"Bairro\",\"municipio\":\"Cidade\",\"uf\":\"" + (ufAlvo || "") + "\",\"cep\":\"00000-000\",\"cnae\":\"\",\"canalSugerido\":\"Vizinhanca|Super|Hiper|Atacado\",\"perfilSugerido\":\"Vizinhanca|Mercado|Supermercado|Hipermercado|Atacarejo|Conveniencia\",\"porteSugerido\":\"\",\"checkoutsEstimado\":null,\"siteDominio\":\"\"}]}";
 
     var txt = await chamarGoogleGeminiFlash(prompt, [], true, null, { timeoutMs: 15000 });
-    var arr = parseGeminiJSON(txt);
-    if (!Array.isArray(arr) && arr && Array.isArray(arr.unidades)) arr = arr.unidades;
+    var parsedJson = parseGeminiJSON(txt);
+    var arr = Array.isArray(parsedJson)
+        ? parsedJson
+        : ((parsedJson && (parsedJson.lojas || parsedJson.unidades || parsedJson.unidades_uf || parsedJson.resultados)) || []);
+    if (!Array.isArray(arr) && parsedJson && typeof parsedJson === "object" && (parsedJson.nome || parsedJson.bandeira || parsedJson.razaoSocial || parsedJson.razao_social)) {
+        arr = [parsedJson];
+    }
     if (!Array.isArray(arr)) return [];
 
     var mapped = arr.map(function(it) {
         var cDig = String(it.cnpj || "").replace(/\D/g, "");
-        var rDig = String(it.cnpjRaiz || (cDig.length === 8 ? cDig : "")).replace(/\D/g, "").slice(0, 8);
+        var rDig = String(it.cnpjRaiz || it.cnpj_raiz || (cDig.length === 8 ? cDig : "")).replace(/\D/g, "").slice(0, 8);
         var bairro = String(it.bairro || "").trim();
-        var mun = String(it.municipio || "").trim();
+        var mun = String(it.municipio || it.cidade || "").trim();
         var ufItem = String(it.uf || ufAlvo || "").trim().toUpperCase();
         var cepFmt = _formatarCepBR(it.cep || "");
         var endBase = String(it.endereco || "").trim();
@@ -5305,7 +5372,7 @@ async function buscarLojasGeminiFlash(query, ctx) {
             source: "Sugestao",
             nome: nome,
             bandeira: bandeira,
-            razaoSocial: String(it.razaoSocial || "").trim(),
+            razaoSocial: String(it.razaoSocial || it.razao_social || "").trim(),
             cnpj: cDig.length === 14 ? formatarCNPJ(cDig) : "",
             cnpjRaiz: rDig.length === 8 ? rDig : "",
             endereco: endFull,
@@ -5315,18 +5382,19 @@ async function buscarLojasGeminiFlash(query, ctx) {
             cidadeUf: _formatarCidadeUf(mun, ufItem),
             cep: cepFmt,
             cnae: String(it.cnae || "").trim(),
-            canalSugerido: String(it.canalSugerido || "").trim(),
-            perfilSugerido: String(it.perfilSugerido || "").trim(),
+            canalSugerido: String(it.canalSugerido || it.canal_sugerido || "").trim(),
+            perfilSugerido: String(it.perfilSugerido || it.perfil_sugerido || "").trim(),
             porte: String(it.porteSugerido || it.porte || "").trim(),
-            checkoutsEstimado: parseInt(it.checkoutsEstimado) || null,
-            siteDominio: String(it.siteDominio || "").trim()
+            checkoutsEstimado: parseInt(it.checkoutsEstimado || it.checkouts) || null,
+            siteDominio: String(it.siteDominio || it.site_dominio || "").trim()
         };
     });
 
     if (ufAlvo) {
-        mapped = mapped.filter(function(it){
-            return _itemPertenceUf(it, ufAlvo, { strictExternal: true });
+        var filtradas = mapped.filter(function(it){
+            return _itemPertenceUf(it, ufAlvo, { strictExternal: false });
         });
+        if (filtradas.length) mapped = filtradas;
     }
     return mapped;
 }
@@ -5840,22 +5908,28 @@ async function buscarLojaInteligente() {
             return;
         }
 
-        // CAMADA 2 & 3 EM PARALELO: Mapa OSM na UF + Busca Dupla (Bandeira + Razão Social via Gemini máx 15s)
-        if (st) st.textContent = "Buscando por Bandeira e Razão Social em " + (ufAlvo || "sua região") + "...";
+        // CAMADA 2 & 3 EM PARALELO (nunca aborta se Nominatim retornar vazio; preserva diagnóstico real se a IA falhar)
+        if (st) _renderSmartStatus(st, "", "Buscando por Bandeira e Razão Social em " + (ufAlvo || "sua região") + "...");
         atualizarProgressoTarefa("Camada 2 & 3: busca dupla em " + (ufAlvo || "Brasil") + "...", "Bandeira / Fantasia + Razão Social", 2, 3);
 
-        var queryOsm = parsed.localHint && parsed.redeHint ? (parsed.redeHint + " " + parsed.localHint) : q;
-        var pNom = buscarOpenStreetMapNominatim(queryOsm, ctx).catch(function(){ return []; });
-        var pGem = getGoogleGeminiKey() ? buscarLojasGeminiFlash(q, ctx).catch(function(){ return []; }) : Promise.resolve([]);
-        var pair = await Promise.all([pNom, pGem]);
-        var nomHits = Array.isArray(pair[0]) ? pair[0] : [];
-        var gemHits = Array.isArray(pair[1]) ? pair[1] : [];
+        var queryOsmSep = (parsed.localHint && parsed.redeHint) ? (parsed.redeHint + " " + parsed.localHint) : "";
+        var pNomFull = buscarOpenStreetMapNominatim(q, ctx).then(function(list){ return { ok: true, list: list || [] }; }).catch(function(eN1){ return { ok: false, list: [], err: eN1 }; });
+        var pNomSep = (queryOsmSep && normTextAccent(queryOsmSep).toLowerCase() !== normTextAccent(q).toLowerCase())
+            ? buscarOpenStreetMapNominatim(queryOsmSep, ctx).then(function(list){ return { ok: true, list: list || [] }; }).catch(function(eN2){ return { ok: false, list: [], err: eN2 }; })
+            : Promise.resolve({ ok: true, list: [] });
+        var pGem = buscarLojasGeminiFlash(q, ctx).then(function(list){ return { ok: true, list: list || [] }; }).catch(function(eG){ return { ok: false, list: [], err: eG }; });
+
+        var resTri = await Promise.all([pNomFull, pNomSep, pGem]);
+        var nomHits = [].concat(resTri[0].list || [], resTri[1].list || []);
+        var gemPack = resTri[2];
+        var gemHits = gemPack.list || [];
+        var gemErr = (!gemPack.ok && gemPack.err) ? gemPack.err : null;
 
         var merged = [];
         var seen = {};
-        // Prioriza itens com Razão Social e mantém diversidade geográfica da UF
+        // Prioriza itens com Razão Social (Gemini) + resultados do Mapa (Nominatim) na UF ativa
         gemHits.concat(nomHits).forEach(function(it) {
-            if (ufAlvo && !_itemPertenceUf(it, ufAlvo, { strictExternal: true })) return;
+            if (ufAlvo && !_itemPertenceUf(it, ufAlvo, { strictExternal: false })) return;
             var k = normProdKey(it.bandeira || it.nome) + "|" + normProdKey((it.bairro || it.endereco || "").substring(0, 28));
             if (!seen[k]) {
                 seen[k] = true;
@@ -5886,25 +5960,27 @@ async function buscarLojaInteligente() {
         _smartStoreResults = merged;
         renderSmartStoreResults();
         if (merged.length) {
-            if (st) {
-                st.style.color = "#1e40af";
-                st.textContent = merged.length + " unidade(s) encontrada(s)" + ufTag + ". Toque para preencher imediatamente (sem travar o formulário).";
-            }
+            var avisoParcial = gemErr ? (" (Aviso IA: " + _traduzirErroAmigavelIA(gemErr) + ")") : "";
+            _renderSmartStatus(
+                st,
+                "",
+                merged.length + " unidade(s) encontrada(s)" + ufTag + ". Toque para preencher imediatamente." + avisoParcial,
+                gemErr ? _extrairDetalheTecnicoErro(gemErr) : ""
+            );
             concluirTarefaGuardiao("✅ " + merged.length + " unidade(s) encontrada(s)" + ufTag, "Toque em uma unidade da lista para preencher.", { keepOverlayMs: 900, onReturn: function(){ showPage("pageClient"); } });
+        } else if (gemErr) {
+            var msgFalhaCli = _traduzirErroAmigavelIA(gemErr);
+            var techCli = _extrairDetalheTecnicoErro(gemErr);
+            _renderSmartStatus(st, "smart-alert-err", msgFalhaCli + " Você pode preencher manualmente enquanto ajusta a conexão/chave.", techCli);
+            falharTarefaGuardiao("Erro na busca de loja", msgFalhaCli);
         } else {
-            if (st) {
-                st.classList.add("smart-alert-warn");
-                st.textContent = "Nenhuma loja encontrada em " + (ufAlvo || "sua UF") + " para \"" + q + "\". Você pode preencher os campos manualmente.";
-            }
+            _renderSmartStatus(st, "smart-alert-warn", "Nenhuma loja encontrada em " + (ufAlvo || "sua UF") + " para \"" + q + "\". Você pode preencher os campos manualmente.");
             falharTarefaGuardiao("Nenhuma unidade encontrada" + ufTag, "Preencha os campos manualmente se desejar.");
         }
     } catch(err) {
         var msgErrCli = _traduzirErroAmigavelIA(err) + " Preencha os campos manualmente se desejar.";
-        if (st) {
-            st.classList.add("smart-alert-err");
-            st.textContent = msgErrCli;
-        }
-        falharTarefaGuardiao("Erro na busca", msgErrCli);
+        _renderSmartStatus(st, "smart-alert-err", msgErrCli, _extrairDetalheTecnicoErro(err));
+        falharTarefaGuardiao("Erro na busca", _traduzirErroAmigavelIA(err));
     } finally {
         setClientSearchLoading(false);
         if (btn) { btn.disabled = false; btn.textContent = "Buscar"; }
@@ -17777,54 +17853,93 @@ function selecionarUnidadeEmpresa(idx) {
 }
 
 async function buscarBasesEmpresaGemini(query, ctx) {
-    if (!getGoogleGeminiKey()) return [];
-    var ufInfo = (ctx && ctx.uf && ctx.uf !== "Brasil") ? (ctx.uf + (ctx.stateName ? " (" + ctx.stateName + ")" : "")) : "Brasil";
+    if (!getGoogleGeminiKey()) {
+        var eK = new Error("CHAVE_GOOGLE_NAO_CONFIGURADA");
+        eK.technicalDetail = "CHAVE_GOOGLE_NAO_CONFIGURADA (adicione sua chave AIza... em Configurações)";
+        throw eK;
+    }
+    var ufCtx = (ctx && ctx.uf && ctx.uf !== "Brasil" && _isValidBrUf(ctx.uf)) ? ctx.uf.toUpperCase() : "";
+    var ufInfo = ufCtx ? (ufCtx + (ctx.stateName ? " (" + ctx.stateName + ")" : "")) : "Brasil";
     var cidHint = (ctx && ctx.cidade) ? (" | Cidade atual: " + ctx.cidade) : "";
     var prompt = "Cadastro comercial de indústria/fornecedor de varejo no Brasil.\n" +
         "Empresa pesquisada: \"" + query + "\".\n" +
-        "FILTRO GEOGRÁFICO OBRIGATÓRIO: Retorne APENAS filiais, Centros de Distribuição (CDs) ou bases de atendimento situados EXCLUSIVAMENTE no estado " + ufInfo + cidHint + ". Nunca inclua unidades de outros estados.\n" +
-        "Liste até 6 bases/CDs/polos de distribuição reais da empresa no estado " + ufInfo + " (ex: CD metropolitano, bases regionais como Niterói, Duque de Caxias, Região Serrana, Região dos Lagos, etc. conforme o estado).\n" +
-        "Se souber com certeza o CNPJ de 14 dígitos da filial/CD, preencha \"cnpj\"; senão preencha apenas \"cnpjRaiz\" (8 dígitos) e deixe \"cnpj\" vazio.\n" +
-        "Retorne APENAS JSON válido:\n" +
-        "{\"nomeFantasia\":\"\",\"razaoSocial\":\"\",\"segmento\":\"\",\"porteSugerido\":\"\",\"cnpjRaiz\":\"\",\"siteDominio\":\"\",\"coresBandeira\":[\"#1e3a8a\",\"#2563eb\"],\"contatosResumo\":\"\",\"unidades\":[{\"nomeBase\":\"CD / Filial ...\",\"cidade\":\"\",\"uf\":\"" + (ctx && ctx.uf !== "Brasil" ? ctx.uf : "") + "\",\"enderecoCd\":\"Rodovia/Rua, Bairro, Cidade - UF\",\"cnpj\":\"\",\"regionalSugerida\":\"RJ / Leste\"}]}";
+        "FILTRO GEOGRÁFICO OBRIGATÓRIO: Para o campo \"unidades_uf\", liste os Centros de Distribuição (CDs), filiais ou bases regionais de atendimento dessa empresa localizados EXCLUSIVAMENTE no estado " + ufInfo + cidHint + " (ex: CD metropolitano, bases regionais dentro desse estado).\n" +
+        "Sempre preencha \"nome\", \"razao_social\", \"cnpj_matriz\" (CNPJ oficial no Brasil se conhecido) e \"segmento\". Nunca omita os dados principais da empresa.\n" +
+        "Retorne APENAS JSON limpo neste formato exato:\n" +
+        "{\"nome\":\"" + query + "\",\"razao_social\":\"\",\"cnpj_matriz\":\"\",\"segmento\":\"\",\"site_dominio\":\"\",\"cores_bandeira\":[\"#1e3a8a\",\"#2563eb\"],\"contatos_resumo\":\"\",\"unidades_uf\":[{\"nome_base\":\"CD / Filial Regional\",\"endereco\":\"Rodovia/Rua, Bairro, Cidade - UF\",\"cidade\":\"\",\"uf\":\"" + ufCtx + "\",\"cnpj\":\"\"}]}";
+
     var raw = await chamarGoogleGeminiFlash(prompt, [], true, null, { timeoutMs: 15000 });
     var obj = parseGeminiJSON(raw);
-    if (Array.isArray(obj)) obj = { unidades: obj };
-    if (!obj || typeof obj !== "object") return [];
-    var unidades = Array.isArray(obj.unidades) && obj.unidades.length ? obj.unidades : [obj];
-    var ufCtx = (ctx && ctx.uf && _isValidBrUf(ctx.uf)) ? ctx.uf.toUpperCase() : "";
+    if (Array.isArray(obj)) obj = { nome: query, unidades_uf: obj };
+    if (!obj || typeof obj !== "object") {
+        var eFmt = new Error("Resposta da IA não trouxe dados estruturados da empresa.");
+        eFmt.technicalDetail = "Retorno não é objeto JSON: " + String(raw || "").slice(0, 140);
+        throw eFmt;
+    }
+
+    var nomeEmpresa = String(obj.nome || obj.nomeFantasia || query).trim();
+    var razaoGeral = String(obj.razao_social || obj.razaoSocial || nomeEmpresa).trim();
+    var segGeral = String(obj.segmento || "").trim();
+    var cnpjMatrizDig = String(obj.cnpj_matriz || obj.cnpj || obj.cnpjRaiz || "").replace(/\D/g, "");
+    var cnpjMatrizFmt = cnpjMatrizDig.length === 14 ? formatarCNPJ(cnpjMatrizDig) : "";
+    var raizGeral = cnpjMatrizDig.length >= 8 ? cnpjMatrizDig.slice(0, 8) : String(obj.cnpjRaiz || obj.cnpj_raiz || "").replace(/\D/g, "").slice(0, 8);
+    var siteDom = String(obj.site_dominio || obj.siteDominio || "").trim();
+    var cores = obj.cores_bandeira || obj.coresBandeira || null;
+    var contatos = String(obj.contatos_resumo || obj.contatosResumo || siteDom || "").trim();
+
+    var rawUnidades = Array.isArray(obj.unidades_uf) && obj.unidades_uf.length
+        ? obj.unidades_uf
+        : (Array.isArray(obj.unidades) && obj.unidades.length ? obj.unidades : []);
+
+    if (!rawUnidades.length) {
+        rawUnidades = [{
+            nome_base: ufCtx ? ("Base Regional " + ufCtx) : "Matriz / Sede Brasil",
+            endereco: String(obj.endereco || obj.enderecoCd || (ufCtx ? ("Atendimento " + ufInfo) : "Brasil")).trim(),
+            cidade: String((ctx && ctx.cidade) || "").trim(),
+            uf: ufCtx,
+            cnpj: cnpjMatrizFmt
+        }];
+    }
+
     var regOpts = ["Nacional","RJ / Leste","SP","MG / ES","Sul","Nordeste","Centro-Oeste","Norte"];
-    var list = unidades.map(function(u) {
-        var cDig = String(u.cnpj || obj.cnpj || "").replace(/\D/g, "");
-        var rDig = String(u.cnpjRaiz || obj.cnpjRaiz || (cDig.length >= 8 ? cDig.slice(0, 8) : "")).replace(/\D/g, "").slice(0, 8);
-        var uUf = String(u.uf || obj.ufLabel || ufCtx || "").toUpperCase().trim();
-        var regU = regOpts.indexOf(u.regionalSugerida) >= 0 ? u.regionalSugerida : (ufCtx ? _mapearUfParaRegional(ufCtx, "") : ctx.regional);
-        var endCd = String(u.enderecoCd || obj.enderecoCd || [u.cidade, uUf].filter(Boolean).join(" - ")).trim();
+    var list = rawUnidades.map(function(u) {
+        var cDig = String((u && (u.cnpj || u.cnpj_filial)) || "").replace(/\D/g, "");
+        var finalCnpj = cDig.length === 14 ? formatarCNPJ(cDig) : cnpjMatrizFmt;
+        var rDig = (cDig.length >= 8 ? cDig.slice(0, 8) : "") || raizGeral;
+        var uUfRaw = String((u && u.uf) || ufCtx || "").toUpperCase().trim();
+        var uUf = _isValidBrUf(uUfRaw) ? uUfRaw : ufCtx;
+        var uCid = String((u && (u.cidade || u.municipio)) || "").trim();
+        var regU = (u && regOpts.indexOf(u.regionalSugerida) >= 0)
+            ? u.regionalSugerida
+            : (uUf ? _mapearUfParaRegional(uUf, "") : (ctx ? ctx.regional : "Nacional"));
+        var endCd = String((u && (u.endereco || u.enderecoCd)) || [uCid, uUf].filter(Boolean).join(" - ")).trim();
         return {
             source: "Sugestao",
-            nomeFantasia: String(u.nomeFantasia || obj.nomeFantasia || query).trim(),
-            nomeBase: String(u.nomeBase || u.cidade || ("Base " + (uUf || ufCtx || ""))).trim(),
-            razaoSocial: String(u.razaoSocial || obj.razaoSocial || obj.nomeFantasia || query).trim(),
-            cnpj: cDig.length === 14 ? formatarCNPJ(cDig) : "",
+            nomeFantasia: String((u && (u.nome || u.nomeFantasia)) || nomeEmpresa).trim(),
+            nomeBase: String((u && (u.nome_base || u.nomeBase || uCid)) || (uUf ? ("Base " + uUf) : "Matriz")).trim(),
+            razaoSocial: String((u && (u.razao_social || u.razaoSocial)) || razaoGeral).trim(),
+            cnpj: finalCnpj,
             cnpjRaiz: rDig,
             enderecoCd: endCd,
-            cidade: String(u.cidade || "").trim(),
+            cidade: uCid,
             uf: uUf,
             ufLabel: uUf || ufCtx || "BR",
-            segmento: String(u.segmento || obj.segmento || "").trim(),
-            porte: String(u.porteSugerido || obj.porteSugerido || "").trim(),
+            segmento: String((u && u.segmento) || segGeral).trim(),
+            porte: String((u && u.porte) || obj.porteSugerido || "").trim(),
             brasilApiValidado: false,
             regionalSugerida: regU,
-            siteDominio: String(obj.siteDominio || "").trim(),
-            coresBandeira: obj.coresBandeira || null,
-            contatosResumo: String(obj.contatosResumo || "").trim(),
+            siteDominio: siteDom,
+            coresBandeira: cores,
+            contatosResumo: contatos,
             logo: ""
         };
     });
+
     if (ufCtx) {
-        list = list.filter(function(it) {
-            return _itemPertenceUf(it, ufCtx, { strictExternal: true });
+        var filteredUf = list.filter(function(it) {
+            return _itemPertenceUf(it, ufCtx, { strictExternal: false });
         });
+        if (filteredUf.length) list = filteredUf;
     }
     return list;
 }
@@ -17855,12 +17970,13 @@ async function buscarEmpresaComIA(manualTrigger) {
     var ufTag = (ctx.uf && ctx.uf !== "Brasil") ? ctx.uf : "Brasil";
 
     if (stEl) {
-        stEl.style.display = "block";
-        stEl.classList.remove("smart-alert-warn", "smart-alert-ok", "smart-alert-err");
-        stEl.style.color = "#1e40af";
-        stEl.textContent = isCnpjDirect
-            ? ("⏳ Consultando dados do CNPJ " + formatarCNPJ(digits) + "...")
-            : ("⏳ Buscando filiais/CDs de \"" + query + "\" em " + ufTag + "...");
+        _renderSmartStatus(
+            stEl,
+            "",
+            isCnpjDirect
+                ? ("⏳ Consultando dados do CNPJ " + formatarCNPJ(digits) + "...")
+                : ("⏳ Consultando IA para localizar dados e CDs de \"" + query + "\" em " + ufTag + "...")
+        );
     }
     if (cardEl) { cardEl.classList.remove("ativo"); cardEl.innerHTML = ""; }
     if (btn) { btn.disabled = true; btn.textContent = "Buscando..."; }
@@ -17869,9 +17985,9 @@ async function buscarEmpresaComIA(manualTrigger) {
         iniciarTarefaGuardiao({
             id: "busca_empresa",
             titulo: "Buscando empresa (" + ufTag + ")...",
-            sub: "Localizando filiais e CDs ativos em " + ufTag,
+            sub: "Consultando dados oficiais e CDs em " + ufTag,
             canBackground: true,
-            totalSteps: 3,
+            totalSteps: 2,
             pageTarget: "pageCompany"
         });
     }
@@ -17892,7 +18008,7 @@ async function buscarEmpresaComIA(manualTrigger) {
         }
 
         if (isCnpjDirect) {
-            if (manualTrigger) atualizarProgressoTarefa("Consultando CNPJ oficial...", formatarCNPJ(digits), 1, 3);
+            if (manualTrigger) atualizarProgressoTarefa("Consultando CNPJ oficial...", formatarCNPJ(digits), 1, 2);
             var bApiDireta = await consultarBrasilApiCnpj(digits, { timeoutMs: 8000 });
             if (bApiDireta) {
                 var regCnpj = _mapearUfParaRegional(bApiDireta.uf || ctx.uf, "");
@@ -17923,20 +18039,17 @@ async function buscarEmpresaComIA(manualTrigger) {
             }
         }
 
-        // CAMADA 2 & 3 EM PARALELO (Mapa OSM na UF + Bases/CDs na UF via Gemini 15s sem google_search)
+        // CAMADA DIRETA GEMINI (sem dependência do OpenStreetMap para empresas/CDs)
         if (manualTrigger) {
-            atualizarProgressoTarefa("Buscando bases e CDs em " + ufTag + "...", query, 1, 3);
+            atualizarProgressoTarefa("Consultando Gemini (" + ufTag + ")...", query, 1, 2);
         }
-        var promNom = (typeof buscarOpenStreetMapNominatim === "function")
-            ? buscarOpenStreetMapNominatim(query, ctx).catch(function(){ return []; })
-            : Promise.resolve([]);
-        var promGem = getGoogleGeminiKey()
-            ? buscarBasesEmpresaGemini(query, ctx).catch(function(){ return []; })
-            : Promise.resolve([]);
-
-        var resPair = await Promise.all([promNom, promGem]);
-        var nomList = Array.isArray(resPair[0]) ? resPair[0] : [];
-        var gemUnits = Array.isArray(resPair[1]) ? resPair[1] : [];
+        var gemUnits = [];
+        var gemErr = null;
+        try {
+            gemUnits = await buscarBasesEmpresaGemini(query, ctx);
+        } catch(eGemEmp) {
+            gemErr = eGemEmp;
+        }
 
         var mergedUnits = [];
         var seenU = {};
@@ -17948,58 +18061,39 @@ async function buscarEmpresaComIA(manualTrigger) {
         }
         if (layer1Sug) _pushUnit(layer1Sug);
         gemUnits.forEach(_pushUnit);
-        nomList.forEach(function(nm) {
-            _pushUnit({
-                source: "OpenStreetMap",
-                nomeFantasia: nm.nome || query,
-                nomeBase: [nm.bairro || nm.municipio || "Unidade", nm.uf || ufTag].filter(Boolean).join(" / "),
-                razaoSocial: (gemUnits[0] && gemUnits[0].razaoSocial) || nm.nome || query,
-                cnpj: "",
-                cnpjRaiz: (gemUnits[0] && gemUnits[0].cnpjRaiz) || "",
-                enderecoCd: nm.endereco || "",
-                uf: nm.uf || ufTag,
-                ufLabel: nm.uf || ufTag,
-                segmento: (gemUnits[0] && gemUnits[0].segmento) || "",
-                porte: "",
-                brasilApiValidado: false,
-                regionalSugerida: ctx.regional,
-                siteDominio: (gemUnits[0] && gemUnits[0].siteDominio) || "",
-                contatosResumo: "",
-                logo: ""
-            });
-        });
+
+        if (!mergedUnits.length && gemErr) {
+            throw gemErr;
+        }
 
         _smartCompanyUnits = mergedUnits;
-        if (mergedUnits.length) {
-            renderSmartCompanyUnitsList(ufTag);
-            if (stEl) {
-                stEl.style.display = "block";
-                stEl.classList.remove("smart-alert-warn", "smart-alert-err");
-                stEl.classList.add("smart-alert-ok");
-                stEl.textContent = "📍 " + mergedUnits.length + " filial(is)/CD(s) encontrada(s) em " + ufTag + ". Toque na sua base de atendimento abaixo para preencher.";
+        if (mergedUnits.length === 1) {
+            selecionarUnidadeEmpresa(0);
+            if (manualTrigger) {
+                concluirTarefaGuardiao("✅ Empresa preenchida!", (mergedUnits[0].razaoSocial || mergedUnits[0].nomeFantasia) + " (" + ufTag + ")", { keepOverlayMs: 900, onReturn: function(){ showPage("pageCompany"); } });
             }
+        } else if (mergedUnits.length > 1) {
+            renderSmartCompanyUnitsList(ufTag);
+            _renderSmartStatus(
+                stEl,
+                "smart-alert-ok",
+                "📍 " + mergedUnits.length + " base(s)/CD(s) encontrada(s) em " + ufTag + ". Toque na sua base abaixo para preencher todos os campos."
+            );
             if (manualTrigger) {
                 concluirTarefaGuardiao("📍 " + mergedUnits.length + " unidade(s) em " + ufTag, "Toque na filial/CD desejada na lista.", { keepOverlayMs: 900, onReturn: function(){ showPage("pageCompany"); } });
             }
         } else {
+            var msgVazia = "Não foi possível obter dados da empresa para \"" + query + "\".";
+            _renderSmartStatus(stEl, "smart-alert-warn", msgVazia, "Retorno vazio sem unidades para " + query + " (" + ufTag + ").");
             if (manualTrigger) {
-                falharTarefaGuardiao("Nenhuma unidade em " + ufTag, "Você pode preencher os dados manualmente normalmente.");
-            }
-            if (stEl) {
-                stEl.classList.add("smart-alert-warn");
-                stEl.textContent = !getGoogleGeminiKey()
-                    ? "Nenhuma unidade encontrada para \"" + query + "\" em " + ufTag + ". Configure a chave Gemini ou preencha manualmente."
-                    : "Nenhuma filial localizada automaticamente em " + ufTag + ". Preencha os campos manualmente.";
+                falharTarefaGuardiao("Busca sem retorno", msgVazia);
             }
         }
     } catch(err) {
         var msgAmig = _traduzirErroAmigavelIA(err);
-        if (manualTrigger) falharTarefaGuardiao("Busca não concluída", msgAmig);
-        if (stEl) {
-            stEl.classList.remove("smart-alert-ok");
-            stEl.classList.add("smart-alert-err");
-            stEl.textContent = msgAmig + " Preencha os campos manualmente se desejar.";
-        }
+        var tech = _extrairDetalheTecnicoErro(err);
+        if (manualTrigger) falharTarefaGuardiao("Falha na busca", msgAmig);
+        _renderSmartStatus(stEl, "smart-alert-err", msgAmig + " Você pode preencher os campos manualmente.", tech);
     } finally {
         if (typeof setCompanySearchLoading === "function") setCompanySearchLoading(false);
         if (btn) { btn.disabled = false; btn.textContent = "Buscar Empresa"; }
