@@ -3464,7 +3464,7 @@ var _compProdFilter = "todos";
 // ── ACESSO DIRETO & MOTOR GEMINI ANTI-OBSOLESCÊNCIA (gemini-3.8-flash) ──────
 var LS_GEMINI_MODEL_KEY = "ls23_gemini_model";
 var LS_GEMINI_MODEL_DEFAULT = "gemini-3.8-flash";
-var LS_GEMINI_FALLBACK_CHAIN = ["gemini-3.8-flash", "gemini-2.5-flash", "gemini-2.5-pro"];
+var LS_GEMINI_FALLBACK_CHAIN = ["gemini-3.8-flash", "gemini-3.7-flash", "gemini-flash-latest"];
 var LS_SEC_ENDPOINT_KEY = "ls23_sec_ai_endpoint";
 var LS_SEC_MODEL_KEY = "ls23_sec_ai_model";
 var _k=["gsk_QsV6XlFuA2","14CquXxKIuWGdy","b3FYwDPFSuCAWK","FYEsInlAlLB7oe"];
@@ -3480,7 +3480,8 @@ function getGoogleGeminiKey() {
 function _ehModeloTextoGeminiValido(modelId) {
     var low = String(modelId || "").trim().replace(/^models\//i, "").toLowerCase();
     if (!low || low.indexOf("gemini") < 0) return false;
-    if (/-(tts|audio|image|embedding|vision|live)\b|aqa|imagen|veo|lyria/.test(low)) return false;
+    if (/-(tts|audio|image|embedding|vision|live|preview)\b|aqa|imagen|veo|lyria/.test(low)) return false;
+    if (/^gemini-[12]\./.test(low)) return false;
     return true;
 }
 function _sanitizarNomeModeloGemini(m) {
@@ -3522,9 +3523,8 @@ function _scoreFlashModelPriority(id) {
     var lower = String(id || "").trim().replace(/^models\//i, "").toLowerCase();
     if (!_ehModeloTextoGeminiValido(lower)) return -99999;
     if (lower === "gemini-3.8-flash") return 5000;
-    if (lower === "gemini-2.5-flash") return 4600;
-    if (lower === "gemini-3-flash-preview" || lower === "gemini-3-flash") return 4550;
-    if (lower === "gemini-flash-latest") return 4400;
+    if (lower === "gemini-3.7-flash") return 4800;
+    if (lower === "gemini-flash-latest") return 4600;
     var score = 1000;
     if (lower.indexOf("flash") >= 0) {
         score += 2800;
@@ -3532,7 +3532,7 @@ function _scoreFlashModelPriority(id) {
         score += 1800;
     }
     if (lower.indexOf("lite") >= 0) score -= 250;
-    if (lower.indexOf("thinking") >= 0 || lower.indexOf("exp") >= 0 || lower.indexOf("preview") >= 0) score -= 120;
+    if (lower.indexOf("thinking") >= 0 || lower.indexOf("exp") >= 0) score -= 200;
     var mVer = lower.match(/gemini-(\d+(?:\.\d+)?)/);
     if (mVer) score += Math.round(parseFloat(mVer[1]) * 40);
     return score;
@@ -3747,19 +3747,6 @@ function _renderSmartStatus(stEl, alertClass, msg, techDetail) {
     stEl.innerHTML = html;
 }
 async function _escolherProximoModeloTexto(apiKey, state) {
-    var modelosDisp = state.modelosCache;
-    if (!Array.isArray(modelosDisp)) {
-        try {
-            modelosDisp = await listarModelosGeminiAPI(apiKey);
-            state.modelosCache = modelosDisp;
-        } catch(e) {
-            if (e && e.technicalDetail && !state.lastTechnicalError) state.lastTechnicalError = e.technicalDetail;
-            modelosDisp = [];
-            state.modelosCache = [];
-        }
-    }
-    var alt = _selecionarMelhorFlashModel(modelosDisp, state.modelosTentados);
-    if (alt) return alt;
     return _selecionarMelhorFlashModel(LS_GEMINI_FALLBACK_CHAIN, state.modelosTentados);
 }
 async function chamarGoogleGeminiFlash(prompt, partsArray, jsonMode, _state, opts) {
@@ -3772,7 +3759,7 @@ async function chamarGoogleGeminiFlash(prompt, partsArray, jsonMode, _state, opt
 
     var state = (_state && typeof _state === "object")
         ? _state
-        : { modeloAtual: getGeminiModel(), retriesTransient: 0, modelosTentados: [], modelosCache: null, opts: opts || {}, lastTechnicalError: "" };
+        : { modeloAtual: getGeminiModel(), retriesTransient: 0, modelosTentados: [], opts: opts || {}, lastTechnicalError: "" };
     if (opts && typeof opts === "object" && !_state) {
         state.opts = Object.assign({}, opts);
     }
@@ -3811,7 +3798,7 @@ async function chamarGoogleGeminiFlash(prompt, partsArray, jsonMode, _state, opt
     };
     var url = "https://generativelanguage.googleapis.com/v1beta/models/" + encodeURIComponent(modeloAtivo) + ":generateContent?key=" + encodeURIComponent(apiKey);
     var ctrl = (typeof AbortController !== "undefined") ? new AbortController() : null;
-    var timeoutMs = (state.opts && Number(state.opts.timeoutMs) > 0) ? Number(state.opts.timeoutMs) : 90000;
+    var timeoutMs = (state.opts && Number(state.opts.timeoutMs) > 0) ? Number(state.opts.timeoutMs) : 60000;
     var timer = ctrl ? setTimeout(function(){ ctrl.abort(); }, timeoutMs) : null;
     try {
         var resp = await fetch(url, {
@@ -3832,16 +3819,19 @@ async function chamarGoogleGeminiFlash(prompt, partsArray, jsonMode, _state, opt
                 /model.*not found|not supported|deprecated|modality|tts|audio/i.test(errMsg || "");
 
             if (isTransient) {
-                if (state.retriesTransient < 2) {
+                if (state.retriesTransient < 3) {
                     state.retriesTransient++;
-                    var nextMod = await _escolherProximoModeloTexto(apiKey, state);
+                    var waitMs = state.retriesTransient === 1 ? 2500 : (state.retriesTransient === 2 ? 4000 : 6000);
+                    var nextMod = (resp.status === 503 || state.retriesTransient >= 2)
+                        ? await _escolherProximoModeloTexto(apiKey, state)
+                        : "";
                     if (nextMod) {
-                        console.warn("LocalShelf AI Retry (" + resp.status + "): trocando de '" + modeloAtivo + "' para '" + nextMod + "' após 1,5s (tentativa " + state.retriesTransient + "/2).");
+                        console.warn("LocalShelf AI Retry (" + resp.status + "): trocando de '" + modeloAtivo + "' para '" + nextMod + "' após " + waitMs + "ms (tentativa " + state.retriesTransient + "/3).");
                         state.modeloAtual = nextMod;
                     } else {
-                        console.warn("LocalShelf AI Retry (" + resp.status + "): repetindo '" + modeloAtivo + "' após 1,5s (tentativa " + state.retriesTransient + "/2).");
+                        console.warn("LocalShelf AI Retry (" + resp.status + "): repetindo '" + modeloAtivo + "' após " + waitMs + "ms (tentativa " + state.retriesTransient + "/3).");
                     }
-                    await _aguardarBackoffMs(1500);
+                    await _aguardarBackoffMs(waitMs);
                     return await chamarGoogleGeminiFlash(prompt, partsArray, jsonMode, state);
                 }
                 var eTrans = new Error(resp.status === 429
@@ -3855,7 +3845,6 @@ async function chamarGoogleGeminiFlash(prompt, partsArray, jsonMode, _state, opt
                 var altModelo = await _escolherProximoModeloTexto(apiKey, state);
                 if (altModelo) {
                     console.warn("LocalShelf AI Fallback: modelo '" + modeloAtivo + "' indisponível (" + resp.status + "). Usando '" + altModelo + "'.");
-                    setGeminiModel(altModelo, true);
                     state.modeloAtual = altModelo;
                     return await chamarGoogleGeminiFlash(prompt, partsArray, jsonMode, state);
                 }
@@ -5341,7 +5330,7 @@ async function buscarLojasGeminiFlash(query, ctx) {
         "Retorne APENAS JSON limpo neste formato:\n" +
         "{\"lojas\":[{\"bandeira\":\"Nome Fantasia / Bandeira\",\"nome\":\"Nome da Loja / Unidade\",\"razaoSocial\":\"Razão Social se conhecida\",\"cnpj\":\"\",\"cnpjRaiz\":\"\",\"endereco\":\"Rua/Av, nº\",\"bairro\":\"Bairro\",\"municipio\":\"Cidade\",\"uf\":\"" + (ufAlvo || "") + "\",\"cep\":\"00000-000\",\"cnae\":\"\",\"canalSugerido\":\"Vizinhanca|Super|Hiper|Atacado\",\"perfilSugerido\":\"Vizinhanca|Mercado|Supermercado|Hipermercado|Atacarejo|Conveniencia\",\"porteSugerido\":\"\",\"checkoutsEstimado\":null,\"siteDominio\":\"\"}]}";
 
-    var txt = await chamarGoogleGeminiFlash(prompt, [], true, null, { timeoutMs: 15000 });
+    var txt = await chamarGoogleGeminiFlash(prompt, [], true, null, { timeoutMs: 25000 });
     var parsedJson = parseGeminiJSON(txt);
     var arr = Array.isArray(parsedJson)
         ? parsedJson
@@ -5403,7 +5392,7 @@ async function enriquecerDossieLojaCascata(item, ctx, opts) {
     if (!item) return { item: item, cnpjOficialOk: false, buscaIaOk: false };
     opts = opts || {};
     var fastTimeoutMs = (Number(opts.fastTimeoutMs) > 0) ? Number(opts.fastTimeoutMs) : 4000;
-    var geminiTimeoutMs = (Number(opts.geminiTimeoutMs) > 0) ? Number(opts.geminiTimeoutMs) : 15000;
+    var geminiTimeoutMs = (Number(opts.geminiTimeoutMs) > 0) ? Number(opts.geminiTimeoutMs) : 25000;
     ctx = ctx || _obterUfContextoDispositivo();
     var ufCtx = (ctx && ctx.uf && ctx.uf !== "Brasil" && _isValidBrUf(ctx.uf)) ? String(ctx.uf).trim().toUpperCase() : "";
     var enriched = Object.assign({}, item);
@@ -5442,7 +5431,7 @@ async function enriquecerDossieLojaCascata(item, ctx, opts) {
         } catch(eBr0) {}
     }
 
-    // Camada 3: Gemini padrão (SEM google_search, timeout máx 15s) para complementar dados faltantes
+    // Camada 3: Gemini padrão (timeout 25s) para complementar dados faltantes
     var precisaIA = !enriched.razaoSocial || !enriched.checkoutsEstimado || !enriched.canalSugerido || !enriched.cnae || !enriched.bairro || !enriched.cep || String(enriched.cnpj || "").replace(/\D/g, "").length !== 14;
     if (precisaIA && getGoogleGeminiKey()) {
         try {
@@ -5790,7 +5779,7 @@ async function selecionarResultadoLoja(idx) {
     (async function() {
         try {
             var ctx = _obterUfContextoDispositivo();
-            var res = await enriquecerDossieLojaCascata(item, ctx, { fastTimeoutMs: 4000, geminiTimeoutMs: 15000 });
+            var res = await enriquecerDossieLojaCascata(item, ctx, { fastTimeoutMs: 4000, geminiTimeoutMs: 25000 });
             if (token !== _activeClientSelectionToken) return;
             await aplicarDadosLojaNoFormulario(res.item, true, { onlyEmpty: true });
             _avaliarEExibirCompletudeCliente({ cnpjRaiz: res.cnpjRaiz || (res.item && res.item.cnpjRaiz) || "" });
@@ -5879,7 +5868,7 @@ async function buscarLojaInteligente() {
             var cnpjRes = await consultarBrasilApiCnpj(digits, { timeoutMs: 6000 });
             if (getGoogleGeminiKey()) {
                 atualizarProgressoTarefa("Camada 3: completando canal e perfil...", cnpjRes.nome, 2, 3);
-                var cascCnpj = await enriquecerDossieLojaCascata(cnpjRes, ctx, { fastTimeoutMs: 4000, geminiTimeoutMs: 15000 });
+                var cascCnpj = await enriquecerDossieLojaCascata(cnpjRes, ctx, { fastTimeoutMs: 4000, geminiTimeoutMs: 25000 });
                 await aplicarDadosLojaNoFormulario(cascCnpj.item, true, { onlyEmpty: false });
                 var avalCnpj = _avaliarEExibirCompletudeCliente({ cnpjRaiz: cascCnpj.cnpjRaiz || digits.slice(0, 8) });
                 concluirTarefaGuardiao(avalCnpj.complete ? "✅ Dados completos!" : "⚠️ CNPJ validado (complete o perfil)", cascCnpj.item.nome, { keepOverlayMs: 1200, onReturn: function(){ showPage("pageClient"); } });
@@ -6130,7 +6119,7 @@ async function processarEspelhoPedidoGemini(input) {
         var prompt = "Analise este espelho/pedido interno da loja (imagem ou PDF) e extraia TODOS os produtos listados com o código interno/PLU usado pela loja.\n" +
             "Retorne APENAS um JSON array válido no formato: [{\"codigo_loja\":\"12345\",\"descricao\":\"Doritos Nacho 120g\",\"ean\":\"789...\"}].\n" +
             "Use como referência os produtos do cliente para ajudar a reconhecer abreviações:\n" + catResumo;
-        var raw = await chamarGoogleGeminiFlash(prompt, [part], true);
+        var raw = await chamarGoogleGeminiFlash(prompt, [part], true, null, { timeoutMs: 60000 });
         var itens = extrairJsonGemini(raw);
         if (!Array.isArray(itens)) throw new Error("Nenhum item extraído do espelho.");
         var res = cruzarEspelhoComProdutosCliente(itens);
@@ -6559,7 +6548,7 @@ async function importarPortfolioInteligente(input) {
                     "Para cada produto retorne: nome, gramatura (ex: '120G', '183G', '1KG'), codigo (SKU ou EAN se houver), categoria, status ('Ativo', 'Lancamento' ou 'Descontinuado') e quantidade (qtd por caixa, padrão 1).\n" +
                     "Retorne APENAS um JSON válido: {\"produtos\":[{\"nome\":\"...\",\"gramatura\":\"...\",\"codigo\":\"...\",\"categoria\":\"...\",\"status\":\"Ativo\",\"quantidade\":1}]}\n\n" +
                     tabelaTexto.substring(0, 45000);
-                var rawTab = await chamarGoogleGeminiFlash(promptTab, [], true);
+                var rawTab = await chamarGoogleGeminiFlash(promptTab, [], true, null, { timeoutMs: 60000 });
                 var objTab = extrairJsonGemini(rawTab);
                 extraidos = Array.isArray(objTab) ? objTab : (objTab.produtos || []);
             } else {
@@ -6567,23 +6556,57 @@ async function importarPortfolioInteligente(input) {
             }
         } else if (isPdf) {
             if (!geminiKey) throw new Error("Configure sua chave de acesso nas Configurações para extrair tabelas e embalagens de PDFs.");
-            if (stEl) stEl.textContent = "📄 Preparando páginas do PDF...";
-            atualizarProgressoTarefa("Preparando páginas do PDF...", file.name, 0, 2);
-            var paginas = await pdfParaImagens(file, 15);
-            for (var pi = 0; pi < paginas.length; pi++) {
-                var msgPg = "Lendo página " + (pi + 1) + " de " + paginas.length + "...";
+            if (stEl) stEl.textContent = "📄 Extraindo texto nativo de todas as páginas do PDF...";
+            atualizarProgressoTarefa("Extraindo texto nativo do PDF...", file.name, 0, 2);
+            var paginas = await pdfParaImagens(file, 30);
+            var textPages = paginas.filter(function(pg){ return !!pg.hasSelectableText; });
+            var visualPages = paginas.filter(function(pg){ return !pg.hasSelectableText; });
+            var pdfApiCalls = 0;
+
+            if (textPages.length) {
+                var fullNative = textPages.map(function(pg){
+                    return "=== PÁGINA " + pg.pageNum + " ===\n" + pg.pdfText;
+                }).join("\n\n");
+                var chunkLimit = 32000;
+                var textChunks = [];
+                for (var ci = 0; ci < fullNative.length; ci += chunkLimit) {
+                    textChunks.push(fullNative.substring(ci, ci + chunkLimit));
+                }
+                for (var tc = 0; tc < textChunks.length; tc++) {
+                    if (pdfApiCalls > 0) await _aguardarBackoffMs(2500);
+                    var msgTxtChunk = "Processando texto extraído do PDF (" + (tc + 1) + "/" + textChunks.length + ")...";
+                    if (stEl) stEl.textContent = "✨ " + msgTxtChunk;
+                    atualizarProgressoTarefa(msgTxtChunk, file.name, tc, textChunks.length + visualPages.length);
+                    var promptTxtPdf = "Analise o texto extraído deste catálogo / Guia de Execução e extraia TODOS os SKUs de produtos listados.\n" +
+                        "Para cada produto identifique: nome, gramatura (ex: '120G'), codigo (SKU ou EAN se houver), categoria, status ('Ativo', 'Lancamento' ou 'Descontinuado') e quantidade (por caixa, padrão 1).\n" +
+                        "Retorne APENAS JSON: {\"produtos\":[{\"nome\":\"...\",\"gramatura\":\"...\",\"codigo\":\"...\",\"categoria\":\"...\",\"status\":\"Ativo\",\"quantidade\":1}]}\n\n" +
+                        textChunks[tc];
+                    var rawTxtPdf = await chamarGoogleGeminiFlash(promptTxtPdf, [], true, null, { timeoutMs: 60000 });
+                    pdfApiCalls++;
+                    var objTxtPdf = extrairJsonGemini(rawTxtPdf);
+                    var listaTxtPg = Array.isArray(objTxtPdf) ? objTxtPdf : (objTxtPdf.produtos || []);
+                    listaTxtPg.forEach(function(it){ extraidos.push(it); });
+                }
+            }
+
+            for (var pi = 0; pi < visualPages.length; pi++) {
+                var pgVis = visualPages[pi];
+                if (pdfApiCalls > 0) await _aguardarBackoffMs(2500);
+                var msgPg = "Lendo página visual " + pgVis.pageNum + " de " + paginas.length + " (fila cadenciada)...";
                 if (stEl) stEl.textContent = "✨ " + msgPg;
-                atualizarProgressoTarefa(msgPg, file.name, pi, paginas.length);
-                var promptPdf = "Analise esta página de catálogo / Guia de Execução e extraia todos os SKUs de produtos listados.\n" +
+                atualizarProgressoTarefa(msgPg, file.name, pi, Math.max(1, visualPages.length));
+                var promptPdf = "Analise esta página visual de catálogo / Guia de Execução e extraia todos os SKUs de produtos listados.\n" +
                     "Para cada produto identifique: nome, gramatura (ex: '120G'), codigo (SKU ou EAN se visível), categoria, status ('Ativo', 'Lancamento' ou 'Descontinuado'), quantidade (por caixa, padrão 1), e se a embalagem aparecer desenhada/fotografada na página informe box_embalagem: [ymin, xmin, ymax, xmax] normalizado de 0 a 1000 (ou null se não houver imagem da embalagem).\n" +
+                    (pgVis.pdfText ? ("Texto parcial da página: " + pgVis.pdfText + "\n") : "") +
                     "Retorne APENAS JSON: {\"produtos\":[{\"nome\":\"...\",\"gramatura\":\"...\",\"codigo\":\"...\",\"categoria\":\"...\",\"status\":\"Ativo\",\"quantidade\":1,\"box_embalagem\":[100,200,300,400]}]}";
-                var rawPdf = await chamarGoogleGeminiFlash(promptPdf, [{ data: paginas[pi].data, mimeType: "image/jpeg" }], true);
+                var rawPdf = await chamarGoogleGeminiFlash(promptPdf, [{ data: pgVis.data, mimeType: "image/jpeg" }], true, null, { timeoutMs: 60000 });
+                pdfApiCalls++;
                 var objPdf = extrairJsonGemini(rawPdf);
                 var listaPg = Array.isArray(objPdf) ? objPdf : (objPdf.produtos || []);
                 for (var li = 0; li < listaPg.length; li++) {
                     var it = listaPg[li];
                     if (extractThumbs && Array.isArray(it.box_embalagem) && it.box_embalagem.length >= 4) {
-                        var thumb = await cropThumbFromPageSrc(paginas[pi].src, it.box_embalagem);
+                        var thumb = await cropThumbFromPageSrc(pgVis.src, it.box_embalagem);
                         if (thumb) { it.thumb = thumb; thumbsCapturadas++; }
                     }
                     extraidos.push(it);
@@ -6598,7 +6621,7 @@ async function importarPortfolioInteligente(input) {
             var promptImg = "Analise esta imagem/print de catálogo ou tabela de portfólio e extraia todos os produtos.\n" +
                 "Identifique: nome, gramatura, codigo (SKU/EAN), categoria, status ('Ativo', 'Lancamento' ou 'Descontinuado'), quantidade (por caixa, padrão 1) e box_embalagem ([ymin, xmin, ymax, xmax] de 0 a 1000 caso haja foto da embalagem).\n" +
                 "Retorne APENAS JSON: {\"produtos\":[{\"nome\":\"...\",\"gramatura\":\"...\",\"codigo\":\"...\",\"categoria\":\"...\",\"status\":\"Ativo\",\"quantidade\":1,\"box_embalagem\":null}]}";
-            var rawImg = await chamarGoogleGeminiFlash(promptImg, [imgPart], true);
+            var rawImg = await chamarGoogleGeminiFlash(promptImg, [imgPart], true, null, { timeoutMs: 60000 });
             var objImg = extrairJsonGemini(rawImg);
             var listaImg = Array.isArray(objImg) ? objImg : (objImg.produtos || []);
             for (var ii = 0; ii < listaImg.length; ii++) {
@@ -6787,7 +6810,8 @@ async function buscarMiniaturasPortfolioAuto() {
                     "\nPara cada embalagem encontrada retorne o nome exato do SKU e o bounding box [ymin, xmin, ymax, xmax] de 0 a 1000.\n" +
                     "Retorne APENAS JSON: [{\"nome\":\"...\",\"gramatura\":\"...\",\"box\":[100,200,300,400]}]";
                 try {
-                    var respG = await chamarGoogleGeminiFlash(promptG, [{ data: b64, mimeType: mime }], true);
+                    if (gi > 0) await _aguardarBackoffMs(2500);
+                    var respG = await chamarGoogleGeminiFlash(promptG, [{ data: b64, mimeType: mime }], true, null, { timeoutMs: 60000 });
                     var matches = extrairJsonGemini(respG);
                     if (Array.isArray(matches)) {
                         for (var mi = 0; mi < matches.length; mi++) {
@@ -11272,7 +11296,7 @@ async function comprimirImagemParaIA(base64, mime) {
 // ── GUARDIÃO & IA UNIFICADA: Motor Aberto Google Gemini (gemini-3.8-flash + Fallback) ───
 async function chamarGuardiaoGemini(prompt, partsArray, jsonMode) {
     if (getGoogleGeminiKey()) {
-        return await chamarGoogleGeminiFlash(prompt, partsArray || [], !!jsonMode);
+        return await chamarGoogleGeminiFlash(prompt, partsArray || [], !!jsonMode, null, { timeoutMs: 60000 });
     }
     throw new Error("CHAVE_GOOGLE_NAO_CONFIGURADA");
 }
@@ -11280,7 +11304,7 @@ async function chamarGuardiaoGemini(prompt, partsArray, jsonMode) {
 async function chamarClaudeWorker(prompt, imagemBase64, mimeType, modo) {
     if (getGoogleGeminiKey()) {
         var parts = imagemBase64 ? [{ mimeType: mimeType || "image/jpeg", data: imagemBase64 }] : [];
-        return await chamarGoogleGeminiFlash(prompt, parts, false);
+        return await chamarGoogleGeminiFlash(prompt, parts, false, null, { timeoutMs: 60000 });
     }
     return await chamarGeminiIA(prompt, imagemBase64, mimeType);
 }
@@ -11288,7 +11312,7 @@ async function chamarClaudeWorker(prompt, imagemBase64, mimeType, modo) {
 async function chamarGeminiIA(prompt, imagemBase64, mimeType) {
     if (getGoogleGeminiKey()) {
         var gParts = imagemBase64 ? [{ mimeType: mimeType || "image/jpeg", data: imagemBase64 }] : [];
-        return await chamarGoogleGeminiFlash(prompt, gParts, false);
+        return await chamarGoogleGeminiFlash(prompt, gParts, false, null, { timeoutMs: 60000 });
     }
     var apiKey = getApiKey() || "";
     if (!apiKey) {
@@ -11904,7 +11928,7 @@ async function analisarAuditoriaIA() {
         }
         atualizarProgressoTarefa("Avaliando execução nas fotos...", "Calculando SOD, SOE e ofensores", 1, 2);
         var resultado = getGoogleGeminiKey()
-            ? await chamarGoogleGeminiFlash(prompt, parts, true)
+            ? await chamarGoogleGeminiFlash(prompt, parts, true, null, { timeoutMs: 60000 })
             : await chamarGeminiIA(prompt, parts[0].data, parts[0].mimeType);
         var analise = extrairJsonGemini(resultado);
         var sc = Number(analise.score) || 0;
@@ -12350,31 +12374,50 @@ function switchGuiaTab(tab) {
     }
 }
 
-// Converte PDF em array de imagens + texto integral (uma entrada por página)
+// Converte PDF extraindo TODO o texto nativo instantaneamente primeiro via pdf.js e gerando miniaturas locais
 async function pdfParaImagens(file, maxPaginas) {
     if (!window.pdfjsLib) throw new Error("Biblioteca PDF nao carregada");
     var arrayBuffer = await file.arrayBuffer();
     var pdf = await pdfjsLib.getDocument({data: arrayBuffer}).promise;
-    var imagens = [];
     var nPag = maxPaginas ? Math.min(pdf.numPages, maxPaginas) : pdf.numPages;
-    for (var i = 1; i <= nPag; i++) {
-        var page = await pdf.getPage(i);
-        var viewport = page.getViewport({scale: 1.5});
-        var canvas = document.createElement("canvas");
-        canvas.width = viewport.width;
-        canvas.height = viewport.height;
-        await page.render({canvasContext: canvas.getContext("2d"), viewport: viewport}).promise;
-        var dataUrl = canvas.toDataURL("image/jpeg", 0.8);
+
+    // Passo 1 (custo zero de API, < 2s): extrai TODO o texto nativo de todas as páginas primeiro
+    var pagesMeta = [];
+    for (var ti = 1; ti <= nPag; ti++) {
+        var pageT = await pdf.getPage(ti);
         var pdfText = "";
         try {
-            if (typeof page.getTextContent === "function") {
-                var tc = await page.getTextContent();
+            if (typeof pageT.getTextContent === "function") {
+                var tc = await pageT.getTextContent();
                 if (tc && Array.isArray(tc.items)) {
                     pdfText = tc.items.map(function(it){ return it && it.str ? String(it.str) : ""; }).join(" ").replace(/\s+/g, " ").trim();
                 }
             }
         } catch(eTxtPdf) {}
-        imagens.push({ data: dataUrl.split(",")[1], mime: "image/jpeg", src: dataUrl, pageNum: i, pdfText: pdfText });
+        var wordsCount = pdfText ? pdfText.split(/\s+/).filter(Boolean).length : 0;
+        var hasSelectableText = (pdfText.length >= 120 && wordsCount >= 18);
+        pagesMeta.push({ pageObj: pageT, pageNum: ti, pdfText: pdfText, hasSelectableText: hasSelectableText });
+    }
+
+    // Passo 2: renderiza previews locais (para exibição e apenas envio à IA em páginas sem texto selecionável)
+    var imagens = [];
+    for (var i = 0; i < pagesMeta.length; i++) {
+        var pm = pagesMeta[i];
+        var viewport = pm.pageObj.getViewport({scale: 1.35});
+        var canvas = document.createElement("canvas");
+        canvas.width = viewport.width;
+        canvas.height = viewport.height;
+        await pm.pageObj.render({canvasContext: canvas.getContext("2d"), viewport: viewport}).promise;
+        var dataUrl = canvas.toDataURL("image/jpeg", 0.78);
+        imagens.push({
+            data: dataUrl.split(",")[1],
+            mime: "image/jpeg",
+            src: dataUrl,
+            pageNum: pm.pageNum,
+            pdfText: pm.pdfText,
+            hasSelectableText: pm.hasSelectableText,
+            isPdfPage: true
+        });
     }
     return imagens;
 }
@@ -12596,7 +12639,7 @@ async function adicionarPilulaInput(input, origem) {
                 "Responda APENAS JSON valido: " +
                 '{"titulo":"titulo curto","texto":"resumo completo das regras e orientacoes","tags":["..."]}. ' +
                 "Use apenas tags desta lista: " + TAGS_GUIA_PERMITIDAS.join(", ");
-            var rawResp = await chamarGoogleGeminiFlash(promptPil, parts, true);
+            var rawResp = await chamarGoogleGeminiFlash(promptPil, parts, true, null, { timeoutMs: 60000 });
             var parsed = extrairJsonGemini(rawResp);
             if (parsed && parsed.texto) resumoTexto = String(parsed.texto);
             if (!tituloUsuario && parsed && parsed.titulo) tituloAuto = String(parsed.titulo);
@@ -12742,6 +12785,31 @@ function _comTimeout(promise, ms, mensagemErro) {
     });
 }
 
+function _classificarTagsGuiaLocal(texto) {
+    var low = normTextAccent(String(texto || "")).toLowerCase();
+    var tags = [];
+    var regras = [
+        ["layout_planograma", /planograma/],
+        ["layout_checkout", /checkout|papa.?fila|frente de caixa|\bcaixa\b/],
+        ["layout_gondola", /gondola|ponto natural/],
+        ["layout_ponto_extra", /ponto extra|\bilha\b|terminal|ponta de gondola/],
+        ["layout_displays", /display|expositor|exhibidor/],
+        ["sortimentos", /sortimento|\bmix\b|\bsku\b/],
+        ["prioritarios", /prioritari|obrigatori|heroi/],
+        ["perfil_loja", /perfil|vizinhanca|\bsuper\b|\bhiper\b|atacarejo|tipologia|\bcanal\b/],
+        ["sazonalidade_lancamento", /lancamento|sazonal|novidade/],
+        ["momentos_consumo", /momento|consumo|ocasiao/],
+        ["tiras_cross", /tira|cross|clip.?strip/],
+        ["percentual_exigido", /%|percentual|participacao|\bmeta\b/],
+        ["sod", /\bsod\b|share of display/],
+        ["soe", /\bsoe\b|share of execution/],
+        ["fefo", /\bfefo\b|validade|vencimento/],
+        ["auditoria_loja_perfeita", /loja perfeita|auditoria|pontuacao|check.?list/]
+    ];
+    regras.forEach(function(r){ if (r[1].test(low) && tags.indexOf(r[0]) < 0) tags.push(r[0]); });
+    return tags;
+}
+
 async function _lerPaginaGuiaCompleta(fotoItem, fi, totalGeral, promptBase) {
     var pageNum = fotoItem.pageNum || (fi + 1);
     var comp = await _comTimeout(comprimirImagemParaIA(fotoItem.data, fotoItem.mime), 25000, "Tempo esgotado ao preparar página " + pageNum);
@@ -12749,9 +12817,22 @@ async function _lerPaginaGuiaCompleta(fotoItem, fi, totalGeral, promptBase) {
         ? ("\n\nTEXTO EXTRAIDO INTEGRALMENTE DO PDF (NAO RESUMA; incorpore todos os detalhes ao cruzar com os elementos visuais):\n" + fotoItem.pdfText.trim())
         : "";
     var promptFinal = promptBase + " (Pagina " + pageNum + " de " + totalGeral + ".)" + txtPdfExtra;
-    var resp = getGoogleGeminiKey()
-        ? await _comTimeout(chamarGoogleGeminiFlash(promptFinal, [{ mimeType: comp.mime, data: comp.data }], false, null, { timeoutMs: 90000 }), 90000, "Tempo esgotado na leitura da página " + pageNum + ". Verifique sua conexão.")
-        : await _comTimeout(chamarClaudeWorker(promptFinal, comp.data, comp.mime, "classificar"), 60000, "Tempo esgotado na leitura da página " + pageNum + ". Verifique sua conexão.");
+    var resp;
+    try {
+        resp = getGoogleGeminiKey()
+            ? await _comTimeout(chamarGoogleGeminiFlash(promptFinal, [{ mimeType: comp.mime, data: comp.data }], false, null, { timeoutMs: 60000 }), 65000, "Tempo esgotado na leitura da página " + pageNum + ". Verifique sua conexão.")
+            : await _comTimeout(chamarClaudeWorker(promptFinal, comp.data, comp.mime, "classificar"), 60000, "Tempo esgotado na leitura da página " + pageNum + ". Verifique sua conexão.");
+    } catch(err1) {
+        var errMsgLow = String((err1 && (err1.technicalDetail || err1.message)) || "").toLowerCase();
+        if (/429|503|congestionado|limite|quota|overloaded|high demand/.test(errMsgLow)) {
+            await _aguardarBackoffMs(4500);
+            resp = getGoogleGeminiKey()
+                ? await _comTimeout(chamarGoogleGeminiFlash(promptFinal, [{ mimeType: comp.mime, data: comp.data }], false, null, { timeoutMs: 60000 }), 65000, "Tempo esgotado na leitura da página " + pageNum + ".")
+                : await _comTimeout(chamarClaudeWorker(promptFinal, comp.data, comp.mime, "classificar"), 60000, "Tempo esgotado na leitura da página " + pageNum + ".");
+        } else {
+            throw err1;
+        }
+    }
     var parsed = _parseGuiaResposta(resp);
     if (fotoItem.pdfText && (!parsed.descricao || parsed.descricao.length < 40)) {
         parsed.descricao = (parsed.descricao ? parsed.descricao + "\n" : "") + fotoItem.pdfText;
@@ -12780,12 +12861,11 @@ async function processarGuiaFotos() {
     var totalGeral = _fotosGuia.length;
     var cidAtiva = _resolverCompanyIdAtiva() || "geral";
     var progKey = "ls23_guia_bg_progress_" + cidAtiva;
-    var BATCH_SIZE = 2;
 
     iniciarTarefaGuardiao({
         id: "leitura_guia_" + cidAtiva,
         titulo: "Lendo Guia Completo...",
-        sub: "Lendo páginas 1-" + Math.min(BATCH_SIZE, totalGeral) + " de " + totalGeral + "...",
+        sub: "Extraindo texto nativo e preparando fila cadenciada (" + totalGeral + " páginas)...",
         canBackground: true,
         totalSteps: totalGeral,
         pageTarget: window._currentPage || "pageCompany"
@@ -12801,47 +12881,74 @@ async function processarGuiaFotos() {
     try {
         var paginas = _lerGuiaPages();
         var quotaEstourou = false;
-        for (var batchStart = inicio; batchStart < totalGeral; batchStart += BATCH_SIZE) {
-            var batchEnd = Math.min(batchStart + BATCH_SIZE, totalGeral);
-            var labelLote = batchEnd > (batchStart + 1) ? ((batchStart + 1) + "-" + batchEnd) : String(batchStart + 1);
-            atualizarProgressoTarefa(
-                "Lendo Guia Completo...",
-                "Lendo páginas " + labelLote + " de " + totalGeral + "...",
-                batchStart,
-                totalGeral
-            );
-            if (batchStart > inicio) await new Promise(function(r){ setTimeout(r, 600); });
-            var promisesLote = [];
-            for (var fi = batchStart; fi < batchEnd; fi++) {
-                promisesLote.push(_lerPaginaGuiaCompleta(_fotosGuia[fi], fi, totalGeral, prompt));
-            }
-            var resultadosLote = await Promise.all(promisesLote);
-            for (var ri = 0; ri < resultadosLote.length; ri++) {
-                var pageObj = resultadosLote[ri];
-                var realIdx = batchStart + ri;
-                paginas.push(pageObj);
-                var salvouOk = _salvarGuiaPages(paginas);
-                if (!salvouOk) {
-                    quotaEstourou = true;
-                    paginas.pop();
-                    _guiaProcessadas = realIdx;
-                    try { localStorage.setItem(progKey, JSON.stringify({ processadas: realIdx, total: totalGeral, updatedAt: new Date().toISOString() })); } catch(eProg){}
-                    break;
+        var chamadasVisaoFeitas = 0;
+
+        for (var fi = inicio; fi < totalGeral; fi++) {
+            var fotoItem = _fotosGuia[fi];
+            var pageNum = fotoItem.pageNum || (fi + 1);
+            var usaTextoNativoDireto = !!(fotoItem.isPdfPage && fotoItem.hasSelectableText && fotoItem.pdfText && fotoItem.pdfText.trim().length >= 120);
+            var pageObj;
+
+            if (usaTextoNativoDireto) {
+                atualizarProgressoTarefa(
+                    "Lendo Guia Completo...",
+                    "Página " + pageNum + " de " + totalGeral + " (texto nativo extraído instantaneamente)...",
+                    fi,
+                    totalGeral
+                );
+                var imgStorageNat = await _comTimeout(
+                    _reduzirImagemGuiaParaStorage(fotoItem.src || ("data:" + (fotoItem.mime || "image/jpeg") + ";base64," + fotoItem.data)),
+                    12000,
+                    "Tempo esgotado ao salvar miniatura da página " + pageNum
+                );
+                pageObj = {
+                    pagina: pageNum,
+                    descricao: fotoItem.pdfText.trim(),
+                    tags: _classificarTagsGuiaLocal(fotoItem.pdfText),
+                    imagemBase64: imgStorageNat,
+                    pdfText: fotoItem.pdfText.trim()
+                };
+            } else {
+                if (chamadasVisaoFeitas > 0) {
+                    atualizarProgressoTarefa(
+                        "Lendo Guia Completo...",
+                        "Pausa cadenciada (2,5s) antes da página visual " + pageNum + " de " + totalGeral + "...",
+                        fi,
+                        totalGeral
+                    );
+                    await _aguardarBackoffMs(2500);
                 }
-                _guiaProcessadas = realIdx + 1;
-                try {
-                    localStorage.setItem(progKey, JSON.stringify({ processadas: _guiaProcessadas, total: totalGeral, updatedAt: new Date().toISOString() }));
-                } catch(eProg2) {}
-                var textareaStep = document.getElementById("guiaEmpresaTexto");
-                if (textareaStep) {
-                    var sepStep = textareaStep.value ? "\n\n" : "";
-                    textareaStep.value = textareaStep.value + sepStep + "=== PAGINA " + pageObj.pagina + " ===\n" + pageObj.descricao;
-                    if (cidAtiva && cidAtiva !== "geral") {
-                        try { localStorage.setItem("ls23_guia_empresa_" + cidAtiva, textareaStep.value); } catch(eTxt){}
-                    }
+                atualizarProgressoTarefa(
+                    "Lendo Guia Completo...",
+                    "Analisando planograma/imagem da página " + pageNum + " de " + totalGeral + " (1 por vez)...",
+                    fi,
+                    totalGeral
+                );
+                pageObj = await _lerPaginaGuiaCompleta(fotoItem, fi, totalGeral, prompt);
+                chamadasVisaoFeitas++;
+            }
+
+            paginas.push(pageObj);
+            var salvouOk = _salvarGuiaPages(paginas);
+            if (!salvouOk) {
+                quotaEstourou = true;
+                paginas.pop();
+                _guiaProcessadas = fi;
+                try { localStorage.setItem(progKey, JSON.stringify({ processadas: fi, total: totalGeral, updatedAt: new Date().toISOString() })); } catch(eProg){}
+                break;
+            }
+            _guiaProcessadas = fi + 1;
+            try {
+                localStorage.setItem(progKey, JSON.stringify({ processadas: _guiaProcessadas, total: totalGeral, updatedAt: new Date().toISOString() }));
+            } catch(eProg2) {}
+            var textareaStep = document.getElementById("guiaEmpresaTexto");
+            if (textareaStep) {
+                var sepStep = textareaStep.value ? "\n\n" : "";
+                textareaStep.value = textareaStep.value + sepStep + "=== PAGINA " + pageObj.pagina + " ===\n" + pageObj.descricao;
+                if (cidAtiva && cidAtiva !== "geral") {
+                    try { localStorage.setItem("ls23_guia_empresa_" + cidAtiva, textareaStep.value); } catch(eTxt){}
                 }
             }
-            if (quotaEstourou) break;
         }
 
         if (document.getElementById("painelGuiaTexto")) switchGuiaTab("texto");
@@ -13199,7 +13306,7 @@ async function retroalimentarCatalogoPeloGuia(opts) {
                 "CONTEUDO DO GUIA:\n" + textoBasePrompt;
 
             try {
-                var raw = await chamarGoogleGeminiFlash(promptRetro, imageParts, true, null, { timeoutMs: 75000 });
+                var raw = await chamarGoogleGeminiFlash(promptRetro, imageParts, true, null, { timeoutMs: 60000 });
                 var parsed = extrairJsonGemini(raw);
                 var atts = (parsed && Array.isArray(parsed.atualizacoes)) ? parsed.atualizacoes : [];
                 for (var ai = 0; ai < atts.length; ai++) {
@@ -14438,7 +14545,7 @@ async function analisarRelatorioComGemini(dias) {
     outEl.innerHTML = "<div class='gchat-card' style='color:#a5b4fc'>⚙️ Guardião gerando resumo executivo de " + dados.dias + " dias...</div>";
     try {
         var prompt = "Voce e o Guardiao LocalShelf. Gere um resumo gerencial executivo direto (maximo 6 topicos curtos) de " + dados.dias + " dias para a loja '" + dados.loja + "' (perfil: " + dados.perfil + "), destacando top SKUs, giro diario, rupturas, trocas, riscos FEFO e evolucao de auditoria.\nDADOS REAIS:\n" + JSON.stringify(dados);
-        var resp = await chamarGoogleGeminiFlash(prompt, [], false);
+        var resp = await chamarGoogleGeminiFlash(prompt, [], false, null, { timeoutMs: 60000 });
         outEl.innerHTML = "<div class='gchat-card' style='white-space:pre-wrap;line-height:1.45'>" + escHtml(resp.trim()) + "</div>";
     } catch(e) {
         outEl.innerHTML = "<div class='gchat-card' style='color:#fca5a5'>Erro: " + escHtml((typeof _traduzirErroAmigavelIA === "function") ? _traduzirErroAmigavelIA(e) : e.message) + "</div>";
@@ -15023,7 +15130,7 @@ async function enviarGuardiaoChat() {
             "\n=== PERGUNTA DO PROMOTOR ===\n" + pergunta;
 
         var resposta = gKey
-            ? await chamarGoogleGeminiFlash(prompt, parts, false)
+            ? await chamarGoogleGeminiFlash(prompt, parts, false, null, { timeoutMs: 60000 })
             : await chamarGeminiIA(prompt, parts.length ? parts[0].data : null, parts.length ? parts[0].mimeType : null);
 
         typing.remove();
@@ -17781,18 +17888,20 @@ function renderSmartCompanyUnitsList(ufLabel) {
     var ufTxt = (ufLabel && ufLabel !== "Brasil") ? ufLabel : "";
     box.innerHTML = _smartCompanyUnits.map(function(u, idx) {
         var bCls = (u.source === "Supabase" || u.source === "Local" || u.brasilApiValidado) ? " brasilapi" : (u.source === "Sugestao" ? " gemini" : "");
+        var tipoTxt = u.tipo ? String(u.tipo).trim() : "";
         var badgeLabel = u.source === "Local"
             ? "Salvo Local"
             : (u.source === "Supabase"
                 ? "Base Compartilhada"
-                : (u.brasilApiValidado ? "CNPJ Oficial" : (u.source === "OpenStreetMap" ? "Mapa" : "CD / Filial" + (ufTxt ? " • " + ufTxt : ""))));
+                : (u.brasilApiValidado ? "CNPJ Oficial" : (tipoTxt || "CD / Filial") + (ufTxt ? " • " + ufTxt : "")));
         var titulo = u.nomeBase
             ? (u.nomeFantasia + " — " + u.nomeBase)
             : (u.nomeFantasia || u.razaoSocial || "Unidade");
         var linhaMeta = [
             u.razaoSocial && normProdKey(u.razaoSocial) !== normProdKey(u.nomeFantasia) ? u.razaoSocial : "",
             u.cnpj ? ("CNPJ: " + u.cnpj) : (u.cnpjRaiz ? ("Raiz: " + _formatarRaizCnpjPrefixo(u.cnpjRaiz)) : ""),
-            u.segmento || ""
+            u.segmento || "",
+            u.contatosResumo || u.siteDominio || ""
         ].filter(Boolean).join(" • ");
         return "<div class='smart-res-item' onclick='selecionarUnidadeEmpresa(" + idx + ")'>" +
             "<div class='smart-res-top'><span class='smart-res-nome'>" + escHtml(titulo) + "</span>" +
@@ -17861,14 +17970,16 @@ async function buscarBasesEmpresaGemini(query, ctx) {
     var ufCtx = (ctx && ctx.uf && ctx.uf !== "Brasil" && _isValidBrUf(ctx.uf)) ? ctx.uf.toUpperCase() : "";
     var ufInfo = ufCtx ? (ufCtx + (ctx.stateName ? " (" + ctx.stateName + ")" : "")) : "Brasil";
     var cidHint = (ctx && ctx.cidade) ? (" | Cidade atual: " + ctx.cidade) : "";
-    var prompt = "Cadastro comercial de indústria/fornecedor de varejo no Brasil.\n" +
+    var prompt = "Especialista em trade marketing e cadeia de distribuição no Brasil.\n" +
         "Empresa pesquisada: \"" + query + "\".\n" +
-        "FILTRO GEOGRÁFICO OBRIGATÓRIO: Para o campo \"unidades_uf\", liste os Centros de Distribuição (CDs), filiais ou bases regionais de atendimento dessa empresa localizados EXCLUSIVAMENTE no estado " + ufInfo + cidHint + " (ex: CD metropolitano, bases regionais dentro desse estado).\n" +
-        "Sempre preencha \"nome\", \"razao_social\", \"cnpj_matriz\" (CNPJ oficial no Brasil se conhecido) e \"segmento\". Nunca omita os dados principais da empresa.\n" +
+        "FILTRO GEOGRÁFICO OBRIGATÓRIO: Para o campo \"unidades_uf\", retorne TANTO as filiais/CDs diretos da indústria QUANTO os grandes operadores e distribuidores exclusivos autorizados dessa indústria atuantes EXCLUSIVAMENTE no estado " + ufInfo + cidHint + ".\n" +
+        "EXEMPLO DE REFERÊNCIA (quando pesquisar PepsiCo no RJ ou similar): inclua a Mega Rio Distribuidora (Venda Velha / São João de Meriti - RJ) além das bases em Duque de Caxias, Niterói, Região Serrana e Região dos Lagos; aplique a mesma lógica de indústria + distribuidor exclusivo autorizado para qualquer outra marca ou UF.\n" +
+        "Para CADA unidade/distribuidor informe: tipo ('Filial Direta' ou 'Distribuidor Autorizado'), nome, nome_base (cidade/região/unidade), razao_social, cnpj (se conhecido; se for distribuidor informe o CNPJ próprio ou deixe vazio se incerto), endereco completo, cidade, uf, site_dominio e contatos_resumo.\n" +
+        "Sempre preencha também na raiz: \"nome\", \"razao_social\", \"cnpj_matriz\" e \"segmento\".\n" +
         "Retorne APENAS JSON limpo neste formato exato:\n" +
-        "{\"nome\":\"" + query + "\",\"razao_social\":\"\",\"cnpj_matriz\":\"\",\"segmento\":\"\",\"site_dominio\":\"\",\"cores_bandeira\":[\"#1e3a8a\",\"#2563eb\"],\"contatos_resumo\":\"\",\"unidades_uf\":[{\"nome_base\":\"CD / Filial Regional\",\"endereco\":\"Rodovia/Rua, Bairro, Cidade - UF\",\"cidade\":\"\",\"uf\":\"" + ufCtx + "\",\"cnpj\":\"\"}]}";
+        "{\"nome\":\"" + query + "\",\"razao_social\":\"\",\"cnpj_matriz\":\"\",\"segmento\":\"\",\"site_dominio\":\"\",\"cores_bandeira\":[\"#1e3a8a\",\"#2563eb\"],\"contatos_resumo\":\"\",\"unidades_uf\":[{\"tipo\":\"Filial Direta|Distribuidor Autorizado\",\"nome\":\"\",\"nome_base\":\"CD / Distribuidor Regional\",\"razao_social\":\"\",\"cnpj\":\"\",\"endereco\":\"Rodovia/Rua, Bairro, Cidade - UF\",\"cidade\":\"\",\"uf\":\"" + ufCtx + "\",\"site_dominio\":\"\",\"contatos_resumo\":\"\"}]}";
 
-    var raw = await chamarGoogleGeminiFlash(prompt, [], true, null, { timeoutMs: 15000 });
+    var raw = await chamarGoogleGeminiFlash(prompt, [], true, null, { timeoutMs: 25000 });
     var obj = parseGeminiJSON(raw);
     if (Array.isArray(obj)) obj = { nome: query, unidades_uf: obj };
     if (!obj || typeof obj !== "object") {
@@ -17893,6 +18004,7 @@ async function buscarBasesEmpresaGemini(query, ctx) {
 
     if (!rawUnidades.length) {
         rawUnidades = [{
+            tipo: "Filial Direta",
             nome_base: ufCtx ? ("Base Regional " + ufCtx) : "Matriz / Sede Brasil",
             endereco: String(obj.endereco || obj.enderecoCd || (ufCtx ? ("Atendimento " + ufInfo) : "Brasil")).trim(),
             cidade: String((ctx && ctx.cidade) || "").trim(),
@@ -17903,9 +18015,13 @@ async function buscarBasesEmpresaGemini(query, ctx) {
 
     var regOpts = ["Nacional","RJ / Leste","SP","MG / ES","Sul","Nordeste","Centro-Oeste","Norte"];
     var list = rawUnidades.map(function(u) {
+        var uTipo = String((u && u.tipo) || "").trim();
+        var uNome = String((u && (u.nome || u.nomeFantasia)) || nomeEmpresa).trim();
+        var uRazao = String((u && (u.razao_social || u.razaoSocial)) || razaoGeral).trim();
+        var isDistribuidor = /distribuidor|operador|autoriz/i.test([uTipo, uNome, uRazao, (u && u.nome_base) || ""].join(" "));
         var cDig = String((u && (u.cnpj || u.cnpj_filial)) || "").replace(/\D/g, "");
-        var finalCnpj = cDig.length === 14 ? formatarCNPJ(cDig) : cnpjMatrizFmt;
-        var rDig = (cDig.length >= 8 ? cDig.slice(0, 8) : "") || raizGeral;
+        var finalCnpj = cDig.length === 14 ? formatarCNPJ(cDig) : (isDistribuidor ? "" : cnpjMatrizFmt);
+        var rDig = (cDig.length >= 8 ? cDig.slice(0, 8) : "") || (isDistribuidor ? "" : raizGeral);
         var uUfRaw = String((u && u.uf) || ufCtx || "").toUpperCase().trim();
         var uUf = _isValidBrUf(uUfRaw) ? uUfRaw : ufCtx;
         var uCid = String((u && (u.cidade || u.municipio)) || "").trim();
@@ -17913,11 +18029,14 @@ async function buscarBasesEmpresaGemini(query, ctx) {
             ? u.regionalSugerida
             : (uUf ? _mapearUfParaRegional(uUf, "") : (ctx ? ctx.regional : "Nacional"));
         var endCd = String((u && (u.endereco || u.enderecoCd)) || [uCid, uUf].filter(Boolean).join(" - ")).trim();
+        var uSite = String((u && (u.site_dominio || u.siteDominio)) || siteDom || "").trim();
+        var uContatos = String((u && (u.contatos_resumo || u.contatosResumo)) || uSite || contatos || "").trim();
         return {
             source: "Sugestao",
-            nomeFantasia: String((u && (u.nome || u.nomeFantasia)) || nomeEmpresa).trim(),
+            tipo: uTipo || (isDistribuidor ? "Distribuidor Autorizado" : "CD / Filial"),
+            nomeFantasia: uNome,
             nomeBase: String((u && (u.nome_base || u.nomeBase || uCid)) || (uUf ? ("Base " + uUf) : "Matriz")).trim(),
-            razaoSocial: String((u && (u.razao_social || u.razaoSocial)) || razaoGeral).trim(),
+            razaoSocial: uRazao,
             cnpj: finalCnpj,
             cnpjRaiz: rDig,
             enderecoCd: endCd,
@@ -17928,9 +18047,9 @@ async function buscarBasesEmpresaGemini(query, ctx) {
             porte: String((u && u.porte) || obj.porteSugerido || "").trim(),
             brasilApiValidado: false,
             regionalSugerida: regU,
-            siteDominio: siteDom,
+            siteDominio: uSite,
             coresBandeira: cores,
-            contatosResumo: contatos,
+            contatosResumo: uContatos,
             logo: ""
         };
     });
@@ -18436,7 +18555,7 @@ async function gerarCatalogoAutomaticoEmpresaIA() {
                     "Liste de 20 a 32 principais SKUs comerciais dessa indústria na região com EAN/código quando conhecido.\n" +
                     "Retorne APENAS JSON válido:\n" +
                     "{\"produtos\":[{\"nome\":\"...\",\"gramatura\":\"45g\",\"quantidade\":24,\"codigo\":\"789...\",\"categoria\":\"...\",\"status\":\"Ativo\"}]}";
-                var raw = await chamarGoogleGeminiFlash(prompt, [], true, null, { timeoutMs: 15000 });
+                var raw = await chamarGoogleGeminiFlash(prompt, [], true, null, { timeoutMs: 60000 });
                 var obj = extrairJsonGemini(raw);
                 var arr = Array.isArray(obj) ? obj : (obj && Array.isArray(obj.produtos) ? obj.produtos : []);
                 var seenKeys = {};
